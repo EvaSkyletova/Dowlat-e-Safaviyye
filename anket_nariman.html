@@ -70,14 +70,12 @@
         ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-        /* ========================================================= */
-        /* ИСПРАВЛЕННАЯ ШАПКА САЙТА: теперь она не растягивается    */
-        /* ========================================================= */
+        /* ИСПРАВЛЕННАЯ ШАПКА */
         .site-header {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 18px 20px;
+            padding: 15px 10px; /* Уменьшили отступы */
             border-bottom: 2px solid var(--line);
             background: rgba(18, 18, 20, 0.96);
             backdrop-filter: blur(12px);
@@ -89,12 +87,12 @@
         }
 
         .site-logo {
-            font-size: 20px;
+            font-size: 18px; /* Чуть уменьшили лого */
             color: var(--gold-light);
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             text-transform: uppercase;
             text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             font-weight: bold;
             text-align: center;
         }
@@ -102,24 +100,24 @@
         .site-nav {
             display: flex;
             justify-content: center;
-            gap: 22px;
-            flex-wrap: wrap; /* <--- ГЛАВНОЕ ИСПРАВЛЕНИЕ: разрешаем перенос на новую строку */
+            gap: 8px 15px; /* Уменьшили отступы между ссылками */
+            flex-wrap: wrap; /* Разрешаем перенос */
             align-items: center;
-            max-width: 1200px; /* Ограничиваем ширину меню */
+            max-width: 1000px;
             width: 100%;
         }
 
         .site-nav a {
             color: var(--text);
             text-decoration: none;
-            font-size: 12px;
-            letter-spacing: 1.5px;
+            font-size: 11px; /* Уменьшили шрифт меню для мобилок */
+            letter-spacing: 0.5px; /* Чуть плотнее буквы */
             text-transform: uppercase;
             transition: all 0.3s ease;
-            padding: 4px 0;
+            padding: 2px 0;
             position: relative;
             font-weight: 500;
-            white-space: nowrap; /* Запрещаем перенос слов внутри ссылки */
+            white-space: nowrap;
         }
 
         .site-nav a::after {
@@ -143,7 +141,7 @@
             text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
         }
 
-        .sheet-wrapper { width: 100%; max-width: 1200px; margin: 30px auto 60px; padding: 0 20px; box-sizing: border-box; }
+        .sheet-wrapper { width: 100%; max-width: 1200px; margin: 20px auto 60px; padding: 0 20px; box-sizing: border-box; }
         
         .back-nav-container {
             width: 100%;
