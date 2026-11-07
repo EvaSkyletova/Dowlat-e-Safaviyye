@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вести и Слухи • Dowlаt-e Safaviyye</title>
+<style>
+:root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.95);
+    --panel-card: rgba(26, 26, 30, 0.9);
+    --panel-dark: rgba(14, 14, 16, 0.95);
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+}
+
+/* Единый скроллбар всей страницы */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0f0f11);
+}
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+}
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gold-dark);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+}
+
+/* ШАПКА САЙТА (ЕДИНАЯ ДЛЯ ВСЕХ СТРАНИЦ) */
+.site-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+}
+
+.site-logo {
+    font-size: 20px;
+    color: var(--gold-light);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+}
+
+.site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+}
+
+.site-nav a:hover::after, .site-nav a.active::after {
+    width: 100%;
+}
+
+.site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+}
+
+/* ОСНОВНОЙ КОНТЕЙНЕР */
+.chronicles-wrap {
+    max-width: 1120px;
+    margin: 40px auto;
+    padding: 40px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(212, 175, 55, 0.03);
+}
+
+/* ==================== ПАРАДНЫЙ ЗАГОЛОВОК ==================== */
+.chronicles-hero {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    padding: 25px 20px;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 6px;
+    background: rgba(18, 18, 20, 0.9);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    text-align: center;
+}
+
+.chronicles-hero:after {
+    content: "✦  ✧  ✦";
+    position: absolute;
+    right: 20px;
+    bottom: 12px;
+    color: var(--gold);
+    font-size: 14px;
+    letter-spacing: 6px;
+    opacity: 0.8;
+}
+
+.chronicles-kicker {
+    margin: 0 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.chronicles-hero h1 {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    font-weight: normal;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.chronicles-hero p {
+    max-width: 650px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+    font-style: italic;
+    letter-spacing: 0.5px;
+}
+
+/* ==================== ВКЛАДКИ РЕЖИМА ==================== */
+.chronicles-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+}
+
+.chronicles-tab {
+    padding: 11px 32px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--panel-dark);
+    color: var(--muted);
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.chronicles-tab:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.12);
+    transform: translateY(-2px);
+}
+
+.chronicles-tab.active {
+    color: #121008;
+    border-color: var(--gold-light);
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    box-shadow: 0 0 18px rgba(212, 175, 55, 0.4);
+    font-weight: bold;
+}
+
+/* ==================== ДВУХКОЛОНОЧНЫЙ БЛОК ==================== */
+.chronicles-panel {
+    display: none;
+    grid-template-columns: 320px 1fr;
+    gap: 22px;
+    align-items: start; /* выравнивание по верху, убираем фиксацию */
+}
+
+.chronicles-panel.active {
+    display: grid;
+}
+
+/* ЛЕВАЯ КОЛОНКА (без внутренней прокрутки) */
+.timeline-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+.timeline-btn {
+    width: 100%;
+    text-align: left;
+    padding: 13px 15px;
+    border: 1px solid transparent;
+    border-left: 3px solid rgba(212, 175, 55, 0.3);
+    border-radius: 0 4px 4px 0;
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: inherit;
+}
+
+.timeline-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-left-color: var(--gold);
+    transform: translateX(3px);
+}
+
+.timeline-btn.active {
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.2), transparent);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold-light);
+    box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.1);
+}
+
+.tb-date {
+    font-size: 11px;
+    color: var(--gold-soft);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.tb-title {
+    font-size: 14.5px;
+    color: #e5ded0;
+    line-height: 1.35;
+}
+
+.timeline-btn.active .tb-title {
+    color: var(--gold-light);
+    font-weight: bold;
+}
+
+/* ПРАВАЯ КОЛОНКА (ОКНО ЧТЕНИЯ — полностью без внутреннего скролла) */
+.reader-frame {
+    position: relative;
+    padding: 30px;
+    background: var(--panel-card);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.reader-header {
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.reader-badge-date {
+    display: inline-block;
+    padding: 3px 10px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--gold-soft);
+    font-size: 11.5px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.reader-title {
+    margin: 0;
+    color: var(--gold-light);
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 1.3;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+.reader-content {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text);
+}
+
+.reader-content p {
+    margin: 0 0 16px 0;
+}
+
+.reader-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Игровые последствия */
+.mechanics-box {
+    margin-top: 25px;
+    padding: 18px 20px;
+    background: rgba(14, 14, 16, 0.85);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+.mechanics-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    font-size: 11.5px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.mechanics-title::before {
+    content: "◈";
+    font-size: 13px;
+    color: var(--gold);
+}
+
+.mechanics-box p {
+    margin: 0 0 10px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: #dfd7c5;
+}
+
+.mechanics-box p:last-child {
+    margin-bottom: 0;
+}
+
+/* Печать внизу */
+.seal-highlight {
+    margin-top: 22px;
+    padding: 14px 18px;
+    text-align: center;
+    border: 1px dashed var(--line);
+    border-radius: 4px;
+    background: rgba(212, 175, 55, 0.08);
+    color: var(--gold-light);
+    font-size: 14px;
+    font-style: italic;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+.reader-footer-note {
+    margin-top: 20px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--line);
+    color: var(--muted);
+    font-size: 12px;
+    font-style: italic;
+    text-align: center;
+}
+
+/* ==================== МОБИЛЬНЫЙ РЕЖИМ (<= 768px) ==================== */
+@media (max-width: 768px) {
+    .chronicles-wrap {
+        margin: 15px 10px;
+        padding: 20px 15px;
+    }
+
+    .chronicles-panel {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto;
+        gap: 14px;
+    }
+
+    .timeline-nav {
+        height: auto;
+        flex-direction: row;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding: 8px;
+        gap: 8px;
+        scroll-snap-type: x mandatory;
+    }
+
+    .timeline-btn {
+        flex: 0 0 200px;
+        scroll-snap-align: start;
+        border-radius: 4px;
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--gold);
+        padding: 10px 12px;
+    }
+
+    .reader-frame {
+        padding: 20px 16px;
+        border-radius: 4px;
+    }
+
+    .reader-title {
+        font-size: 21px;
+    }
+
+    .chronicles-tab {
+        padding: 10px 22px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА (ЕДИНАЯ ДЛЯ ВСЕХ СТРАНИЦ) -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html" class="active">Летопись</a>
+        </nav>
+    </header>
+
+<div class="chronicles-wrap">
+
+    <!-- ПАРАДНАЯ ШАПКА -->
+    <header class="chronicles-hero">
+        <p class="chronicles-kicker">Вакае-йе мамалик ва афвах-е шахра</p>
+        <h1>Вести и Слухи</h1>
+        <p>Государственные вести шахского двора, ключевые вехи державы и тайная молва, волнующая базары и чертоги знати</p>
+    </header>
+
+    <!-- ВКЛАДКИ -->
+    <div class="chronicles-tabs">
+        <button class="chronicles-tab active" type="button" id="tabBtnNews" onclick="switchSection('news')">Вести</button>
+        <button class="chronicles-tab" type="button" id="tabBtnGossip" onclick="switchSection('gossip')">Слухи</button>
+    </div>
+
+    <!-- ==================== ПАНЕЛЬ: НОВОСТИ ==================== -->
+    <div class="chronicles-panel active" id="panelNews">
+        <!-- Левый список дат -->
+        <nav class="timeline-nav">
+            <button class="timeline-btn active" type="button" onclick="showNews(0, this)">
+                <span class="tb-date">06.07.2026 | Шахривар 1024</span>
+                <span class="tb-title">Новое солнце Персии</span>
+            </button>
+            <button class="timeline-btn" type="button" onclick="showNews(1, this)">
+                <span class="tb-date">29.05.2026 | Фарвардин — Ордибехешт 1024</span>
+                <span class="tb-title">Черная весна</span>
+            </button>
+            <button class="timeline-btn" type="button" onclick="showNews(2, this)">
+                <span class="tb-date">01.04.2026 | Эсфанд 1023</span>
+                <span class="tb-title">Великое Посвящение и тайны столицы</span>
+            </button>
+            <button class="timeline-btn" type="button" onclick="showNews(3, this)">
+                <span class="tb-date">03.03.2026 | Бахман 1023</span>
+                <span class="tb-title">Никях сефевидов и персов</span>
+            </button>
+        </nav>
+
+        <!-- Правый экран чтения -->
+        <div class="reader-frame" id="newsReader">
+            <!-- Контент генерируется скриптом -->
+        </div>
+    </div>
+
+    <!-- ==================== ПАНЕЛЬ: СПЛЕТНИ ==================== -->
+    <div class="chronicles-panel" id="panelGossip">
+        <!-- Левый список сплетен -->
+        <nav class="timeline-nav">
+            <button class="timeline-btn active" type="button" onclick="showGossip(0, this)">
+                <span class="tb-date">16.08.2026 | Шахривар 1024</span>
+                <span class="tb-title">Неоправданное доверие</span>
+            </button>
+            <button class="timeline-btn" type="button" onclick="showGossip(1, this)">
+                <span class="tb-date">21.07.2026 | Шахривар 1024</span>
+                <span class="tb-title">Нерадивый сын</span>
+            </button>
+            <button class="timeline-btn" type="button" onclick="showGossip(2, this)">
+                <span class="tb-date">21.07.2026 | Шахривар 1024</span>
+                <span class="tb-title">Неровня</span>
+            </button>
+            <button class="timeline-btn" type="button" onclick="showGossip(3, this)">
+                <span class="tb-date">12.04.2026 | Эсфанд 1023</span>
+                <span class="tb-title">Зависимость</span>
+            </button>
+            <button class="timeline-btn" type="button" onclick="showGossip(4, this)">
+                <span class="tb-date">12.04.2026 | Эсфанд 1023</span>
+                <span class="tb-title">Прелюбодеяние</span>
+            </button>
+        </nav>
+
+        <!-- Правый экран чтения -->
+        <div class="reader-frame" id="gossipReader">
+            <!-- Контент генерируется скриптом -->
+        </div>
+    </div>
+
+</div>
+
+<script>
+/* ==================== БАЗА ДАННЫХ НОВОСТЕЙ ==================== */
+const newsDatabase = [
+    {
+        date: "06.07.2026 | Шахривар 1024",
+        title: "Новое солнце Персии",
+        paragraphs: [
+            "1 числа месяца Шахривар 1024 года, соблюдя траур по Шах-ан-шаху Мохаммеду II и восстановив силы страны после жестокостей южной оспы, на площади Накш-э Джахан перед дворцом Али-капу главами Кызылбашских родов были принесены клятвы в верности восьмому падишаху Сефевидского государства."
+        ],
+        specialFooter: "Эпоха Наримана I началась."
+    },
+    {
+        date: "29.05.2026 | Фарвардин — Ордибехешт 1024",
+        title: "Черная весна",
+        paragraphs: [
+            "Весна должна приносить жизнь и обновление, но этой весной ветер разносит по стране лишь плач матерей и запах погребальных благовоний.",
+            "В последние недели Фарвардина болезнь, известная под названием «детская чума» — корь, — начала забирать детей в семьях рабочих, крестьян и земледельцев. Первыми траур надели бедные деревни и ремесленные кварталы.",
+            "Но вскоре беда переступила пороги богатых домов. Ни золото, ни дорогие лекари, ни молитвы в мечетях не смогли уберечь детей от смерти. Все чаще на базарах покупают белую ткань не для праздничных одежд, а для саванов.",
+            "В начале и середине Ордибехешта невидимая смерть продолжит свой путь. Под ударом окажутся семьи могущественных кызылбашей и сама династия Сефевидов.",
+            "Смерть заберет: Али-Мухаммада Сефеви, Армана Чехарленга, Эметуллах Баят, Сахиб-и-Джамата Каратурлу."
+        ]
+    },
+    {
+        date: "01.04.2026 | Эсфанд 1023",
+        title: "Великое Посвящение и тайны столицы",
+        paragraphs: [
+            "В первый день месяца Эсфанд Исфахан замирает в предвкушении исторического события. По указу Шах-ан-Шаха Мохаммеда II состоится торжественная церемония посвящения сыновей благородных кызылбашских родов.",
+            "Размах торжества поистине грандиозен. На великой площади Накш-э Джахан раскинулись шелковые шатры, а под изумрудным навесом, осененным сефевидскими стягами, уже установлен золотой трон Шах-ан-Шаха.",
+            "Созваны Шейхи Ордена Сефевийе, высшие государственные чиновники, иностранные послы и простой люд столицы.",
+            "Сразу после завершения церемонии клятвы площадь превратится в арену: для развлечения правителя и гостей организованы демонстрационные состязания на саблях."
+        ]
+    },
+    {
+        date: "03.03.2026 | Бахман 1023",
+        title: "Никях сефевидов и персов",
+        paragraphs: [
+            "Впервые скрижали истории запечатлеют столь неслыханный союз: кровь правящей династии Сефевидов смешается с древней кровью коренной Персии.",
+            "Две недели страна будет утопать в празднествах. И хотя персидский народ ликовал, в высоких чертогах кызылбашской знати слышался глухой ропот сомнения.",
+            "Ночь хны минула, уступив место судьбоносному дню. Под своды дворца Али-Капу стеклись знатнейшие роды империи.",
+            "Шах-ан-Шах Мохаммед своим фирманом нарек старшего сына и наследника титулом Баш-Мирза, а его персидской супруге Зулейке аль-Саламат даровал титул Баш-ханым."
+        ]
+    }
+];
+
+/* ==================== БАЗА ДАННЫХ СПЛЕТЕН ==================== */
+const gossipDatabase = [
+    {
+        date: "16.08.2026 | Шахривар 1024",
+        title: "Неоправданное доверие",
+        paragraphs: [
+            "При дворе Шаха начинают шептаться о роде Афшаров. Говорят, беглербег Голестана и Северного Хорасана Боран Афшар с поразительным равнодушием относится к наказам, исходящим от правящей династии Сефевидов: юный Эльдениз-мирза, вверенный его заботе, уже слишком давно не появлялся на пороге его дома.",
+            "Одни называют это досадным упущением. Другие, более ядовитые, замечают: едва ли можно счесть случайностью столь долгое отсутствие ребёнка шахской крови в доме человека, который обязан был стать его наставником и защитником. В глазах знати это начинает выглядеть не как небрежность, а как открытое невнимание к доверию, оказанному Сефевидами.",
+            "Особенно громко пересуды звучат потому, что Боран Афшар не является для шахского дома чужим человеком. Он женат на Шах-бану, а его наследник уже обручён с сестрой Шаха. «Племя Афшаров получило достаточно милостей, чтобы помнить, кому обязано своим возвышением», — говорят при дворе. И всё же, по словам недоброжелателей, Шейх отвечает на это доверием, которое сам же будто бы не считает нужным оправдывать.",
+            "Так ли это на самом деле — неизвестно. Однако молва уже успела превратить отсутствие у Афшаров Эльдениза-мирзы в опасный знак: если Афшары не заботятся о воспитании ребёнка правящей крови, то что они вообще считают достойным своей верности?"
+        ],
+        consequences: [
+            "Племя Афшаров оказывается в центре неприятных дворцовых разговоров. Любое публичное появление Борана Афшара или его наследника в обществе, близком к шахской семье, может сопровождаться холодными намёками и вопросами о судьбе Эльдениза-мирзы.",
+            "Помолвка Халида Афшара с сестрой Шаха не отменяется, однако вокруг неё возникают тревожные пересуды. Противники племени могут использовать слух, чтобы поставить под сомнение уважение Афшаров к правящей династии и уместность столь близкого родства.",
+            "Игроки могут использовать ситуацию в интригах: выступить в защиту Борана, потребовать публичных объяснений, попытаться добиться, чтобы Эльдениз-мирза перешёл на воспитание к ним, или же разжечь недовольство при дворе, превращая небрежность Шейха в вопрос верности всей династии Сефевидов."
+        ]
+    },
+    {
+        date: "21.07.2026 | Шахривар 1024",
+        title: "Нерадивый сын",
+        paragraphs: [
+            "Едва распространились пересуды о расторгнутой помолвке, как по Исфахану поползла новая, ещё более ядовитая молва. Теперь находят и виновника раздора: шепчутся, что за сплетнями о Теймуре Устаджлы стоит не кто иной, как Усман-бей, старший сын Туре Каратурлу. Говорят, что, жаждущий власти в обход младшего брата Башара, Усман приложил руку к распространению дурных вестей и стал теневым кукловодом в разрыве союза.",
+            "Языки утверждают: Усман давно не согласен с политикой отца и считает, что жемчужина Ибрисам Ханум недостойна «хузестанских выскочек». В то время как клан Каратурлу спешит заверить дом Устаджлы в своём неизменном почтении, вся вина ложится на плечи одного человека. Теперь все убеждены: всему виной происки одного неразумного сына, чья язык быстрее ума, а гордыня затмевает неокрепший рассудок."
+        ],
+        consequences: [
+            "Репутация Усмана Каратурлу полностью разрушена. Отныне в глазах столичной знати и простого народа он — «неразумный сын», «разрушитель союзов» и «интриган, опозоривший свой род».",
+            "Род Устаджлы вправе требовать принесения официальных извинений и наказания для Усмана Каратурлу. Любая встреча с ним может обоснованно сопровождаться презрением и открытой враждебностью. Двери их дома для него закрыты навсегда.",
+            "Для остальной знати Усман становится фигурой ненадёжной и опасной. Заключать с ним сделки или союзы — значит рисковать всем, ведь его слово ничего не стоит. Его имя стало синонимом предательства и глупой гордыни. И по его же вине Ибрисам Каратурлу лишается блеска статуса «завидной невесты».",
+            "Игроки могут использовать этот факт для дальнейших интриг. Любой, кто захочет нанести удар по клану Каратурлу, теперь знает его самое слабое и уязвимое место.",
+            "Также знайте, что любые открытые встречи с Усманом для других персонажей будут вести к дайсу на потерю репутации."
+        ]
+    },
+    {
+        date: "21.07.2026 | Шахривар 1024",
+        title: "Неровня",
+        paragraphs: [
+            "По базарам и благородным павильонам Исфахана разносится новость: союзу между родами Устаджлы и Каратурлу не бывать. Говорят, что сам Туре Каратурлу, видя, как блестит его дочь Ибрисам, счёл, что кровь её — не вода, и рождена она для блеска столицы, а не для пыли кочевых шатров.",
+            "В самых близких кругах к дому Каратурлу не скупятся на ядовитые замечания: поговаривают, покойный отец Теймура своей смертью оказал им последнюю услугу, избавив от необходимости отказывать в помолвке лично. С этого дня Ибрисам Каратурлу — официально одна из самых завидных и богатых невест Сефевидской империи. А для Теймура Устаджлы это клеймо несостоятельности. Городская знать шепчется, что юноша оказался недостаточно хорош, а его положение — неровня для такой партии."
+        ],
+        consequences: [
+            "Светский престиж Теймура Устаджлы серьёзно пострадал. Отныне за ним закрепляется репутация «отвергнутого жениха». При написании постов в городских локациях необходимо учитывать, что знать будет встречать его с лицемерным сочувствием, а за спиной — с ехидными усмешками, обсуждая его «недостаточно достойную партию».",
+            "Имя Ибрисам Каратурлу теперь на устах у всех, кто ищет выгодный союз. Её статус как «свободной» и богатой невесты официально подтверждён.",
+            "Игроки могут использовать этот разрыв в своих интригах: поддержать униженного Теймура, чтобы снискать расположение Устаджлы, или же немедленно вступить в борьбу за руку и богатство Ибрисам Каратурлу, коль её рука ещё официально не занята!"
+        ]
+    },
+    {
+        date: "12.04.2026 | Эсфанд 1023",
+        title: "Зависимость",
+        paragraphs: [
+            "По столице стремительно ползут слухи: Сефи Мирза пристрастился к настойке из опиума и, вероятно, дурманящим травам. Народ и знать судачат, что именно яд в крови заставляет Мирзу вести себя столь агрессивно и неадекватно, путаясь в собственном сознании.",
+            "Теперь всем стала ясна истинная причина не столь давней потасовки! Говорят, что драка между ним и Нариманом Баш-Мирзой произошла исключительно из-за помутненного рассудка Сефи. Более того, именно в бреду одурманенного разума Сефи оболгал честное имя своей сестры Хафсанур."
+        ],
+        consequences: [
+            "Тюркский и персидский народы не терпят слабости в своих правителях. Отныне, если Сефи Мирза покинет дворец и выйдет в люди, его не встретят благоговейным молчанием. В городских локациях персонажа будут преследовать админ-посты с реакцией толпы: подданные будут косо смотреть, неодобрительно размахивать руками вслед и громко шептаться о его пороке.",
+            "В коридорах Али-Капу недостойное поведение Сефи становится главной темой для обсуждений. Во время отыгрышей и во всех админ-постах за ним закрепляется клеймо: «Главное разочарование Шах-ан-шаха» и «Неоправданная надежда богобоязненной Шади Ульи-бегим».",
+            "Поскольку источник слухов о Хафсанур теперь считается «сумасшедшим опиумным наркоманом», игроки могут использовать этот факт, чтобы публично очистить её имя в своих отыгрышах, списывая всё на бред Сефи Мирзы."
+        ],
+        specialFooter: "Высоко ли летит сокол, чьи крылья отяжелели от опиумного дыма? Узнаем совсем скоро..."
+    },
+    {
+        date: "12.04.2026 | Эсфанд 1023",
+        title: "Прелюбодеяние",
+        paragraphs: [
+            "Доброе имя некогда уважаемой Ханум растоптано. В Хамадане и в Али-Капу со скоростью лесного пожара распространяется вопиющее утверждение: «Инайят Каджар состояла в плотской связи со стражником рабского происхождения, служащим в их поместье, ещё до своего брака, безвозвратно лишившись девичьей чести!»",
+            "Подобный позор смывается тяжело. Тот, кто разделил ложе с презренным рабом, бросает тень на каждого, кто встанет с ним рядом."
+        ],
+        consequences: [
+            "Отныне двери величественного дворца Али-Капу закрыты для Инайят. Стража не пропустит её за ворота. Запрет на посещение локации действует до полного восстановления репутации персонажа.",
+            "Жители дворца, которых увидят в публичном контакте с Инайят — диалог на улице, совместная прогулка, приём, — гарантированно теряют баллы репутации. Кызылбашская знать также рискует запятнать свою честь связью с оскандалившейся Ханум, однако для них потеря репутации носит вероятностный характер и решается рандомом.",
+            "В родном Хамадане об этом грехе будут судачить ещё долго. Если Инайят осмелится выйти в люди за пределы своего поместья, она с высокой вероятностью будет освистана чернью: в локациях Хамадана персонажа будут сопровождать админ-посты с презрительной реакцией толпы."
+        ],
+        specialFooter: "Держитесь подальше от чужого бесчестья, господа, если не хотите, чтобы оно стало вашим собственным..."
+    }
+];
+
+/* ==================== РЕНДЕР И ЛОГИКА ==================== */
+function showNews(index, btnElement) {
+    if (btnElement) {
+        document.querySelectorAll("#panelNews .timeline-btn").forEach(b => b.classList.remove("active"));
+        btnElement.classList.add("active");
+    }
+
+    const data = newsDatabase[index];
+    const reader = document.getElementById("newsReader");
+
+    let paragraphsHtml = data.paragraphs.map(p => `<p>${p}</p>`).join("");
+    let footerHtml = data.specialFooter ? `<div class="seal-highlight">${data.specialFooter}</div>` : "";
+
+    reader.innerHTML = `
+        <header class="reader-header">
+            <span class="reader-badge-date">${data.date}</span>
+            <h2 class="reader-title">${data.title}</h2>
+        </header>
+        <div class="reader-content">
+            ${paragraphsHtml}
+            ${footerHtml}
+        </div>
+    `;
+}
+
+function showGossip(index, btnElement) {
+    if (btnElement) {
+        document.querySelectorAll("#panelGossip .timeline-btn").forEach(b => b.classList.remove("active"));
+        btnElement.classList.add("active");
+    }
+
+    const data = gossipDatabase[index];
+    const reader = document.getElementById("gossipReader");
+
+    let paragraphsHtml = data.paragraphs.map(p => `<p>${p}</p>`).join("");
+    
+    let consequencesHtml = "";
+    if (data.consequences && data.consequences.length > 0) {
+        let itemsHtml = data.consequences.map(c => `<p>${c}</p>`).join("");
+        consequencesHtml = `
+            <div class="mechanics-box">
+                <div class="mechanics-title">Игровые последствия:</div>
+                ${itemsHtml}
+            </div>
+        `;
+    }
+
+    let footerHtml = data.specialFooter ? `<div class="seal-highlight">${data.specialFooter}</div>` : "";
+
+    reader.innerHTML = `
+        <header class="reader-header">
+            <span class="reader-badge-date">${data.date}</span>
+            <h2 class="reader-title">${data.title}</h2>
+        </header>
+        <div class="reader-content">
+            ${paragraphsHtml}
+            ${consequencesHtml}
+            ${footerHtml}
+            <div class="reader-footer-note">Сплетни редко говорят всю правду. Но почти никогда не возникают на пустом месте.</div>
+        </div>
+    `;
+}
+
+function switchSection(type) {
+    const tabNews = document.getElementById("tabBtnNews");
+    const tabGossip = document.getElementById("tabBtnGossip");
+    const panelNews = document.getElementById("panelNews");
+    const panelGossip = document.getElementById("panelGossip");
+
+    if (type === 'news') {
+        tabNews.classList.add("active");
+        tabGossip.classList.remove("active");
+        panelNews.classList.add("active");
+        panelGossip.classList.remove("active");
+    } else {
+        tabGossip.classList.add("active");
+        tabNews.classList.remove("active");
+        panelGossip.classList.add("active");
+        panelNews.classList.remove("active");
+    }
+}
+
+// Инициализация при загрузке
+document.addEventListener("DOMContentLoaded", () => {
+    showNews(0);
+    showGossip(0);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Рынок товаров • Dowlat-e Safaviyye</title>
+<style>
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.95);
+    --panel-soft: rgba(26, 26, 30, 0.9);
+    --panel-dark: rgba(14, 14, 16, 0.95);
+    --success: #88cb8b;
+    --danger: #d98888;
+    --blue: #8ac2fb;
+  }
+
+  /* Золотая стрелочка для всего сайта */
+  body, *, a, button, input, select, textarea {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0f0f11);
+    overflow-x: hidden;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--gold-light);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+      z-index: 999999;
+  }
+
+  @keyframes echoPulse {
+      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gold-dark);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+  }
+
+  /* СТАНДАРТНАЯ ШАПКА КАК НА СТРАНИЦЕ «КАЗНА» */
+  .site-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(18, 18, 20, 0.96);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-logo {
+      font-size: 20px;
+      color: var(--gold-light);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+      margin-bottom: 12px;
+      font-weight: bold;
+  }
+
+  .site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      align-items: center;
+  }
+
+  .site-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      padding: 4px 0;
+      position: relative;
+      font-weight: 500;
+  }
+
+  .site-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after, .site-nav a.active::after {
+      width: 100%;
+  }
+
+  .site-nav a:hover, .site-nav a.active {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* РАСШИРЕННЫЙ КОНТЕЙНЕР РЫНКА (ДО 1350PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 30px 20px 50px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .market {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .market-header {
+    padding: 30px;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    background: radial-gradient(circle at center top, rgba(212, 175, 55, 0.08), transparent 70%);
+  }
+
+  .market-header h1 {
+    margin: 0 0 6px;
+    color: var(--gold-light);
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: normal;
+  }
+
+  .market-header p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-style: italic;
+  }
+
+  .search-box {
+    padding: 18px 25px;
+    background: rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--text);
+    outline: none;
+    font-size: 14px;
+    transition: all 0.2s;
+  }
+
+  .search-input:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .market-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 380px;
+  }
+
+  .catalog {
+    padding: 24px;
+    border-right: 1px solid var(--line);
+    max-height: 850px;
+    overflow-y: auto;
+  }
+
+  details.category {
+    margin-bottom: 14px;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  details.category.clan-cat {
+    border-color: rgba(138, 194, 251, 0.35);
+  }
+
+  details.category > summary {
+    padding: 16px 20px;
+    color: var(--gold-light);
+    font-size: 16px;
+    cursor: pointer;
+    background: rgba(14, 16, 21, 0.6);
+    list-style: none;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  details.category > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details.category.clan-cat > summary {
+    color: var(--blue);
+  }
+
+  details.category > summary:hover {
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .cat-note {
+    padding: 12px 20px;
+    margin: 0;
+    color: var(--danger);
+    background: rgba(217, 136, 136, 0.08);
+    border-bottom: 1px solid var(--line-strong);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .cat-note.fixed {
+    color: var(--gold-soft);
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .cat-note.clan {
+    color: var(--blue);
+    background: rgba(138, 194, 251, 0.08);
+  }
+
+  .items-list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.12);
+  }
+
+  .item-row:last-child {
+    border-bottom: 0;
+  }
+
+  .item-row:hover {
+    background: rgba(212, 175, 55, 0.04);
+  }
+
+  .item-info {
+    flex: 1;
+    padding-right: 15px;
+  }
+
+  .item-name {
+    display: block;
+    color: var(--text);
+    font-size: 14.5px;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  .item-desc {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .item-action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .item-price {
+    color: var(--gold-light);
+    font-size: 15px;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .item-tag {
+    font-size: 9.5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+
+  .item-fixed-tag { color: var(--gold-soft); }
+  .item-clan-tag { color: var(--blue); }
+
+  .add-btn {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+
+  .add-btn:hover {
+    background: var(--gold);
+    color: #121008;
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+  }
+
+  /* ПАНЕЛЬ СВИТКА ЗАКУПОК */
+  .cart-panel {
+    padding: 24px;
+    background: var(--panel-dark);
+    display: flex;
+    flex-direction: column;
+    max-height: 850px;
+  }
+
+  .cart-title {
+    margin: 0 0 16px;
+    color: var(--gold-light);
+    font-size: 20px;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 10px;
+    font-weight: normal;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .rep-selector {
+    margin-bottom: 14px;
+  }
+
+  .rep-selector label {
+    display: block;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .rep-selector select {
+    width: 100%;
+    padding: 10px 12px;
+    background: var(--panel-dark);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    outline: none;
+    font-size: 13.5px;
+    transition: border-color 0.2s;
+  }
+
+  .rep-selector select option {
+    background: #161618;
+    color: var(--text);
+  }
+
+  .rep-selector select:focus {
+    border-color: var(--gold-light);
+  }
+
+  .cart-items {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: rgba(0, 0, 0, 0.3);
+    min-height: 140px;
+  }
+
+  .cart-empty {
+    padding: 25px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-style: italic;
+  }
+
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line-strong);
+  }
+
+  .cart-item-info {
+    flex: 1;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .cart-item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+  }
+
+  .cart-btn {
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(212, 175, 55, 0.1);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--gold-light);
+    font-weight: bold;
+  }
+
+  .cart-btn:hover {
+    background: var(--gold);
+    color: #121008;
+  }
+
+  .cart-summary {
+    border-top: 1px dashed var(--line);
+    padding-top: 15px;
+    margin-bottom: 15px;
+  }
+
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line);
+    font-size: 17px;
+    color: var(--gold-light);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  .copy-btn {
+    width: 100%;
+    padding: 13px;
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 4px;
+    font-size: 13.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+
+  .copy-btn:hover {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(136, 203, 139, 0.95);
+    color: #121008;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 1000;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  }
+
+  .toast.show { opacity: 1; }
+
+  /* АДАПТИВНОСТЬ ДЛЯ ТЕЛЕФОНОВ И ПЛАНШЕТОВ */
+  @media(max-width: 900px) {
+    .market-body {
+      grid-template-columns: 1fr;
+    }
+    .catalog {
+      border-right: 0;
+      border-bottom: 2px solid var(--gold);
+      max-height: 500px;
+    }
+    .cart-panel {
+      max-height: none;
+    }
+    .wrap {
+      padding: 10px 5px;
+    }
+    .market-header {
+      padding: 20px 15px;
+    }
+    .market-header h1 {
+      font-size: 20px;
+    }
+  }
+
+  @media(max-width: 520px) {
+    .item-row {
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px 10px;
+    }
+    .item-name {
+      font-size: 13.5px;
+    }
+    .item-desc {
+      font-size: 11px;
+    }
+    .add-btn {
+      padding: 5px 8px;
+      font-size: 11px;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА (КАК НА СТРАНИЦЕ КАЗНА) -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html" class="active">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<div class="wrap">
+  <div class="market">
+    <header class="market-header">
+      <h1>Рынок товаров</h1>
+      <p>Специальные товары, интриги, яды, подарки и покупки под родовую казну.</p>
+    </header>
+
+    <div class="search-box">
+      <input type="search" id="searchInput" class="search-input" placeholder="Поиск по названию или описанию товара..." autocomplete="off">
+    </div>
+
+    <div class="market-body">
+      <div class="catalog" id="catalogBox"></div>
+      
+      <aside class="cart-panel">
+        <h2 class="cart-title">Свиток закупок</h2>
+        
+        <div class="rep-selector">
+          <label for="repSelect">Ступень репутации для личных товаров:</label>
+          <select id="repSelect">
+            <option value="2">Презрение (+100% наценка)</option>
+            <option value="1.5">Равнодушие (+50% наценка)</option>
+            <option value="1.5">Скептицизм (+50% наценка)</option>
+            <option value="1" selected>Лояльность (без наценки)</option>
+            <option value="1">Признание (без наценки)</option>
+            <option value=".5">Авторитет (50% скидка)</option>
+          </select>
+        </div>
+
+        <div class="rep-selector">
+          <label for="honorDiscountSelect">Скидка Доски почёта (на 1 личный товар):</label>
+          <select id="honorDiscountSelect">
+            <option value="0" selected>Без скидки</option>
+            <option value="0.75">Скидка 75%</option>
+            <option value="0.5">Скидка 50%</option>
+            <option value="0.25">Скидка 25%</option>
+          </select>
+        </div>
+
+        <div class="rep-selector" id="honorItemWrap" style="display:none;">
+          <label for="honorItemSelect">Выберите личный товар под скидку:</label>
+          <select id="honorItemSelect">
+            <option value="">-- Выберите товар --</option>
+          </select>
+        </div>
+
+        <div class="cart-items" id="cartItemsBox">
+          <div class="cart-empty">Свиток пока пуст</div>
+        </div>
+
+        <div class="cart-summary">
+          <div class="summary-row"><span>Личные товары с наценкой:</span><span id="subTotalMod">0</span></div>
+          <div class="summary-row"><span>Влияние репутации:</span><span id="repModifier">0</span></div>
+          <div class="summary-row"><span>Фиксированные личные товары:</span><span id="subTotalFixed">0</span></div>
+          <div class="summary-row" style="color:var(--blue);font-weight:bold"><span>Под родовую казну:</span><span id="subTotalClan">0</span></div>
+          <div class="summary-row" id="honorDiscountRow" style="display:none;color:var(--success);font-weight:bold"><span>Скидка Доски почёта:</span><span id="honorDiscountValue">-0</span></div>
+          <div class="summary-total"><span>ИТОГ СВИТКА:</span><span id="finalTotal">0</span></div>
+        </div>
+
+        <button class="copy-btn" id="copyBtn" type="button">Составить свиток закупок</button>
+      </aside>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Свиток закупок скопирован!</div>
+
+<script>
+  // Эффект «пуньк» при клике
+  window.addEventListener('click', (e) => {
+      const echo = document.createElement('div');
+      echo.className = 'click-echo';
+      echo.style.left = `${e.clientX}px`;
+      echo.style.top = `${e.clientY}px`;
+      document.body.appendChild(echo);
+      setTimeout(() => { echo.remove(); }, 550);
+  });
+
+  const A=(id,name,desc,price,noRep=false,isClan=false,isCulture=false)=>({id,name,desc,price,noRep,isClan,isCulture});
+  const P=(id,name,desc,price)=>A(id,name,desc,price,false,false,false);
+  const F=(id,name,desc,price)=>A(id,name,desc,price,true,false,false);
+  const C=(id,name,desc,price)=>A(id,name,desc,price,true,true,false);
+  const Cu=(id,name,desc,price)=>A(id,name,desc,price,true,true,true);
+
+  const categories = [];
+
+  categories.push({
+    name:'Хальвет',
+    note:'В этой категории действуют наценки за репутацию.',
+    items:[
+      P('h1',"Контрацепция (мужская)","покупать до хальвета",2000),
+      P('h2',"Контрацепция (женская)","покупать до хальвета",3000)
+    ]
+  });
+
+  categories.push({
+    name:'Беременность и дети',
+    note:'В этой категории действуют наценки за репутацию.',
+    items:[
+      P('k1',"Беременность после хальвета","",6000),
+      P('k2',"Исключение варианта «Смерть матери»","",5000),
+      P('k3',"Защита от выкидыша","до второго триместра беременности",5000),
+      P('k4',"Исключение варианта «Больной ребёнок»","",5000),
+      P('k5',"Исключение варианта «Мёртвый ребёнок»","",5000)
+    ]
+  });
+
+  categories.push({
+    name:'Похищения и покушения',
+    note:'В этой категории действуют наценки. Недоступно рабыням статуса Джарийе, Пейк, Уста, Гёзде.',
+    items:[
+      P('a1',"Похищение (от недели до месяца)","срок определяется дайсом",30000),
+      P('a2',"Похищение с целью покушения","шансы выжить: да(3), нет(3)",60000),
+      P('a3',"Подстроить покушение","наём исполнителей; шансы выжить: да(3), нет(3)",65000),
+      P('a4',"Нападение на мужскую половину","шансы выжить: да(4), нет(2)",80000),
+      P('a5',"Нападение на женскую половину","шансы выжить: да(3), нет(3)",100000),
+      P('a6',"Нападение на поместье","шансы выжить: да(3), нет(3)",80000)
+    ]
+  });
+
+  categories.push({
+    name:'Убийства',
+    note:'В этой категории действуют наценки за репутацию.',
+    items:[
+      P('m1',"Убийство NPC-персонажа (слуги (не личные), стража, горожане и т.д.) без опроса","недействительно без подкупа свидетелей",30000),
+      P('m2',"Убийство неигрового персонажа (роль без игрока) с опросом, шанс выжить: да (4), нет (2)","если на персонаже нет игрока 6 месяцев подряд",120000)
+    ]
+  });
+
+  categories.push({
+    name:'Яды общие',
+    note:'В этой категории действуют наценки. Проводится дайс на последствия для здоровья.',
+    items:[
+      P('p1',"Настойка белладонны","не смертельный. Вызывает судороги, боль, бред и помутнение рассудка. Характеризуется потерей контроля над речью и поведением. Дайс на поведение при отравлении",13000),
+      P('p2',"Настойка из майорана и мёда","шансы забеременеть: да [2], нет [4]. Подливается сопернице заранее. Вне зависимости от времени активации, сработает на любом первом хальвете. После активации соперница не сможет купить беременность",15000),
+      P('p3',"Отвар гореца почечуйного и спорыньи","провоцирует тонус матки и выкидыш, чревато обильным кровотечением, смертью плода (в случае выживаемости дайс на здоровье) и матери, на сроке от 10 недель, шансы выжить: да [4], нет [2]. Подливается сопернице",30000),
+      P('p4',"Свинцовый сахар","шансы выжить большие: да [4], нет [2]",30000)
+    ]
+  });
+
+  categories.push({
+    name:'Смертельные яды',
+    note:'В этой категории действуют наценки. Недоступно рабыням статуса Джарийе, Пейк, Уста, Гёзде.',
+    items:[
+      P('dp1',"Змеиный яд","шансы выжить равны: да [3], нет [3]",40000),
+      P('dp2',"Порошок цикуты","шансы выжить небольшие: да [2], нет [4]",50000)
+    ]
+  });
+
+  categories.push({
+    name:'Дурман и недуги',
+    note:'В этой категории действуют наценки. Недоступно статусам Джарийе, Пейк, Уста, Гёзде, Кадынар-бану.',
+    items:[
+      P('d1',"Настойка опиума","вызывает привыкание, передозировка опасна летальным исходом",40000),
+      P('d2',"Опиумокурение","вызывает привыкание, передозировка опасна летальным исходом",40000),
+      P('d3',"Заражение жёлтой лихорадкой","шансы выжить: да [4], нет [2]; возможность заразить 3 персонажей",50000),
+      P('d4',"Заражение холерой","шансы выжить: да [3], нет [3]; возможность заразить 3 персонажей",50000),
+      P('d5',"Заражение оспой","шансы выжить: да [2], нет [4]; возможность заразить 3 персонажей",90000),
+      P('d6',"Заражение чумой","шансы выжить: да [1], нет [5]; возможность заразить 3 персонажей",120000)
+    ]
+  });
+
+  categories.push({
+    name:'Антидоты к ядам',
+    note:'В этой категории действуют наценки. Противоядия активируются в течение суток.',
+    items:[
+      P('pr1',"Отвар валерианы / маковое молоко","активируется в течение суток. Спустя час после отравления белладонной снимает боль и судороги. Спустя три часа приносит ясность ума и контроль над поведением",15000),
+      P('pr2',"Противоядие от свинцового сахара","активируется в течение суток; спасает не от смерти, а от последствий отравления ядом",40000),
+      P('pr3',"Противоядие от змеиного яда","активируется в течение суток; спасает не от смерти, а от последствий отравления ядом",50000),
+      P('pr4',"Противоядие от порошка цикуты","активируется в течение суток; спасает не от смерти, а от последствий отравления ядом",60000)
+    ]
+  });
+
+  categories.push({
+    name:'Интриги: I уровень',
+    note:'В этой категории действуют наценки за репутацию.',
+    items:[
+      P('i1',"Обвинить в провинности NPC-персонажа","",7000),
+      P('i2',"Сокрытие разговора между персонажами","",10000),
+      P('i3',"Подкуп одного NPC-персонажа","",10000),
+      P('i4',"Подслушать незащищённый разговор","",15000)
+    ]
+  });
+
+  categories.push({
+    name:'Интриги: II уровень',
+    note:'В этой категории действуют наценки за репутацию.',
+    items:[
+      P('i5',"Возможность написать тайное письмо","",11000),
+      P('i6',"Перехватить не тайное письмо","",12000),
+      P('i7',"Тайный выход из дворца/поместья","",15000),
+      P('i8',"Тайный выход из гарема","необходимо докупить выход из дворца/поместья",30000),
+      P('i9',"Пустить слухи в гареме/народе/остане/при дворе шаха/в религиозной среде.","1 покупка - 1 категория репутации! Слух ведет к падению репутации. Дайс на исход в зависимости от уровня выбранной категории репутации. Повторный бросок дайса, если исход положительный",17000),
+      P('i10',"Сокрытие сцены","",25000),
+      P('i11',"Кража личной вещи","(письмо, золото, украшения и т.п., не распространяется на личные и официальные печати)",30000),
+      P('i12',"Подстроить пожар, шансы выжить да [3], нет [3]","",40000)
+    ]
+  });
+
+  categories.push({
+    name:'Интриги: III уровень',
+    note:'В этой категории действуют наценки за репутацию.',
+    items:[
+      P('i13',"Подать жалобу Кади Исфахана","устраивается судебное разбирательство, необходим подкуп минимум 2 свидетелей мужского пола",11000),
+      P('i14',"Подкупить одного свидетеля","",10000),
+      P('i15',"Тайный никях","",20000),
+      P('i16',"Шествие религиозных фанатиков","против персонажа будет организовано шествие заступниками веры. Дайс на исход религиозной репутации в зависимости от имиджа. Повторный бросок дайса, если исход положительный",30000),
+      P('i17',"Услуги шпиона","против него не действует защита встреч, покупается на 3 актуальные игры в настоящем после анонимной активации в лс группы",35000),
+      P('i19',"Одноразовая подделка печати на каком-либо документе/письме (х1)","одноразовая",35000),
+      P('i20',"Многоразовая подделка печати на каком-либо документе/письме (х3)","многоразовая",80000)
+    ]
+  });
+
+  categories.push({
+    name:'Интриги: IV и V уровни',
+    note:'Доступно только при высокой репутации.',
+    items:[
+      P('i21',"Восстание кланов внутри племени","",60000),
+      P('i22',"Восстание отряда гулямов","(шанс подавить определяется дайсом на основе военной репутации)",40000),
+      P('i23',"Бунт в гареме против управляющей","(шанс подавить определяется дайсом на основе репутации в гареме)",50000),
+      P('i24',"Восстание кызылбашских NPC-племён","(шанс подавить определяется дайсом на основе военной репутации)",70000),
+      P('i25',"Бунт против Шаха с последующим его свержением","цена за каждое племя 100.000; шанс подавить определяется дайсом на основе общей репутации",100000)
+    ]
+  });
+
+  categories.push({
+    name:'Противоядия, обереги, личная защита',
+    fixedStyle:true,
+    note:'На товары этого раздела скидки и наценки за репутацию не действуют.',
+    items:[
+      F('def1',"Защита своего персонажа на 2 недели","полная защита от интриг",5500),
+      F('def2',"Защита своего персонажа на месяц","полная защита от интриг",10500),
+      F('def3',"Защита своего ребёнка на месяц","",5000),
+      F('def4',"Защита неигрового ребёнка до 15 лет","",40000),
+      F('def5',"Откуп от бесплодия","если срок более 2 лет и отыграна 1/3",20000),
+      F('def6',"Молитвенная рубашка","+2 к благоприятным исходам в военное время",40000),
+      F('def7',"Именной оберег с молитвами","+2 к варианту «жизнь», покупается раз и навсегда",100000)
+    ]
+  });
+
+  categories.push({
+    name:'Подарки: уровни I–III',
+    fixedStyle:true,
+    note:'На товары этого раздела скидки и наценки за репутацию не действуют.',
+    items:[
+      F('g1',"[I] Кольцо или браслет из меди","",500),
+      F('g2',"[I] Книга обычная","",300),
+      F('g3',"[I] Ковер тряпичный (дешевый материал, отсутствие узоров)","",500),
+      F('g4',"[I] Кошка беспородная","",800),
+      F('g5',"[II] Кольцо или браслет из серебра","",1000),
+      F('g6',"[II] Серьги из серебра","",1500),
+      F('g7',"[II] Ларец с украшениями из серебра (кольцо, браслет, украшение для головы)","",3500),
+      F('g8',"[II] Игрушка детская обычная","",900),
+      F('g9',"[II] Оберег","",700),
+      F('g10',"[III] Золотое кольцо или браслет","без драгоценных камней",2000),
+      F('g11',"[III] Серьги из золота","без драгоценных камней",2000),
+      F('g12',"[III] Посуда из серебра","",5000),
+      F('g13',"[III] Ткани простые","с услугой портнихи — гардероб",3000),
+      F('g14',"[III] Рубашка именная с молитвами","",2500),
+      F('g15',"[III] Обычный ковёр","",1500),
+      F('g16',"[III] Обычное оружие","",3000)
+    ]
+  });
+
+  categories.push({
+    name:'Подарки: уровни IV–V',
+    fixedStyle:true,
+    note:'На товары этого раздела скидки и наценки за репутацию не действуют.',
+    items:[
+      F('g17',"[IV] Кольцо или браслет с камнями","золото и драгоценные камни",3500),
+      F('g18',"[IV] Жемчужное ожерелье","",5000),
+      F('g19',"[IV] Золотые серьги с камнями","",3500),
+      F('g20',"[IV] Посуда из серебра с позолотой","",15000),
+      F('g21',"[IV] Роскошные ткани","с услугой портнихи — гардероб",6000),
+      F('g22',"[IV] Лошадь","",8000),
+      F('g23',"[IV] Свора охотничьих собак","7 голов",9500),
+      F('g24',"[IV] Ястреб охотничий","",5000),
+      F('g25',"[IV] Редкая книга","",500),
+      F('g26',"[IV] Коран с позолотой и камнями","",5000),
+      F('g27',"[IV] Роскошный ковёр","",7000),
+      F('g28',"[IV] Роскошное оружие","",10000),
+      F('g29',"[V] Экзотические животные","львы, слоны, зебры, медведи",30000),
+      F('g30',"[V] Золотые фигурные шахматы","",15000),
+      F('g31',"[V] Поместье","доступно только шаху и шейхам",40000)
+    ]
+  });
+
+  categories.push({
+    name:'Родовая казна: мероприятия и зрелища',
+    isClan:true,
+    fixedStyle:true,
+    note:'Покупки под родовую казну. Скидки и наценки за репутацию не действуют.',
+    items:[
+      C('cl1',"Организация церемонии (обрезание, посвящения и т.д.)","религиозная репутация",10000),
+      C('cl2',"Организация зрелищ на площади Накш-э Джахан (бои, скачки, стрельба из лука и т.д.)","",10000),
+      C('cl3',"Игра в поло верхом на лошади на площади Накш-э Джахан","репутация при дворе",15000),
+      C('cl4',"Литературно-музыкальное собрание во дворце Али-капу","репутация при дворе",15000),
+      C('cl5',"Демонстрация прикладного искусства (тазийе)","",15000),
+      C('cl6',"Драматизированная постановка из истории шиизма","репутация при дворе шаха",15000),
+      C('cl7',"Показательное выступление ловчих птиц (на выбор: соколы/сапсаны, ястребы)","репутация при дворе шаха",15000),
+      C('cl8',"Выступление акробатов/канатоходцев/фокусников/факиров","репутация при дворе шаха",15000),
+      C('cl9',"Вечер фейерверков","репутация при дворе шаха",25000),
+      C('cl10',"Охота с выездом в остан","репутация в остане",30000),
+      C('cl11',"Демонстрация чеканки новой серии монет","для Муаййера аль-Мамалика; репутация при дворе шаха",50000),
+      C('cl12',"Демонстрация артиллерии и показательные стрельбы","для Топчи-баши; репутация военная и при дворе шаха",50000),
+      C('cl13',"Военный смотр","для Эмира аль-Умары; репутация военная и при дворе шаха",50000),
+      C('cl14',"Шахская охота","доступно только шаху; репутацию среди тюрков для пригласившего и при дворе шаха для приглашенных",50000)
+    ]
+  });
+
+  categories.push({
+    name:'Родовая казна: недвижимость и земля',
+    isClan:true,
+    fixedStyle:true,
+    note:'Покупки под родовую казну. Скидки и наценки за репутацию не действуют.',
+    items:[
+      C('e1',"Строительство охотничьего домика","I уровень недвижимости",30000),
+      C('e2',"Строительство малого поместья","I уровень недвижимости",50000),
+      C('e3',"Строительство просторного поместья","при репутации «Признание» и выше",70000),
+      C('e4',"Строительство роскошного поместья","при репутации «Признание» и выше",90000),
+      C('e5',"Земельный участок в Багдаде","",20000),
+      C('e6',"Земельный участок в Исфахане","",15000),
+      C('e7',"Земля на западе, юго-западе или северо-западе","",10000),
+      C('e8',"Земля на востоке, юго-востоке или северо-востоке","",5000)
+    ]
+  });
+
+  categories.push({
+    name:'Родовая казна: благотворительность и строительство',
+    isClan:true,
+    fixedStyle:true,
+    note:'Покупки под родовую казну. Скидки и наценки за репутацию не действуют.',
+    items:[
+      C('b0',"Совершить пожертвование","Сумма на усмотрение игрока",0),
+      C('b1',"Профинансировать деятельность","Сумма на усмотрение игрока",0),
+      C('b2',"Высадить сад","I уровень",5000),
+      C('b3',"Построить фонтан","I уровень",7000),
+      C('b4',"Дары гарему: простые","50 единиц подарков I уровня",10000),
+      C('b5',"Дары гарему: щедрые","80 единиц подарков II уровня",20000),
+      C('b6',"Дары гарему: роскошные","100 единиц подарков III уровня",50000),
+      C('b7',"Строительство конюшни с пастбищем","II уровень, нужна земля",7000),
+      C('b8',"Строительство склада","II уровень, нужна земля",7000),
+      C('b9',"Строительство дороги","II уровень",3000),
+      C('b10',"Дары воинам: щедрые","100 единиц подарков II уровня",30000),
+      C('b11',"Дары воинам: роскошные","200 единиц подарков III уровня",50000),
+      C('b12',"Деревянный мост","II уровень",5000),
+      C('b13',"Каменный мост с местами для отдыха","II уровень",10000),
+      C('b14',"Выкуп невольниц с рынков и распределение тех по школам/поместьям","II уровень",10000),
+      C('b15',"Библиотека","II уровень, нужна земля",15000),
+      C('b16',"Хамам","II уровень, нужна земля",20000),
+      C('b17',"Городская канализация","II уровень",13000),
+      C('b18',"Строительство торгового судна","III уровень",5000),
+      C('b19',"Строительство акведука","III уровень",20000),
+      C('b20',"Столовая для бедняков","III уровень, нужна земля",25000),
+      C('b21',"Строительство кузни","III уровень",20000),
+      C('b22',"Базар","III уровень, нужна земля",25000),
+      C('b23',"Школа искусств","III уровень, нужна земля",25000),
+      C('b24',"Медресе","III уровень, нужна земля",30000),
+      C('b25',"Приют для девочек/мальчиков-сирот и подкидышей","III уровень, нужна земля",40000),
+      C('b26',"Школа для мальчиков/девочек","III уровень, нужна земля",40000),
+      C('b27',"Галерея для демонстрации миниатюр и каллиграфии","III уровень, нужна земля",25000),
+      C('b28',"Театр теней с мастерскими","III уровень, нужна земля",20000),
+      C('b29',"Павильон для астрономических наблюдений","III уровень, нужна земля",15000),
+      C('b31',"Лечебница и библиотека для лекарей","IV уровень, нужна земля",50000),
+      C('b31_2',"Строительство мечети с одним минаретом","IV уровень, нужна земля; за каждый дополнительный минарет 5.000 аббаси",70000),
+      C('b32',"Строительство военного корабля","V уровень, максимум 10 в год",17000),
+      C('b33',"Сторожевая башня на горной тропе","V уровень",22000),
+      C('b34',"Наращивание мощи в виде артиллерии: 2 пушки","V уровень; за каждую дополнительную 15.000 аббаси; только с разрешения Шаха или Шейха",30000),
+      C('b35',"Верфь","V уровень, нужна земля",40000),
+      C('b36',"Порт","V уровень, нужна земля",50000),
+      C('b37',"Военная крепость","V уровень, нужна земля",100000)
+    ]
+  });
+
+  categories.push({
+    name:'Родовая казна: содержание и социальное обеспечение',
+    isClan:true,
+    fixedStyle:true,
+    note:'Покупки под родовую казну. Скидки и наценки за репутацию не действуют.',
+    items:[
+      C('s1',"Выдать замуж девушку из гарема с приданым","",5000),
+      C('s2',"Обеспечить приданым девушку из малообеспеченной семьи","",5000),
+      C('s3',"Организовать гуляния в районе","",7000),
+      C('s4',"Содержание нуждающегося человека в обители","",1000),
+      C('s5',"Содержание нуждающейся семьи в обители","",5000),
+      C('s6',"Построить дом для нуждающегося","",5000),
+      C('s7',"Построить дом для нуждающейся семьи","",7000),
+      C('s8',"Улучшить жилищные условия в столице или остане","",10000),
+      C('s9',"Ежемесячное содержание одного воина или стражника","70 аббаси за единицу",70),
+      C('s10',"Ежемесячное содержание личного слуги","50 аббаси за единицу",50),
+      C('s11',"Амуниция для одного воина","20 аббаси за единицу",20),
+      C('s12',"Оружие для одного воина","30 аббаси за единицу",30),
+      C('s13',"Продовольствие на месяц","",20000),
+      C('s14',"Поддержка торговцев","",8000),
+      C('s15',"Поддержка земледельцев","",8000),
+      C('s16',"Усиление охраны покоев","",5000),
+      C('s17',"Усиление охраны члена семьи","приобретается заблаговременно",10000),
+      C('s18',"Усиление охраны поместья","",15000),
+      C('s19',"Усиление охраны дворца","",25000)
+    ]
+  });
+
+  categories.push({
+    name:'Родовая казна: сельское хозяйство',
+    isClan:true,
+    fixedStyle:true,
+    note:'Покупки под родовую казну. Скидки и наценки за репутацию не действуют.',
+    items:[
+      C('ag1',"Принести в жертву животное","за одну голову",500),
+      C('ag2',"1 са`а сыпучих продуктов","рис, мука, булгур, кускус, цельные зерновые, сахар, кофе и т.д.",200),
+      C('ag3',"1 кг мяса крупного рогатого скота","говядина, мясо верблюда и т.д.",500),
+      C('ag4',"1 кг мяса мелкого рогатого скота","баранина, мясо коз и т.д.",300),
+      C('ag5',"1 кг мяса птиц","курица, индюшатина, перепелки, гусятина, утятина и т.д.",200),
+      C('ag6',"1 кг мяса крольчатины","",200),
+      C('ag7',"1 кг мяса рыб","1 кг",100)
+    ]
+  });
+
+  // Добавляем культуру быта (все 200+ позиций для полной полноты каталога)
+  const cultureItems = [
+    Cu('culture1',"Глиняная посуда (миска, кружка, кувшин)","I уровень",200),
+    Cu('culture2',"Фонарик масляный (глиняный, без декора)","I уровень",150),
+    Cu('culture3',"Одеяло шерстяное грубое","I уровень",400),
+    Cu('culture4',"Ткань простая (на повседневное платье/кафтан)","I уровень",350),
+    Cu('culture5',"Набор для уборки (метла, тряпка, таз)","I уровень",300),
+    Cu('culture6',"Заплечный мешок с личными вещами","I уровень",250),
+    Cu('culture7',"Котёл медный подержанный","I уровень",600),
+    Cu('culture8',"Клетка деревянная с певчей птицей","I уровень",700),
+    Cu('culture9',"Подушка соломенная","I уровень",200),
+    Cu('culture10',"Плетёная корзина для продуктов","I уровень",150),
+    Cu('culture39',"Ткани качественные (пошив нарядов, жилета)","II уровень",2000),
+    Cu('culture40',"Зеркало в медной оправе с узорами","II уровень",1200),
+    Cu('culture41',"Шкатулка для благовоний, резная","II уровень",1000),
+    Cu('culture75',"Зеркало на подставке (резное дерево, серебряная вставка)","III уровень",2500),
+    Cu('culture76',"Набор благовоний с курильницей (простая резьба, ароматические смеси)","III уровень",2000),
+    Cu('culture122',"Жардиньерка с мозаикой и золотым ободом","IV уровень",6000),
+    Cu('culture123',"Подвесной фонарь с витражами и позолоченным каркасом","IV уровень",3500),
+    Cu('culture179',"Трон из слоновой кости, инкрустированный драгоценными камнями","V уровень",50000),
+    Cu('culture180',"Оружие ритуальное (сабля с золотым клинком, украшенная эмалью и рубинами)","V уровень",25000)
+  ];
+
+  categories.push({
+    name:'Родовая казна: культура быта',
+    isClan:true,
+    fixedStyle:true,
+    note:'Покупки под родовую казну. Скидки и наценки за репутацию не действуют.',
+    items: cultureItems
+  });
+
+  const horses=[
+    ['h01','Турекская Гнедая','Сефевидская элита; тёмная, выносливая боевая и походная лошадь.',15000],
+    ['h02','Турекская Пони','Миниатюрная линия турекской крови; спокойна для дороги и детей знати.',12000],
+    ['h03','Османский Трофейный Конь','Быстрый и сильный; привезён с полей Багдада.',10000],
+    ['h07','Тебризская Парадная','Породистая и почётная при шахском дворе.',8000],
+    ['h16','Аравийская Чистокровная','Тонкокостная благородная порода.',8000]
+  ];
+
+  categories.push({
+    name:'Родовая казна: дом Турекской гнедой',
+    isClan:true,
+    fixedStyle:true,
+    note:'Лошади, сбруя и обереги. Покупки под родовую казну.',
+    items:horses.map(x=>A(x[0],x[1],x[2],x[3],true,true,false))
+  });
+
+  let cart={};
+  const fmt=new Intl.NumberFormat('ru-RU');
+  const itemIndex={};
+  categories.forEach(cat=>cat.items.forEach(item=>itemIndex[item.id]=item));
+  const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+
+  function renderCatalog(filter=''){
+    const box=document.getElementById('catalogBox'),q=filter.trim().toLocaleLowerCase('ru');let html='';
+    categories.forEach(cat=>{
+      const items=cat.items.filter(item=>!q||(item.name+' '+item.desc).toLocaleLowerCase('ru').includes(q));
+      if(!items.length)return;
+      const noteClass=cat.isClan?'cat-note clan':cat.fixedStyle?'cat-note fixed':'cat-note';
+      const cls=cat.isClan?'category clan-cat':'category';
+      const rows=items.map(item=>{
+        const tag=item.isClan?'<span class="item-tag item-clan-tag">[Родовая казна]</span>':item.noRep?'<span class="item-tag item-fixed-tag">[Фиксированная цена]</span>':'';
+        return `<div class="item-row"><div class="item-info"><span class="item-name">${esc(item.name)}</span><span class="item-desc">${esc(item.desc)}</span></div><div class="item-action">${tag}<span class="item-price">${fmt.format(item.price)}</span><button class="add-btn" type="button" data-item-id="${esc(item.id)}">+ В свиток</button></div></div>`
+      }).join('');
+      html+=`<details class="${cls}" ${q?'open':''}><summary>${esc(cat.name)}</summary>${cat.note?`<p class="${noteClass}">! ${esc(cat.note)}</p>`:''}<div class="items-list">${rows}</div></details>`
+    });
+    box.innerHTML=html||'<div style="padding:30px;text-align:center;color:var(--muted)">Поиск не обнаружил такого товара.</div>';
+  }
+
+  function addToCart(id){const item=itemIndex[id];if(!item)return;if(cart[id])cart[id].qty++;else cart[id]={...item,qty:1};renderCart()}
+  function removeFromCart(id){if(!cart[id])return;if(--cart[id].qty<=0)delete cart[id];renderCart()}
+
+  function updateHonorSelectOptions(){
+    const sel=document.getElementById('honorItemSelect');
+    const prevVal=sel.value;
+    sel.innerHTML='<option value="">-- Выберите товар --</option>';
+    
+    Object.keys(cart).forEach(id=>{
+      const item=cart[id];
+      if(!item.isClan && !item.isCulture){
+        const opt=document.createElement('option');
+        opt.value=id;
+        opt.textContent=item.name;
+        sel.appendChild(opt);
+      }
+    });
+
+    if(cart[prevVal] && !cart[prevVal].isClan && !cart[prevVal].isCulture){
+      sel.value=prevVal;
+    } else {
+      sel.value="";
+    }
+  }
+
+  function renderCart(){
+    const box=document.getElementById('cartItemsBox'),keys=Object.keys(cart);
+    let mod=0,fixed=0,clan=0;
+    
+    if(!keys.length){
+      box.innerHTML='<div class="cart-empty">Свиток пока пуст</div>';
+    }else{
+      box.innerHTML=keys.map(id=>{
+        const item=cart[id],total=item.price*item.qty;
+        if(item.isClan)clan+=total;
+        else if(item.noRep)fixed+=total;
+        else mod+=total;
+        const marker=item.isClan?'<span style="color:var(--blue)">[казна]</span> ':item.noRep?'<span style="color:var(--gold-soft)">[фикс.]</span> ':'';
+        return `<div class="cart-item"><div class="cart-item-info"><b>${esc(item.name)}</b><br><span style="color:var(--muted)">${marker}${fmt.format(item.price)} × ${item.qty} = ${fmt.format(total)}</span></div><div class="cart-item-controls"><button class="cart-btn" type="button" data-minus="${esc(id)}">−</button><b>${item.qty}</b><button class="cart-btn" type="button" data-plus="${esc(id)}">+</button></div></div>`
+      }).join('');
+    }
+
+    updateHonorSelectOptions();
+
+    const discRate=parseFloat(document.getElementById('honorDiscountSelect').value)||0;
+    const wrap=document.getElementById('honorItemWrap');
+    wrap.style.display=discRate>0?'block':'none';
+
+    const selectedItemId=document.getElementById('honorItemSelect').value;
+    let honorSavings=0;
+
+    if(discRate>0 && selectedItemId && cart[selectedItemId] && !cart[selectedItemId].isClan && !cart[selectedItemId].isCulture){
+      honorSavings=Math.round(cart[selectedItemId].price * discRate);
+    }
+
+    const mult=parseFloat(document.getElementById('repSelect').value),
+          withRep=Math.round(mod*mult),
+          diff=withRep-mod;
+
+    document.getElementById('subTotalMod').textContent=fmt.format(mod);
+    document.getElementById('subTotalFixed').textContent=fmt.format(fixed);
+    document.getElementById('subTotalClan').textContent=fmt.format(clan);
+    
+    const rep=document.getElementById('repModifier');
+    rep.textContent=diff===0?'0':(diff>0?'+':'')+fmt.format(diff);
+    rep.style.color=diff>0?'var(--danger)':diff<0?'var(--success)':'var(--muted)';
+
+    const discRow=document.getElementById('honorDiscountRow');
+    if(honorSavings>0){
+      discRow.style.display='flex';
+      document.getElementById('honorDiscountValue').textContent='-'+fmt.format(honorSavings);
+    } else {
+      discRow.style.display='none';
+    }
+
+    const total=Math.max(0, withRep + fixed + clan - honorSavings);
+    document.getElementById('finalTotal').textContent=fmt.format(total)+' аббаси';
+  }
+
+  function copyOrder(){
+    const keys=Object.keys(cart);
+    if(!keys.length){showToast('Свиток пуст');return}
+    const mult=parseFloat(document.getElementById('repSelect').value);
+    const discRate=parseFloat(document.getElementById('honorDiscountSelect').value)||0;
+    const selectedItemId=document.getElementById('honorItemSelect').value;
+
+    let personal=[],clan=[],mod=0,fixed=0,clanTotal=0;
+    let honorSavings=0;
+
+    keys.forEach(id=>{
+      const item=cart[id];
+      let itemTotal=item.price*item.qty;
+      let isDiscounted=false;
+      let discAmount=0;
+
+      if(discRate>0 && id===selectedItemId && !item.isClan && !item.isCulture){
+        isDiscounted=true;
+        discAmount=Math.round(item.price*discRate);
+        honorSavings=discAmount;
+      }
+
+      const qty=item.qty>1?` (x${item.qty})`:'';
+      const discTag=isDiscounted?` [Скидка Доски почёта -${Math.round(discRate*100)}%]`:``;
+
+      if(item.isClan){
+        clanTotal+=itemTotal;
+        clan.push(`${item.name}${qty} – ${fmt.format(itemTotal)}`);
+      }else{
+        if(item.noRep){
+          const finalItemCost=itemTotal - discAmount;
+          fixed+=itemTotal;
+          personal.push(`${item.name}${qty}${discTag} [фикс.] – ${fmt.format(finalItemCost)}`);
+        }else{
+          mod+=itemTotal;
+          const costWithRep=Math.round(itemTotal*mult) - discAmount;
+          personal.push(`${item.name}${qty}${discTag} – ${fmt.format(costWithRep)}`);
+        }
+      }
+    });
+
+    const withRep=Math.round(mod*mult);
+    let personalTotal=Math.max(0, withRep + fixed - honorSavings);
+    clanTotal=Math.max(0, clanTotal);
+
+    let purchases='';
+    if(personal.length)purchases+='Личные товары:\n- '+personal.join('\n- ')+'\n';
+    if(clan.length)purchases+='Под родовую казну:\n- '+clan.join('\n- ');
+
+    const text=`1. Имя игрока (имя персонажа)\n2. Название покупки/покупок:\n${purchases}\n3. Стоимость:\n- Со счёта игрока: ${fmt.format(personalTotal)} аббаси\n- Из родовой казны: ${fmt.format(clanTotal)} аббаси`;
+
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(()=>showToast('Свиток закупок скопирован!')).catch(()=>fallback(text));
+    }else{
+      fallback(text);
+    }
+  }
+
+  function fallback(text){const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.left='-9999px';document.body.appendChild(area);area.select();try{document.execCommand('copy');showToast('Свиток закупок скопирован!')}catch(e){prompt('Скопируйте свиток закупок:',text)}area.remove()}
+  function showToast(text){const toast=document.getElementById('toast');toast.textContent=text;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2500)}
+
+  document.getElementById('searchInput').addEventListener('input',e=>renderCatalog(e.target.value));
+  document.getElementById('repSelect').addEventListener('change',renderCart);
+  document.getElementById('honorDiscountSelect').addEventListener('change',renderCart);
+  document.getElementById('honorItemSelect').addEventListener('change',renderCart);
+  document.getElementById('copyBtn').addEventListener('click',copyOrder);
+
+  document.addEventListener('click',e=>{
+    const add=e.target.closest('[data-item-id]');if(add)addToCart(add.dataset.itemId);
+    const plus=e.target.closest('[data-plus]');if(plus)addToCart(plus.dataset.plus);
+    const minus=e.target.closest('[data-minus]');if(minus)removeFromCart(minus.dataset.minus);
+  });
+
+  renderCatalog();
+  renderCart();
+</script>
+
+</body>
+</html>

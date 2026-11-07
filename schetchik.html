@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Калькулятор постов • Dowlat-e Safaviyye</title>
+<style>
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.95);
+    --panel-soft: rgba(26, 26, 30, 0.9);
+    --panel-dark: rgba(14, 14, 16, 0.95);
+    --success: #88cb8b;
+    --danger: #d98888;
+  }
+
+  /* Золотая стрелочка для всего сайта */
+  body, *, a, button, input, select, textarea {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0f0f11);
+    overflow-x: hidden;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--gold-light);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+      z-index: 999999;
+  }
+
+  @keyframes echoPulse {
+      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gold-dark);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+  }
+
+  /* СТАНДАРТНАЯ ШАПКА КАК НА СТРАНИЦЕ «КАЗНА» */
+  .site-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(18, 18, 20, 0.96);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-logo {
+      font-size: 20px;
+      color: var(--gold-light);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+      margin-bottom: 12px;
+      font-weight: bold;
+  }
+
+  .site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      align-items: center;
+  }
+
+  .site-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      padding: 4px 0;
+      position: relative;
+      font-weight: 500;
+  }
+
+  .site-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after, .site-nav a.active::after {
+      width: 100%;
+  }
+
+  .site-nav a:hover, .site-nav a.active {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (РАСШИРЕННЫЙ ДО 1200PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 40px 20px 60px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .calculator-card {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    padding: 40px 50px;
+  }
+
+  .calc-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+  }
+
+  .calc-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: normal;
+  }
+
+  .calc-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-style: italic;
+  }
+
+  /* Текстовое поле */
+  .textarea-wrapper {
+    margin-bottom: 20px;
+  }
+
+  .post-textarea {
+    width: 100%;
+    height: 280px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 18px;
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: 14.5px;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .post-textarea:focus,
+  .post-input:focus,
+  select:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .post-textarea::placeholder,
+  .post-input::placeholder {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* Поля имени и ссылки на пост */
+  .inputs-row {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .post-input {
+    width: 100%;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 12px 16px;
+    color: var(--text);
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  /* Выпадающее меню поиска имени игрока */
+  .combo-wrap {
+    position: relative;
+  }
+
+  .combo-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    max-height: 230px;
+    overflow-y: auto;
+    background: #161618;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    z-index: 999;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
+  }
+
+  .combo-menu.open {
+    display: block;
+  }
+
+  .combo-opt {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    color: var(--text);
+  }
+
+  .combo-opt:hover {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-light);
+  }
+
+  /* Панель чекбоксов (бонусы) */
+  .bonuses-panel {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px 25px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .bonus-title {
+    font-size: 12px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 6px;
+    font-weight: bold;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13.5px;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .checkbox-label.grey-option {
+    color: var(--muted); /* Приглушенный серый для дополнительных/второстепенных опций */
+  }
+
+  .checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+
+  /* Панель результатов */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .result-box {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s;
+  }
+
+  .result-box.highlighted {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.05);
+  }
+
+  .result-box.reward-box {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.08);
+    grid-column: span 2;
+  }
+
+  .result-label {
+    display: block;
+    font-size: 11.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  .result-value {
+    font-size: 28px;
+    color: var(--gold-light);
+    font-weight: bold;
+  }
+
+  .result-value.lines {
+    font-size: 32px;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.3);
+  }
+
+  .result-value.reward {
+    font-size: 38px;
+    color: var(--gold-light);
+    text-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+
+  .stats-row-small {
+    display: flex;
+    justify-content: space-around;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  /* Кнопка копирования */
+  .copy-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 4px;
+    font-size: 13.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+
+  .copy-btn:hover {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  }
+
+  /* Сноска снизу */
+  .calc-footer {
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  .calc-footer span {
+    color: var(--gold-soft);
+    font-style: normal;
+  }
+
+  /* Уведомление */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(136, 203, 139, 0.95);
+    color: #121008;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 1000;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  }
+
+  .toast.show { opacity: 1; }
+
+  @media (max-width: 768px) {
+    .inputs-row,
+    .results-grid {
+      grid-template-columns: 1fr;
+    }
+    .result-box.reward-box {
+      grid-column: span 1;
+    }
+    .calculator-card {
+      padding: 20px 16px;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА (КАК НА СТРАНИЦЕ КАЗНА) -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html" class="active">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<div class="wrap">
+  <div class="calculator-card">
+    
+    <header class="calc-header">
+      <h1 class="calc-title">Калькулятор постов</h1>
+      <p class="calc-subtitle">Автоматический подсчёт строк и суммы вознаграждения в аббаси</p>
+    </header>
+
+    <div class="textarea-wrapper">
+      <textarea 
+        id="postInput" 
+        class="post-textarea" 
+        placeholder="Вставьте текст вашего ролевого поста сюда..." 
+        oninput="calculatePostStats()"></textarea>
+    </div>
+
+    <div class="inputs-row">
+      <!-- Поле имени игрока с выпадающим списком -->
+      <div class="combo-wrap" id="playerComboWrap">
+        <input 
+          type="text" 
+          id="playerNameInput" 
+          class="post-input" 
+          placeholder="Имя персонажа / игрока..." 
+          autocomplete="off">
+        <div class="combo-menu" id="playerMenu"></div>
+      </div>
+
+      <input 
+        type="text" 
+        id="postLinkInput" 
+        class="post-input" 
+        placeholder="Вставьте ссылку на пост...">
+    </div>
+
+    <!-- Дополнительные бонусы -->
+    <div class="bonuses-panel">
+      <div class="bonus-title">Дополнительные бонусы и акции:</div>
+      <label class="checkbox-label">
+        <input type="checkbox" id="checkMedia" onchange="calculatePostStats()">
+        <span>Прикрепление к посту фото / гиф. анимации / аудио (+500 аббаси)</span>
+      </label>
+      <label class="checkbox-label">
+        <input type="checkbox" id="checkFast5k" onchange="calculatePostStats()">
+        <span>Ответить на пост в день его получения (+5 000 аббаси)</span>
+      </label>
+      <label class="checkbox-label grey-option">
+        <input type="checkbox" id="checkFast30k" onchange="calculatePostStats()">
+        <span>Ответ день в день (+30 000 аббаси)</span>
+      </label>
+      <label class="checkbox-label grey-option">
+        <input type="checkbox" id="checkClosedPresent" onchange="calculatePostStats()">
+        <span>Закрытая сцена (настоящее, +30 000 аббаси)</span>
+      </label>
+      <label class="checkbox-label grey-option">
+        <input type="checkbox" id="checkClosedFlashback" onchange="calculatePostStats()">
+        <span>Закрытая сцена (флешбек, +15 000 аббаси)</span>
+      </label>
+      <label class="checkbox-label grey-option">
+        <input type="checkbox" id="checkX2" onchange="calculatePostStats()">
+        <span>Акция х2 на посты (удвоение суммы за строки)</span>
+      </label>
+    </div>
+
+    <div class="results-grid">
+      
+      <div class="result-box highlighted">
+        <span class="result-label">Строк во ВКонтакте</span>
+        <span id="vkLinesVal" class="result-value lines">0</span>
+      </div>
+
+      <div class="result-box">
+        <span class="result-label">Статистика символов</span>
+        <div class="stats-row-small" style="margin-top: 10px;">
+          <span>С пробелами: <b id="charWithSpacesVal" style="color:var(--text);">0</b></span>
+        </div>
+        <div class="stats-row-small" style="margin-top: 6px;">
+          <span>Без пробелов: <b id="charNoSpacesVal" style="color:var(--text);">0</b></span>
+        </div>
+      </div>
+
+      <div class="result-box reward-box">
+        <span class="result-label">Сумма вознаграждения</span>
+        <span id="rewardVal" class="result-value reward">0 аббаси</span>
+      </div>
+
+    </div>
+
+    <button class="copy-btn" onclick="copyReport()">Скопировать для банка</button>
+
+    <footer class="calc-footer">
+      * Подсчет строк ведется по стандарту обсуждений ВК (~110 символов в строке). Пустые переносы не учитываются.<br>
+      * Вознаграждение начисляется начиная с <span>20 комп. строк</span> (2 000 аббаси, далее +100 аббаси за каждую строчку).
+    </footer>
+
+  </div>
+</div>
+
+<div class="toast" id="toast">Скопировано в буфер обмена!</div>
+
+<script>
+  // Эффект «пуньк» (эхо) при клике
+  window.addEventListener('click', (e) => {
+      const echo = document.createElement('div');
+      echo.className = 'click-echo';
+      echo.style.left = `${e.clientX}px`;
+      echo.style.top = `${e.clientY}px`;
+      document.body.appendChild(echo);
+      setTimeout(() => { echo.remove(); }, 550);
+  });
+
+  // Список игроков
+  const playersList = [
+    "Love And Attraction",
+    "Таня Левицкая",
+    "Елена Троянская",
+    "Eva Skyletova",
+    "Poison Attarction",
+    "Polina Kouna",
+    "Sultana Herondale",
+    "Анастасия Назарьева",
+    "Rina Targaryen",
+    "Anna De‑Bourgogne",
+    "Sofia Schweighöfer",
+    "Caroline Fortin",
+    "Ada Atasever",
+    "Felicity Epicura",
+    "Elen Stoker",
+    "Sandra Stoker",
+    "Виктория Чеснокова",
+    "Мелли Казанцева",
+    "Veleno D’amore",
+    "Delicate Fuchsia",
+    "Pelin Wendibren",
+    "Pizdec Ebany Wendibren",
+    "Ascella Wendibren",
+    "Betti Miller",
+    "Emotional Addixtion",
+    "Peter Pevensie"
+  ];
+
+  // Логика выпадающего списка
+  const playerInput = document.getElementById("playerNameInput");
+  const playerMenu = document.getElementById("playerMenu");
+
+  function renderPlayerDropdown(query) {
+    const q = (query || "").trim().toLowerCase();
+    playerMenu.innerHTML = "";
+
+    const matched = playersList.filter(name => !q || name.toLowerCase().includes(q));
+
+    if (matched.length === 0) {
+      playerMenu.innerHTML = `<div class="combo-opt" style="color:var(--muted);">Игрок не найден (можно ввести свой вариант)</div>`;
+      return;
+    }
+
+    matched.forEach(name => {
+      const div = document.createElement("div");
+      div.className = "combo-opt";
+      div.textContent = name;
+      div.onmousedown = (e) => {
+        e.preventDefault();
+        playerInput.value = name;
+        playerMenu.classList.remove("open");
+      };
+      playerMenu.appendChild(div);
+    });
+  }
+
+  playerInput.addEventListener("focus", () => {
+    renderPlayerDropdown(playerInput.value);
+    playerMenu.classList.add("open");
+  });
+
+  playerInput.addEventListener("input", () => {
+    renderPlayerDropdown(playerInput.value);
+    playerMenu.classList.add("open");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!document.getElementById("playerComboWrap").contains(e.target)) {
+      playerMenu.classList.remove("open");
+    }
+  });
+
+  let currentStats = {
+    lines: 0,
+    charWithSpaces: 0,
+    charNoSpaces: 0,
+    baseReward: 0,
+    isX2: false,
+    mediaBonus: 0,
+    fast5kBonus: 0,
+    fast30kBonus: 0,
+    closedPresentBonus: 0,
+    closedFlashbackBonus: 0,
+    totalReward: 0
+  };
+
+  function calculatePostStats() {
+    const text = document.getElementById("postInput").value;
+    const limit = 110;
+    const hasMedia = document.getElementById("checkMedia").checked;
+    const hasFast5k = document.getElementById("checkFast5k").checked;
+    const hasFast30k = document.getElementById("checkFast30k").checked;
+    const hasClosedPresent = document.getElementById("checkClosedPresent").checked;
+    const hasClosedFlashback = document.getElementById("checkClosedFlashback").checked;
+    const isX2 = document.getElementById("checkX2").checked;
+    
+    if (!text) {
+      document.getElementById("vkLinesVal").innerText = "0";
+      document.getElementById("charWithSpacesVal").innerText = "0";
+      document.getElementById("charNoSpacesVal").innerText = "0";
+      document.getElementById("rewardVal").innerText = "0 аббаси";
+      currentStats = { 
+        lines: 0, charWithSpaces: 0, charNoSpaces: 0, baseReward: 0, isX2: false, 
+        mediaBonus: 0, fast5kBonus: 0, fast30kBonus: 0, closedPresentBonus: 0, closedFlashbackBonus: 0, totalReward: 0 
+      };
+      return;
+    }
+
+    const charWithSpaces = text.length;
+    const charNoSpaces = text.replace(/\s/g, "").length;
+
+    const paragraphs = text.split("\n");
+    let totalVkLines = 0;
+
+    paragraphs.forEach(paragraph => {
+      const p = paragraph.trim();
+      if (p.length === 0) return;
+
+      const words = p.split(/\s+/);
+      let currentLineLen = 0;
+      let pLines = 1;
+
+      words.forEach(word => {
+        const wordLen = word.length;
+        if (currentLineLen === 0) {
+          currentLineLen = wordLen;
+        } else if (currentLineLen + 1 + wordLen <= limit) {
+          currentLineLen += 1 + wordLen;
+        } else {
+          pLines++;
+          currentLineLen = wordLen;
+        }
+      });
+
+      totalVkLines += pLines;
+    });
+
+    let baseReward = totalVkLines >= 20 ? totalVkLines * 100 : 0;
+    let calculatedBase = isX2 ? (baseReward * 2) : baseReward;
+
+    let mediaBonus = hasMedia ? 500 : 0;
+    let fast5kBonus = (hasFast5k && !hasFast30k) ? 5000 : 0;
+    let fast30kBonus = hasFast30k ? 30000 : 0;
+    let closedPresentBonus = hasClosedPresent ? 30000 : 0;
+    let closedFlashbackBonus = hasClosedFlashback ? 15000 : 0;
+
+    let totalReward = calculatedBase + mediaBonus + fast5kBonus + fast30kBonus + closedPresentBonus + closedFlashbackBonus;
+
+    currentStats = {
+      lines: totalVkLines,
+      charWithSpaces: charWithSpaces,
+      charNoSpaces: charNoSpaces,
+      baseReward: calculatedBase,
+      isX2: isX2,
+      mediaBonus: mediaBonus,
+      fast5kBonus: fast5kBonus,
+      fast30kBonus: fast30kBonus,
+      closedPresentBonus: closedPresentBonus,
+      closedFlashbackBonus: closedFlashbackBonus,
+      totalReward: totalReward
+    };
+
+    const fmt = new Intl.NumberFormat('ru-RU');
+    document.getElementById("vkLinesVal").innerText = fmt.format(totalVkLines);
+    document.getElementById("charWithSpacesVal").innerText = fmt.format(charWithSpaces);
+    document.getElementById("charNoSpacesVal").innerText = fmt.format(charNoSpaces);
+    document.getElementById("rewardVal").innerText = fmt.format(totalReward) + " аббаси";
+  }
+
+  function copyReport() {
+    if (currentStats.lines === 0) return;
+
+    const fmt = new Intl.NumberFormat('ru-RU');
+    const playerName = document.getElementById("playerNameInput").value.trim() || "Имя игрока";
+    const postLink = document.getElementById("postLinkInput").value.trim();
+    const linesStr = `${fmt.format(currentStats.lines)} строк${getPluralEnding(currentStats.lines)}`;
+    
+    let parts = [linesStr];
+    
+    if (currentStats.mediaBonus > 0) parts.push("вложение");
+    if (currentStats.fast5kBonus > 0) parts.push("ответ день в день");
+    if (currentStats.fast30kBonus > 0) parts.push("ответ день в день (30 000)");
+    if (currentStats.closedPresentBonus > 0) parts.push("закрытая сцена (наст.)");
+    if (currentStats.closedFlashbackBonus > 0) parts.push("закрытая сцена (флешбек)");
+    if (currentStats.isX2) parts.push("акция х2");
+
+    const detailsStr = parts.join(" + ");
+    const line2 = postLink ? `${postLink} (${detailsStr})` : detailsStr;
+    const line3 = `${fmt.format(currentStats.totalReward)} аббаси`;
+
+    const reportText = `1. ${playerName}\n2. ${line2}\n3. ${line3}`;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(reportText).then(() => {
+        showToast("Отчет скопирован в буфер!");
+      }).catch(err => {
+        runFallbackCopy(reportText);
+      });
+    } else {
+      runFallbackCopy(reportText);
+    }
+  }
+
+  function getPluralEnding(number) {
+    const n = Math.abs(number) % 100;
+    const n1 = n % 10;
+    if (n > 10 && n < 20) return "";
+    if (n1 > 1 && n1 < 5) return "и";
+    if (n1 === 1) return "а";
+    return "";
+  }
+
+  function runFallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      const successful = document.execCommand('copy');
+      document.body.removeChild(textArea);
+      if (successful) {
+        showToast("Отчет скопирован в буфер!");
+      } else {
+        showManualCopyPrompt(text);
+      }
+    } catch (err) {
+      document.body.removeChild(textArea);
+      showManualCopyPrompt(text);
+    }
+  }
+
+  function showManualCopyPrompt(text) {
+    window.prompt(
+      "Копирование заблокировано политикой безопасности.\n\n" +
+      "Текст отчета уже выделен ниже. Нажмите Ctrl+C (или Cmd+C на Mac) для копирования:", 
+      text
+    );
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+</script>
+
+</body>
+</html>

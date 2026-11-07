@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dowlаt-e Safaviyye</title>
+    <style>
+        :root {
+            --gold: #bf9000;
+            --gold-light: #ffd700;
+            --text: #f0e5c9;
+            --muted: #aaa18e;
+            --line: rgba(191, 144, 0, 0.38);
+            --line-soft: rgba(191, 144, 0, 0.16);
+            --bg: #000000;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            font-family: Georgia, "Times New Roman", serif !important;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        /* ШАПКА */
+        .site-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 24px;
+            border-bottom: 1px solid var(--line);
+            background: #000000;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .site-logo {
+            font-size: 18px;
+            color: var(--text);
+            letter-spacing: 1px;
+        }
+
+        .site-nav {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .site-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 13.5px;
+            transition: color 0.2s;
+        }
+
+        .site-nav a:hover, .site-nav a.active {
+            color: var(--gold-light);
+            font-weight: bold;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: transparent;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin: 0;
+            line-height: 1.1;
+            color: #e8e8e8;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-weight: normal;
+        }
+
+        .hero h1 span {
+            font-size: 42px;
+            display: block;
+            margin-top: 10px;
+            color: var(--text);
+        }
+
+        /* ОПИСАНИЕ */
+        .intro-text {
+            max-width: 900px;
+            margin: 40px auto;
+            text-align: center;
+            padding: 0 20px;
+            font-size: 16px;
+            line-height: 1.8;
+            color: #d1c8b4;
+        }
+
+        .intro-text .gold {
+            color: var(--gold);
+            font-weight: bold;
+        }
+
+        /* ========================================= */
+        /* СТИЛИ ДЛЯ АДМИНИСТРАЦИИ                   */
+        /* ========================================= */
+        .safavid-grand-hall {
+            background: transparent;
+            color: #cccccc;
+            padding: 20px 0 60px 0;
+            text-align: center;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .hall-title {
+            font-size: 20px;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .hall-divider {
+            color: #d4af37;
+            font-size: 16px;
+            margin-bottom: 40px;
+            opacity: 0.7;
+        }
+
+        .hall-grid {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 35px;
+        }
+
+        .palace-card {
+            width: 200px;
+            flex: 0 0 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .palace-window {
+            width: 180px;
+            height: 250px;
+            flex-shrink: 0;
+            border-radius: 90px 90px 10px 10px;
+            border: 2px solid #b89947;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(0,0,0,0.8);
+            overflow: hidden;
+            background: #1a1a1a;
+            position: relative;
+            margin-bottom: -20px;
+            z-index: 1;
+        }
+
+        .palace-window img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center top;
+            filter: grayscale(100%);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .palace-window:hover img {
+            transform: scale(1.08);
+            filter: grayscale(0%);
+        }
+
+        .name-plaque {
+            background: linear-gradient(to right, #111, #222, #111);
+            border-top: 1px solid #d4af37;
+            border-bottom: 1px solid #d4af37;
+            padding: 10px 5px;
+            width: 100%;
+            min-height: 75px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.8);
+        }
+
+        .admin-name {
+            color: #d4af37;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-align: center;
+            line-height: 1.2;
+            word-wrap: break-word;
+        }
+
+        .admin-role {
+            color: #888;
+            font-size: 11px;
+            font-style: italic;
+            letter-spacing: 2px;
+            text-transform: lowercase;
+            text-align: center;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 920px) {
+            .hall-grid {
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+            .palace-card {
+                width: 160px;
+                flex: 0 0 160px;
+            }
+            .palace-window {
+                width: 140px;
+                height: 200px;
+                border-radius: 70px 70px 10px 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .site-header { flex-direction: column; gap: 15px; }
+            .site-nav { justify-content: center; font-size: 12px; gap: 10px;}
+            .hero h1 { font-size: 36px; }
+            .hero h1 span { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА С МЕНЮ -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html" class="active">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="calendar.html">Календарь</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- ЗАГОЛОВОК -->
+    <section class="hero">
+        <h1>Добро пожаловать в<br><span>Dowlat-e Safaviyye</span></h1>
+    </section>
+
+    <!-- ТЕКСТ О ПРОЕКТЕ -->
+    <section class="intro-text">
+        <p><span class="gold">Dowlat-e Safaviyye</span> — это проект с альтернативной историей Сефевидского государства, ведущий начало с правления Шаха Аббаса I Великого. Нынешний правитель Сефевидского государства — шах Нариман I. Он же — глава народа, управляющий землями вместе с кызылбашской знатью, которая входит в главный совет государя и в распоряжении которой находится вся военная мощь страны.</p>
+    </section>
+
+    <!-- ВАШ БЛОК АДМИНИСТРАЦИИ -->
+    <div class="safavid-grand-hall">
+      <div class="hall-title">Администрация проекта</div>
+      <div class="hall-divider">✦ ✧ ✦ ✧ ✦</div>
+
+      <div class="hall-grid">
+
+        <div class="palace-card">
+          <div class="palace-window">
+            <img src="https://i.ibb.co/yBdT3zXJ/001.png" alt="Polina">
+          </div>
+          <div class="name-plaque">
+            <div class="admin-name">Polina Kouna</div>
+            <div class="admin-role">пуся</div>
+          </div>
+        </div>
+
+        <div class="palace-card">
+          <div class="palace-window">
+            <img src="https://i.ibb.co/pvFnHqXm/001.png" alt="Eva">
+          </div>
+          <div class="name-plaque">
+            <div class="admin-name">Eva Skyletova</div>
+            <div class="admin-role">муся</div>
+          </div>
+        </div>
+
+        <div class="palace-card">
+          <div class="palace-window">
+            <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/10/14/dfbgdfgb.png" alt="Poison">
+          </div>
+          <div class="name-plaque">
+            <div class="admin-name">Poison Attraction</div>
+            <div class="admin-role">сюся</div>
+          </div>
+        </div>
+
+        <div class="palace-card">
+          <div class="palace-window">
+            <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/10/14/c636418c3395f7ebf1fbc32dd8c3354f_95a1e885-78e2-49de-b2b2-7b3f95876691.png" alt="Елена">
+          </div>
+          <div class="name-plaque">
+            <div class="admin-name">Елена Троянская</div>
+            <div class="admin-role">буся</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+</body>
+</html>

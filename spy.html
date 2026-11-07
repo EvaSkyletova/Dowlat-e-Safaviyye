@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заявка на шпиона • Dowlаt-e Safaviyye</title>
+<!-- ПОДКЛЮЧАЕМ GSAP И SCROLLTRIGGER -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<style>
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.95);
+    --panel-soft: rgba(26, 26, 30, 0.9);
+    --panel-dark: rgba(14, 14, 16, 0.95);
+    --success: #88cb8b;
+    --danger: #d98888;
+  }
+
+  /* Золотая стрелочка для всего сайта */
+  body, *, a, button, input, select, textarea {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0f0f11);
+    overflow-x: hidden;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--gold-light);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+      z-index: 999999;
+  }
+
+  @keyframes echoPulse {
+      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gold-dark);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+  }
+
+  /* СТАНДАРТНАЯ ШАПКА КАК НА СТРАНИЦЕ «КАЗНА» */
+  .site-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(18, 18, 20, 0.96);
+      backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 100;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-logo {
+      font-size: 20px;
+      color: var(--gold-light);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+      margin-bottom: 12px;
+      font-weight: bold;
+  }
+
+  .site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      align-items: center;
+  }
+
+  .site-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase; /* Строго заглавные буквы, как в Казне */
+      transition: all 0.3s ease;
+      padding: 4px 0;
+      position: relative;
+      font-weight: 500;
+  }
+
+  .site-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after, .site-nav a.active::after {
+      width: 100%;
+  }
+
+  .site-nav a:hover, .site-nav a.active {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* СЕКЦИИ СТРОГО ПО ФОРМАТУ ЭКРАНА */
+  .page-section {
+    width: 100%;
+    height: calc(100vh - 85px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 10px 20px 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  /* ЧЕРНО-БЕЛЫЕ КАРТИНКИ */
+  .side-decoration {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    max-height: calc(100vh - 85px);
+    width: auto;
+    object-fit: contain;
+    object-position: bottom;
+    filter: grayscale(100%) contrast(110%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .side-decoration.left {
+    left: 10px;
+    object-position: bottom left;
+  }
+
+  .side-decoration.right {
+    right: 10px;
+    object-position: bottom right;
+  }
+
+  /* КОНТЕЙНЕР ФОРМЫ */
+  .spy-wrap {
+    width: 100%;
+    max-width: 550px;
+    padding: 22px 28px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.96), rgba(14, 14, 16, 0.99));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    z-index: 3;
+    margin-top: -15px;
+  }
+
+  .spy-header {
+    text-align: center;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .spy-kicker {
+    margin: 0 0 3px;
+    color: var(--gold-soft);
+    font-size: 10.5px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .spy-title {
+    margin: 0 0 4px;
+    color: var(--gold-light);
+    font-size: 22px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+
+  .spy-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 12px;
+  }
+
+  label {
+    font-size: 11.5px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+
+  input, select {
+    width: 100%;
+    background: var(--panel-dark);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 9px 12px;
+    outline: none;
+    font-size: 13.5px;
+    transition: all 0.2s;
+  }
+
+  select option {
+    background: #161618;
+    color: var(--text);
+  }
+
+  input:focus, select:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .price-box {
+    margin-top: 6px;
+    padding: 10px 14px;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .price-label {
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+
+  .price-val {
+    font-size: 16px;
+    color: var(--gold-light);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 11px;
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .status-msg {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    text-align: center;
+    display: none;
+  }
+
+  .status-msg.success {
+    display: block;
+    background: rgba(136, 203, 139, 0.12);
+    color: var(--success);
+    border: 1px solid var(--success);
+  }
+
+  .status-msg.error {
+    display: block;
+    background: rgba(217, 136, 136, 0.12);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+  }
+
+  /* ВТОРАЯ СЕКЦИЯ: ШИРОКОФОРМАТНЫЙ СВИТОК РЕГЛАМЕНТА */
+  .rules-section {
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0d0d0f 0%, #161619 50%, #0d0d0f 100%);
+    padding: 60px 40px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    border-top: 2px solid var(--gold);
+    box-shadow: inset 0 20px 40px rgba(0,0,0,0.8);
+  }
+
+  .rules-scroll-container {
+    width: 100%;
+    max-width: 1050px;
+    background: linear-gradient(145deg, rgba(20, 20, 23, 0.98), rgba(12, 12, 14, 0.99));
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 45px 55px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.95), 0 0 40px rgba(212, 175, 55, 0.08);
+    position: relative;
+  }
+
+  .rules-scroll-container::before, .rules-scroll-container::after {
+    content: '❖';
+    position: absolute;
+    color: var(--gold);
+    font-size: 16px;
+  }
+  .rules-scroll-container::before { top: 15px; left: 20px; }
+  .rules-scroll-container::after { bottom: 15px; right: 20px; }
+
+  .rules-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .rules-kicker {
+    color: var(--gold-soft);
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .rules-title {
+    color: var(--gold-light);
+    font-size: 28px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin: 0;
+    font-weight: normal;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px 40px;
+  }
+
+  .rule-card {
+    background: rgba(26, 26, 32, 0.6);
+    border-left: 3px solid var(--gold);
+    padding: 16px 20px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .rule-card.full-width {
+    grid-column: span 2;
+  }
+
+  .rule-card strong {
+    color: var(--gold-light);
+  }
+
+  .rule-card ul {
+    margin: 8px 0 0 0;
+    padding-left: 18px;
+    color: var(--gold-light);
+  }
+
+  .rule-card li {
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+
+  /* ПОДСКАЗКА ПРОКРУТКИ */
+  .scroll-hint {
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--gold-light);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: center;
+    animation: bounce 2s infinite;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    z-index: 10;
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+    40% { transform: translateY(-6px) translateX(-50%); }
+    60% { transform: translateY(-3px) translateX(-50%); }
+  }
+
+  /* Адаптивность для телефонов и планшетов */
+  @media (max-width: 1200px) {
+    .side-decoration {
+      display: none;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .rules-grid {
+      grid-template-columns: 1fr;
+    }
+    .rule-card.full-width {
+      grid-column: span 1;
+    }
+    .rules-scroll-container {
+      padding: 25px 20px;
+    }
+    .rules-title {
+      font-size: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА (КАК НА СТРАНИЦЕ КАЗНА) -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html" class="active">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<!-- СЕКЦИЯ 1: ФОРМА ЗАКАЗА -->
+<section class="page-section" id="section1">
+  <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/11/02/5977d9208c06a9e1019326bfce62c107_9db069c1-98cd-4367-88bc-03a6d1e2bb73.png" alt="Decoration Left" class="side-decoration left" id="leftImg">
+
+  <div class="spy-wrap">
+    <header class="spy-header">
+      <p class="spy-kicker">✦ Диван аль-Хафийа ✦</p>
+      <h1 class="spy-title">Наём Шпиона</h1>
+      <p class="spy-desc">Заказ услуги шпиона (базовая цена: 35 000 аббаси)</p>
+      <p class="spy-desc">Заявка сразу поступает в реестр учета</p>
+    </header>
+
+    <form id="spyForm">
+      <div class="form-group">
+        <label for="charName">Имя персонажа (заказчика)</label>
+        <input type="text" id="charName" placeholder="Например: Фархад" required autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label for="repSelect">Выбрать скидку за уровень репутации</label>
+        <select id="repSelect">
+          <option value="2">Презрение (+100% наценка)</option>
+          <option value="1.5">Равнодушие (+50% наценка)</option>
+          <option value="1.5">Скептицизм (+50% наценка)</option>
+          <option value="1" selected>Лояльность (без наценки)</option>
+          <option value="1">Признание (без наценки)</option>
+          <option value="0.5">Авторитет (50% скидка)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="spyQty">Количество шпионов</label>
+        <select id="spyQty">
+          <option value="1" selected>1 шпион</option>
+          <option value="2">2 шпиона</option>
+          <option value="3">3 шпиона</option>
+          <option value="4">4 шпиона</option>
+          <option value="5">5 шпионов</option>
+          <option value="6">6 шпионов</option>
+          <option value="7">7 шпионов</option>
+          <option value="8">8 шпионов</option>
+        </select>
+      </div>
+
+      <div class="price-box">
+        <span class="price-label">Итоговая стоимость:</span>
+        <span class="price-val" id="totalDisplay">35 000 аббаси</span>
+      </div>
+
+      <button type="submit" class="submit-btn" id="sendBtn">Отправить донесение</button>
+    </form>
+
+    <div class="status-msg" id="statusBox"></div>
+  </div>
+
+  <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/11/02/5a483d4bbc3bf0ec1e04cd690c214cac_3e578935-c536-43c5-bf04-583a9adeca70.png" alt="Decoration Right" class="side-decoration right" id="rightImg">
+
+  <div class="scroll-hint">↓ Листайте вниз для ознакомления с регламентом ↓</div>
+</section>
+
+<!-- СЕКЦИЯ 2: ШИРОКОФОРМАТНЫЙ РЕГЛАМЕНТ -->
+<section class="rules-section" id="section2">
+  <div class="rules-scroll-container">
+    <header class="rules-header">
+      <p class="rules-kicker">✦ Регламент Тайной Канцелярии ✦</p>
+      <h2 class="rules-title">Условия и Принципы Шпионажа</h2>
+    </header>
+
+    <div class="rules-grid">
+      <div class="rule-card">
+        <strong>Активация услуги:</strong> Товар «Услуга шпиона» активируется анонимно на сайте в разделе <strong>«Банк» -> «Анонимный шпион»</strong> и не оформляется в банке.
+      </div>
+      
+      <div class="rule-card">
+        <strong>Защита встреч:</strong> Против шпиона <strong>не действует защита встреч</strong>. Услуга покупается на <strong>3 актуальные игры</strong> в настоящем после анонимной активации.
+      </div>
+      
+      <div class="rule-card">
+        <strong>Цель слежки:</strong> Шпион нацелен лишь на того, на кого оформлен. Присутствие других персонажей с защитой скрывает их личность, но если защиты нет — шпиону доступны все подробности.
+      </div>
+      
+      <div class="rule-card">
+        <strong>Отчетность:</strong> Необходимо открыто написать в ЛСГ имена персонажей. Если среди них есть администратор, разрешено направить расшифровку в личные сообщения напрямую.
+      </div>
+
+      <div class="rule-card full-width">
+        <strong>Принцип раскрытия имен:</strong>
+        <ul>
+          <li>Указание имени персонажа.</li>
+          <li>Формулировка: <em>«Оформляю на [имя], [имя]»</em>.</li>
+          <li>В постах необязательно сразу раскрывать покупку. Информацию можно узнать позже или не использовать в игре.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Эффект «пуньк» при клике
+  window.addEventListener('click', (e) => {
+      const echo = document.createElement('div');
+      echo.className = 'click-echo';
+      echo.style.left = `${e.clientX}px`;
+      echo.style.top = `${e.clientY}px`;
+      document.body.appendChild(echo);
+      setTimeout(() => { echo.remove(); }, 550);
+  });
+
+  // GSAP АНИМАЦИИ ИСПАРЕНИЯ И ВЫПЛЫВАНИЯ КАРТИНОК
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Плавное растворение и улет формы вверх
+  gsap.to("#section1", {
+    scrollTrigger: {
+      trigger: "#section2",
+      start: "top bottom",
+      end: "top top",
+      scrub: true,
+    },
+    y: -120,
+    opacity: 0,
+    scale: 0.95,
+    ease: "power1.out"
+  });
+
+  // Полное исчезновение картинок при прокрутке вниз и выплывание при возврате вверх
+  gsap.to("#leftImg", {
+    scrollTrigger: {
+      trigger: "#section2",
+      start: "top bottom",
+      end: "top 60%",
+      scrub: true,
+    },
+    x: -150,
+    opacity: 0,
+    ease: "power1.in"
+  });
+
+  gsap.to("#rightImg", {
+    scrollTrigger: {
+      trigger: "#section2",
+      start: "top bottom",
+      end: "top 60%",
+      scrub: true,
+    },
+    x: 150,
+    opacity: 0,
+    ease: "power1.in"
+  });
+
+  // Примагничивание (снэп) к секциям
+  ScrollTrigger.create({
+    snap: {
+      snapTo: [0, 1],
+      duration: 0.5,
+      delay: 0.1,
+      ease: "power2.inOut"
+    }
+  });
+
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwUSpWkFMnP1oHQ2HTx9MG3B2qQ7naYynceA-DDdGqwDYTlHNgnipTonZB7NI-BnNxT/exec";
+
+  const BASE_PRICE_PER_SPY = 35000;
+  const fmt = new Intl.NumberFormat('ru-RU');
+
+  const qtySelect = document.getElementById('spyQty');
+  const repSelect = document.getElementById('repSelect');
+  const totalDisplay = document.getElementById('totalDisplay');
+  const form = document.getElementById('spyForm');
+  const sendBtn = document.getElementById('sendBtn');
+  const statusBox = document.getElementById('statusBox');
+
+  function calculateTotal() {
+    const qty = parseInt(qtySelect.value, 10);
+    const multiplier = parseFloat(repSelect.value);
+    const total = Math.round(qty * BASE_PRICE_PER_SPY * multiplier);
+    totalDisplay.textContent = fmt.format(total) + ' аббаси';
+    return total;
+  }
+
+  qtySelect.addEventListener('change', calculateTotal);
+  repSelect.addEventListener('change', calculateTotal);
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const charName = document.getElementById('charName').value.trim();
+    const qty = parseInt(qtySelect.value, 10);
+    const finalPrice = calculateTotal();
+    const cost = fmt.format(finalPrice) + ' аббаси';
+
+    if (!charName) return;
+
+    sendBtn.disabled = true;
+    sendBtn.textContent = "Отправка в реестр...";
+    statusBox.style.display = "none";
+
+    const moscowDateTime = new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" });
+
+    const payload = JSON.stringify({
+      characterName: charName,
+      mechanic: "Шпион",
+      quantity: qty,
+      cost: cost,
+      date: moscowDateTime
+    });
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: payload
+      });
+
+      statusBox.className = "status-msg success";
+      statusBox.textContent = "Заявка успешно внесена в реестр!";
+      form.reset();
+      calculateTotal();
+    } catch (err) {
+      statusBox.className = "status-msg error";
+      statusBox.textContent = "Не удалось отправить заявку. Попробуйте позже.";
+    } finally {
+      sendBtn.disabled = false;
+      sendBtn.textContent = "Отправить донесение";
+    }
+  });
+
+  calculateTotal();
+</script>
+
+</body>
+</html>

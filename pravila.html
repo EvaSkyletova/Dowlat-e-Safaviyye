@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Свод правил • Dowlаt-e Safaviyye</title>
+
+<style>
+:root {
+  --gold-dark: #8c6a08;
+  --gold: #d4af37;
+  --gold-light: #fbe8a6;
+  --gold-soft: #c5a059;
+  --text: #f0ebd8;
+  --muted: #a69e88;
+  --line: rgba(212, 175, 55, 0.3);
+  --line-strong: rgba(212, 175, 55, 0.65);
+  --bg: #161618;
+  --panel: rgba(22, 22, 25, 0.95);
+  --panel-soft: rgba(26, 26, 30, 0.92);
+  --panel-dark: rgba(14, 14, 16, 0.95);
+  --danger: #d98888;
+  --success: #88cb8b;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  font-family: Georgia, "Times New Roman", serif !important;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: var(--bg) !important;
+  color: var(--text);
+  background-image: 
+      radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+      linear-gradient(to bottom, #161618, #0f0f11);
+  scroll-behavior: smooth;
+}
+
+/* Золотой скроллбар */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+}
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--gold-dark);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+}
+
+/* ШАПКА САЙТА (ЕДИНАЯ) */
+.site-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 18px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+}
+
+.site-logo {
+    font-size: 20px;
+    color: var(--gold-light);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+    margin-bottom: 12px;
+    font-weight: bold;
+}
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+}
+
+.site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+}
+
+.site-nav a:hover::after, .site-nav a.active::after {
+    width: 100%;
+}
+
+.site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+}
+
+/* ОСНОВНОЙ КОНТЕЙНЕР КОДЕКСА */
+.codex-wrap {
+  max-width: 960px;
+  margin: 40px auto 100px;
+  padding: 0 20px;
+}
+
+.codex-header {
+  text-align: center;
+  padding: 35px 20px;
+  background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--gold);
+  border-bottom: 2px solid var(--gold);
+  border-radius: 6px;
+  margin-bottom: 40px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+}
+
+.codex-kicker {
+  color: var(--gold-soft);
+  font-size: 11px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.codex-title {
+  color: var(--gold-light);
+  font-size: 30px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin: 0;
+  font-weight: normal;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+}
+
+/* МАГИЯ ВСПЛЫВАНИЯ ПРИ СКРОЛЛЕ ВНИЗ */
+.reveal-block {
+  opacity: 0;
+  transform: translateY(60px) scale(0.98);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-block.revealed {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* КАРТОЧКИ СТАТЕЙ */
+.rule-article {
+  background: linear-gradient(145deg, rgba(24, 24, 28, 0.94), rgba(16, 16, 19, 0.98));
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--gold);
+  border-radius: 6px;
+  padding: 30px 35px;
+  margin-bottom: 30px;
+  box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+}
+
+.article-num {
+  color: var(--gold-soft);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.article-title {
+  color: var(--gold-light);
+  font-size: 20px;
+  letter-spacing: 1px;
+  margin: 0 0 18px 0;
+  font-weight: normal;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 12px;
+}
+
+.article-text {
+  font-size: 14.5px;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.article-text p { margin: 0 0 15px; }
+.article-text p:last-child { margin-bottom: 0; }
+.article-text strong { color: var(--gold-light); }
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+.dice-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.dice-table th, .dice-table td {
+  padding: 12px 16px;
+  border: 1px solid var(--line);
+  text-align: left;
+}
+
+.dice-table th {
+  color: var(--gold-light);
+  background: rgba(212, 175, 55, 0.15);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.dice-table td {
+  background: rgba(0,0,0,0.3);
+}
+
+.warning-box {
+  margin: 20px 0;
+  padding: 15px 20px;
+  border-left: 3px solid var(--danger);
+  background: rgba(217, 136, 136, 0.1);
+  color: #f3c2c2;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.warning-box::before {
+  content: "ВАЖНО: ";
+  font-weight: bold;
+}
+
+/* ЗАГОЛОВКИ РАЗДЕЛОВ ПРИ СКРОЛЛЕ */
+.section-heading {
+  color: var(--gold-light);
+  font-size: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 40px 0 20px 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.9);
+}
+
+/* АДАПТИВ */
+@media(max-width: 768px) {
+  .codex-wrap { padding: 0 10px; }
+  .rule-article { padding: 20px 18px; }
+  .article-title { font-size: 18px; }
+  .site-nav { gap: 12px 16px; }
+  .site-nav a { font-size: 11px; }
+}
+</style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html" class="active">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<div class="codex-wrap">
+
+    <header class="codex-header reveal-block">
+        <div class="codex-kicker">✦ Qanun-e Dowlat-e Safaviyye ✦</div>
+        <h1 class="codex-title">Имперский Свод Правил</h1>
+    </header>
+
+    <!-- РАЗДЕЛ 1: БЕРЕМЕННОСТЬ -->
+    <h2 class="section-heading reveal-block">✦ Раздел I. Беременность</h2>
+
+    <article class="rule-article reveal-block">
+        <div class="article-num">Статья I</div>
+        <h3 class="article-title">Общие положения о беременности</h3>
+        <div class="article-text">
+            <p><strong>Беременность</strong> — одно из самых важных событий в жизни любой женщины ролевой, а также нелёгкое испытание для её организма.</p>
+            <p>Беременность длится <strong>9 игровых месяцев</strong> и <strong>2–6 реальных месяцев</strong>, в зависимости от темпа игры. О своём положении женщина узнаёт на сроке <strong>10–14 недель</strong> (3–4 месяц). Главный симптом — отсутствие регул.</p>
+            <div class="warning-box">Нападение, покушение, отравление, физическая травма, тяжёлая болезнь или сильное психическое потрясение беременной женщины могут спровоцировать выкидыш или преждевременные роды.</div>
+        </div>
+    </article>
+
+    <article class="rule-article reveal-block">
+        <div class="article-num">Статья II</div>
+        <h3 class="article-title">Наступление беременности: Дайсы</h3>
+        <div class="article-text">
+            <p>Без покупки товаров из банка всё определяется последовательными дайсами.</p>
+            <div class="table-wrap">
+                <table class="dice-table">
+                    <tr><th>Результат дайса</th><th>Итог</th></tr>
+                    <tr><td>1–85</td><td>Женщина беременна.</td></tr>
+                    <tr><td>86–100</td><td>Женщина не беременна.</td></tr>
+                </table>
+            </div>
+        </div>
+    </article>
+
+    <!-- РАЗДЕЛ 2: АКТИВНОСТЬ -->
+    <h2 class="section-heading reveal-block">✦ Раздел II. Активность</h2>
+
+    <article class="rule-article reveal-block">
+        <div class="article-num">Статья I</div>
+        <h3 class="article-title">Минимум постов и лимиты</h3>
+        <div class="article-text">
+            <p>Минимум постов един для всех: <strong>1 пост в месяц</strong>, чтобы не лишиться роли.</p>
+            <div class="warning-box">Если при проверке актива за персонажа не было написано ни единого поста, то игроку выносится штраф в размере <strong>10.000 аббаси</strong> и дается 3 дня для написания поста. В противном случае администрация снимает игрока с роли.</div>
+        </div>
+    </article>
+
+    <article class="rule-article reveal-block">
+        <div class="article-num">Статья II</div>
+        <h3 class="article-title">Активация защит</h3>
+        <div class="article-text">
+            <p>При регистрации персонажа игрок имеет право активировать первую защиту до конца текущего месяца без соблюдения обязательного лимита постов. Первые сутки после принятия анкеты персонаж неуязвим для интриг.</p>
+        </div>
+    </article>
+
+    <!-- РАЗДЕЛ 3: ИНТРИГИ -->
+    <h2 class="section-heading reveal-block">✦ Раздел III. Интриги</h2>
+
+    <article class="rule-article reveal-block">
+        <div class="article-num">Статья I</div>
+        <h3 class="article-title">Основные положения об интригах</h3>
+        <div class="article-text">
+            <p><strong>Интрига</strong> — это любое скрытое или явное действие, направленное на причинение прямого физического, психологического или репутационного вреда другому персонажу.</p>
+            <p>Любое негативное воздействие на земли или остан (поджог полей, переманивание рабочих) является интригой, но может совершаться в обход защиты, так как не несет прямого вреда здоровью персонажа.</p>
+        </div>
+    </article>
+
+</div>
+
+<script>
+// СКРИПТ ПЛАВНОГО ВСПЛЫВАНИЯ ПРИ ПРОКРУТКЕ ВНИЗ (SCROLL REVEAL)
+document.addEventListener("DOMContentLoaded", () => {
+  const observerOptions = {
+    root: null,
+    rootMargin: "0px 0px -80px 0px", // Срабатывает чуть раньше, чем элемент появится внизу экрана
+    threshold: 0.15
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("revealed");
+        // Опционально: прекращаем наблюдение после первого появления
+        // observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll(".reveal-block").forEach(block => {
+    observer.observe(block);
+  });
+});
+</script>
+
+</body>
+</html>

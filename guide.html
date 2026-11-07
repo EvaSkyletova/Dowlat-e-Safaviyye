@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Звёздный гид • Dowlаt-e Safaviyye</title>
+    <style>
+      :root {
+        --gold-dark: #8c6a08;
+        --gold: #d4af37;
+        --gold-light: #fbe8a6;
+        --gold-soft: #c5a059;
+        --text: #f0ebd8;
+        --muted: #a69e88;
+        --line: rgba(212, 175, 55, 0.35);
+        --line-strong: rgba(212, 175, 55, 0.7);
+        --bg: #161618;
+        --panel: rgba(22, 22, 25, 0.96);
+      }
+
+      /* Золотая стрелочка для всего сайта */
+      body, *, a, button, input, select, textarea, option, optgroup {
+          cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+      }
+
+      *, *::before, *::after {
+          box-sizing: border-box;
+          -webkit-tap-highlight-color: transparent;
+          font-family: Georgia, "Times New Roman", serif !important;
+      }
+
+      body {
+          margin: 0;
+          padding: 0;
+          background: var(--bg);
+          color: var(--text);
+          min-height: 100vh;
+          background-image: 
+              radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 70%),
+              linear-gradient(to bottom, #161618, #0b0b0d);
+          overflow-x: hidden;
+      }
+
+      /* Эффект «пуньк» при клике */
+      .click-echo {
+          position: fixed;
+          width: 12px;
+          height: 12px;
+          border: 2px solid var(--gold-light);
+          border-radius: 50%;
+          pointer-events: none;
+          transform: translate(-50%, -50%);
+          animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+          z-index: 999999;
+      }
+
+      @keyframes echoPulse {
+          0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+          100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+      }
+
+      /* Тонкий золотой скроллбар */
+      * {
+          scrollbar-width: thin;
+          scrollbar-color: var(--gold-dark) transparent;
+      }
+      ::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+          background: var(--bg);
+      }
+      ::-webkit-scrollbar-thumb {
+          background: var(--gold-dark);
+          border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+          background: var(--gold);
+      }
+
+      /* ШАПКА САЙТА (ЕДИНАЯ) */
+      .site-header {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding: 18px 20px;
+          border-bottom: 2px solid var(--line);
+          background: rgba(18, 18, 20, 0.96);
+          backdrop-filter: blur(12px);
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+      }
+
+      .site-logo {
+          font-size: 20px;
+          color: var(--gold-light);
+          letter-spacing: 3px;
+          text-transform: uppercase;
+          text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+          margin-bottom: 12px;
+          font-weight: bold;
+      }
+
+      .site-nav {
+          display: flex;
+          justify-content: center;
+          gap: 22px;
+          flex-wrap: wrap;
+          align-items: center;
+      }
+
+      .site-nav a {
+          color: var(--text);
+          text-decoration: none;
+          font-size: 12px;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          transition: all 0.3s ease;
+          padding: 4px 0;
+          position: relative;
+          font-weight: 500;
+      }
+
+      .site-nav a::after {
+          content: '';
+          position: absolute;
+          width: 0;
+          height: 1px;
+          bottom: -2px;
+          left: 50%;
+          transform: translateX(-50%);
+          background-color: var(--gold);
+          transition: width 0.3s ease;
+      }
+
+      .site-nav a:hover::after, .site-nav a.active::after {
+          width: 100%;
+      }
+
+      .site-nav a:hover, .site-nav a.active {
+          color: var(--gold-light);
+          text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+      }
+
+      /* ОСНОВНОЙ КОНТЕЙНЕР */
+      .garden-wrap {
+          max-width: 1100px;
+          margin: 30px auto 60px;
+          padding: 30px 40px;
+          text-align: center;
+      }
+
+      .garden-header {
+          margin-bottom: 40px;
+      }
+
+      .garden-kicker {
+          color: var(--gold-soft);
+          font-size: 11px;
+          letter-spacing: 4px;
+          text-transform: uppercase;
+          margin-bottom: 8px;
+          font-weight: bold;
+      }
+
+      .garden-title {
+          color: var(--gold-light);
+          font-size: 32px;
+          letter-spacing: 4px;
+          text-transform: uppercase;
+          margin: 0 0 12px 0;
+          font-weight: normal;
+          text-shadow: 0 3px 10px rgba(0,0,0,0.9);
+      }
+
+      .garden-divider {
+          color: var(--gold);
+          font-size: 16px;
+          letter-spacing: 10px;
+          opacity: 0.9;
+          margin-bottom: 15px;
+      }
+
+      .garden-subtitle {
+          color: var(--muted);
+          font-size: 14px;
+          font-style: italic;
+          max-width: 600px;
+          margin: 0 auto;
+          line-height: 1.6;
+      }
+
+      /* СЕТКА АРТЕФАКТОВ ЗВЁЗДНОГО ГИДА */
+      .artifacts-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 25px;
+          margin-bottom: 40px;
+      }
+
+      .artifact-card {
+          background: linear-gradient(145deg, rgba(22, 22, 26, 0.9), rgba(12, 12, 15, 0.95));
+          border: 1px solid var(--line);
+          border-radius: 12px;
+          padding: 25px 20px;
+          cursor: pointer;
+          position: relative;
+          overflow: hidden;
+          transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+
+      .artifact-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+          opacity: 0;
+          transition: opacity 0.4s ease;
+      }
+
+      .artifact-card:hover::before {
+          opacity: 1;
+      }
+
+      .artifact-card:hover {
+          border-color: var(--gold);
+          transform: translateY(-6px);
+          box-shadow: 0 15px 35px rgba(212, 175, 55, 0.25);
+      }
+
+      .artifact-icon {
+          font-size: 32px;
+          margin-bottom: 14px;
+          filter: drop-shadow(0 2px 5px rgba(212, 175, 55, 0.4));
+          transition: transform 0.4s ease;
+      }
+
+      .artifact-card:hover .artifact-icon {
+          transform: scale(1.15) rotate(5deg);
+      }
+
+      .artifact-name {
+          color: var(--gold-light);
+          font-size: 16px;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          margin-bottom: 8px;
+          font-weight: normal;
+      }
+
+      .artifact-hint {
+          color: var(--muted);
+          font-size: 12px;
+          font-style: italic;
+      }
+
+      /* ЦАРСКИЙ СВИТОК (МОДАЛЬНОЕ ОКНО) */
+      .scroll-modal {
+          display: none;
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.85);
+          backdrop-filter: blur(8px);
+          z-index: 1000;
+          justify-content: center;
+          align-items: center;
+          padding: 20px;
+          animation: fadeInModal 0.3s ease;
+      }
+
+      @keyframes fadeInModal {
+          from { opacity: 0; }
+          to { opacity: 1; }
+      }
+
+      .scroll-window {
+          background: linear-gradient(145deg, #1b1b1f, #111113);
+          border: 2px solid var(--gold);
+          border-radius: 10px;
+          max-width: 650px;
+          width: 100%;
+          padding: 40px;
+          position: relative;
+          box-shadow: 0 25px 60px rgba(0,0,0,0.95), inset 0 0 35px rgba(212, 175, 55, 0.05);
+          text-align: center;
+          animation: slideUpModal 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+      }
+
+      @keyframes slideUpModal {
+          from { transform: translateY(30px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+      }
+
+      .close-btn {
+          position: absolute;
+          top: 15px;
+          right: 20px;
+          background: none;
+          border: none;
+          color: var(--gold);
+          font-size: 24px;
+          cursor: pointer;
+          transition: color 0.2s;
+      }
+
+      .close-btn:hover {
+          color: var(--gold-light);
+      }
+
+      .scroll-window-icon {
+          font-size: 40px;
+          margin-bottom: 12px;
+      }
+
+      .scroll-window-title {
+          color: var(--gold-light);
+          font-size: 22px;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          margin-bottom: 16px;
+      }
+
+      .scroll-window-text {
+          color: #ded6c2;
+          font-size: 15px;
+          line-height: 1.8;
+          font-style: italic;
+          margin-bottom: 30px;
+      }
+
+      .scroll-window-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          text-decoration: none;
+          color: #121008;
+          background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+          padding: 12px 25px;
+          border-radius: 4px;
+          font-size: 13.5px;
+          font-weight: bold;
+          text-transform: uppercase;
+          letter-spacing: 1.2px;
+          transition: all 0.3s;
+          box-shadow: 0 5px 20px rgba(0,0,0,0.6);
+      }
+
+      .scroll-window-btn:hover {
+          background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+      }
+
+      /* Адаптив */
+      @media (max-width: 850px) {
+          .artifacts-grid {
+              grid-template-columns: repeat(2, 1fr);
+              gap: 15px;
+          }
+      }
+
+      @media (max-width: 550px) {
+          .artifacts-grid {
+              grid-template-columns: 1fr;
+          }
+          .garden-wrap {
+              padding: 15px;
+          }
+          .scroll-window {
+              padding: 25px 20px;
+          }
+          .site-nav {
+              gap: 12px 16px;
+          }
+          .site-nav a {
+              font-size: 11px;
+          }
+      }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА (ЕДИНАЯ) -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html" class="active">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<div class="garden-wrap">
+    <header class="garden-header">
+        <div class="garden-kicker">✦ Rahnama-ye Setaregan ✦</div>
+        <h1 class="garden-title">Звёздный гид</h1>
+        <div class="garden-divider">✦ ✧ ✦ ✧ ✦</div>
+        <p class="garden-subtitle">Коснитесь небесных сфер, календарей и инструментов звездочетов, чтобы познать время и предзнаменования империи Сефевидов.</p>
+    </header>
+
+    <!-- СЕТКА ИНТЕРАКТИВНЫХ АРТЕФАКТОВ ЗВЁЗДНОГО ГИДА -->
+    <div class="artifacts-grid">
+
+        <!-- 1. Календарь -->
+        <div class="artifact-card" onclick="openArtifact('calendar')">
+            <div class="artifact-icon">📅</div>
+            <h3 class="artifact-name">Календарь</h3>
+            <span class="artifact-hint">Счёт дней и месяцев</span>
+        </div>
+
+        <!-- 2. Прогноз погоды -->
+        <div class="artifact-card" onclick="openArtifact('weather')">
+            <div class="artifact-icon">🌤️</div>
+            <h3 class="artifact-name">Прогноз погоды</h3>
+            <span class="artifact-hint">Климат Исфахана и ветры</span>
+        </div>
+
+        <!-- 3. Фазы Луны -->
+        <div class="artifact-card" onclick="openArtifact('moon')">
+            <div class="artifact-icon">🌙</div>
+            <h3 class="artifact-name">Фазы Луны</h3>
+            <span class="artifact-hint">Влияние ночного светила</span>
+        </div>
+
+        <!-- 4. Часы Муэдзина -->
+        <div class="artifact-card" onclick="openArtifact('muezzin')">
+            <div class="artifact-icon">🕌</div>
+            <h3 class="artifact-name">Часы Муэдзина</h3>
+            <span class="artifact-hint">Время молитв и тишины</span>
+        </div>
+
+        <!-- 5. Зодиак -->
+        <div class="artifact-card" onclick="openArtifact('zodiac')">
+            <div class="artifact-icon">♈</div>
+            <h3 class="artifact-name">Зодиак</h3>
+            <span class="artifact-hint">Небесные покровители</span>
+        </div>
+
+        <!-- 6. Астролябия Судеб -->
+        <div class="artifact-card" onclick="openArtifact('astrolabe')">
+            <div class="artifact-icon">🔭</div>
+            <h3 class="artifact-name">Астролябия Судеб</h3>
+            <span class="artifact-hint">Инструмент звездочетов</span>
+        </div>
+
+        <!-- 7. Оракул Судьбы -->
+        <div class="artifact-card" onclick="openArtifact('oracle')">
+            <div class="artifact-icon">🔮</div>
+            <h3 class="artifact-name">Оракул Судьбы</h3>
+            <span class="artifact-hint">Шахское гадание и знаки</span>
+        </div>
+
+    </div>
+</div>
+
+<!-- ОКНО СВИТКА (МОДАЛЬНОЕ ОКНО) -->
+<div id="scrollModal" class="scroll-modal" onclick="closeOnOutside(event)">
+    <div class="scroll-window">
+        <button class="close-btn" onclick="closeModal()">×</button>
+        <div id="modalIcon" class="scroll-window-icon">📜</div>
+        <h2 id="modalTitle" class="scroll-window-title">Заголовок</h2>
+        <p id="modalText" class="scroll-window-text">Текст путеводителя...</p>
+        <a id="modalLink" href="#" class="scroll-window-btn" target="_blank">✦ Открыть полный свиток</a>
+    </div>
+</div>
+
+<script>
+    // Эффект «пуньк» при клике
+    window.addEventListener('click', (e) => {
+        const echo = document.createElement('div');
+        echo.className = 'click-echo';
+        echo.style.left = `${e.clientX}px`;
+        echo.style.top = `${e.clientY}px`;
+        document.body.appendChild(echo);
+        setTimeout(() => { echo.remove(); }, 550);
+    });
+
+    // Данные для артефактов Звёздного гида
+    const guideData = {
+        calendar: {
+            icon: "📅",
+            title: "Имперский Календарь",
+            text: "«Летосчисление в Державе Сефевидов ведется по лунной хиджре. Каждый месяц начинается с новолуния, определяя время религиозных постов, праздников Навруза, сбора урожая и начала военных походов шахской армии.»",
+            link: "calendar.html"
+        },
+        weather: {
+            icon: "🌤️",
+            title: "Прогноз погоды и климат",
+            text: "«Исфахан встречает путешественников знойным солнцем шахских садов и прохладными вечерними ветрами с гор Загроса. Зимой сухие заморозки сменяются весенними дождями, питающими плодородные долины Зайянруда.»",
+            link: "#"
+        },
+        moon: {
+            icon: "🌙",
+            title: "Фазы Луны и Знамения",
+            text: "«Ночное светило управляет не только приливами и соками растений, но и человеческими страстями. В дни полнолуния обостряются придворные интриги, а новолуние считается лучшим временем для тайных союзов и писем.»",
+            link: "#"
+        },
+        muezzin: {
+            icon: "🕌",
+            title: "Часы Муэдзина и Намаз",
+            text: "«Ритм жизни великой столицы подчинен зову минаретов. От рассветного призыва до ночной молитвы империя живет в гармонии с предписаниями веры, разделяя день на часы трудов, отдыха и размышлений.»",
+            link: "#"
+        },
+        zodiac: {
+            icon: "♈",
+            title: "Небесный Зодиак и Светила",
+            text: "«Придворные астрологи Шаха ежедневно сверяют расположение созвездий Овна, Льва и Скорпиона. Каждый знак дарует рожденным под ним особый нрав: от непреклонной воинской доблести до тонкого дипломатического ума.»",
+            link: "#"
+        },
+        astrolabe: {
+            icon: "🔭",
+            title: "Астролябия Судеб",
+            text: "«Сложный медный инструмент арабских и персидских мудрецов позволяет определять высоту звезд, время суток и предсказывать поворотные моменты в судьбах знатных родов и судьбе самого шахского престола.»",
+            link: "#"
+        },
+        oracle: {
+            icon: "🔮",
+            title: "Оракул Судьбы",
+            text: "«Древнее искусство гадания по костям, строкам великого поэта Хафиза и знакам стихий. Когда придворные мудрецы молчат, оракул открывает завесу тайны над тем, что сокрыто в тумане грядущих дней.»",
+            link: "#"
+        }
+    };
+
+    function openArtifact(key) {
+        const item = guideData[key];
+        if (!item) return;
+
+        document.getElementById('modalIcon').textContent = item.icon;
+        document.getElementById('modalTitle').textContent = item.title;
+        document.getElementById('modalText').textContent = item.text;
+        document.getElementById('modalLink').href = item.link;
+
+        document.getElementById('scrollModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('scrollModal').style.display = 'none';
+    }
+
+    function closeOnOutside(event) {
+        if (event.target.id === 'scrollModal') {
+            closeModal();
+        }
+    }
+</script>
+
+</body>
+</html>

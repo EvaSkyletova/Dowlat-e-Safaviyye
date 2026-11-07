@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Заявка для строительства • Dowlаt-e Safaviyye</title>
+<style>
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.95);
+    --panel-soft: rgba(26, 26, 30, 0.9);
+    --panel-dark: rgba(14, 14, 16, 0.95);
+    --success: #88cb8b;
+    --danger: #d98888;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0f0f11);
+  }
+
+  /* Тонкий золотой скроллбар */
+  * {
+      scrollbar-width: thin;
+      scrollbar-color: var(--gold-dark) transparent;
+  }
+  ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+      background: var(--bg);
+  }
+  ::-webkit-scrollbar-thumb {
+      background: var(--gold-dark);
+      border-radius: 4px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+      background: var(--gold);
+  }
+
+  /* ШАПКА САЙТА (ЕДИНАЯ ДЛЯ ВСЕХ СТРАНИЦ) */
+  .site-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(18, 18, 20, 0.96);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-logo {
+      font-size: 20px;
+      color: var(--gold-light);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
+      margin-bottom: 12px;
+      font-weight: bold;
+  }
+
+  .site-nav {
+      display: flex;
+      justify-content: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      align-items: center;
+  }
+
+  .site-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      padding: 4px 0;
+      position: relative;
+      font-weight: 500;
+  }
+
+  .site-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after, .site-nav a.active::after {
+      width: 100%;
+  }
+
+  .site-nav a:hover, .site-nav a.active {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР СТРОИТЕЛЬСТВА */
+  .build-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 40px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(212, 175, 55, 0.03);
+  }
+
+  .build-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .build-kicker {
+    margin: 0 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .build-title {
+    margin: 0 0 10px;
+    color: var(--gold-light);
+    font-size: 26px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    font-weight: normal;
+  }
+
+  .build-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+  }
+
+  .field-card {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  }
+
+  .field-label {
+    display: block;
+    color: var(--gold-light);
+    font-size: 13.5px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .field-hint {
+    display: block;
+    color: var(--muted);
+    font-size: 12.5px;
+    margin-top: -2px;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .input-text, .select-box, .textarea-box {
+    width: 100%;
+    background: var(--panel-dark);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 11px 14px;
+    font-size: 13.5px;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .input-text:focus, .select-box:focus, .textarea-box:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .select-box option {
+    background: #161618;
+    color: var(--text);
+  }
+
+  .textarea-box {
+    min-height: 80px;
+    resize: vertical;
+  }
+
+  /* Выпадающий список построек */
+  .combo-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .combo-arrow {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gold);
+    font-size: 11px;
+    pointer-events: none;
+  }
+
+  .combo-menu {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    max-height: 240px;
+    overflow-y: auto;
+    background: #121215;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    z-index: 999;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.95);
+  }
+
+  .combo-menu.open {
+    display: block;
+  }
+
+  .combo-option {
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: var(--text);
+    cursor: pointer;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .combo-option:hover {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-light);
+  }
+
+  .combo-option-term {
+    color: var(--muted);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  /* Под-блок выбора минаретов */
+  .minaret-box {
+    display: none;
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px dashed var(--line);
+    border-radius: 4px;
+  }
+
+  .minaret-box.visible {
+    display: block;
+  }
+
+  /* Календарь */
+  .cal-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .cal-tab {
+    flex: 1;
+    background: var(--panel-dark);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 9px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .cal-tab.active {
+    background: var(--gold);
+    color: #121008;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+
+  .date-grid {
+    display: grid;
+    grid-template-columns: 1fr 150px;
+    gap: 12px;
+  }
+
+  .date-preview {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--gold-light);
+    font-style: italic;
+  }
+
+  /* Кнопки */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 14px 22px;
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 4px;
+    font-size: 13.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.55;
+    cursor: wait;
+  }
+
+  .sheet-link-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 22px;
+    text-align: center;
+    text-decoration: none;
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+
+  .sheet-link-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .result-panel {
+    display: none;
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--gold);
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--gold-light);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .result-panel.show {
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .build-container {
+      margin: 20px 10px;
+      padding: 25px 15px;
+    }
+    .date-grid {
+      grid-template-columns: 1fr;
+    }
+    .site-nav {
+      gap: 12px 16px;
+    }
+    .site-nav a {
+      font-size: 11px;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА (ЕДИНАЯ ДЛЯ ВСЕХ СТРАНИЦ) -->
+    <header class="site-header">
+        <div class="site-logo">Dowlаt-e Safaviyye</div>
+        <nav class="site-nav">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<div class="build-container">
+  <div class="build-header">
+    <p class="build-kicker">✦ Məmar-e Mamalik ✦</p>
+    <h1 class="build-title">Заявка для строительства</h1>
+    <p class="build-subtitle">Рандом сроков возведения и отправка в имперский реестр построек</p>
+  </div>
+
+  <form id="buildForm" onsubmit="submitBuildingForm(event)">
+
+    <!-- 1. ИМЯ ПЕРСОНАЖА -->
+    <div class="field-card">
+      <label class="field-label" for="charName">1. Имя вашего персонажа:</label>
+      <input type="text" id="charName" class="input-text" placeholder="Введите имя персонажа..." required autocomplete="off">
+    </div>
+
+    <!-- 2. НАИМЕНОВАНИЕ ПОСТРОЙКИ -->
+    <div class="field-card">
+      <label class="field-label" for="buildingInput">2. Наименование постройки:</label>
+      <span class="field-hint">Название строго как в банке! Если постройки нет в списке, впишите её название (срок будет выбран случайно от 1 до 12 месяцев).</span>
+      
+      <div class="combo-wrap" id="buildingCombo">
+        <input type="text" id="buildingInput" class="input-text" placeholder="Начните вводить или выберите постройку из списка..." required autocomplete="off">
+        <span class="combo-arrow">▼</span>
+        <div class="combo-menu" id="buildingMenu"></div>
+      </div>
+
+      <!-- Выбор минаретов для мечети -->
+      <div class="minaret-box" id="minaretBox">
+        <label class="field-label" for="minaretSelect" style="margin-bottom: 6px; font-size: 12.5px;">Количество минаретов у мечети:</label>
+        <select id="minaretSelect" class="select-box">
+          <option value="1">1 минарет (срок: 2 года)</option>
+          <option value="2">2 минарета (срок: 3 года)</option>
+          <option value="3">3 минарета (срок: 4 года)</option>
+          <option value="4">4 минарета (срок: 5 лет)</option>
+          <option value="5">5 минаретов (срок: 6 лет)</option>
+          <option value="6">6 минаретов (срок: 7 лет)</option>
+          <option value="7">7 минаретов (срок: 8 лет)</option>
+          <option value="8">8 минаретов (срок: 9 лет)</option>
+          <option value="9">9 и более минаретов (срок: 10 лет)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 3. ДАТА НАЧАЛА СТРОИТЕЛЬСТВА -->
+    <div class="field-card">
+      <label class="field-label">3. Дата начала строительства (месяц, год):</label>
+      <div class="cal-tabs">
+        <button type="button" class="cal-tab active" id="tabGreg" onclick="setCalMode('greg')">Григорианский календарь</button>
+        <button type="button" class="cal-tab" id="tabIran" onclick="setCalMode('iran')">Иранский календарь</button>
+      </div>
+
+      <!-- Григорианский -->
+      <div class="date-grid" id="gregInputs">
+        <select id="monthGreg" class="select-box" onchange="updateDatePreview()">
+          <option value="0">Январь</option>
+          <option value="1">Февраль</option>
+          <option value="2" selected>Март</option>
+          <option value="3">Апрель</option>
+          <option value="4">Май</option>
+          <option value="5">Июнь</option>
+          <option value="6">Июль</option>
+          <option value="7">Август</option>
+          <option value="8">Сентябрь</option>
+          <option value="9">Октябрь</option>
+          <option value="10">Ноябрь</option>
+          <option value="11">Декабрь</option>
+        </select>
+        <input type="number" id="yearGreg" class="input-text" value="1645" min="1500" max="1900" oninput="updateDatePreview()">
+      </div>
+
+      <!-- Иранский -->
+      <div class="date-grid" id="iranInputs" style="display: none;">
+        <select id="monthIran" class="select-box" onchange="updateDatePreview()">
+          <option value="0" selected>Фарвардин</option>
+          <option value="1">Ордибехешт</option>
+          <option value="2">Хордад</option>
+          <option value="3">Тир</option>
+          <option value="4">Мордад</option>
+          <option value="5">Шахривар</option>
+          <option value="6">Мехр</option>
+          <option value="7">Абан</option>
+          <option value="8">Азар</option>
+          <option value="9">Дей</option>
+          <option value="10">Бахман</option>
+          <option value="11">Эсфанд</option>
+        </select>
+        <input type="number" id="yearIran" class="input-text" value="1024" min="900" max="1300" oninput="updateDatePreview()">
+      </div>
+
+      <div class="date-preview" id="startPreview"></div>
+    </div>
+
+    <!-- 4. МЕСТОНАХОЖДЕНИЕ -->
+    <div class="field-card">
+      <label class="field-label" for="locationInput">4. Местонахождение постройки:</label>
+      <input type="text" id="locationInput" class="input-text" placeholder="Укажите остан, шахрестан, улицу или дворец/поместье..." required autocomplete="off">
+    </div>
+
+    <!-- 5. ССЫЛКА НА ПОСТ -->
+    <div class="field-card">
+      <label class="field-label" for="postLinkInput">5. Ссылка на пост с началом строительства:</label>
+      <input type="text" id="postLinkInput" class="input-text" placeholder="Вставьте ссылку на пост..." required autocomplete="off">
+    </div>
+
+    <!-- 6. КОММЕНТАРИЙ -->
+    <div class="field-card">
+      <label class="field-label" for="commentInput">6. Комментарий (если необходим):</label>
+      <textarea id="commentInput" class="textarea-box" placeholder="Например, строительство для другого персонажа или уточнения по постройке..."></textarea>
+    </div>
+
+    <div class="btn-group">
+      <button type="submit" class="submit-btn" id="submitBtn">Скопировать шаблон и отправить в таблицу</button>
+      <a href="https://docs.google.com/spreadsheets/d/1C5nF0EyHwIJYAJ0aW-gna-9qbSDx003ECmjy3bIL7iw/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="sheet-link-btn">Смотреть таблицу строительства</a>
+    </div>
+  </form>
+
+  <div class="result-panel" id="resultPanel"></div>
+</div>
+
+<script>
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlF49zvDWqEa117mHXB5RT0Z75cj9HUudJTK8gVGjAVfAH89DtHZSMtN7cLfylQ60L9A/exec";
+
+  const BUILDINGS = [
+    { name: "Строительство охотничьего домика", label: "от 2 до 3 лет", minM: 24, maxM: 36 },
+    { name: "Строительство малого поместья", label: "от 2 до 3 лет", minM: 24, maxM: 36 },
+    { name: "Строительство просторного поместья", label: "от 2 до 4 лет", minM: 24, maxM: 48 },
+    { name: "Строительство роскошного поместья", label: "от 2 до 5 лет", minM: 24, maxM: 60 },
+    { name: "Строительство фонтана", label: "от 1 до 3 месяцев", minM: 1, maxM: 3 },
+    { name: "Строительство конюшни с пастбищем", label: "1 год", minM: 12, maxM: 12 },
+    { name: "Строительство склада", label: "1 месяц", minM: 1, maxM: 1 },
+    { name: "Строительство дороги", label: "автоматически после покупки", minM: 0, maxM: 0, instant: true },
+    { name: "Городская канализация", label: "от 1 до 12 месяцев", minM: 1, maxM: 12 },
+    { name: "Строительство торгового судна", label: "300 дней (10 мес.)", minM: 10, maxM: 10 },
+    { name: "Строительство акведука", label: "от 1,5 до 3 лет", minM: 18, maxM: 36 },
+    { name: "Столовая для бедняков", label: "1 год", minM: 12, maxM: 12 },
+    { name: "Строительство кузни", label: "от 1 до 12 месяцев", minM: 1, maxM: 12 },
+    { name: "Базар", label: "от 1 до 4 лет", minM: 12, maxM: 48 },
+    { name: "Школа искусств", label: "2 года", minM: 24, maxM: 24 },
+    { name: "Медресе", label: "4 года", minM: 48, maxM: 48 },
+    { name: "Приют для девочек/мальчиков-сирот и подкидышей", label: "от 2 до 4 лет", minM: 24, maxM: 48 },
+    { name: "Школа для мальчиков/девочек", label: "3 года", minM: 36, maxM: 36 },
+    { name: "Галерея для демонстрации миниатюр и каллиграфии", label: "от 1 до 12 месяцев", minM: 1, maxM: 12 },
+    { name: "Театр теней с мастерскими для изготовления кукол", label: "от 1 до 12 месяцев", minM: 1, maxM: 12 },
+    { name: "Павильон для астрономических наблюдений", label: "от 1 до 12 месяцев", minM: 1, maxM: 12 },
+    { name: "Лечебница и библиотека для лекарей", label: "4 года", minM: 48, maxM: 48 },
+    { name: "Строительство мечети с 1 минаретом", label: "от 2 до 10 лет (по минаретам)", isMosque: true },
+    { name: "Строительство военного корабля", label: "400 дней (~13 мес.)", minM: 13, maxM: 13 },
+    { name: "Сторожевая башня на горной тропе", label: "от 1 до 12 месяцев", minM: 1, maxM: 12 },
+    { name: "Верфь", label: "1,5 года (18 мес.)", minM: 18, maxM: 18 },
+    { name: "Порт", label: "1,5 года (18 мес.)", minM: 18, maxM: 18 },
+    { name: "Военная крепость", label: "от 2 до 6 лет", minM: 24, maxM: 72 }
+  ];
+
+  const GREG_MONTHS = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+  const IRAN_MONTHS = ["Фарвардин", "Ордибехешт", "Хордад", "Тир", "Мордад", "Шахривар", "Мехр", "Абан", "Азар", "Дей", "Бахман", "Эсфанд"];
+  const MONTH_OFFSET = 7454;
+
+  let calMode = 'greg';
+
+  function gregToAbsMonths(gYear, gMonth) { return gYear * 12 + gMonth; }
+  function iranToAbsMonths(iYear, iMonth) { return iYear * 12 + iMonth + MONTH_OFFSET; }
+
+  function formatDualDateFromAbs(absMonths) {
+    const gYear = Math.floor(absMonths / 12);
+    const gMonth = ((absMonths % 12) + 12) % 12;
+    const iranTotal = absMonths - MONTH_OFFSET;
+    const iYear = Math.floor(iranTotal / 12);
+    const iMonth = ((iranTotal % 12) + 12) % 12;
+    return `${GREG_MONTHS[gMonth]} ${gYear} года (${IRAN_MONTHS[iMonth]} ${iYear} года)`;
+  }
+
+  function getCurrentStartAbsMonths() {
+    if (calMode === 'greg') {
+      const m = parseInt(document.getElementById('monthGreg').value, 10);
+      const y = parseInt(document.getElementById('yearGreg').value, 10) || 1645;
+      return gregToAbsMonths(y, m);
+    } else {
+      const m = parseInt(document.getElementById('monthIran').value, 10);
+      const y = parseInt(document.getElementById('yearIran').value, 10) || 1024;
+      return iranToAbsMonths(y, m);
+    }
+  }
+
+  function setCalMode(mode) {
+    const currentAbs = getCurrentStartAbsMonths();
+    calMode = mode;
+    document.getElementById('tabGreg').classList.toggle('active', mode === 'greg');
+    document.getElementById('tabIran').classList.toggle('active', mode === 'iran');
+    document.getElementById('gregInputs').style.display = mode === 'greg' ? 'grid' : 'none';
+    document.getElementById('iranInputs').style.display = mode === 'iran' ? 'grid' : 'none';
+
+    const gYear = Math.floor(currentAbs / 12);
+    const gMonth = ((currentAbs % 12) + 12) % 12;
+    const iranTotal = currentAbs - MONTH_OFFSET;
+    const iYear = Math.floor(iranTotal / 12);
+    const iMonth = ((iranTotal % 12) + 12) % 12;
+
+    document.getElementById('monthGreg').value = gMonth;
+    document.getElementById('yearGreg').value = gYear;
+    document.getElementById('monthIran').value = iMonth;
+    document.getElementById('yearIran').value = iYear;
+    updateDatePreview();
+  }
+
+  function updateDatePreview() {
+    const abs = getCurrentStartAbsMonths();
+    document.getElementById('startPreview').textContent = "Будет записано как: " + formatDualDateFromAbs(abs);
+  }
+
+  const buildingInput = document.getElementById('buildingInput');
+  const buildingMenu = document.getElementById('buildingMenu');
+  const minaretBox = document.getElementById('minaretBox');
+
+  function checkMosqueField(val) {
+    if (val.trim().toLowerCase().includes("мечет")) {
+      minaretBox.classList.add('visible');
+    } else {
+      minaretBox.classList.remove('visible');
+    }
+  }
+
+  function renderBuildingMenu(filter = "") {
+    const q = filter.trim().toLowerCase();
+    buildingMenu.innerHTML = "";
+    const filtered = BUILDINGS.filter(b => !q || b.name.toLowerCase().includes(q));
+
+    if (filtered.length === 0) {
+      const customDiv = document.createElement("div");
+      customDiv.className = "combo-option";
+      customDiv.innerHTML = `<span>Своя постройка: «${filter}»</span><span class="combo-option-term">рандом 1–12 мес.</span>`;
+      customDiv.onclick = () => { buildingMenu.classList.remove("open"); checkMosqueField(buildingInput.value); };
+      buildingMenu.appendChild(customDiv);
+      return;
+    }
+
+    filtered.forEach(item => {
+      const opt = document.createElement("div");
+      opt.className = "combo-option";
+      opt.innerHTML = `<span>${item.name}</span><span class="combo-option-term">${item.label}</span>`;
+      opt.onclick = () => {
+        buildingInput.value = item.name;
+        buildingMenu.classList.remove("open");
+        checkMosqueField(item.name);
+      };
+      buildingMenu.appendChild(opt);
+    });
+  }
+
+  buildingInput.addEventListener("focus", () => { renderBuildingMenu(buildingInput.value); buildingMenu.classList.add("open"); });
+  buildingInput.addEventListener("input", () => { renderBuildingMenu(buildingInput.value); buildingMenu.classList.add("open"); checkMosqueField(buildingInput.value); });
+
+  document.addEventListener("click", (e) => {
+    if (!document.getElementById("buildingCombo").contains(e.target)) { buildingMenu.classList.remove("open"); }
+  });
+
+  function rollDurationMonths(buildingName) {
+    const clean = buildingName.trim().toLowerCase();
+    if (clean.includes("мечет")) {
+      const minarets = parseInt(document.getElementById("minaretSelect").value, 10) || 1;
+      const years = minarets + 1;
+      return { months: years * 12, text: `${years} г. (${minarets} минар.)` };
+    }
+    const found = BUILDINGS.find(b => b.name.toLowerCase() === clean);
+    if (found) {
+      if (found.instant) return { months: 0, text: "Автоматически после покупки" };
+      const randMonths = Math.floor(Math.random() * (found.maxM - found.minM + 1)) + found.minM;
+      return { months: randMonths, text: formatMonthsDuration(randMonths) };
+    }
+    const fallbackMonths = Math.floor(Math.random() * 12) + 1;
+    return { months: fallbackMonths, text: formatMonthsDuration(fallbackMonths) + " (своя постройка)" };
+  }
+
+  function formatMonthsDuration(m) {
+    if (m === 0) return "Мгновенно";
+    const yrs = Math.floor(m / 12);
+    const mos = m % 12;
+    let parts = [];
+    if (yrs > 0) parts.push(`${yrs} ${yrs === 1 ? "год" : (yrs <= 4 ? "года" : "лет")}`);
+    if (mos > 0) parts.push(`${mos} ${mos === 1 ? "месяц" : (mos <= 4 ? "месяца" : "месяцев")}`);
+    return parts.join(" и ");
+  }
+
+  async function submitBuildingForm(e) {
+    e.preventDefault();
+    const charName = document.getElementById("charName").value.trim();
+    let buildingName = document.getElementById("buildingInput").value.trim();
+    const locationVal = document.getElementById("locationInput").value.trim();
+    const postLink = document.getElementById("postLinkInput").value.trim();
+    const comment = document.getElementById("commentInput").value.trim();
+
+    if (!charName || !buildingName || !locationVal || !postLink) return;
+
+    if (buildingName.toLowerCase().includes("мечет")) {
+      const minarets = parseInt(document.getElementById("minaretSelect").value, 10) || 1;
+      if (minarets > 1 && buildingName === "Строительство мечети с 1 минаретом") {
+        buildingName = `Строительство мечети (${minarets} минарета/ов)`;
+      }
+    }
+
+    const startAbs = getCurrentStartAbsMonths();
+    const startDateStr = formatDualDateFromAbs(startAbs);
+    const roll = rollDurationMonths(buildingName);
+    const openAbs = startAbs + roll.months;
+    const openDateStr = roll.months === 0 ? `${startDateStr} (автоматически сразу)` : formatDualDateFromAbs(openAbs);
+    const moscowNow = new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" });
+
+    const templateText = `1. Имя вашего персонажа: ${charName}\n2. Наименование постройки: ${buildingName}\n3. Дата начала строительства: ${startDateStr}\n4. Местонахождение постройки: ${locationVal}\n5. Ссылка на пост с началом строительства: ${postLink}\n6. Комментарий: ${comment || "—"}`;
+
+    try { await navigator.clipboard.writeText(templateText); } catch (_) {}
+
+    const btn = document.getElementById("submitBtn");
+    const resultPanel = document.getElementById("resultPanel");
+    btn.disabled = true;
+    btn.textContent = "Отправка в реестр...";
+
+    const payload = JSON.stringify({
+      date: moscowNow, charName, buildingName, startDate: startDateStr, openDate: openDateStr, location: locationVal, postLink, comment: comment || "—"
+    });
+
+    try {
+      if (SCRIPT_URL && !SCRIPT_URL.includes("ВСТАВЬТЕ_ССЫЛКУ")) {
+        await fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: payload });
+      }
+      resultPanel.className = "result-panel show";
+      resultPanel.innerHTML = `<strong>Заявка скопирована в буфер и отправлена в таблицу!</strong><br>• <b>Постройка:</b> ${buildingName}<br>• <b>Начало:</b> ${startDateStr}<br>• <b>Рандом срок:</b> ${roll.text}<br>• <b>Дата открытия:</b> <strong>${openDateStr}</strong>`;
+    } catch (err) {
+      resultPanel.className = "result-panel show";
+      resultPanel.innerHTML = `<strong>Шаблон скопирован, но возникла ошибка отправки в таблицу.</strong><br>Дата открытия: <strong>${openDateStr}</strong>`;
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Скопировать шаблон и отправить в таблицу";
+    }
+  }
+
+  updateDatePreview();
+</script>
+
+</body>
+</html>
