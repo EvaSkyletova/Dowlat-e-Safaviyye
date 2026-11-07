@@ -2,9 +2,19 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dowlаt-e Safaviyye • Великая Держава</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dowlat-e Safaviyye</title>
     <style>
+        /* ========================================= */
+        /* ПОДКЛЮЧЕНИЕ ШРИФТА YIPES                  */
+        /* ========================================= */
+        @font-face {
+            font-family: 'Yipes';
+            src: url('yipes-regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
             --gold-dark: #8c6a08;
             --gold: #d4af37;
@@ -15,30 +25,42 @@
             --line: rgba(212, 175, 55, 0.3);
             --line-strong: rgba(212, 175, 55, 0.65);
             --bg: #161618;
+            --panel: rgba(22, 22, 25, 0.95);
+            --panel-soft: rgba(26, 26, 30, 0.9);
+            --panel-dark: rgba(14, 14, 16, 0.95);
         }
 
-        /* ЖЕСТКО ЗАПРЕЩАЕМ ПАЛЕЦ НА ВСЕХ ЭЛЕМЕНТАХ И ОСТАВЛЯЕМ ТОЛЬКО ЗОЛОТУЮ СТРЕЛКУ */
-        body, *, a, button, .palace-card, .feature-card, .site-nav a, input, select {
+        /* Золотая стрелочка для всего сайта */
+        body, *, a, button, input, select, textarea, option, optgroup {
             cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
         }
 
         *, *::before, *::after {
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
             font-family: Georgia, "Times New Roman", serif !important;
+            font-style: normal !important;
         }
 
-        body {
+        /* Применяем Yipes к заголовку по центру */
+        .hero h1 {
+            font-family: 'Yipes', Georgia, serif !important;
+        }
+
+        html, body {
             margin: 0;
             padding: 0;
-            background: var(--bg);
+            background: var(--bg) !important;
             color: var(--text);
             min-height: 100vh;
             background-image: 
-                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
-                linear-gradient(to bottom, #161618, #0f0f11);
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+                linear-gradient(to bottom, #161618, #0b0b0d);
+            overflow-x: hidden;
+            overflow-y: scroll;
         }
 
-        /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+        /* Эффект «пуньк» при клике */
         .click-echo {
             position: fixed;
             width: 12px;
@@ -52,46 +74,25 @@
         }
 
         @keyframes echoPulse {
-            0% {
-                width: 12px;
-                height: 12px;
-                opacity: 1;
-                box-shadow: 0 0 12px var(--gold);
-            }
-            100% {
-                width: 80px;
-                height: 80px;
-                opacity: 0;
-                box-shadow: 0 0 30px rgba(212, 175, 55, 0);
-            }
+            0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+            100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
         }
 
-        /* Тонкий золотой скроллбар */
         * {
             scrollbar-width: thin;
             scrollbar-color: var(--gold-dark) transparent;
         }
-        ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--bg);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--gold-dark);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--gold);
-        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-        /* ШАПКА САЙТА */
+        /* ЕДИНАЯ ШАПКА САЙТА (ТОЛЬКО МЕНЮ БЕЗ СОЛНЦА) */
         .site-header {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 18px 20px;
+            padding: 16px 20px;
             border-bottom: 2px solid var(--line);
             background: rgba(18, 18, 20, 0.96);
             backdrop-filter: blur(12px);
@@ -99,16 +100,6 @@
             top: 0;
             z-index: 100;
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
-        }
-
-        .site-logo {
-            font-size: 20px;
-            color: var(--gold-light);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-            margin-bottom: 12px;
-            font-weight: bold;
         }
 
         .site-nav {
@@ -152,74 +143,42 @@
             text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
         }
 
-        /* HERO SECTION */
+        /* HERO SECTION — УМЕНЬШЕННЫЙ ЗАГОЛОВОК */
         .hero {
             text-align: center;
-            padding: 60px 20px 20px;
+            padding: 40px 20px 10px 20px;
             background: transparent;
-            position: relative;
-        }
-
-        .hero::before {
-            content: '❖   ✦   ❖';
-            display: block;
-            color: var(--gold);
-            font-size: 16px;
-            letter-spacing: 8px;
-            margin-bottom: 20px;
-            opacity: 0.85;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
 
         .hero h1 {
-            font-size: 48px;
+            font-size: clamp(28px, 4vw, 46px);
             margin: 0;
-            line-height: 1.25;
-            color: #faf5e6;
-            text-shadow: 0 4px 15px rgba(0,0,0,0.9);
-            font-weight: normal;
-            letter-spacing: 3px;
+            line-height: 1.2;
+            color: var(--gold-light);
+            letter-spacing: 2px;
             text-transform: uppercase;
+            text-shadow: 0 4px 25px rgba(212, 175, 55, 0.35);
+            font-weight: normal;
         }
 
-        .hero h1 span {
-            font-size: 30px;
-            display: block;
-            margin-top: 14px;
-            color: var(--gold);
-            letter-spacing: 4px;
-            font-style: italic;
-            text-transform: none;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+        /* ОПИСАНИЕ С ИМПЕРСКОЙ РАМКОЙ */
+        .intro-container {
+            max-width: 900px;
+            margin: 20px auto 40px auto;
+            padding: 0 20px;
         }
 
-        /* ИМПЕРИАЛЬНЫЙ ДЕВИЗ */
-        .imperial-quote {
-            text-align: center;
-            font-style: italic;
-            color: var(--gold-soft);
-            font-size: 15px;
-            letter-spacing: 1.5px;
-            margin: 15px 0 35px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-
-        /* ОПИСАНИЕ (РАМКА РУНОПИСИ) */
         .intro-text {
-            max-width: 860px;
-            margin: 0 auto 50px;
             text-align: center;
-            padding: 35px 45px;
-            background: linear-gradient(145deg, rgba(22, 22, 25, 0.92), rgba(14, 14, 16, 0.97));
-            border: 1px solid var(--line);
-            border-top: 2px solid var(--gold);
-            border-bottom: 2px solid var(--gold);
-            font-size: 15.5px;
-            line-height: 1.9;
-            color: #ded6c2;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.6), inset 0 0 25px rgba(212, 175, 55, 0.03);
+            font-size: 15px;
+            line-height: 1.85;
+            color: var(--text);
+            background: var(--panel);
+            border: 2px solid var(--gold);
+            border-radius: 12px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7), inset 0 0 25px rgba(212, 175, 55, 0.05);
+            padding: 30px 35px;
             position: relative;
-            border-radius: 4px;
         }
 
         .intro-text::before, .intro-text::after {
@@ -227,94 +186,124 @@
             position: absolute;
             color: var(--gold);
             font-size: 12px;
-            top: 50%;
-            transform: translateY(-50%);
         }
-        .intro-text::before { left: 15px; }
-        .intro-text::after { right: 15px; }
+        .intro-text::before { top: 8px; left: 12px; }
+        .intro-text::after { top: 8px; right: 12px; }
 
         .intro-text .gold {
             color: var(--gold-light);
             font-weight: bold;
-            font-style: italic;
         }
 
-        /* СЕТКА БЫСТРЫХ ПЕРЕХОДОВ */
-        .features-grid {
-            max-width: 1000px;
-            margin: 0 auto 60px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+        /* ========================================= */
+        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) С ГОРИЗОНТАЛЬНЫМ СКРОЛЛОМ НА МОБИЛЬНЫХ */
+        /* ========================================= */
+        .media-buttons-section {
+            max-width: 1100px;
+            margin: 0 auto 50px auto;
             padding: 0 20px;
         }
 
-        .feature-card {
-            background: rgba(20, 20, 23, 0.85);
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            padding: 25px 20px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text);
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
-            position: relative;
-            overflow: hidden;
+        .media-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
         }
 
-        .feature-card::before {
+        .media-card {
+            position: relative;
+            height: 140px;
+            border-radius: 6px;
+            border: 1px solid var(--line);
+            background: var(--panel-soft);
+            overflow: hidden;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+            transition: all 0.3s ease;
+        }
+
+        .media-card img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            filter: brightness(0.35) contrast(1.1);
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .media-card:hover img {
+            transform: scale(1.06);
+            filter: brightness(0.5) contrast(1.15);
+        }
+
+        .media-card::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--gold);
-            transform: scaleX(0);
+            inset: 6px;
+            border: 1px solid var(--gold);
+            opacity: 0.4;
+            border-radius: 4px;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .media-card:hover::after {
+            opacity: 0.9;
+            box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        .media-title {
+            position: relative;
+            z-index: 2;
+            color: var(--gold-light);
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
             transition: transform 0.3s ease;
         }
 
-        .feature-card:hover::before {
-            transform: scaleX(1);
+        .media-card:hover .media-title {
+            transform: translateY(-2px);
+            text-shadow: 0 0 12px rgba(251, 232, 166, 0.8);
         }
 
-        .feature-card:hover {
-            border-color: var(--gold);
-            transform: translateY(-4px);
-            background: rgba(26, 26, 30, 0.95);
-            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15);
+        /* На мобильных телефонах делаем горизонтальную прокрутку в ряд, чтобы они не падали в столбик */
+        @media (max-width: 920px) {
+            .media-buttons-section {
+                padding: 0 10px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .media-buttons-grid {
+                display: flex;
+                flex-wrap: nowrap;
+                gap: 12px;
+                width: max-content;
+                padding-bottom: 8px;
+            }
+            .media-card {
+                width: 170px;
+                height: 120px;
+                flex: 0 0 170px;
+            }
+            /* Скрываем стандартный горизонтальный скроллбар для красоты */
+            .media-buttons-section::-webkit-scrollbar {
+                display: none;
+            }
+            .media-buttons-section {
+                scrollbar-width: none;
+            }
         }
 
-        .feature-icon {
-            font-size: 24px;
-            color: var(--gold);
-            margin-bottom: 12px;
-        }
-
-        .feature-title {
-            font-size: 15px;
-            color: var(--gold-light);
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-
-        .feature-desc {
-            font-size: 12.5px;
-            color: var(--muted);
-            line-height: 1.5;
-            font-style: italic;
-        }
-
-        /* ========================================= */
-        /* БЛОК АДМИНИСТРАЦИИ (РОСКОШНЫЕ АРКИ)       */
-        /* ========================================= */
+        /* БЛОК АДМИНИСТРАЦИИ */
         .safavid-grand-hall {
             background: transparent;
             color: #cccccc;
-            padding: 20px 0 80px 0;
+            padding: 10px 0 60px 0;
             text-align: center;
             max-width: 1100px;
             margin: 0 auto;
@@ -324,52 +313,44 @@
             font-size: 22px;
             color: var(--gold-light);
             text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 12px;
+            letter-spacing: 2.5px;
+            margin-bottom: 10px;
             font-weight: normal;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
         }
 
         .hall-divider {
             color: var(--gold);
-            font-size: 15px;
-            letter-spacing: 6px;
-            margin-bottom: 50px;
-            opacity: 0.9;
+            font-size: 16px;
+            margin-bottom: 40px;
+            opacity: 0.8;
         }
 
         .hall-grid {
             display: flex;
             flex-wrap: nowrap;
             justify-content: center;
-            gap: 45px;
+            gap: 30px;
         }
 
         .palace-card {
-            width: 215px;
-            flex: 0 0 215px;
+            width: 190px;
+            flex: 0 0 190px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
 
-        .palace-card:hover {
-            transform: translateY(-8px);
-        }
-
-        /* Восточная арка с золотым свечением */
         .palace-window {
-            width: 195px;
-            height: 275px;
+            width: 170px;
+            height: 240px;
             flex-shrink: 0;
-            border-radius: 100px 100px 14px 14px;
+            border-radius: 85px 85px 10px 10px;
             border: 2px solid var(--gold);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), inset 0 0 25px rgba(0,0,0,0.95), 0 0 15px rgba(212, 175, 55, 0.15);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(0,0,0,0.9);
             overflow: hidden;
-            background: #0a0a0c;
+            background: var(--panel-dark);
             position: relative;
-            margin-bottom: -24px;
+            margin-bottom: -20px;
             z-index: 1;
         }
 
@@ -378,24 +359,22 @@
             height: 100%;
             object-fit: cover;
             object-position: center top;
-            filter: grayscale(100%) contrast(115%);
-            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+            filter: grayscale(100%) contrast(1.1);
+            transition: transform 0.5s ease, filter 0.5s ease;
         }
 
         .palace-window:hover img {
-            transform: scale(1.07);
-            filter: grayscale(0%) contrast(100%);
+            transform: scale(1.08);
+            filter: grayscale(0%);
         }
 
-        /* Именная плашка в шахском стиле */
         .name-plaque {
-            background: linear-gradient(145deg, #1d1d21, #111113, #1d1d21);
-            border: 1px solid var(--line-strong);
-            border-top: 2px solid var(--gold);
-            border-bottom: 2px solid var(--gold);
-            padding: 14px 10px;
+            background: linear-gradient(145deg, rgba(22, 22, 25, 0.96), rgba(14, 14, 16, 0.99));
+            border-top: 1px solid var(--gold);
+            border-bottom: 1px solid var(--gold);
+            padding: 12px 6px;
             width: 100%;
-            min-height: 85px;
+            min-height: 75px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -403,25 +382,24 @@
             box-sizing: border-box;
             position: relative;
             z-index: 2;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.9);
-            border-radius: 6px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.85);
+            border-radius: 4px;
         }
 
         .admin-name {
             color: var(--gold-light);
-            font-size: 16px;
+            font-size: 14.5px;
             font-weight: bold;
-            letter-spacing: 1.5px;
-            margin-bottom: 5px;
+            letter-spacing: 0.8px;
+            margin-bottom: 4px;
             text-align: center;
             line-height: 1.2;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.9);
-            text-transform: uppercase;
+            word-wrap: break-word;
         }
 
         .admin-role {
             color: var(--muted);
-            font-size: 11.5px;
+            font-size: 11px;
             font-style: italic;
             letter-spacing: 2px;
             text-transform: lowercase;
@@ -429,128 +407,86 @@
         }
 
         /* ========================================= */
-        /* МОДАЛЬНОЕ ОКНО (ВСПЛЫВАЮЩЕЕ ПЕРСИДСКОЕ СООБЩЕНИЕ) */
+        /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ                   */
         /* ========================================= */
-        .admin-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .admin-modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .admin-modal-box {
-            width: 90%;
-            max-width: 440px;
-            background: linear-gradient(145deg, #1a1a1e, #111114);
-            border: 1px solid var(--gold);
-            border-top: 3px solid var(--gold-light);
-            border-bottom: 3px solid var(--gold-light);
-            border-radius: 8px;
-            padding: 35px 30px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 30px rgba(212, 175, 55, 0.2);
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-        }
-
-        .admin-modal-overlay.active .admin-modal-box {
-            transform: scale(1) translateY(0);
-        }
-
-        .modal-kicker {
-            color: var(--gold-soft);
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            font-weight: bold;
-        }
-
-        .modal-text {
-            color: var(--gold-light);
-            font-size: 18px;
-            font-style: italic;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
-        }
-
-        .modal-close-btn {
-            background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
-            color: #121008;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 24px;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: all 0.2s ease;
-        }
-
-        .modal-close-btn:hover {
-            background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
-            transform: translateY(-1px);
-        }
-
-        /* Адаптивность для телефонов */
         @media (max-width: 920px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
             .hall-grid {
                 flex-wrap: wrap;
-                gap: 25px;
+                gap: 18px;
+                padding: 0 10px;
             }
             .palace-card {
-                width: 160px;
-                flex: 0 0 160px;
+                width: 45%;
+                flex: 0 0 45%;
             }
             .palace-window {
-                width: 145px;
-                height: 205px;
-                border-radius: 75px 75px 10px 10px;
-            }
-            .site-nav {
-                gap: 12px 16px;
-            }
-            .site-nav a {
-                font-size: 11px;
+                width: 100%;
+                height: 210px;
             }
         }
 
-        @media (max-width: 768px) {
-            .site-header { padding: 14px 10px; }
-            .hero h1 { font-size: 28px; }
-            .hero h1 span { font-size: 22px; }
-            .intro-text { padding: 25px 20px; margin: 20px 15px; font-size: 14px; }
+        @media (max-width: 480px) {
+            .site-header {
+                padding: 12px 10px;
+            }
+            .site-nav {
+                gap: 8px 12px;
+            }
+            .site-nav a {
+                font-size: 10px;
+                letter-spacing: 0.6px;
+            }
+            .hero {
+                padding: 30px 10px 10px 10px;
+            }
+            .hero h1 {
+                font-size: 26px;
+            }
+            .intro-container {
+                margin: 15px auto;
+                padding: 0 10px;
+            }
+            .intro-text {
+                padding: 20px 16px;
+                font-size: 14px;
+            }
+            .safavid-grand-hall {
+                padding: 0 10px 40px 10px;
+            }
+            .hall-title {
+                font-size: 18px;
+            }
+            .hall-divider {
+                margin-bottom: 25px;
+            }
+            .palace-card {
+                width: 47%;
+                flex: 0 0 47%;
+            }
+            .palace-window {
+                height: 180px;
+            }
+            .admin-name {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
 
-    <!-- ШАПКА С ЦЕНТРИРОВАННЫМ МЕНЮ КАПСОМ -->
+    <script>
+        window.addEventListener('click', (e) => {
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ШАПКА САЙТА (ТОЛЬКО МЕНЮ БЕЗ СОЛНЦА) -->
     <header class="site-header">
-        <div class="site-logo">Dowlаt-e Safaviyye</div>
         <nav class="site-nav">
             <a href="index.html" class="active">Главная</a>
             <a href="activity.html">Активность</a>
@@ -561,41 +497,44 @@
             <a href="structure.html">Устройство Персии</a>
             <a href="army.html">Армия</a>
             <a href="map.html">Карта</a>
-            <a href="guide.html">Звездный гид</a>
+            <a href="calendar.html">Календарь</a>
             <a href="letopis.html">Летопись</a>
         </nav>
     </header>
 
-    <!-- ЗАГОЛОВОК -->
+    <!-- НАЗВАНИЕ ПО ЦЕНТРУ ПЕРЕД ОПИСАНИЕМ -->
     <section class="hero">
-        <h1>Великая Держава<br><span>Dowlat-e Safaviyye</span></h1>
+        <h1>Dowlat-e Safaviyye</h1>
     </section>
 
-    <div class="imperial-quote">«Тень Всевышнего на земле, оплот веры и справедливости»</div>
-
-    <!-- ТЕКСТ О ПРОЕКТЕ -->
-    <section class="intro-text">
-        <p><span class="gold">Dowlat-e Safaviyye</span> — это проект с альтернативной историей Сефевидского государства, ведущий начало с правления Шаха Аббаса I Великого. Нынешний правитель Сефевидского государства — шах Нариман I. Он же — глава народа, управляющий землями вместе с кызылбашской знатью, которая входит в главный совет государя и в распоряжении которой находится вся военная мощь страны.</p>
-    </section>
-
-    <!-- СЕТКА БЫСТРЫХ ПЕРЕХОДОВ -->
-    <div class="features-grid">
-        <a href="ankets.html" class="feature-card">
-            <div class="feature-icon">✦</div>
-            <div class="feature-title">Анкеты знати</div>
-            <div class="feature-desc">Правящая династия, великие роды и кызылбашские племена державы.</div>
-        </a>
-        <a href="structure.html" class="feature-card">
-            <div class="feature-icon">❖</div>
-            <div class="feature-title">Устройство Персии</div>
-            <div class="feature-desc">Госаппарат, высокие титулы, законы и структура шахского двора.</div>
-        </a>
-        <a href="letopis.html" class="feature-card">
-            <div class="feature-icon">✧</div>
-            <div class="feature-title">Летопись эпохи</div>
-            <div class="feature-desc">Хроники великих событий, указы государя и сюжетные статьи.</div>
-        </a>
+    <!-- ОПИСАНИЕ С ИМПЕРСКОЙ РАМКОЙ -->
+    <div class="intro-container">
+        <section class="intro-text">
+            <p><span class="gold">Dowlat-e Safaviyye</span> — это проект с альтернативной историей Сефевидского государства, ведущий начало с правления Шаха Аббаса I Великого. Нынешний правитель Сефевидского государства — шах Нариман I. Он же — глава народа, управляющий землями вместе с кызылбашской знатью, которая входит в главный совет государя и в распоряжении которой находится вся военная мощь страны.</p>
+        </section>
     </div>
+
+    <!-- БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ): НА МОБИЛЬНЫХ В РЯД В СТОРОНУ -->
+    <section class="media-buttons-section">
+        <div class="media-buttons-grid">
+
+            <a href="https://vk.ru/@club182656984?isCloseForwardPush=false" target="_blank" rel="noopener noreferrer" class="media-card">
+                <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/TzVvfmukS2gOH8H65PyJCvEUW8j6Ht8FcD2SKmuub_JKrRFggu5hx3uL7MpWRVLiAJZ_ohuBj7-XSehZRKRWjjpt.jpg" alt="Статьи">
+                <span class="media-title">Статьи</span>
+            </a>
+
+            <a href="https://vkvideo.ru/@dwltrpg" target="_blank" rel="noopener noreferrer" class="media-card">
+                <img src="https://i.ibb.co/6R228ZtF/image.png" alt="Видео">
+                <span class="media-title">Видео</span>
+            </a>
+
+            <a href="https://vk.ru/clips/dwltrpg" target="_blank" rel="noopener noreferrer" class="media-card">
+                <img src="https://i.ibb.co/YFYP4ZWq/ostany-1.png" alt="Клипы">
+                <span class="media-title">Клипы</span>
+            </a>
+
+        </div>
+    </section>
 
     <!-- БЛОК АДМИНИСТРАЦИИ -->
     <div class="safavid-grand-hall">
@@ -603,8 +542,7 @@
       <div class="hall-divider">✦ ✧ ✦ ✧ ✦</div>
 
       <div class="hall-grid">
-
-        <div class="palace-card" onclick="showAdminQuote(this)">
+        <div class="palace-card">
           <div class="palace-window">
             <img src="https://i.ibb.co/yBdT3zXJ/001.png" alt="Polina">
           </div>
@@ -614,7 +552,7 @@
           </div>
         </div>
 
-        <div class="palace-card" onclick="showAdminQuote(this)">
+        <div class="palace-card">
           <div class="palace-window">
             <img src="https://i.ibb.co/pvFnHqXm/001.png" alt="Eva">
           </div>
@@ -624,7 +562,7 @@
           </div>
         </div>
 
-        <div class="palace-card" onclick="showAdminQuote(this)">
+        <div class="palace-card">
           <div class="palace-window">
             <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/10/14/dfbgdfgb.png" alt="Poison">
           </div>
@@ -634,7 +572,7 @@
           </div>
         </div>
 
-        <div class="palace-card" onclick="showAdminQuote(this)">
+        <div class="palace-card">
           <div class="palace-window">
             <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/10/14/c636418c3395f7ebf1fbc32dd8c3354f_95a1e885-78e2-49de-b2b2-7b3f95876691.png" alt="Елена">
           </div>
@@ -643,61 +581,8 @@
             <div class="admin-role">буся</div>
           </div>
         </div>
-
       </div>
     </div>
-
-    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ АДМИНОВ -->
-    <div class="admin-modal-overlay" id="adminModal" onclick="closeAdminModal(event)">
-        <div class="admin-modal-box">
-            <div class="modal-kicker">✦ Шахский Двор ✦</div>
-            <div class="modal-text" id="modalQuoteText">«И что ты хочешь про меня узнать?»</div>
-            <button class="modal-close-btn" onclick="closeAdminModalBtn()">Ой</button>
-        </div>
-    </div>
-
-    <script>
-        // ЭФФЕКТ «ПУНЬК» (ЭХО) ПРИ КЛИКЕ
-        window.addEventListener('click', (e) => {
-            const echo = document.createElement('div');
-            echo.className = 'click-echo';
-            echo.style.left = `${e.clientX}px`;
-            echo.style.top = `${e.clientY}px`;
-            document.body.appendChild(echo);
-            
-            setTimeout(() => {
-                echo.remove();
-            }, 550);
-        });
-
-        // Цитаты администраторов
-        const adminQuotes = [
-            "«И что ты хочешь про меня узнать?»",
-            "«Не тыкай так грубо, будь ласковее»",
-            "«Ткнул и уйдешь сейчас, да?»",
-            "«Какая любопытная...»"
-        ];
-
-        function showAdminQuote(cardElement) {
-            const modal = document.getElementById('adminModal');
-            const quoteTextElem = document.getElementById('modalQuoteText');
-            
-            const randomQuote = adminQuotes[Math.floor(Math.random() * adminQuotes.length)];
-            quoteTextElem.textContent = randomQuote;
-
-            modal.classList.add('active');
-        }
-
-        function closeAdminModal(event) {
-            if (event.target.id === 'adminModal') {
-                document.getElementById('adminModal').classList.remove('active');
-            }
-        }
-
-        function closeAdminModalBtn() {
-            document.getElementById('adminModal').classList.remove('active');
-        }
-    </script>
 
 </body>
 </html>
