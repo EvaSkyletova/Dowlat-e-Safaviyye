@@ -447,7 +447,7 @@
 
     async function loadReputationData() {
         try {
-            const response = await fetch(`${SCRIPT_WEBHOOK_URL}?name=${encodeURIComponent("Видади Бахадур")}`, { redirect: "follow" });
+            const response = await fetch(`${SCRIPT_WEBHOOK_URL}?name=${encodeURIComponent("Бахадур")}`, { redirect: "follow" });
             const data = await response.json();
             
             if (data.error || !data.reputation) {
