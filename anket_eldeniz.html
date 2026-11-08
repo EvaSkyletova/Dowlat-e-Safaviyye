@@ -573,4 +573,149 @@
 
             <div class="modal-form-group">
                 <label class="modal-label">Текст информации:</label>
-                <textarea id="infoText" class="modal-textarea" placeholder="
+                <textarea id="infoText" class="modal-textarea" placeholder="Опишите факт, сцену или новое сведение об Эльденизе..." required></textarea>
+            </div>
+
+            <div class="modal-status" id="modalStatus"></div>
+
+            <div class="modal-actions">
+                <button type="submit" class="modal-submit-btn" id="submitBtn">Отправить</button>
+                <button type="button" class="modal-close-btn" onclick="closeModal()">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Эффект «пуньк» при клике (исправлен, чтобы не блокировать ссылки)
+    window.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('.tab-btn') || e.target.closest('button')) return;
+
+        const echo = document.createElement('div');
+        echo.className = 'click-echo';
+        echo.style.left = `${e.clientX}px`;
+        echo.style.top = `${e.clientY}px`;
+        document.body.appendChild(echo);
+        setTimeout(() => { echo.remove(); }, 550);
+    });
+
+    function openTab(evt, tabId) {
+        const tabs = document.getElementsByClassName('tab-content');
+        for (let i = 0; i < tabs.length; i++) { tabs[i].classList.remove('active'); }
+        const btns = document.getElementsByClassName('tab-btn');
+        for (let i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
+        document.getElementById(tabId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    function openModal() { document.getElementById('infoModal').style.display = 'flex'; document.getElementById('modalStatus').style.display = 'none'; }
+    function closeModal() { document.getElementById('infoModal').style.display = 'none'; }
+    document.getElementById('infoModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+    function getLevelName(score) {
+        if (score <= 19) return "Презрение";
+        if (score <= 39) return "Равнодушие";
+        if (score <= 59) return "Скептицизм";
+        if (score <= 79) return "Лояльность";
+        if (score <= 90) return "Признание";
+        return "Авторитет";
+    }
+
+    const SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDpw/exec";
+
+    async function loadReputationData() {
+        try {
+            const response = await fetch(`${SCRIPT_WEBHOOK_URL}?name=${encodeURIComponent("Эльдениз")}`, { redirect: "follow" });
+            const data = await response.json();
+            
+            if (data.error || !data.reputation) {
+                console.log("Данные репутации не найдены");
+                return;
+            }
+
+            const repData = data.reputation;
+            const map = {
+                "Светский престиж": "prestige",
+                "Расположение тюркского народа": "turk",
+                "Расположение персидского народа": "persian",
+                "Военная репутация": "military",
+                "Религиозность и благотворительность": "religion"
+            };
+
+            let sum = 0;
+            let count = 0;
+
+            for (let cat in map) {
+                let score = repData[cat] !== undefined ? repData[cat] : 0;
+                const valEl = document.getElementById(`val_${map[cat]}`);
+                const lvlEl = document.getElementById(`lvl_${map[cat]}`);
+                if (valEl) valEl.innerText = score;
+                if (lvlEl) lvlEl.innerText = `(Уровень: ${getLevelName(score)})`;
+                sum += parseFloat(score);
+                count++;
+            }
+
+            if (count > 0) {
+                let avg = (sum / count).toFixed(1);
+                const totalEl = document.getElementById('repTotal');
+                if (totalEl) {
+                    totalEl.innerHTML = `${avg} / 100 <span id="repTotalLevel">(Уровень: ${getLevelName(avg)})</span>`;
+                }
+            }
+
+        } catch (err) {
+            console.log("Ошибка загрузки репутации:", err);
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadReputationData);
+
+    const SUBMIT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw1XRoA9bE8w8RBi9thUmm1JOZ3PQbpNhlKFJNtnjohcjqhwLGNl8KE9m-tyNlaDZBs/exec";
+
+    function submitToSheet(e) {
+        e.preventDefault();
+        const sender = document.getElementById('senderName').value;
+        const category = document.getElementById('infoCategory').value;
+        const text = document.getElementById('infoText').value;
+        const statusBox = document.getElementById('modalStatus');
+        const submitBtn = document.getElementById('submitBtn');
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Отправка...";
+        statusBox.style.display = "block";
+        statusBox.style.color = "var(--gold-light)";
+        statusBox.innerText = "Свиток запечатывается и отправляется...";
+
+        fetch(SUBMIT_WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                character: "Эльдениз",
+                sender: sender,
+                category: category,
+                text: text,
+                date: new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" })
+            })
+        })
+        .then(() => {
+            statusBox.style.color = "#88cb8b";
+            statusBox.innerText = "✓ Успешно отправлено в государственную таблицу!";
+            setTimeout(() => {
+                closeModal();
+                document.getElementById('infoForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Отправить";
+            }, 1500);
+        })
+        .catch(err => {
+            statusBox.style.color = "#d98888";
+            statusBox.innerText = "Ошибка при отправке. Попробуйте позже.";
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Отправить";
+        });
+    }
+</script>
+
+</body>
+</html>
