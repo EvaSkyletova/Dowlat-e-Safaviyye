@@ -306,6 +306,12 @@
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scroll-snap-type: x mandatory;
+                /* Скрываем полосу прокрутки */
+                -ms-overflow-style: none;
+                scrollbar-width: none;
+            }
+            .media-buttons-section::-webkit-scrollbar {
+                display: none;
             }
             
             .media-buttons-grid {
@@ -323,36 +329,26 @@
                 flex: 0 0 auto;
                 scroll-snap-align: center;
             }
-            
-            /* Скрываем полосу прокрутки */
-            .media-buttons-section::-webkit-scrollbar {
-                display: none;
-            }
-            .media-buttons-section {
-                -ms-overflow-style: none;
-                scrollbar-width: none;
-            }
 
-            /* Показываем подсказку со стрелочкой */
+            /* Подсказка со свайпом */
             .swipe-hint {
                 display: flex;
-                flex-direction: column;
-                align-items: center;
                 justify-content: center;
+                align-items: center;
                 margin-top: 15px;
                 color: var(--gold-light);
-                font-size: 11px;
+                font-size: 12px;
                 letter-spacing: 2px;
                 text-transform: uppercase;
                 text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
-                animation: bounceLeft 2s infinite;
+                animation: bounceLeft 1.5s infinite;
             }
 
-            /* Анимация стрелочки влево */
+            /* Анимация текста влево */
             @keyframes bounceLeft {
                 0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
-                40% { transform: translateX(-10px); }
-                60% { transform: translateX(-5px); }
+                40% { transform: translateX(-8px); }
+                60% { transform: translateX(-4px); }
             }
         }
 
@@ -603,12 +599,9 @@
 
         </div>
 
-        <!-- ПОДСКАЗКА ДЛЯ СВАЙПА (видна только на мобильных) -->
+        <!-- ПОДСКАЗКА ДЛЯ СВАЙПА (теперь просто текст) -->
         <div class="swipe-hint">
-            <span>← Свайпай влево ←</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top: 5px;">
-                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+            ← Свайпай влево ←
         </div>
     </section>
 
