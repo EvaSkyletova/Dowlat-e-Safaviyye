@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- Иконка вкладки (если вы ее еще не добавили) -->
+    <link rel="icon" type="image/png" href="favicon.png">
+    
     <title>Dowlat-e Safaviyye</title>
     <style>
         /* ========================================= */
@@ -42,7 +46,6 @@
             font-style: normal !important;
         }
 
-        /* Применяем Yipes к заголовку по центру */
         .hero h1 {
             font-family: 'Yipes', Georgia, serif !important;
         }
@@ -87,7 +90,7 @@
         ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-        /* ЕДИНАЯ ШАПКА САЙТА (ТОЛЬКО МЕНЮ БЕЗ СОЛНЦА) */
+        /* ЕДИНАЯ ШАПКА САЙТА */
         .site-header {
             display: flex;
             justify-content: center;
@@ -143,11 +146,26 @@
             text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
         }
 
-        /* HERO SECTION — УМЕНЬШЕННЫЙ ЗАГОЛОВОК */
+        /* HERO SECTION — ЗАГОЛОВОК И НОВАЯ КАРТИНКА */
         .hero {
             text-align: center;
             padding: 40px 20px 10px 20px;
             background: transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Стили для картинки (без рамки, уменьшенный размер) */
+        .hero-image-container {
+            max-width: 450px; /* Уменьшено с 800 до 450 */
+            margin-bottom: 20px; /* Отступ от картинки до заголовка */
+        }
+
+        .hero-image {
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
         .hero h1 {
@@ -196,7 +214,7 @@
         }
 
         /* ========================================= */
-        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) С ГОРИЗОНТАЛЬНЫМ СКРОЛЛОМ НА МОБИЛЬНЫХ */
+        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) */
         /* ========================================= */
         .media-buttons-section {
             max-width: 1100px;
@@ -271,7 +289,6 @@
             text-shadow: 0 0 12px rgba(251, 232, 166, 0.8);
         }
 
-        /* На мобильных телефонах делаем горизонтальную прокрутку в ряд, чтобы они не падали в столбик */
         @media (max-width: 920px) {
             .media-buttons-section {
                 padding: 0 10px;
@@ -290,7 +307,6 @@
                 height: 120px;
                 flex: 0 0 170px;
             }
-            /* Скрываем стандартный горизонтальный скроллбар для красоты */
             .media-buttons-section::-webkit-scrollbar {
                 display: none;
             }
@@ -439,6 +455,9 @@
             .hero {
                 padding: 30px 10px 10px 10px;
             }
+            .hero-image-container {
+                margin-bottom: 15px;
+            }
             .hero h1 {
                 font-size: 26px;
             }
@@ -485,7 +504,7 @@
         });
     </script>
 
-    <!-- ШАПКА САЙТА (ТОЛЬКО МЕНЮ БЕЗ СОЛНЦА) -->
+    <!-- ШАПКА САЙТА -->
     <header class="site-header">
         <nav class="site-nav">
             <a href="index.html" class="active">Главная</a>
@@ -502,9 +521,18 @@
         </nav>
     </header>
 
-    <!-- НАЗВАНИЕ ПО ЦЕНТРУ ПЕРЕД ОПИСАНИЕМ -->
+    <!-- НАЗВАНИЕ И КАРТИНКА ПО ЦЕНТРУ -->
     <section class="hero">
+        
+        <!-- ВАША КАРТИНКА (теперь над названием) -->
+        <div class="hero-image-container">
+            <!-- Оставлен только один правильный тег img -->
+            <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/11/08/7d179496022dd3168d0fa8d5bb1d86d4_7f105616-6d00-4fa0-965c-cdd972f6cbad.png" alt="Сефевидский Иран" class="hero-image">
+        </div>
+        
+        <!-- НАЗВАНИЕ -->
         <h1>Dowlat-e Safaviyye</h1>
+
     </section>
 
     <!-- ОПИСАНИЕ С ИМПЕРСКОЙ РАМКОЙ -->
@@ -514,7 +542,7 @@
         </section>
     </div>
 
-    <!-- БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ): НА МОБИЛЬНЫХ В РЯД В СТОРОНУ -->
+    <!-- БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) -->
     <section class="media-buttons-section">
         <div class="media-buttons-grid">
 
