@@ -95,7 +95,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px 20px;
+            padding: 12px 20px;
             border-bottom: 2px solid var(--line);
             background: rgba(18, 18, 20, 0.96);
             backdrop-filter: blur(12px);
@@ -108,9 +108,22 @@
         .site-nav {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 22px;
             flex-wrap: wrap;
-            align-items: center;
+        }
+
+        /* ЛОГОТИП В МЕНЮ (БЕЗ СВЕЧЕНИЯ) */
+        .nav-logo {
+            height: 50px;
+            width: auto;
+            margin-right: 15px;
+            /* Убрали filter: drop-shadow(...) */
+            transition: transform 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.1);
         }
 
         .site-nav a {
@@ -146,7 +159,7 @@
             text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
         }
 
-        /* HERO SECTION — ЗАГОЛОВОК И КАРТИНКА */
+        /* HERO SECTION — ЗАГОЛОВОК И БОЛЬШАЯ КАРТИНКА */
         .hero {
             text-align: center;
             padding: 40px 20px 10px 20px;
@@ -343,19 +356,19 @@
         }
 
         /* ========================================= */
-        /* БЛОК АДМИНИСТРАЦИИ */
+        /* БЛОК АДМИНИСТРАЦИИ (УВЕЛИЧЕННЫЙ)          */
         /* ========================================= */
         .safavid-grand-hall {
             background: transparent;
             color: #cccccc;
             padding: 10px 0 60px 0;
             text-align: center;
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .hall-title {
-            font-size: 22px;
+            font-size: 26px;
             color: var(--gold-light);
             text-transform: uppercase;
             letter-spacing: 2.5px;
@@ -374,12 +387,12 @@
             display: flex;
             flex-wrap: nowrap;
             justify-content: center;
-            gap: 30px;
+            gap: 40px;
         }
 
         .palace-card {
-            width: 190px;
-            flex: 0 0 190px;
+            width: 230px;
+            flex: 0 0 230px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -391,10 +404,10 @@
         }
 
         .palace-window {
-            width: 170px;
-            height: 240px;
+            width: 210px;
+            height: 290px;
             flex-shrink: 0;
-            border-radius: 85px 85px 10px 10px;
+            border-radius: 105px 105px 10px 10px;
             border: 2px solid var(--gold);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(0,0,0,0.9);
             overflow: hidden;
@@ -422,9 +435,9 @@
             background: linear-gradient(145deg, rgba(22, 22, 25, 0.96), rgba(14, 14, 16, 0.99));
             border-top: 1px solid var(--gold);
             border-bottom: 1px solid var(--gold);
-            padding: 12px 6px;
+            padding: 16px 10px;
             width: 100%;
-            min-height: 75px;
+            min-height: 85px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -438,10 +451,10 @@
 
         .admin-name {
             color: var(--gold-light);
-            font-size: 14.5px;
+            font-size: 16px;
             font-weight: bold;
             letter-spacing: 0.8px;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
             text-align: center;
             line-height: 1.2;
             word-wrap: break-word;
@@ -449,7 +462,7 @@
 
         .admin-role {
             color: var(--muted);
-            font-size: 11px;
+            font-size: 12px;
             font-style: italic;
             letter-spacing: 2px;
             text-transform: lowercase;
@@ -461,71 +474,40 @@
         /* ========================================= */
         .admin-modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.75);
             backdrop-filter: blur(8px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            opacity: 0;
-            pointer-events: none;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999; opacity: 0; pointer-events: none;
             transition: opacity 0.3s ease;
         }
-        .admin-modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .admin-modal-overlay.active { opacity: 1; pointer-events: auto; }
         .admin-modal-box {
-            width: 90%;
-            max-width: 440px;
+            width: 90%; max-width: 440px;
             background: linear-gradient(145deg, #1a1a1e, #111114);
             border: 1px solid var(--gold);
-            border-top: 3px solid var(--gold-light);
-            border-bottom: 3px solid var(--gold-light);
-            border-radius: 8px;
-            padding: 35px 30px;
-            text-align: center;
+            border-top: 3px solid var(--gold-light); border-bottom: 3px solid var(--gold-light);
+            border-radius: 8px; padding: 35px 30px; text-align: center;
             box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 30px rgba(212, 175, 55, 0.2);
             transform: scale(0.9) translateY(20px);
             transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
         }
-        .admin-modal-overlay.active .admin-modal-box {
-            transform: scale(1) translateY(0);
-        }
+        .admin-modal-overlay.active .admin-modal-box { transform: scale(1) translateY(0); }
         .modal-kicker {
-            color: var(--gold-soft);
-            font-size: 11px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            margin-bottom: 12px;
-            font-weight: bold;
+            color: var(--gold-soft); font-size: 11px; letter-spacing: 3px;
+            text-transform: uppercase; margin-bottom: 12px; font-weight: bold;
         }
         .modal-text {
-            color: var(--gold-light);
-            font-size: 18px;
-            font-style: italic;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            color: var(--gold-light); font-size: 18px; font-style: italic;
+            line-height: 1.5; margin-bottom: 25px; text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         }
         .modal-close-btn {
             background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
-            color: #121008;
-            border: none;
-            border-radius: 4px;
-            padding: 10px 24px;
-            font-size: 12px;
-            font-weight: bold;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: all 0.2s ease;
+            color: #121008; border: none; border-radius: 4px;
+            padding: 10px 24px; font-size: 12px; font-weight: bold;
+            letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5); transition: all 0.2s ease;
         }
         .modal-close-btn:hover {
             background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
@@ -538,16 +520,16 @@
         @media (max-width: 920px) {
             .hall-grid {
                 flex-wrap: wrap;
-                gap: 18px;
+                gap: 25px;
                 padding: 0 10px;
             }
             .palace-card {
-                width: 45%;
-                flex: 0 0 45%;
+                width: 180px;
+                flex: 0 0 180px;
             }
             .palace-window {
-                width: 100%;
-                height: 210px;
+                width: 160px;
+                height: 230px;
             }
         }
 
@@ -556,7 +538,12 @@
                 padding: 12px 10px;
             }
             .site-nav {
-                gap: 8px 12px;
+                gap: 10px 15px;
+            }
+            /* Логотип на мобильных */
+            .nav-logo {
+                height: 40px;
+                margin-right: 8px;
             }
             .site-nav a {
                 font-size: 10px;
@@ -593,10 +580,15 @@
                 flex: 0 0 47%;
             }
             .palace-window {
+                width: 100%;
                 height: 180px;
             }
+            .name-plaque {
+                padding: 12px 5px;
+                min-height: 75px;
+            }
             .admin-name {
-                font-size: 13px;
+                font-size: 14px;
             }
         }
     </style>
@@ -618,6 +610,9 @@
     <!-- ШАПКА САЙТА -->
     <header class="site-header">
         <nav class="site-nav">
+            <!-- Логотип слева от меню (без свечения) -->
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            
             <a href="index.html" class="active">Главная</a>
             <a href="activity.html">Активность</a>
             <a href="ankets.html">Анкеты</a>
@@ -632,7 +627,7 @@
         </nav>
     </header>
 
-    <!-- НАЗВАНИЕ И КАРТИНКА -->
+    <!-- НАЗВАНИЕ И БОЛЬШАЯ КАРТИНКА -->
     <section class="hero">
         <div class="hero-image-container">
             <img src="leo.png" alt="Сефевидский Иран" class="hero-image">
