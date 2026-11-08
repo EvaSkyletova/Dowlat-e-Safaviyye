@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Анкета: Солейман Амин • Dowlat-e Safaviyye</title>
+    <title>Анкета: Солейман Амин</title>
     
     <!-- Иконка вкладки -->
     <link rel="icon" type="image/png" href="leo.png">
@@ -298,77 +298,171 @@
         .family-key { color: var(--gold-soft); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; }
 
         /* ========================================= */
-        /* ИДЕАЛЬНЫЙ БЛОК РЕПУТАЦИИ                  */
+        /* ШКАЛЫ РЕПУТАЦИИ (КАК У НАРИМАНА)          */
         /* ========================================= */
-        .reputation-grid { display: flex; flex-direction: column; gap: 14px; }
-        
-        .rep-main-card { 
-            background: rgba(14, 14, 16, 0.9); 
-            border: 1px solid var(--gold); 
-            border-radius: 6px; 
-            padding: 18px 22px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            box-shadow: 0 6px 20px rgba(0,0,0,0.6); 
-        }
-        
-        .rep-item { 
-            background: rgba(14, 14, 16, 0.65); 
-            border: 1px solid var(--line); 
-            border-radius: 6px; 
-            padding: 16px 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            transition: border-color 0.3s ease;
-        }
-
-        .rep-item:hover {
-            border-color: rgba(212, 175, 55, 0.6);
-        }
-        
-        .rep-label { 
-            font-size: 14px; 
-            color: var(--gold-light); 
-            text-transform: uppercase; 
-            letter-spacing: 1px; 
-            font-weight: bold; 
-            max-width: 65%;
-            line-height: 1.4;
-        }
-        
-        .rep-value { 
-            font-size: 16px; 
-            color: var(--text); 
-            font-weight: bold; 
-            text-align: right; 
+        .reputation-stack {
             display: flex;
             flex-direction: column;
-            align-items: flex-end; 
-            gap: 3px;
+            gap: 14px;
+            width: 100%;
         }
-        
-        .rep-value span { 
-            color: var(--gold-soft); 
-            font-size: 11.5px; 
-            font-style: italic; 
+
+        .rep-card {
+            background: rgba(14, 14, 16, 0.7);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Главная плашка общей репутации выделена золотой рамкой */
+        .rep-card.main-banner {
+            background: rgba(22, 22, 25, 0.95);
+            border: 1px solid var(--gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 15px rgba(212, 175, 55, 0.05);
+        }
+
+        .rep-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .rep-card-title {
+            color: var(--gold-soft);
+            text-transform: uppercase;
+            font-size: 12.5px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .rep-card.main-banner .rep-card-title {
+            color: var(--gold-light);
+            font-size: 13.5px;
+        }
+
+        .rep-card-value {
+            font-size: 14px;
+            color: var(--text);
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .rep-card-value span {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--muted);
+            margin-left: 6px;
             font-weight: normal;
         }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 15px; }
-        .modal-card { background: linear-gradient(145deg, rgba(22, 22, 25, 0.98), rgba(14, 14, 16, 0.99)); border: 1px solid var(--line); border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); border-radius: 6px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9); max-width: 480px; width: 100%; padding: 28px 24px; position: relative; }
+        .rep-bar-wrap {
+            width: 100%;
+            height: 7px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .rep-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        /* Цвета шкал по уровням */
+        .fill-red { background: linear-gradient(90deg, #b33939, #eb4d4b); box-shadow: 0 0 10px rgba(235, 77, 75, 0.4); }
+        .fill-yellow { background: linear-gradient(90deg, #d4af37, #fbe8a6); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
+        .fill-green { background: linear-gradient(90deg, #27ae60, #2ecc71); box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
+
+        /* ========================================= */
+        /* МОДАЛЬНОЕ ОКНО                            */
+        /* ========================================= */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(6px); 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 9999; 
+            padding: 15px; 
+        }
+        
+        .modal-card { 
+            background: linear-gradient(145deg, rgba(22, 22, 25, 0.98), rgba(14, 14, 16, 0.99)); 
+            border: 1px solid var(--line); 
+            border-top: 2px solid var(--gold); 
+            border-bottom: 2px solid var(--gold); 
+            border-radius: 6px; 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9); 
+            max-width: 480px; 
+            width: 100%; 
+            padding: 28px 24px; 
+            position: relative; 
+        }
+        
         .modal-header { margin-bottom: 18px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
         .modal-title { color: var(--gold-light); font-size: 18px; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 1.5px; font-weight: normal; }
         .modal-desc { color: var(--muted); font-size: 12.5px; margin: 0; font-style: italic; }
+        
         .modal-form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
         .modal-label { color: var(--gold-soft); font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-        .modal-input, .modal-textarea, .modal-select { width: 100%; padding: 11px 14px; background: var(--panel-dark); border: 1px solid var(--line); border-radius: 4px; color: var(--text); font-size: 13.5px; outline: none; transition: all 0.3s; }
+        
+        .modal-input, .modal-textarea, .modal-select { 
+            width: 100%; 
+            padding: 11px 14px; 
+            background: var(--panel-dark); 
+            border: 1px solid var(--line); 
+            border-radius: 4px; 
+            color: var(--text); 
+            font-size: 13.5px; 
+            outline: none; 
+            transition: all 0.3s; 
+        }
+        
         .modal-textarea { resize: vertical; min-height: 90px; }
-        .modal-input:focus, .modal-textarea:focus, .modal-select:focus { border-color: var(--gold-light); box-shadow: 0 0 12px rgba(212, 175, 55, 0.3); }
+        
+        .modal-input:focus, .modal-textarea:focus, .modal-select:focus { 
+            border-color: var(--gold-light); 
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3); 
+        }
+        
         .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
-        .modal-submit-btn { flex: 2; padding: 12px; background: linear-gradient(90deg, #b89947, #d4af37, #b89947); color: #121008; border: none; border-radius: 4px; font-size: 13px; font-weight: bold; text-transform: uppercase; cursor: pointer; letter-spacing: 1.2px; }
-        .modal-close-btn { flex: 1; padding: 12px; background: var(--panel-dark); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; font-size: 13px; text-transform: uppercase; cursor: pointer; }
+        
+        .modal-submit-btn { 
+            flex: 2; 
+            padding: 12px; 
+            background: linear-gradient(90deg, #b89947, #d4af37, #b89947); 
+            color: #121008; 
+            border: none; 
+            border-radius: 4px; 
+            font-size: 13px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            letter-spacing: 1.2px; 
+        }
+        
+        .modal-close-btn { 
+            flex: 1; 
+            padding: 12px; 
+            background: var(--panel-dark); 
+            color: var(--muted); 
+            border: 1px solid var(--line); 
+            border-radius: 4px; 
+            font-size: 13px; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+        }
+        
         .modal-status { margin-top: 10px; font-size: 12.5px; text-align: center; display: none; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -395,28 +489,24 @@
             .site-nav { gap: 10px 15px; }
             .nav-logo { height: 40px; margin-right: 8px; }
             .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+            .sheet-content { padding: 15px 10px; }
+            .tab-content { padding: 12px 10px; }
 
-            /* ИДЕАЛЬНОЕ МОБИЛЬНОЕ ОПИСАНИЕ РЕПУТАЦИИ */
-            .rep-main-card, .rep-item {
+            /* Идеальная компоновка репутации на узких экранах */
+            .rep-card-top {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 8px;
-                padding: 14px 16px;
+                gap: 2px;
             }
-            .rep-label {
-                max-width: 100%;
-                font-size: 12.5px;
-            }
-            .rep-value {
+            .rep-card-value {
                 width: 100%;
-                flex-direction: row;
+                display: flex;
                 justify-content: space-between;
                 align-items: baseline;
-                text-align: right;
+                text-align: left;
             }
-            .rep-value span {
-                margin-top: 0;
-                font-size: 12px;
+            .rep-card-value span {
+                margin-left: 0;
             }
         }
     </style>
@@ -512,36 +602,8 @@
 
                 <!-- Репутация -->
                 <div id="reputation" class="tab-content">
-                    <div class="reputation-grid">
-                        <div class="rep-main-card">
-                            <span class="rep-label">Общая репутация:</span>
-                            <span class="rep-value" id="repTotal">... / 100 <span id="repTotalLevel">(Уровень: ...)</span></span>
-                        </div>
-
-                        <div class="rep-item">
-                            <span class="rep-label">Светский престиж:</span>
-                            <span class="rep-value"><span id="val_prestige">...</span> / 100 <span id="lvl_prestige">(Уровень: ...)</span></span>
-                        </div>
-
-                        <div class="rep-item">
-                            <span class="rep-label">Расположение тюркского народа:</span>
-                            <span class="rep-value"><span id="val_turk">...</span> / 100 <span id="lvl_turk">(Уровень: ...)</span></span>
-                        </div>
-
-                        <div class="rep-item">
-                            <span class="rep-label">Расположение персидского народа:</span>
-                            <span class="rep-value"><span id="val_persian">...</span> / 100 <span id="lvl_persian">(Уровень: ...)</span></span>
-                        </div>
-
-                        <div class="rep-item">
-                            <span class="rep-label">Военная репутация:</span>
-                            <span class="rep-value"><span id="val_military">...</span> / 100 <span id="lvl_military">(Уровень: ...)</span></span>
-                        </div>
-
-                        <div class="rep-item">
-                            <span class="rep-label">Религиозность и благотворительность:</span>
-                            <span class="rep-value"><span id="val_religion">...</span> / 100 <span id="lvl_religion">(Уровень: ...)</span></span>
-                        </div>
+                    <div class="reputation-stack" id="reputationStackContainer">
+                        <div style="text-align: center; color: var(--muted); padding: 20px;">Загрузка данных...</div>
                     </div>
                 </div>
 
@@ -616,64 +678,7 @@
     function closeModal() { document.getElementById('infoModal').style.display = 'none'; }
     document.getElementById('infoModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
-    function getLevelName(score) {
-        if (score <= 19) return "Презрение";
-        if (score <= 39) return "Равнодушие";
-        if (score <= 59) return "Скептицизм";
-        if (score <= 79) return "Лояльность";
-        if (score <= 90) return "Признание";
-        return "Авторитет";
-    }
-
-    const SCRIPT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDpw/exec";
-
-    async function loadReputationData() {
-        try {
-            const response = await fetch(`${SCRIPT_WEBHOOK_URL}?name=${encodeURIComponent("Солейман Амин")}`, { redirect: "follow" });
-            const data = await response.json();
-            
-            if (data.error || !data.reputation) {
-                console.log("Данные репутации не найдены");
-                return;
-            }
-
-            const repData = data.reputation;
-            const map = {
-                "Светский престиж": "prestige",
-                "Расположение тюркского народа": "turk",
-                "Расположение персидского народа": "persian",
-                "Военная репутация": "military",
-                "Религиозность и благотворительность": "religion"
-            };
-
-            let sum = 0;
-            let count = 0;
-
-            for (let cat in map) {
-                let score = repData[cat] !== undefined ? repData[cat] : 0;
-                const valEl = document.getElementById(`val_${map[cat]}`);
-                const lvlEl = document.getElementById(`lvl_${map[cat]}`);
-                if (valEl) valEl.innerText = score;
-                if (lvlEl) lvlEl.innerText = `(Уровень: ${getLevelName(score)})`;
-                sum += parseFloat(score);
-                count++;
-            }
-
-            if (count > 0) {
-                let avg = (sum / count).toFixed(1);
-                const totalEl = document.getElementById('repTotal');
-                if (totalEl) {
-                    totalEl.innerHTML = `${avg} / 100 <span id="repTotalLevel">(Уровень: ${getLevelName(avg)})</span>`;
-                }
-            }
-
-        } catch (err) {
-            console.log("Ошибка загрузки репутации:", err);
-        }
-    }
-
-    window.addEventListener('DOMContentLoaded', loadReputationData);
-
+    // --- ОТПРАВКА В ТАБЛИЦУ ---
     const SUBMIT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw1XRoA9bE8w8RBi9thUmm1JOZ3PQbpNhlKFJNtnjohcjqhwLGNl8KE9m-tyNlaDZBs/exec";
 
     function submitToSheet(e) {
@@ -719,6 +724,79 @@
             submitBtn.innerText = "Отправить";
         });
     }
+
+    // --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ (СО ШКАЛАМИ) ---
+    const REP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDpw/exec"; 
+    const CURRENT_CHARACTER_NAME = "Солейман Амин"; 
+
+    function getReputationLevel(points) {
+        if (points <= 19) return { name: "Презрение", fillClass: "fill-red" };
+        if (points <= 39) return { name: "Равнодушие", fillClass: "fill-red" };
+        if (points <= 59) return { name: "Скептицизм", fillClass: "fill-yellow" };
+        if (points <= 79) return { name: "Лояльность", fillClass: "fill-yellow" };
+        if (points <= 90) return { name: "Признание", fillClass: "fill-green" };
+        return { name: "Авторитет", fillClass: "fill-green" };
+    }
+
+    async function loadReputation() {
+        const stackContainer = document.getElementById('reputationStackContainer');
+
+        try {
+            const res = await fetch(`${REP_SCRIPT_URL}?name=${encodeURIComponent(CURRENT_CHARACTER_NAME)}`);
+            const data = await res.json();
+            const repData = data.reputation || {};
+
+            let totalPoints = 0;
+            let count = 0;
+            let categoriesHtml = "";
+
+            for (const [category, pointsRaw] of Object.entries(repData)) {
+                const points = Number(pointsRaw) || 0;
+                totalPoints += points;
+                count++;
+
+                const lvlInfo = getReputationLevel(points);
+                categoriesHtml += `
+                    <div class="rep-card">
+                        <div class="rep-card-top">
+                            <span class="rep-card-title">${category}</span>
+                            <span class="rep-card-value">${points} / 100 <span>(Уровень: ${lvlInfo.name})</span></span>
+                        </div>
+                        <div class="rep-bar-wrap">
+                            <div class="rep-bar-fill ${lvlInfo.fillClass}" style="width: ${Math.min(Math.max(points, 0), 100)}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (count === 0) {
+                stackContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--muted);">Репутация пока не накоплена.</div>`;
+                return;
+            }
+
+            const avg = Math.round(totalPoints / count);
+            const avgLvlInfo = getReputationLevel(avg);
+
+            // Собираем общую репутацию со шкалой + все остальные категории
+            stackContainer.innerHTML = `
+                <div class="rep-card main-banner">
+                    <div class="rep-card-top">
+                        <span class="rep-card-title">Общая репутация</span>
+                        <span class="rep-card-value">${avg} / 100 <span>(Уровень: ${avgLvlInfo.name})</span></span>
+                    </div>
+                    <div class="rep-bar-wrap">
+                        <div class="rep-bar-fill ${avgLvlInfo.fillClass}" style="width: ${Math.min(Math.max(avg, 0), 100)}%;"></div>
+                    </div>
+                </div>
+            ` + categoriesHtml;
+
+        } catch (err) {
+            console.error("Ошибка загрузки репутации:", err);
+            stackContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: #ff6b6b;">Не удалось загрузить данные репутации.</div>`;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadReputation);
 </script>
 
 </body>
