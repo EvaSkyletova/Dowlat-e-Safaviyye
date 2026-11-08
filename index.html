@@ -289,28 +289,33 @@
             text-shadow: 0 0 12px rgba(251, 232, 166, 0.8);
         }
 
+        /* СВАЙП НА ТЕЛЕФОНАХ */
         @media (max-width: 920px) {
             .media-buttons-section {
                 padding: 0 10px;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
+                overflow-x: auto; /* Разрешаем горизонтальную прокрутку */
+                -webkit-overflow-scrolling: touch; /* Плавный свайп на iOS */
+                scroll-snap-type: x mandatory; /* Прилипание карточек */
             }
             .media-buttons-grid {
                 display: flex;
                 flex-wrap: nowrap;
-                gap: 12px;
+                gap: 15px;
                 width: max-content;
-                padding-bottom: 8px;
+                padding-bottom: 10px; /* Место для тени */
             }
             .media-card {
-                width: 170px;
-                height: 120px;
-                flex: 0 0 170px;
+                width: 280px; /* Ширина карточки на мобильном (чтобы было видно одну и кусочек следующей) */
+                height: 160px;
+                flex: 0 0 280px;
+                scroll-snap-align: center; /* Центрирование при свайпе */
             }
+            /* Скрываем некрасивую полосу прокрутки, чтобы был чистый свайп */
             .media-buttons-section::-webkit-scrollbar {
                 display: none;
             }
             .media-buttons-section {
+                -ms-overflow-style: none;
                 scrollbar-width: none;
             }
         }
@@ -526,7 +531,7 @@
         
         <!-- ВАША КАРТИНКА (теперь над названием) -->
         <div class="hero-image-container">
-            <!-- Оставлен только один правильный тег img -->
+            <!-- Убедитесь, что картинка называется leo.png и лежит в папке с index.html -->
             <img src="leo.png" alt="Сефевидский Иран" class="hero-image">
         </div>
         
