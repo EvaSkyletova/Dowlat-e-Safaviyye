@@ -158,8 +158,8 @@
 
         /* Стили для картинки (без рамки, уменьшенный размер) */
         .hero-image-container {
-            max-width: 450px; /* Уменьшено с 800 до 450 */
-            margin-bottom: 20px; /* Отступ от картинки до заголовка */
+            max-width: 450px;
+            margin-bottom: 20px;
         }
 
         .hero-image {
@@ -220,6 +220,7 @@
             max-width: 1100px;
             margin: 0 auto 50px auto;
             padding: 0 20px;
+            position: relative;
         }
 
         .media-buttons-grid {
@@ -289,34 +290,69 @@
             text-shadow: 0 0 12px rgba(251, 232, 166, 0.8);
         }
 
-        /* СВАЙП НА ТЕЛЕФОНАХ */
+        /* ========================================= */
+        /* СВАЙП И ПОДСКАЗКА (ТОЛЬКО ДЛЯ ТЕЛЕФОНОВ)  */
+        /* ========================================= */
+        
+        /* По умолчанию (на ПК) подсказку скрываем */
+        .swipe-hint {
+            display: none;
+        }
+
         @media (max-width: 920px) {
+            /* Делаем горизонтальную прокрутку для карточек */
             .media-buttons-section {
                 padding: 0 10px;
-                overflow-x: auto; /* Разрешаем горизонтальную прокрутку */
-                -webkit-overflow-scrolling: touch; /* Плавный свайп на iOS */
-                scroll-snap-type: x mandatory; /* Прилипание карточек */
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
             }
+            
             .media-buttons-grid {
                 display: flex;
                 flex-wrap: nowrap;
                 gap: 15px;
                 width: max-content;
-                padding-bottom: 10px; /* Место для тени */
+                padding-bottom: 10px;
             }
+            
             .media-card {
-                width: 280px; /* Ширина карточки на мобильном (чтобы было видно одну и кусочек следующей) */
+                width: 85vw; /* Карточка занимает 85% ширины экрана, чтобы было видно, что есть еще */
+                max-width: 350px;
                 height: 160px;
-                flex: 0 0 280px;
-                scroll-snap-align: center; /* Центрирование при свайпе */
+                flex: 0 0 auto;
+                scroll-snap-align: center;
             }
-            /* Скрываем некрасивую полосу прокрутки, чтобы был чистый свайп */
+            
+            /* Скрываем полосу прокрутки */
             .media-buttons-section::-webkit-scrollbar {
                 display: none;
             }
             .media-buttons-section {
                 -ms-overflow-style: none;
                 scrollbar-width: none;
+            }
+
+            /* Показываем подсказку со стрелочкой */
+            .swipe-hint {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin-top: 15px;
+                color: var(--gold-light);
+                font-size: 11px;
+                letter-spacing: 2px;
+                text-transform: uppercase;
+                text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+                animation: bounceLeft 2s infinite;
+            }
+
+            /* Анимация стрелочки влево */
+            @keyframes bounceLeft {
+                0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
+                40% { transform: translateX(-10px); }
+                60% { transform: translateX(-5px); }
             }
         }
 
@@ -531,7 +567,6 @@
         
         <!-- ВАША КАРТИНКА (теперь над названием) -->
         <div class="hero-image-container">
-            <!-- Убедитесь, что картинка называется leo.png и лежит в папке с index.html -->
             <img src="leo.png" alt="Сефевидский Иран" class="hero-image">
         </div>
         
@@ -566,6 +601,14 @@
                 <span class="media-title">Клипы</span>
             </a>
 
+        </div>
+
+        <!-- ПОДСКАЗКА ДЛЯ СВАЙПА (видна только на мобильных) -->
+        <div class="swipe-hint">
+            <span>← Свайпай влево ←</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-top: 5px;">
+                <path d="M15 18L9 12L15 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
         </div>
     </section>
 
