@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <!-- Иконка вкладки (если вы ее еще не добавили) -->
+    <!-- Иконка вкладки -->
     <link rel="icon" type="image/png" href="favicon.png">
     
     <title>Dowlat-e Safaviyye</title>
@@ -146,7 +146,7 @@
             text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
         }
 
-        /* HERO SECTION — ЗАГОЛОВОК И НОВАЯ КАРТИНКА */
+        /* HERO SECTION — ЗАГОЛОВОК И КАРТИНКА */
         .hero {
             text-align: center;
             padding: 40px 20px 10px 20px;
@@ -156,7 +156,6 @@
             align-items: center;
         }
 
-        /* Стили для картинки (без рамки, уменьшенный размер) */
         .hero-image-container {
             max-width: 450px;
             margin-bottom: 20px;
@@ -179,7 +178,7 @@
             font-weight: normal;
         }
 
-        /* ОПИСАНИЕ С ИМПЕРСКОЙ РАМКОЙ */
+        /* ОПИСАНИЕ */
         .intro-container {
             max-width: 900px;
             margin: 20px auto 40px auto;
@@ -214,7 +213,7 @@
         }
 
         /* ========================================= */
-        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) */
+        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) И СВАЙП      */
         /* ========================================= */
         .media-buttons-section {
             max-width: 1100px;
@@ -290,23 +289,16 @@
             text-shadow: 0 0 12px rgba(251, 232, 166, 0.8);
         }
 
-        /* ========================================= */
-        /* СВАЙП И ПОДСКАЗКА (ТОЛЬКО ДЛЯ ТЕЛЕФОНОВ)  */
-        /* ========================================= */
-        
-        /* По умолчанию (на ПК) подсказку скрываем */
         .swipe-hint {
             display: none;
         }
 
         @media (max-width: 920px) {
-            /* Делаем горизонтальную прокрутку для карточек */
             .media-buttons-section {
                 padding: 0 10px;
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scroll-snap-type: x mandatory;
-                /* Скрываем полосу прокрутки */
                 -ms-overflow-style: none;
                 scrollbar-width: none;
             }
@@ -323,14 +315,13 @@
             }
             
             .media-card {
-                width: 85vw; /* Карточка занимает 85% ширины экрана, чтобы было видно, что есть еще */
+                width: 85vw;
                 max-width: 350px;
                 height: 160px;
                 flex: 0 0 auto;
                 scroll-snap-align: center;
             }
 
-            /* Подсказка со свайпом */
             .swipe-hint {
                 display: flex;
                 justify-content: center;
@@ -344,7 +335,6 @@
                 animation: bounceLeft 1.5s infinite;
             }
 
-            /* Анимация текста влево */
             @keyframes bounceLeft {
                 0%, 20%, 50%, 80%, 100% { transform: translateX(0); }
                 40% { transform: translateX(-8px); }
@@ -352,7 +342,9 @@
             }
         }
 
+        /* ========================================= */
         /* БЛОК АДМИНИСТРАЦИИ */
+        /* ========================================= */
         .safavid-grand-hall {
             background: transparent;
             color: #cccccc;
@@ -391,6 +383,11 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            transition: transform 0.3s ease;
+        }
+
+        .palace-card:hover {
+            transform: translateY(-5px);
         }
 
         .palace-window {
@@ -457,6 +454,82 @@
             letter-spacing: 2px;
             text-transform: lowercase;
             text-align: center;
+        }
+
+        /* ========================================= */
+        /* МОДАЛЬНОЕ ОКНО (ВСПЛЫВАЮЩЕЕ ОКНО)         */
+        /* ========================================= */
+        .admin-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .admin-modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .admin-modal-box {
+            width: 90%;
+            max-width: 440px;
+            background: linear-gradient(145deg, #1a1a1e, #111114);
+            border: 1px solid var(--gold);
+            border-top: 3px solid var(--gold-light);
+            border-bottom: 3px solid var(--gold-light);
+            border-radius: 8px;
+            padding: 35px 30px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.95), 0 0 30px rgba(212, 175, 55, 0.2);
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .admin-modal-overlay.active .admin-modal-box {
+            transform: scale(1) translateY(0);
+        }
+        .modal-kicker {
+            color: var(--gold-soft);
+            font-size: 11px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .modal-text {
+            color: var(--gold-light);
+            font-size: 18px;
+            font-style: italic;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+        }
+        .modal-close-btn {
+            background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+            color: #121008;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 24px;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: all 0.2s ease;
+        }
+        .modal-close-btn:hover {
+            background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+            transform: translateY(-1px);
         }
 
         /* ========================================= */
@@ -531,6 +604,7 @@
 <body>
 
     <script>
+        // Эффект «пуньк» при клике
         window.addEventListener('click', (e) => {
             const echo = document.createElement('div');
             echo.className = 'click-echo';
@@ -558,20 +632,15 @@
         </nav>
     </header>
 
-    <!-- НАЗВАНИЕ И КАРТИНКА ПО ЦЕНТРУ -->
+    <!-- НАЗВАНИЕ И КАРТИНКА -->
     <section class="hero">
-        
-        <!-- ВАША КАРТИНКА (теперь над названием) -->
         <div class="hero-image-container">
             <img src="leo.png" alt="Сефевидский Иран" class="hero-image">
         </div>
-        
-        <!-- НАЗВАНИЕ -->
         <h1>Dowlat-e Safaviyye</h1>
-
     </section>
 
-    <!-- ОПИСАНИЕ С ИМПЕРСКОЙ РАМКОЙ -->
+    <!-- ОПИСАНИЕ -->
     <div class="intro-container">
         <section class="intro-text">
             <p><span class="gold">Dowlat-e Safaviyye</span> — это проект с альтернативной историей Сефевидского государства, ведущий начало с правления Шаха Аббаса I Великого. Нынешний правитель Сефевидского государства — шах Нариман I. Он же — глава народа, управляющий землями вместе с кызылбашской знатью, которая входит в главный совет государя и в распоряжении которой находится вся военная мощь страны.</p>
@@ -581,25 +650,19 @@
     <!-- БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) -->
     <section class="media-buttons-section">
         <div class="media-buttons-grid">
-
             <a href="https://vk.ru/@club182656984?isCloseForwardPush=false" target="_blank" rel="noopener noreferrer" class="media-card">
                 <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/TzVvfmukS2gOH8H65PyJCvEUW8j6Ht8FcD2SKmuub_JKrRFggu5hx3uL7MpWRVLiAJZ_ohuBj7-XSehZRKRWjjpt.jpg" alt="Статьи">
                 <span class="media-title">Статьи</span>
             </a>
-
             <a href="https://vkvideo.ru/@dwltrpg" target="_blank" rel="noopener noreferrer" class="media-card">
                 <img src="https://i.ibb.co/6R228ZtF/image.png" alt="Видео">
                 <span class="media-title">Видео</span>
             </a>
-
             <a href="https://vk.ru/clips/dwltrpg" target="_blank" rel="noopener noreferrer" class="media-card">
                 <img src="https://i.ibb.co/YFYP4ZWq/ostany-1.png" alt="Клипы">
                 <span class="media-title">Клипы</span>
             </a>
-
         </div>
-
-        <!-- ПОДСКАЗКА ДЛЯ СВАЙПА (теперь просто текст) -->
         <div class="swipe-hint">
             ← Свайпай влево ←
         </div>
@@ -611,7 +674,7 @@
       <div class="hall-divider">✦ ✧ ✦ ✧ ✦</div>
 
       <div class="hall-grid">
-        <div class="palace-card">
+        <div class="palace-card" onclick="showAdminQuote(this)">
           <div class="palace-window">
             <img src="https://i.ibb.co/yBdT3zXJ/001.png" alt="Polina">
           </div>
@@ -621,7 +684,7 @@
           </div>
         </div>
 
-        <div class="palace-card">
+        <div class="palace-card" onclick="showAdminQuote(this)">
           <div class="palace-window">
             <img src="https://i.ibb.co/pvFnHqXm/001.png" alt="Eva">
           </div>
@@ -631,7 +694,7 @@
           </div>
         </div>
 
-        <div class="palace-card">
+        <div class="palace-card" onclick="showAdminQuote(this)">
           <div class="palace-window">
             <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/10/14/dfbgdfgb.png" alt="Poison">
           </div>
@@ -641,7 +704,7 @@
           </div>
         </div>
 
-        <div class="palace-card">
+        <div class="palace-card" onclick="showAdminQuote(this)">
           <div class="palace-window">
             <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/10/14/c636418c3395f7ebf1fbc32dd8c3354f_95a1e885-78e2-49de-b2b2-7b3f95876691.png" alt="Елена">
           </div>
@@ -652,6 +715,41 @@
         </div>
       </div>
     </div>
+
+    <!-- МОДАЛЬНОЕ ОКНО ДЛЯ АДМИНОВ -->
+    <div class="admin-modal-overlay" id="adminModal" onclick="closeAdminModal(event)">
+        <div class="admin-modal-box">
+            <div class="modal-kicker">✦ Шахский Двор ✦</div>
+            <div class="modal-text" id="modalQuoteText">«И что ты хочешь про меня узнать?»</div>
+            <button class="modal-close-btn" onclick="closeAdminModalBtn()">Ой</button>
+        </div>
+    </div>
+
+    <!-- СКРИПТ ДЛЯ МОДАЛЬНОГО ОКНА -->
+    <script>
+        const adminQuotes = [
+            "«И что ты хочешь про меня узнать?»",
+            "«Не тыкай так грубо, будь ласковее»",
+            "«Ткнул и уйдешь сейчас, да?»",
+            "«Какая любопытная...»"
+        ];
+        function showAdminQuote(cardElement) {
+            const modal = document.getElementById('adminModal');
+            const quoteTextElem = document.getElementById('modalQuoteText');
+            
+            const randomQuote = adminQuotes[Math.floor(Math.random() * adminQuotes.length)];
+            quoteTextElem.textContent = randomQuote;
+            modal.classList.add('active');
+        }
+        function closeAdminModal(event) {
+            if (event.target.id === 'adminModal') {
+                document.getElementById('adminModal').classList.remove('active');
+            }
+        }
+        function closeAdminModalBtn() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+    </script>
 
 </body>
 </html>
