@@ -298,7 +298,7 @@
         .family-key { color: var(--gold-soft); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; }
 
         /* ========================================= */
-        /* ИДЕАЛЬНЫЙ БЛОК РЕПУТАЦИИ                  */
+        /* БЛОК РЕПУТАЦИИ (ПК)                       */
         /* ========================================= */
         .reputation-grid { display: flex; flex-direction: column; gap: 14px; }
         
@@ -308,7 +308,7 @@
             border-radius: 6px; 
             padding: 18px 22px; 
             display: flex; 
-            justify-content: space-between; /* Название слева, цифры справа */
+            justify-content: space-between; 
             align-items: center; 
             box-shadow: 0 6px 20px rgba(0,0,0,0.6); 
         }
@@ -319,7 +319,7 @@
             border-radius: 6px; 
             padding: 16px 20px; 
             display: flex; 
-            justify-content: space-between; /* Название слева, цифры справа */
+            justify-content: space-between; 
             align-items: center; 
             transition: border-color 0.3s ease;
         }
@@ -334,9 +334,7 @@
             text-transform: uppercase; 
             letter-spacing: 1px; 
             font-weight: bold; 
-            /* Убрали ограничение ширины, чтобы текст не переносился без надобности */
-            max-width: none;
-            margin-right: 20px; /* Отступ от текста до цифр */
+            margin-right: 20px;
         }
         
         .rep-value { 
@@ -345,10 +343,10 @@
             font-weight: bold; 
             text-align: right; 
             display: flex;
-            flex-direction: row; /* Цифры и уровень в одну строку */
+            flex-direction: row;
             align-items: baseline; 
             gap: 8px;
-            white-space: nowrap; /* Запрещаем перенос цифр */
+            white-space: nowrap;
         }
         
         .rep-value span { 
@@ -358,61 +356,56 @@
             font-weight: normal;
         }
 
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 15px; }
-        .modal-card { background: linear-gradient(145deg, rgba(22, 22, 25, 0.98), rgba(14, 14, 16, 0.99)); border: 1px solid var(--line); border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); border-radius: 6px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9); max-width: 480px; width: 100%; padding: 28px 24px; position: relative; }
-        .modal-header { margin-bottom: 18px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
-        .modal-title { color: var(--gold-light); font-size: 18px; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 1.5px; font-weight: normal; }
-        .modal-desc { color: var(--muted); font-size: 12.5px; margin: 0; font-style: italic; }
-        .modal-form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
-        .modal-label { color: var(--gold-soft); font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-        .modal-input, .modal-textarea, .modal-select { width: 100%; padding: 11px 14px; background: var(--panel-dark); border: 1px solid var(--line); border-radius: 4px; color: var(--text); font-size: 13.5px; outline: none; transition: all 0.3s; }
-        .modal-textarea { resize: vertical; min-height: 90px; }
-        .modal-input:focus, .modal-textarea:focus, .modal-select:focus { border-color: var(--gold-light); box-shadow: 0 0 12px rgba(212, 175, 55, 0.3); }
-        .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
-        .modal-submit-btn { flex: 2; padding: 12px; background: linear-gradient(90deg, #b89947, #d4af37, #b89947); color: #121008; border: none; border-radius: 4px; font-size: 13px; font-weight: bold; text-transform: uppercase; cursor: pointer; letter-spacing: 1.2px; }
-        .modal-close-btn { flex: 1; padding: 12px; background: var(--panel-dark); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; font-size: 13px; text-transform: uppercase; cursor: pointer; }
-        .modal-status { margin-top: 10px; font-size: 12.5px; text-align: center; display: none; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* АДАПТАЦИЯ */
-        @media (max-width: 920px) {
-            .site-nav { gap: 12px 16px; }
-            .site-nav a { font-size: 11px; }
-        }
-
+        /* ========================================= */
+        /* МОБИЛЬНАЯ ВЕРСИЯ (КАК ВЫ ПРОСИЛИ)         */
+        /* ========================================= */
         @media (max-width: 900px) {
-            .sheet-grid { grid-template-columns: 100%; }
-            .sheet-sidebar { border-right: none; border-bottom: 1px solid var(--line); padding: 20px 15px; }
-            .avatar-frame { max-width: 180px; }
-            .sheet-content { padding: 20px 15px; }
-            .tabs-header { gap: 6px; }
-            .tab-btn { font-size: 11px; padding: 9px 6px; min-width: 45%; flex-grow: 1; }
-            .tab-content { padding: 16px 14px; font-size: 13.5px; }
-            p { text-align: left; }
-            
-            /* На телефонах возвращаем вертикальное расположение для удобства */
+            /* Основные карточки — колонка */
             .rep-main-card, .rep-item {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
                 padding: 14px 16px;
             }
+            
+            /* Название сверху */
             .rep-label {
                 max-width: 100%;
-                font-size: 12.5px;
+                font-size: 13px;
                 margin-right: 0;
+                margin-bottom: 4px;
             }
+            
+            /* Контейнер с цифрами — в строку */
             .rep-value {
                 width: 100%;
                 flex-direction: row;
                 justify-content: space-between;
-                align-items: baseline;
-                text-align: right;
+                align-items: center;
+                text-align: left;
+                white-space: normal;
+                font-size: 15px;
             }
+
+            /* Цифра до слэша (золотая) */
+            .rep-value .score-val {
+                color: var(--gold-soft);
+                font-size: 15px;
+            }
+
+            /* / 100 (белое) */
+            .rep-value .max-val {
+                color: var(--text);
+                font-weight: bold;
+            }
+
+            /* (Уровень: ...) */
             .rep-value span {
-                margin-top: 0;
-                font-size: 12px;
+                color: var(--gold-soft);
+                font-size: 11.5px;
+                font-style: italic;
+                display: inline;
+                margin-left: auto; /* Прижимаем вправо */
             }
         }
 
@@ -421,6 +414,8 @@
             .site-nav { gap: 10px 15px; }
             .nav-logo { height: 40px; margin-right: 8px; }
             .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+            .sheet-content { padding: 15px 10px; }
+            .tab-content { padding: 12px 10px; }
         }
     </style>
 </head>
@@ -526,32 +521,44 @@
                     <div class="reputation-grid">
                         <div class="rep-main-card">
                             <span class="rep-label">Общая репутация:</span>
-                            <span class="rep-value" id="repTotal">... / 100 <span id="repTotalLevel">(Уровень: ...)</span></span>
+                            <span class="rep-value" id="repTotal">
+                                <span class="score-val">...</span> <span class="max-val">/ 100</span> <span id="repTotalLevel">(Уровень: ...)</span>
+                            </span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Светский престиж:</span>
-                            <span class="rep-value"><span id="val_prestige">...</span> / 100 <span id="lvl_prestige">(Уровень: ...)</span></span>
+                            <span class="rep-value">
+                                <span class="score-val" id="val_prestige">...</span> <span class="max-val">/ 100</span> <span id="lvl_prestige">(Уровень: ...)</span>
+                            </span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Расположение тюркского народа:</span>
-                            <span class="rep-value"><span id="val_turk">...</span> / 100 <span id="lvl_turk">(Уровень: ...)</span></span>
+                            <span class="rep-value">
+                                <span class="score-val" id="val_turk">...</span> <span class="max-val">/ 100</span> <span id="lvl_turk">(Уровень: ...)</span>
+                            </span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Расположение персидского народа:</span>
-                            <span class="rep-value"><span id="val_persian">...</span> / 100 <span id="lvl_persian">(Уровень: ...)</span></span>
+                            <span class="rep-value">
+                                <span class="score-val" id="val_persian">...</span> <span class="max-val">/ 100</span> <span id="lvl_persian">(Уровень: ...)</span>
+                            </span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Военная репутация:</span>
-                            <span class="rep-value"><span id="val_military">...</span> / 100 <span id="lvl_military">(Уровень: ...)</span></span>
+                            <span class="rep-value">
+                                <span class="score-val" id="val_military">...</span> <span class="max-val">/ 100</span> <span id="lvl_military">(Уровень: ...)</span>
+                            </span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Религиозность и благотворительность:</span>
-                            <span class="rep-value"><span id="val_religion">...</span> / 100 <span id="lvl_religion">(Уровень: ...)</span></span>
+                            <span class="rep-value">
+                                <span class="score-val" id="val_religion">...</span> <span class="max-val">/ 100</span> <span id="lvl_religion">(Уровень: ...)</span>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -674,7 +681,8 @@
                 let avg = (sum / count).toFixed(1);
                 const totalEl = document.getElementById('repTotal');
                 if (totalEl) {
-                    totalEl.innerHTML = `${avg} / 100 <span id="repTotalLevel">(Уровень: ${getLevelName(avg)})</span>`;
+                    // Обратите внимание: здесь мы меняем только внутренние элементы, сохраняя структуру
+                    totalEl.innerHTML = `<span class="score-val">${avg}</span> <span class="max-val">/ 100</span> <span id="repTotalLevel">(Уровень: ${getLevelName(avg)})</span>`;
                 }
             }
 
