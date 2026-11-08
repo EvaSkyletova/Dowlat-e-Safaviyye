@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Анкета: Нариман • Dowlat-e Safaviyye</title>
+    <title>Анкета: Нариман</title>
     
     <!-- Иконка вкладки -->
     <link rel="icon" type="image/png" href="leo.png">
@@ -343,7 +343,7 @@
             font-weight: bold; 
             text-align: right; 
             display: flex;
-            flex-direction: row;
+            flex-direction: row; /* В одну строку на ПК */
             align-items: baseline; 
             gap: 8px;
             white-space: nowrap;
@@ -357,10 +357,19 @@
         }
 
         /* ========================================= */
-        /* МОБИЛЬНАЯ ВЕРСИЯ (КАК ВЫ ПРОСИЛИ)         */
+        /* МОБИЛЬНАЯ ВЕРСИЯ (ИСПРАВЛЕННАЯ)           */
         /* ========================================= */
         @media (max-width: 900px) {
-            /* Основные карточки — колонка */
+            .sheet-grid { grid-template-columns: 100%; }
+            .sheet-sidebar { border-right: none; border-bottom: 1px solid var(--line); padding: 20px 15px; }
+            .avatar-frame { max-width: 180px; }
+            .sheet-content { padding: 20px 15px; }
+            .tabs-header { gap: 6px; }
+            .tab-btn { font-size: 11px; padding: 9px 6px; min-width: 45%; flex-grow: 1; }
+            .tab-content { padding: 16px 14px; font-size: 13.5px; }
+            p { text-align: left; }
+            
+            /* Карточка репутации в колонку */
             .rep-main-card, .rep-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -368,15 +377,15 @@
                 padding: 14px 16px;
             }
             
-            /* Название сверху */
+            /* Название параметра */
             .rep-label {
                 max-width: 100%;
-                font-size: 13px;
+                font-size: 12.5px;
                 margin-right: 0;
                 margin-bottom: 4px;
             }
             
-            /* Контейнер с цифрами — в строку */
+            /* Контейнер с цифрами в строку */
             .rep-value {
                 width: 100%;
                 flex-direction: row;
@@ -414,8 +423,6 @@
             .site-nav { gap: 10px 15px; }
             .nav-logo { height: 40px; margin-right: 8px; }
             .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
-            .sheet-content { padding: 15px 10px; }
-            .tab-content { padding: 12px 10px; }
         }
     </style>
 </head>
@@ -521,44 +528,32 @@
                     <div class="reputation-grid">
                         <div class="rep-main-card">
                             <span class="rep-label">Общая репутация:</span>
-                            <span class="rep-value" id="repTotal">
-                                <span class="score-val">...</span> <span class="max-val">/ 100</span> <span id="repTotalLevel">(Уровень: ...)</span>
-                            </span>
+                            <span class="rep-value" id="repTotal">... / 100 <span id="repTotalLevel">(Уровень: ...)</span></span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Светский престиж:</span>
-                            <span class="rep-value">
-                                <span class="score-val" id="val_prestige">...</span> <span class="max-val">/ 100</span> <span id="lvl_prestige">(Уровень: ...)</span>
-                            </span>
+                            <span class="rep-value"><span id="val_prestige">...</span> / 100 <span id="lvl_prestige">(Уровень: ...)</span></span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Расположение тюркского народа:</span>
-                            <span class="rep-value">
-                                <span class="score-val" id="val_turk">...</span> <span class="max-val">/ 100</span> <span id="lvl_turk">(Уровень: ...)</span>
-                            </span>
+                            <span class="rep-value"><span id="val_turk">...</span> / 100 <span id="lvl_turk">(Уровень: ...)</span></span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Расположение персидского народа:</span>
-                            <span class="rep-value">
-                                <span class="score-val" id="val_persian">...</span> <span class="max-val">/ 100</span> <span id="lvl_persian">(Уровень: ...)</span>
-                            </span>
+                            <span class="rep-value"><span id="val_persian">...</span> / 100 <span id="lvl_persian">(Уровень: ...)</span></span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Военная репутация:</span>
-                            <span class="rep-value">
-                                <span class="score-val" id="val_military">...</span> <span class="max-val">/ 100</span> <span id="lvl_military">(Уровень: ...)</span>
-                            </span>
+                            <span class="rep-value"><span id="val_military">...</span> / 100 <span id="lvl_military">(Уровень: ...)</span></span>
                         </div>
 
                         <div class="rep-item">
                             <span class="rep-label">Религиозность и благотворительность:</span>
-                            <span class="rep-value">
-                                <span class="score-val" id="val_religion">...</span> <span class="max-val">/ 100</span> <span id="lvl_religion">(Уровень: ...)</span>
-                            </span>
+                            <span class="rep-value"><span id="val_religion">...</span> / 100 <span id="lvl_religion">(Уровень: ...)</span></span>
                         </div>
                     </div>
                 </div>
@@ -681,8 +676,7 @@
                 let avg = (sum / count).toFixed(1);
                 const totalEl = document.getElementById('repTotal');
                 if (totalEl) {
-                    // Обратите внимание: здесь мы меняем только внутренние элементы, сохраняя структуру
-                    totalEl.innerHTML = `<span class="score-val">${avg}</span> <span class="max-val">/ 100</span> <span id="repTotalLevel">(Уровень: ${getLevelName(avg)})</span>`;
+                    totalEl.innerHTML = `${avg} / 100 <span id="repTotalLevel">(Уровень: ${getLevelName(avg)})</span>`;
                 }
             }
 
