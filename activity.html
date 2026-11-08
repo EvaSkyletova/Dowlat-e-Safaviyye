@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Учёт активности</title>
+    <title>Учёт активности • Dowlat-e Safaviyye</title>
     
     <!-- Иконка вкладки -->
     <link rel="icon" type="image/png" href="leo.png">
@@ -97,7 +97,7 @@
         /* ЕДИНАЯ ШАПКА САЙТА (КАК НА ГЛАВНОЙ) */
         .site-header {
             display: flex;
-            justify-content: center; /* Центрируем содержимое по горизонтали */
+            justify-content: center;
             align-items: center;
             padding: 12px 20px;
             border-bottom: 2px solid var(--line);
@@ -111,13 +111,12 @@
 
         .site-nav {
             display: flex;
-            justify-content: center; /* Центрируем элементы меню */
+            justify-content: center;
             align-items: center;
             gap: 22px;
             flex-wrap: wrap;
         }
 
-        /* ЛОГОТИП В МЕНЮ */
         .nav-logo {
             height: 50px;
             width: auto;
@@ -542,6 +541,7 @@
             color: var(--gold-light);
         }
 
+        /* ТАБЛИЦА ИГРОКОВ */
         .char-table {
             width: 100%;
             border-collapse: collapse;
@@ -556,11 +556,13 @@
             text-transform: uppercase;
             letter-spacing: 1.2px;
             border-bottom: 1px solid rgba(255,255,255,0.08);
+            white-space: nowrap;
         }
 
         .char-table td {
             padding: 11px 16px;
             border-bottom: 1px solid rgba(255,255,255,0.04);
+            white-space: nowrap;
         }
 
         .char-table tr:last-child td {
@@ -586,6 +588,7 @@
             border-radius: 10px;
             font-size: 11.5px;
             font-weight: bold;
+            white-space: nowrap;
         }
 
         .prot-active {
@@ -628,6 +631,8 @@
             padding: 14px 20px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.5);
             transition: transform 0.3s;
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .rank-row:hover {
@@ -655,6 +660,7 @@
             .site-nav { gap: 12px 16px; }
             .site-nav a { font-size: 11px; }
             .activity-wrap { padding: 20px 15px; margin: 15px 10px; }
+            .player-card-head { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
 
         @media (max-width: 480px) {
@@ -662,6 +668,18 @@
             .site-nav { gap: 10px 15px; }
             .nav-logo { height: 40px; margin-right: 8px; }
             .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .search-input { width: 100%; min-width: 0; }
+            
+            /* ПРОКРУТКА ТАБЛИЦЫ НА ТЕЛЕФОНАХ */
+            .table-responsive {
+                width: 100%;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+            .char-table {
+                min-width: 450px; /* Задаем минимальную ширину, чтобы таблица не сжималась */
+            }
         }
     </style>
 </head>
@@ -953,17 +971,19 @@
                 <span class="stat-pill">Приз: <b>${p.prizes}</b></span>
               </div>
             </div>
-            <table class="char-table">
-              <thead>
-                <tr>
-                  <th>Персонаж</th>
-                  <th style="text-align:center;">Посты</th>
-                  <th>Защита от л.п.в.</th>
-                  <th>Защита до</th>
-                </tr>
-              </thead>
-              <tbody>${rowsHtml}</tbody>
-            </table>
+            <div class="table-responsive">
+              <table class="char-table">
+                <thead>
+                  <tr>
+                    <th>Персонаж</th>
+                    <th style="text-align:center;">Посты</th>
+                    <th>Защита от л.п.в.</th>
+                    <th>Защита до</th>
+                  </tr>
+                </thead>
+                <tbody>${rowsHtml}</tbody>
+              </table>
+            </div>
           </div>
         `;
       });
