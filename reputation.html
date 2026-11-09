@@ -3,8 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Репутация • Dowlat-e Safaviyye</title>
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Репутация</title>
+
 <style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА YIPES                  */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   :root {
     --gold-dark: #8c6a08;
     --gold: #d4af37;
@@ -47,6 +62,8 @@
         radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
         linear-gradient(to bottom, #161618, #0d0d0f);
     overflow-x: hidden;
+    /* ИСПРАВЛЕНИЕ: одно колесико прокрутки */
+    overflow-y: auto;
   }
 
   /* Эффект «пуньк» (эхо) при клике */
@@ -77,12 +94,12 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-  /* ШАПКА САЙТА (КАК В БАНКЕ) */
+  /* ЕДИНАЯ ШАПКА САЙТА */
   .site-header {
       display: flex;
-      flex-direction: column;
+      justify-content: center;
       align-items: center;
-      padding: 18px 20px;
+      padding: 12px 20px;
       border-bottom: 2px solid var(--line);
       background: rgba(18, 18, 20, 0.96);
       backdrop-filter: blur(12px);
@@ -92,23 +109,22 @@
       box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
   }
 
-  .site-logo {
-      font-size: 20px;
-      color: var(--gold-light);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-      margin-bottom: 12px;
-      font-weight: bold;
-  }
-
   .site-nav {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 22px;
       flex-wrap: wrap;
-      align-items: center;
   }
+
+  /* ЛОГОТИП В МЕНЮ */
+  .nav-logo {
+      height: 50px;
+      width: auto;
+      margin-right: 15px;
+      transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
 
   .site-nav a {
       color: var(--text);
@@ -140,62 +156,57 @@
       text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
-  /* ВЕРХНЯЯ ПАНЕЛЬ С КНОПКАМИ — ТОЧНО КАК В БАНКЕ */
-  .bank-subnav-bar {
-      background: linear-gradient(180deg, rgba(20, 20, 24, 0.98) 0%, rgba(14, 14, 16, 0.95) 100%);
-      border-bottom: 1px solid var(--line);
-      padding: 16px 20px;
+  /* КНОПКИ ДЕЙСТВИЙ: ТОЧНОЕ ОФОРМЛЕНИЕ ИЗ РАЗДЕЛА «БАНК» */
+  .bank-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 35px;
+  }
+
+  .bank-action-btn {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 20px;
-      flex-wrap: wrap;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      position: relative;
-      z-index: 90;
-  }
-
-  .bank-top-btn {
-      position: relative;
-      display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      padding: 12px 28px;
-      background: linear-gradient(145deg, rgba(28, 28, 32, 0.95), rgba(16, 16, 18, 0.98));
-      border: 1px solid var(--gold);
-      border-radius: 4px;
-      color: var(--gold-light);
-      font-size: 12.5px;
-      font-weight: bold;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      gap: 8px;
       text-decoration: none;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7), inset 0 0 12px rgba(212, 175, 55, 0.08);
+      color: var(--text);
+      background: var(--panel-dark);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 12.5px;
+      text-align: center;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
       transition: all 0.3s ease;
-      min-width: 260px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      width: 100%;
+      cursor: pointer;
   }
 
-  .bank-top-btn::before,
-  .bank-top-btn::after {
-      content: '✦';
-      color: var(--gold);
-      font-size: 11px;
-      transition: transform 0.3s ease, color 0.3s ease;
+  .bank-action-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background-color: var(--gold);
+      transform: translateX(-50%);
+      transition: width 0.35s ease;
   }
 
-  .bank-top-btn:hover {
-      background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
-      color: #121008;
-      border-color: var(--gold-light);
-      box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+  .bank-action-btn:hover::after { width: 100%; }
+  .bank-action-btn:hover {
+      color: var(--gold-light);
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.1);
+      box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
       transform: translateY(-2px);
-  }
-
-  .bank-top-btn:hover::before,
-  .bank-top-btn:hover::after {
-      color: #121008;
-      transform: scale(1.2);
   }
 
   /* ОСНОВНОЙ КОНТЕЙНЕР */
@@ -218,7 +229,7 @@
     border: 1px solid var(--line);
     border-top: 2px solid var(--gold);
     border-bottom: 2px solid var(--gold);
-    border-radius: 6px;
+    border-radius: 12px;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
     overflow: hidden;
   }
@@ -241,6 +252,7 @@
     letter-spacing: 4px;
     font-weight: normal;
     text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+    font-family: 'Yipes', Georgia, serif !important;
   }
 
   .imperial-subtitle {
@@ -283,7 +295,7 @@
   .ascension-showcase {
     background: var(--panel);
     border: 1px solid var(--line);
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 30px;
     margin-bottom: 50px;
     box-shadow: 0 20px 55px rgba(0, 0, 0, 0.85);
@@ -685,6 +697,7 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: 0.2s;
+    cursor: pointer;
   }
 
   .deed-filter-pill:hover {
@@ -699,23 +712,37 @@
     font-weight: bold;
   }
 
-  /* Карточки категорий деяний */
+  /* =========================================================
+     СВОРАЧИВАЕМЫЕ КАРТОЧКИ КАТЕГОРИЙ (АККОРДЕОН)
+     ========================================================= */
   .deed-category-card {
     background: var(--panel-soft);
     border: 1px solid var(--line);
     border-left: 3px solid var(--gold);
     border-radius: 4px;
-    margin-bottom: 16px;
+    margin-bottom: 12px;
     overflow: hidden;
   }
 
-  .deed-cat-header {
+  /* Стилизация details / summary */
+  .deed-category-card summary {
     padding: 16px 20px;
     background: rgba(12, 12, 15, 0.65);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    outline: none;
+    user-select: none;
+    transition: background 0.2s;
+  }
+
+  .deed-category-card summary:hover {
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  /* Прячем стандартную стрелочку в браузере */
+  .deed-category-card summary::-webkit-details-marker {
+    display: none;
   }
 
   .deed-cat-title {
@@ -724,6 +751,23 @@
     color: var(--gold-light);
     text-transform: uppercase;
     letter-spacing: 1px;
+  }
+
+  /* Кастомная стрелочка справа */
+  .deed-category-card summary::after {
+    content: '▼';
+    font-size: 11px;
+    color: var(--gold);
+    transition: transform 0.3s ease;
+  }
+
+  /* Поворот стрелочки, когда открыто */
+  .deed-category-card[open] summary::after {
+    transform: rotate(180deg);
+  }
+
+  .deed-category-card[open] summary {
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
   }
 
   .deed-cat-body {
@@ -929,16 +973,29 @@
     .imperial-container { padding: 20px 12px 50px; }
     .imperial-title { font-size: 22px; letter-spacing: 2px; }
     .ascension-showcase, .estate-deeds-panel, .codex-box { padding: 18px 14px; }
-    .bank-top-btn { width: 100%; min-width: unset; }
+    .bank-actions-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
 <body>
 
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
     <!-- ШАПКА САЙТА -->
     <header class="site-header">
-        <div class="site-logo">Dowlаt-e Safaviyye</div>
         <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+
             <a href="index.html">Главная</a>
             <a href="activity.html">Активность</a>
             <a href="ankets.html">Анкеты</a>
@@ -953,17 +1010,17 @@
         </nav>
     </header>
 
-    <!-- ПАНЕЛЬ КНОПОК СВЕРХУ — В ТОЧНОСТИ КАК В БАНКЕ -->
-    <div class="bank-subnav-bar">
-        <button type="button" class="bank-top-btn" onclick="copyTemplate('request')">
-            <span>Заявка для репутации</span>
-        </button>
-        <button type="button" class="bank-top-btn" onclick="copyTemplate('topic')">
-            <span>Шаблон для темы</span>
-        </button>
-    </div>
-
     <div class="imperial-container">
+
+        <!-- КНОПКИ ДЕЙСТВИЙ: В ЕДИНОМ СТИЛЕ С КНОПКАМИ БАНКА -->
+        <div class="bank-actions-grid">
+            <button type="button" class="bank-action-btn" onclick="copyTemplate('request')">
+                Заявка для репутации
+            </button>
+            <button type="button" class="bank-action-btn" onclick="copyTemplate('topic')">
+                Шаблон для темы
+            </button>
+        </div>
 
         <!-- КОРОЛЕВСКИЙ ТИТУЛЬНЫЙ БАННЕР -->
         <header class="imperial-crest-banner">
@@ -1597,6 +1654,7 @@
     renderRoleCategories();
   }
 
+  // Отрисовка аккордеона (свернутые карточки)
   function renderRoleCategories() {
     const role = roles[currentRoleIdx];
     const container = document.getElementById("roleCategoriesContainer");
@@ -1610,16 +1668,17 @@
 
       const fullText = (cat.title + " " + cat.desc + " " + cat.content).toLowerCase();
       if (query === "" || fullText.includes(query)) {
+        // ИСПОЛЬЗУЕМ DETAILS ДЛЯ АККОРДЕОНА
         html += `
-          <div class="deed-category-card">
-            <div class="deed-cat-header">
+          <details class="deed-category-card">
+            <summary>
               <h4 class="deed-cat-title">❖ ${cat.title}</h4>
-            </div>
+            </summary>
             <div class="deed-cat-body">
               <p class="deed-cat-desc">${cat.desc}</p>
               ${cat.content}
             </div>
-          </div>
+          </details>
         `;
       }
     });
