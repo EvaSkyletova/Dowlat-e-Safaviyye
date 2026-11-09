@@ -86,7 +86,7 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА С ПРАВИЛЬНЫМ TITLE И ФАВИКОНОМ */
   .site-header {
     display: flex;
     justify-content: center;
@@ -337,7 +337,7 @@
     align-items: stretch;
   }
 
-  /* ФОТО ПЕРСОНАЖА СЛЕВА (ЧБ СТИЛЬ КАК У АДМИНОВ) */
+  /* ФОТО ПЕРСОНАЖА СЛЕВА (ЧБ СТИЛЬ) */
   .character-avatar-box {
     width: 90px;
     min-width: 90px;
@@ -546,6 +546,7 @@
   // СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ
   const CHARACTER_AVATARS = {
     "Нариман Сефеви": "nariman.jpg", 
+    "Шах-ан-шах Нариман Сефеви": "nariman.jpg", 
     "Халид Афшар": "",
     "Сефи Сефеви": ""
   };
@@ -568,10 +569,44 @@
 
   function getCharacterAvatar(name) {
     const clean = name.trim();
-    if (CHARACTER_AVATARS[clean] && CHARACTER_AVATARS[clean].trim() !== "") {
-      return `<img src="${CHARACTER_AVATARS[clean]}" alt="${escapeHtml(clean)}" class="character-avatar" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'character-avatar-placeholder\\'>👤</div>';">`;
+    let matchedPhoto = CHARACTER_AVATARS[clean];
+    if (!matchedPhoto) {
+      for (let k in CHARACTER_AVATARS) {
+        if (clean.includes(k) || k.includes(clean)) {
+          matchedPhoto = CHARACTER_AVATARS[k];
+          break;
+        }
+      }
+    }
+
+    if (matchedPhoto && matchedPhoto.trim() !== "") {
+      return `<img src="${matchedPhoto}" alt="${escapeHtml(clean)}" class="character-avatar" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'character-avatar-placeholder\\'>👤</div>';">`;
     }
     return `<div class="character-avatar-placeholder">👤</div>`;
+  }
+
+  function getRowCharacterName(row, tab) {
+    if (!row || row.length === 0) return "Без имени";
+    
+    // Лист "В процессе строительства":
+    // Колонка A (индекс 0) — дата/время отправки заявки, которую НЕ нужно учитывать.
+    // Имя персонажа находится во 2-й колонке (индекс 1).
+    if (tab === 'process') {
+      return (row[1] || row[0] || "Без имени").trim();
+    }
+
+    // Лист "Архивные": если [0] дата, имя может быть в [1]
+    if (tab === 'archive') {
+      const col0 = (row[0] || '').trim();
+      const col1 = (row[1] || '').trim();
+      if (col0.match(/\d{2}\.\d{2}\.\d{4}/) && col1) {
+        return col1;
+      }
+      return col0 || "Без имени";
+    }
+
+    // Лист "Активные": [0] = Имя персонажа
+    return (row[0] || "Без имени").trim();
   }
 
   function renderTable() {
@@ -584,11 +619,11 @@
       return;
     }
 
-    let nameIndex = (currentTab === 'archive') ? 1 : 0;
-
+    // Группировка строк по имени персонажа
     let grouped = {};
     rows.forEach(row => {
-      let charName = (row[nameIndex] || "Без имени").trim();
+      let charName = getRowCharacterName(row, currentTab);
+      if (!charName || charName === "") charName = "Без имени";
       if (searchFilter && !charName.toLowerCase().includes(searchFilter)) return;
       if (!grouped[charName]) grouped[charName] = [];
       grouped[charName].push(row);
@@ -629,7 +664,21 @@
       grouped[charName].forEach(r => {
         html += `<tr>`;
         if (currentTab === 'process') {
-          html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td>`;
+          // Для вкладки "В процессе строительства":
+          // r[0] — дата/время (не выводим в таблицу)
+          // r[1] — Имя персонажа (уже используется в шапке карточки)
+          // r[2] — Название постройки
+          // r[3] — Дата начала
+          // r[4] — Дата окончания (Год откр.)
+          // r[5] — Место
+          // r[6] — Ссылка на пост
+          // r[7] — Комментарий
+          const name = r[2] || '—';
+          const start = r[3] || '—';
+          const open = r[4] || '—';
+          const loc = r[5] || '—';
+
+          html += `<td>${escapeHtml(name)}</td><td>${escapeHtml(start)}</td><td>${escapeHtml(open)}</td><td>${escapeHtml(loc)}</td>`;
         } else if (currentTab === 'active') {
           html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td><td>${escapeHtml(r[5] || '—')}</td><td>${escapeHtml(r[6] || '—')}</td><td>${escapeHtml(r[7] || '—')}</td>`;
         } else {
@@ -658,21 +707,6 @@
       renderTable();
     } catch (err) {
       console.error("Ошибка загрузки данных из таблицы:", err);
-      // Демо-данные для проверки верстки
-      sheetsData = {
-        process: [
-          ["Сефи Сефеви", "Столовая для бедняков", "Октябрь 1645 года", "Октябрь 1646 года", "Исфахан"],
-          ["Халид Афшар", "Строительство кузни", "Октябрь 1645 года", "Сентябрь 1646 года", "Северный Хорасан"]
-        ],
-        active: [
-          ["Нариман Сефеви", "Лечебница и библиотека для лекарей", "1636", "Казвин", "отличное (2/3)", "Внесен", "5000 (Мейлишах), 5000 (Мави-Лале)", "15000"],
-          ["Нариман Сефеви", "Лечебница и библиотека для лекарей", "1636", "Кум", "отличное (2/3)", "Внесен", "5000 (Мейлишах), 20000 (Мави-Лале)", "—"],
-          ["Халид Афшар", "Строительство поместья", "1640", "Исфахан", "хорошее (3/3)", "Внесен", "—", "5000"]
-        ],
-        archive: [
-          ["01.11.2026", "Халид Афшар", "Строistво склада", "Исфахан", "Завершено"]
-        ]
-      };
       renderTable();
     }
   }
