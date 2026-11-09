@@ -577,6 +577,26 @@
     display: block;
   }
 
+  /* Уведомление (скрыто по умолчанию) */
+  .toast {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(136, 203, 139, 0.95);
+    color: #121008;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 13.5px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 1000;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+  }
+  .toast.show { opacity: 1; }
+
   @media (max-width: 768px) {
     .build-card {
       padding: 20px 16px;
@@ -758,7 +778,7 @@
       </div>
     </div>
 
-<div class="toast" id="toast">Скопировано в буфер обмена!</div>
+<div class="toast" id="toast">Заявка успешно отправлена в имперский реестр!</div>
 
 <script>
   // Эффект «пуньк» при клике и кастомный курсор
@@ -1084,10 +1104,6 @@
     const openDateStr = roll.months === 0 ? `${startDateStr} (автоматически сразу)` : formatDualDateFromAbs(openAbs);
     const moscowNow = new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" });
 
-    const templateText = `1. Имя вашего персонажа: ${charName}\n2. Наименование постройки: ${buildingName}\n3. Дата начала строительства: ${startDateStr}\n4. Местонахождение постройки: ${locationVal}\n5. Ссылка на пост с началом строительства: ${postLink}\n6. Комментарий: ${comment || "—"}`;
-
-    try { await navigator.clipboard.writeText(templateText); } catch (_) {}
-
     const btn = document.getElementById("submitBtn");
     const resultPanel = document.getElementById("resultPanel");
     btn.disabled = true;
@@ -1102,10 +1118,15 @@
         await fetch(SCRIPT_URL, { method: "POST", mode: "no-cors", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: payload });
       }
       resultPanel.className = "result-panel show";
-      resultPanel.innerHTML = `<strong>Заявка скопирована в буфер и отправлена в таблицу!</strong><br>• <b>Постройка:</b> ${buildingName}<br>• <b>Начало:</b> ${startDateStr}<br>• <b>Рандом срок:</b> ${roll.text}<br>• <b>Дата открытия:</b> <strong>${openDateStr}</strong>`;
+      resultPanel.innerHTML = `<strong>Заявка успешно отправлена в имперский реестр!</strong><br>• <b>Постройка:</b> ${buildingName}<br>• <b>Начало:</b> ${startDateStr}<br>• <b>Рандом срок:</b> ${roll.text}<br>• <b>Дата открытия:</b> <strong>${openDateStr}</strong>`;
+      
+      const toast = document.getElementById("toast");
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+
     } catch (err) {
       resultPanel.className = "result-panel show";
-      resultPanel.innerHTML = `<strong>Шаблон скопирован, но возникла ошибка отправки в таблицу.</strong><br>Дата открытия: <strong>${openDateStr}</strong>`;
+      resultPanel.innerHTML = `<strong>Возникла ошибка отправки в таблицу.</strong><br>Дата открытия: <strong>${openDateStr}</strong>`;
     } finally {
       btn.disabled = false;
       btn.textContent = "Отправить в таблицу";
