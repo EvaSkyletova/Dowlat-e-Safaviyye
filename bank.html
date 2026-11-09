@@ -56,7 +56,6 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы было одно колесико */
             overflow-y: auto;
         }
 
@@ -218,7 +217,8 @@
         /* КОМПАКТНЫЕ КНОПКИ С ЭФФЕКТОМ РАЗДВИГАЮЩЕЙСЯ ПОЛОСКИ ИЗ ЦЕНТРА */
         .bank-actions-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            /* На компьютере все 6 кнопок в один ряд */
+            grid-template-columns: repeat(6, 1fr); 
             gap: 12px;
             margin-bottom: 35px;
         }
@@ -378,6 +378,13 @@
         }
 
         /* Адаптив */
+        @media (max-width: 992px) {
+            /* На планшетах по 3 в ряд */
+            .bank-actions-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
         @media (max-width: 920px) {
             .section-wrap {
                 margin: 20px 12px;
@@ -386,9 +393,6 @@
             .section-title {
                 font-size: 22px;
             }
-            .bank-actions-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
             .characters-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
@@ -396,6 +400,13 @@
             .character-btn {
                 padding: 11px 10px;
                 font-size: 12px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            /* На телефонах ровно по 2 в ряд */
+            .bank-actions-grid {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
@@ -424,9 +435,6 @@
             }
             .section-desc {
                 font-size: 12.5px;
-            }
-            .bank-actions-grid {
-                grid-template-columns: 1fr;
             }
             .characters-grid {
                 grid-template-columns: 1fr;
@@ -479,17 +487,17 @@
             <p class="section-desc">Личные свитки казны, владения, государственные услуги и финансовый учет подданных Довлата.</p>
         </header>
 
-        <!-- ПАНЕЛЬ КОМПАКТНЫХ КНОПОК С АНИМАЦИЕЙ ИЗ ЦЕНТРА -->
+        <!-- ПАНЕЛЬ КОМПАКТНЫХ КНОПОК -->
         <div class="bank-actions-grid">
-            <!-- Убрали target="_blank" у всех кнопок, чтобы они открывались в этой же вкладке -->
             <a href="market.html" class="bank-action-btn">Калькулятор товаров</a>
             <a href="build.html" class="bank-action-btn">Заявка на строительство</a>
             <a href="spy.html" class="bank-action-btn">Шпион</a>
             <a href="podslushka.html" class="bank-action-btn">Подслушка</a>
             <a href="schetchik.html" class="bank-action-btn">Счетчик постов</a>
+            <a href="business.html" class="bank-action-btn">Бизнес</a>
         </div>
 
-        <h2 class="subsection-title">Личные счета подданных</h2>
+        <h2 class="subsection-title">Личные счета</h2>
 
         <!-- СЕТКА СЧЕТОВ ИГРОКОВ -->
         <div class="characters-grid">
