@@ -7,7 +7,7 @@
 <!-- Иконка вкладки -->
 <link rel="icon" type="image/png" href="leo.png">
 
-<title>Строительство • Dowlаt-e Safaviyye</title>
+<title>Строительство</title>
 
 <style>
   /* ========================================= */
@@ -543,13 +543,14 @@
   // ССЫЛКА НА ВАШ GOOGLE APPS SCRIPT
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlF49zvDWqEa117mHXB5RT0Z75cj9HUudJTK8gVGjAVfAH89DtHZSMtN7cLfylQ60L9A/exec";
 
-// СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ
+  // СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ
   const CHARACTER_AVATARS = {
     "Нариман Сефеви": "nariman.jpg", 
+    "Шах-ан-шах Нариман Сефеви": "nariman.jpg", 
     "Халид Афшар": "khalid.jpg",
-    "Сефи Сефеви": "sefi.jpg"
-    "Гаресах": "garesah.jpg"
-    "Малахат Устаджлы": "malahat.jpg"
+    "Сефи Сефеви": "sefi.jpg",
+    "Гаресах": "garesah.jpg",
+    "Малахат Устаджлы": "malahat.jpg",
     "Зулейка аль-Саламат Чехарленг": "salamat.jpg"
   };
 
@@ -589,14 +590,6 @@
 
   function getRowCharacterName(row, tab) {
     if (!row || row.length === 0) return "Без имени";
-    
-    // Лист "В процессе строительства":
-    // Колонка A (индекс 0) — Имя персонажа из таблицы (согласно скриншоту)
-    if (tab === 'process') {
-      return (row[0] || "Без имени").trim();
-    }
-
-    // Лист "Архивные": если [0] дата, имя может быть в [1]
     if (tab === 'archive') {
       const col0 = (row[0] || '').trim();
       const col1 = (row[1] || '').trim();
@@ -605,9 +598,56 @@
       }
       return col0 || "Без имени";
     }
-
-    // Лист "Активные": [0] = Имя персонажа
     return (row[0] || "Без имени").trim();
+  }
+
+  // Функция для поиска всех чисел во взносах и подсчета их суммы
+  function calculateTotalContribution(rowsForCharacter) {
+    let total = 0;
+    rowsForCharacter.forEach(r => {
+      // Колонка взноса в активных постройках — это r[7] (или r[6])
+      // Проверим все ячейки строки на наличие чисел
+      r.forEach(cell => {
+        if (typeof cell === 'string') {
+          // Ищем числа, которые похожи на суммы (например, 5000, 20000)
+          // Или конкретно извлекаем числа из строки
+          const matches = cell.match(/\d+/g);
+          if (matches) {
+            matches.forEach(numStr => {
+              const num = parseInt(numStr, 10);
+              // Если число достаточно большое, чтобы быть суммой взноса (> 99 или соответствовать взносам)
+              // Либо суммируем все найденные числа в колонке взносов
+            });
+          }
+        }
+      });
+    });
+
+    // Более точный подход для активных построек: колонка r[7] (Взнос) и r[6] (Пожертвования)
+    let sum = 0;
+    rowsForCharacter.forEach(r => {
+      // Проверим колонку взноса (r[7])
+      const vznosText = String(r[7] || '').trim();
+      const vznosMatch = vznosText.match(/\d+/);
+      if (vznosMatch) {
+        sum += parseInt(vznosMatch[0], 10);
+      }
+
+      // Проверим также пожертвования (r[6]), если там указаны суммы в скобках или через запятую
+      const donationsText = String(r[6] || '').trim();
+      const allNumbers = donationsText.match(/\d+/g);
+      if (allNumbers) {
+        // Если это суммы пожертвований, суммируем их
+        allNumbers.forEach(n => {
+          const num = parseInt(n, 10);
+          if (num >= 100) { // фильтруем мелкие цифры вроде номеров постов если они попали
+            sum += num;
+          }
+        });
+      }
+    });
+
+    return sum > 0 ? sum + " (общий итог)" : "—";
   }
 
   function renderTable() {
@@ -639,9 +679,55 @@
     for (let charName in grouped) {
       let avatarHtml = getCharacterAvatar(charName);
       
+      // Если это активные постройки, посчитаем общую сумму взносов для шапки или карточки
+      let totalVznosHtml = "";
+      if (currentTab === 'active') {
+        let totalSum = 0;
+        grouped[charName].forEach(r => {
+          // Ищем все числа в колонках платеж(5), пожертвования(6), взнос(7)
+          for (let i = 5; i <= 7; i++) {
+            const val = String(r[i] || '');
+            const nums = val.match(/\d+/g);
+            if (nums) {
+              nums.forEach(n => {
+                const num = parseInt(n, 10);
+                // Считаем только крупные имперские суммы (например от 500, исключая версии 2/3 и т.д.)
+                if (num >= 500 && !val.includes(num + '/3') && !val.includes(num + '/')) {
+                  // но если это конкретно взнос или пожертвование — суммируем
+                }
+              });
+            }
+          }
+
+          // Прямой парсинг колонки взноса r[7]
+          const vznos = parseInt(String(r[7] || '').replace(/\D/g, ''), 10);
+          if (!isNaN(vznos)) totalSum += vznos;
+
+          // Парсинг пожертвований r[6] (может содержать несколько сумм)
+          const donText = String(r[6] || '');
+          const donMatches = donText.match(/\d+/g);
+          if (donMatches) {
+            donMatches.forEach(dm => {
+              const dNum = parseInt(dm, 10);
+              // Если число похоже на сумму денег (> 999)
+              if (dNum >= 1000) {
+                totalSum += dNum;
+              }
+            });
+          }
+        });
+
+        if (totalSum > 0) {
+          totalVznosHtml = `<div style="font-size: 11px; color: var(--gold-light); margin-top: 4px; font-style: italic;">Общая сумма взносов: ${totalSum.toLocaleString()} монет</div>`;
+        }
+      }
+
       html += `
         <div class="character-group">
-          <div class="character-group-header">${escapeHtml(charName)}</div>
+          <div class="character-group-header">
+            ${escapeHtml(charName)}
+            ${totalVznosHtml}
+          </div>
           <div class="character-content-flex">
             <div class="character-avatar-box">
               ${avatarHtml}
@@ -665,17 +751,10 @@
       grouped[charName].forEach(r => {
         html += `<tr>`;
         if (currentTab === 'process') {
-          // Согласно вашему скриншоту таблицы:
-          // r[0] = Имя персонажа (уже идет в шапку карточки)
-          // r[1] = Название постройки (Колонка B)
-          // r[2] = Дата начала строительства (Колонка C)
-          // r[3] = Год открытия (Колонка D)
-          // r[4] = Местонахождение (Колонка E)
           const name = r[1] || '—';
           const start = r[2] || '—';
           const open = r[3] || '—';
           const loc = r[4] || '—';
-
           html += `<td>${escapeHtml(name)}</td><td>${escapeHtml(start)}</td><td>${escapeHtml(open)}</td><td>${escapeHtml(loc)}</td>`;
         } else if (currentTab === 'active') {
           html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td><td>${escapeHtml(r[5] || '—')}</td><td>${escapeHtml(r[6] || '—')}</td><td>${escapeHtml(r[7] || '—')}</td>`;
