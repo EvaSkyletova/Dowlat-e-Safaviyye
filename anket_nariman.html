@@ -56,7 +56,8 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            overflow-y: scroll;
+            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы не было второго колесика */
+            overflow-y: auto;
         }
 
         /* Эффект «пуньк» при клике */
@@ -382,7 +383,7 @@
         .fill-green { background: linear-gradient(90deg, #27ae60, #2ecc71); box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
 
         /* ========================================= */
-        /* ИСПРАВЛЕННОЕ МОДАЛЬНОЕ ОКНО               */
+        /* МОДАЛЬНОЕ ОКНО                            */
         /* ========================================= */
         .modal-overlay { 
             position: fixed; 
@@ -542,7 +543,7 @@
 
             <div class="sheet-sidebar">
                 <div class="avatar-frame">
-                    <img src="https://sun9-61.userapi.com/s/v1/ig2/lItBLzpMytgfbzUriEVX4JQJq0JBGHKf3r6GmcJt7rNscRjSF9-FSeTdumzatf0fmh5-a2FWmhdRN9n0o51KVHL_.jpg?quality=95&as=32x40,48x60,72x90,108x135,160x200,240x300,360x449,480x599,540x674,640x799,720x899,1080x1348,1280x1598,1440x1798,1792x2237&from=bu&u=At4aE4egoFfy_cN4K7WpZIkhffut9Dm-e5c5_S3tINE&cs=1792x0" alt="Нариман">
+                    <img src="nariman.jpg" alt="Нариман">
                 </div>
 
                 <div class="char-title">
