@@ -62,7 +62,6 @@
         radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
         linear-gradient(to bottom, #161618, #0d0d0f);
     overflow-x: hidden;
-    /* ИСПРАВЛЕНИЕ: одно колесико прокрутки */
     overflow-y: auto;
   }
 
@@ -156,59 +155,58 @@
       text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
-  /* ОБЕРТКА СТРАНИЦЫ (ДЛЯ КНОПКИ НАЗАД) */
+  /* ОБЕРТКА СТРАНИЦЫ (КАК В ЗАЯВКЕ НА СТРОИТЕЛЬСТВО — 1250PX) */
   .page-wrapper {
     width: 100%;
-    max-width: 1020px;
+    max-width: 1250px;
     margin: 30px auto 60px;
     padding: 0 20px;
-    position: relative;
     box-sizing: border-box;
   }
 
-  /* КНОПКА НАЗАД */
+  /* КНОПКА НАЗАД (В СТИЛЕ ЗАЯВКИ НА СТРОИТЕЛЬСТВО) */
+  .top-action-bar {
+    margin-bottom: 20px;
+  }
+
   .back-btn {
-    position: absolute;
-    top: 0;
-    left: 20px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
+    padding: 9px 18px;
+    background: var(--panel-dark);
     color: var(--gold-light);
     text-decoration: none;
-    font-size: 12px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 8px 14px;
-    background: var(--panel-dark);
     border: 1px solid var(--line);
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: bold;
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-    font-weight: bold;
-    z-index: 10;
   }
 
   .back-btn:hover {
     border-color: var(--gold);
-    background: rgba(212, 175, 55, 0.15);
+    background: rgba(212, 175, 55, 0.12);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
     color: #fff;
     transform: translateX(-3px);
-    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
   }
 
-  /* ОСНОВНОЙ КОНТЕЙНЕР ФОРМЫ (ОТОДВИНУТ ВНИЗ ОТ КНОПКИ) */
+  /* ОСНОВНОЙ КОНТЕЙНЕР ФОРМЫ (ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ) */
   .form-card {
     width: 100%;
-    margin-top: 50px;
     background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
     border: 1px solid var(--line);
     border-top: 2px solid var(--gold);
     border-bottom: 2px solid var(--gold);
     border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(212, 175, 55, 0.05);
-    padding: 35px 30px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
     position: relative;
+    box-sizing: border-box;
   }
 
   .form-card::before,
@@ -250,7 +248,7 @@
     background: var(--panel-soft);
     border: 1px solid var(--line);
     border-radius: 6px;
-    padding: 18px 20px;
+    padding: 18px 22px;
     margin-bottom: 20px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.5);
   }
@@ -267,13 +265,13 @@
 
   .input-text {
     width: 100%;
-    padding: 11px 14px;
+    padding: 12px 16px;
     background: var(--panel-dark);
     border: 1px solid var(--line);
     border-radius: 4px;
     color: #fff;
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 14px;
     outline: none;
     transition: 0.3s;
   }
@@ -285,14 +283,14 @@
 
   .input-textarea {
     width: 100%;
-    height: 80px;
-    padding: 12px 15px;
+    height: 90px;
+    padding: 12px 16px;
     background: var(--panel-dark);
     border: 1px solid var(--line);
     border-radius: 4px;
     color: #fff;
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 14px;
     resize: vertical;
     outline: none;
     line-height: 1.4;
@@ -311,7 +309,7 @@
 
   .combo-arrow {
     position: absolute;
-    right: 12px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--gold-soft);
@@ -354,7 +352,7 @@
 
   .combo-option {
     padding: 10px 14px;
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--text);
     cursor: pointer;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -455,9 +453,9 @@
     color: var(--gold-light);
     border: 1px dashed var(--gold);
     border-radius: 4px;
-    padding: 9px 14px;
+    padding: 10px 16px;
     font-family: inherit;
-    font-size: 13px;
+    font-size: 13.5px;
     cursor: pointer;
     transition: 0.2s;
     display: inline-flex;
@@ -495,20 +493,20 @@
   /* Блок вывода результата баллов */
   .result-box {
     display: none;
-    margin-top: 15px;
-    padding: 14px 18px;
-    border-radius: 6px;
+    margin-top: 18px;
+    padding: 16px;
+    border-radius: 4px;
     border: 1px solid var(--gold);
-    background: rgba(212, 175, 55, 0.08);
+    background: rgba(212, 175, 55, 0.12);
     color: var(--gold-light);
     font-size: 14px;
-    line-height: 1.5;
+    line-height: 1.6;
   }
 
   /* Кнопка отправки */
   .copy-btn {
     width: 100%;
-    padding: 15px;
+    padding: 14px;
     background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
     color: #121008;
     border: none;
@@ -517,17 +515,16 @@
     font-size: 13.5px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-    margin-top: 5px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+    margin-top: 10px;
   }
 
   .copy-btn:hover:not(:disabled) {
     background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
   }
 
   .copy-btn:disabled {
@@ -539,7 +536,7 @@
   .sheet-link-btn {
     display: block;
     width: 100%;
-    padding: 13px 15px;
+    padding: 13px;
     margin-top: 12px;
     background: var(--panel-dark);
     color: var(--gold-light);
@@ -560,28 +557,25 @@
     border-color: var(--gold);
     background: rgba(212, 175, 55, 0.15);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-    transform: translateY(-2px);
   }
 
   /* Всплывающее уведомление */
   .toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(90deg, #b89947, #d4af37);
+    background: rgba(136, 203, 139, 0.95);
     color: #121008;
-    padding: 12px 26px;
+    padding: 12px 24px;
     border-radius: 4px;
     font-size: 13.5px;
     font-weight: bold;
-    letter-spacing: 1px;
-    text-transform: uppercase;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s;
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
   }
 
   .toast.show { opacity: 1; }
@@ -591,7 +585,7 @@
     background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(12, 14, 19, 0.92));
     border: 1px solid var(--line);
     border-left: 3px solid var(--gold);
-    border-radius: 0 6px 6px 0;
+    border-radius: 0 4px 4px 0;
     margin-bottom: 22px;
     overflow: hidden;
   }
@@ -632,7 +626,7 @@
   .guide-content {
     display: none;
     padding: 14px 20px 18px 20px;
-    border-top: 1px dashed var(--line-soft);
+    border-top: 1px dashed rgba(212, 175, 55, 0.2);
     color: var(--text);
     font-size: 13.5px;
     line-height: 1.6;
@@ -681,11 +675,10 @@
 
   /* Адаптив */
   @media (max-width: 860px) {
-    .page-wrapper { margin: 30px auto 40px; padding: 0 10px; }
-    .back-btn { top: 0; left: 10px; padding: 6px 10px; font-size: 11px; }
-    .form-card { margin-top: 40px; padding: 20px 15px; }
+    .page-wrapper { padding: 0 10px; }
+    .form-card { padding: 25px 16px; }
     .action-row { grid-template-columns: 1fr; }
-    .remove-row-btn { width: 100%; height: 34px; }
+    .remove-row-btn { width: 100%; height: 38px; }
   }
 </style>
 </head>
@@ -722,11 +715,13 @@
         </nav>
     </header>
 
-    <!-- ОБЕРТКА СТРАНИЦЫ (ДЛЯ ЦЕНТРИРОВАНИЯ И КНОПКИ) -->
+    <!-- ОБЕРТКА СТРАНИЦЫ (ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ) -->
     <div class="page-wrapper">
       
-      <!-- Кнопка возврата -->
-      <a href="reputation.html" class="back-btn">← Вернуться назад</a>
+      <!-- Кнопка возврата в стиле заявки на строительство -->
+      <div class="top-action-bar">
+        <a href="reputation.html" class="back-btn">← Вернуться назад в Репутацию</a>
+      </div>
 
       <!-- ОСНОВНАЯ ФОРМА -->
       <div class="form-card">
@@ -1166,7 +1161,7 @@ C('b37',"Военная крепость","V уровень, нужна земл
         Cu('culture35',"Булавка для платка в форме звезды","I уровень, ювелирные украшения",400),
         Cu('culture36',"Кольцо «Пыль пустыни» (матовая бронза, вставка - необработанный агат)","I уровень, ювелирные украшения",800),
         Cu('culture37',"Браслет с бусинами из обсидиана","I уровень, ювелирные украшения",950),
-        Cu('culture38',"Серёжки «Слёзы травницы» (мелкие зелёные камешки в латуни, напоминают зёрна укропа)","I уровень, ювелирные украшения",1000),
+        Cu('culture38',"Серьги «Слёзы травницы» (мелкие зелёные камешки в латуни, напоминают зёрна укропа)","I уровень, ювелирные украшения",1000),
         Cu('culture39',"Ткани качественные (пошив нарядов, жилета)","II уровень",2000),
         Cu('culture40',"Зеркало в медной оправе с узорами","II уровень",1200),
         Cu('culture41',"Шкатулка для благовоний, резная","II уровень",1000),
@@ -1682,7 +1677,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
     const descCombo = row.querySelector(".combo-wrap.desc-combo");
     const sumInput  = row.querySelector(".action-sum");
 
-    // Если строка создается через дублирование — заполняем её теми же данными
     if (initialData) {
       row.querySelector(".action-char").value = initialData.char || "";
       row.querySelector(".action-cat").value  = initialData.cat || "";
@@ -1690,7 +1684,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
       sumInput.value = initialData.sum || "";
     }
 
-    // Включаем мультивыбор (isMulti = true) для поля получателей
     setupSearchableCombo(charCombo, getCharacterComboData(true), null, true);
     setupSearchableCombo(catCombo, getCategoryComboData());
     setupSearchableCombo(descCombo, getPrizeComboData(), (selected) => {
@@ -1700,7 +1693,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
     });
   }
 
-  // Дублирование конкретной строки при клике на ❐
   function duplicateActionRow(btn) {
     const sourceRow = btn.closest(".action-row");
     if (!sourceRow) return;
@@ -1713,7 +1705,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
     addActionRow(data, sourceRow);
   }
 
-  // Удаление строки из 3.1
   function removeActionRow(btn) {
     const container = document.getElementById("actionRowsContainer");
     if (container.querySelectorAll(".action-row").length > 1) {
@@ -1727,20 +1718,18 @@ C('b37',"Военная крепость","V уровень, нужна земл
     }
   }
 
-  // Генерация случайного целого числа включительно [min, max]
   function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  // Расчет рандомного балла (дайса) от доли участника в аббаси
   function calculatePointsForSum(amount) {
     if (isNaN(amount) || amount <= 0) return 0;
     if (amount < 20000) {
-      return getRandomInt(1, 2); // до 20000 -> 1-2 балла
+      return getRandomInt(1, 2);
     } else if (amount >= 20000 && amount < 50000) {
-      return getRandomInt(3, 6); // от 20000 до 50000 -> 3-6 баллов
+      return getRandomInt(3, 6);
     } else {
-      return getRandomInt(7, 10); // от 50000 и выше -> 7-10 баллов
+      return getRandomInt(7, 10);
     }
   }
 
@@ -1748,12 +1737,9 @@ C('b37',"Военная крепость","V уровень, нужна земл
     const submitBtn = document.getElementById("submitBtn");
     submitBtn.disabled = true;
 
-    // --- НОВОЕ: Генерируем уникальный ID для этой заявки ---
     const rawTime = Date.now().toString();
     const requestId = "Заявка #" + rawTime.slice(-5); 
-    // ------------------------------------------------------
 
-    // 1. Имя заявителя (может быть несколько участников через запятую)
     const charNameInput = document.getElementById("charName");
     const applicantsList = parseNamesList(charNameInput.value);
     const charNameClean = applicantsList.join(", ");
@@ -1761,11 +1747,9 @@ C('b37',"Военная крепость","V уровень, нужна земл
 
     const part1 = charNameClean ? `1. Имя персонажа: ${charNameClean}.` : `1. Имя персонажа.`;
 
-    // 2. Повышение / Понижение
     const repAction = document.querySelector('input[name="repAction"]:checked').value;
     const sign = repAction === "Понижение" ? "-" : "+";
 
-    // 3.1. Сбор строк, деление суммы совместной покупки на количество участников и прикрепление альбомов
     const rows = Array.from(document.querySelectorAll("#actionRowsContainer .action-row"));
     let actionsTextArr = [];
     let actionsSheetArr = [];
@@ -1774,7 +1758,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
     let uniqueTargets = [];
     let autoAlbumsMap = {};
 
-    // Прикрепляем альбомы всех заявителей из п. 1
     applicantsList.forEach(appName => {
       const foundApp = findAlbumByName(appName);
       if (foundApp) {
@@ -1841,7 +1824,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
 
     const autoAlbumsList = Object.values(autoAlbumsMap);
 
-    // Бросаем рандомный дайс для каждого участника по его итоговой доле (shareSum) в категории
     let pointsByCharCatForSheet = [];
     let breakdownHtmlArr = [];
 
@@ -1855,13 +1837,11 @@ C('b37',"Военная крепость","V уровень, нужна земл
       breakdownHtmlArr.push(`🎲 <b>${item.target}</b> — <i>${item.category}</i> (доля: ${roundedShare.toLocaleString("ru-RU")} аббаси) → выпало: <b>${signedPts} балл(ов)</b>`);
     });
 
-    // Формируем пункт 2 шаблона
     let catsStr = uniqueCategories.length > 0 ? uniqueCategories.join(", ") : "в категории/категориях";
     let targetsOther = uniqueTargets.filter(t => !applicantsList.includes(t) && t !== "Себе");
     let targetStr = targetsOther.length > 0 ? ` (${targetsOther.join(", ")})` : "";
     let part2 = `2. ${repAction} репутации: ${catsStr}${targetStr}.`;
 
-    // Формируем пункт 3 шаблона
     const descProof = document.getElementById("descProof").value.trim();
     let part3_1 = actionsTextArr.length > 0
       ? `⠀⠀⠀ 3.1. ${actionsTextArr.join("; ")}`
@@ -1872,14 +1852,12 @@ C('b37',"Военная крепость","V уровень, нужна земл
     
     let part3 = `3. Описание совершенного действия, необходимого для активации действия приза, а также приложение для подтверждения данного факта:\n${part3_1}\n${part3_2}`;
 
-    // Формируем пункт 4 шаблона автоматически
     let part4 = autoAlbumsList.length > 0
       ? `4. Ссылка на альбом с репутацией персонажа:\n` + autoAlbumsList.join("\n")
       : `4. Ссылка на альбом с репутацией персонажа.`;
 
     const fullTemplate = `${part1}\n${part2}\n${part3}\n${part4}`;
 
-    // Вывод результатов дайса на экран
     const resultBox = document.getElementById("resultBox");
     resultBox.style.display = "block";
     resultBox.innerHTML = `
@@ -1889,7 +1867,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
         : `<div style="font-size:13px; color:var(--muted);">Суммы и категории не указаны (0 баллов)</div>`}
     `;
 
-    // Пакет данных для Google Таблицы
     let rowsForSheet = [];
 
     Object.keys(charCategorySums).forEach(key => {
@@ -1930,7 +1907,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
        });
     }
 
-    // Отправка в Google Таблицу
     if (GOOGLE_SCRIPT_URL && GOOGLE_SCRIPT_URL.startsWith("http")) {
       try {
         await fetch(GOOGLE_SCRIPT_URL, {
@@ -1944,7 +1920,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
       }
     }
 
-    // Копирование текста шаблона в буфер обмена
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(fullTemplate).then(() => {
         showToast();
@@ -1988,7 +1963,6 @@ C('b37',"Военная крепость","V уровень, нужна земл
     setTimeout(() => toast.classList.remove("show"), 3000);
   }
 
-  // Первый запуск: инициализируем мультивыбор для поля заявителя (п.1) и добавляем первую строку в 3.1
   setupSearchableCombo(document.getElementById("applicantComboWrap"), getCharacterComboData(false), null, true);
   addActionRow();
 </script>
