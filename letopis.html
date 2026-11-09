@@ -2,9 +2,16 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Летопись • Dowlаt-e Safaviyye</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Летопись</title>
     <style>
+        @font-face {
+            font-family: 'Yipes';
+            src: url('yipes-regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
         :root {
             --gold-dark: #8c6a08;
             --gold: #d4af37;
@@ -12,28 +19,56 @@
             --gold-soft: #c5a059;
             --text: #f0ebd8;
             --muted: #a69e88;
-            --line: rgba(212, 175, 55, 0.35);
-            --line-strong: rgba(212, 175, 55, 0.7);
+            --line: rgba(212, 175, 55, 0.3);
+            --line-strong: rgba(212, 175, 55, 0.65);
             --bg: #161618;
-            --panel: rgba(22, 22, 25, 0.96);
+            --panel: rgba(22, 22, 26, 0.96);
+            --panel-soft: rgba(26, 26, 32, 0.92);
+            --panel-dark: rgba(14, 14, 17, 0.97);
+        }
+
+        /* Золотой курсор (глобальный) */
+        body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
         }
 
         *, *::before, *::after {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
             font-family: Georgia, "Times New Roman", serif !important;
+            font-style: normal !important;
         }
 
-        body {
+        html, body {
             margin: 0;
             padding: 0;
-            background: var(--bg);
-            color: var(--text);
+            width: 100%;
             min-height: 100vh;
+            background: var(--bg) !important;
+            color: var(--text);
             background-image: 
                 radial-gradient(circle at 50% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 70%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        /* Эффект «пуньк» при клике */
+        .click-echo {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--gold-light);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+            z-index: 999999;
+        }
+
+        @keyframes echoPulse {
+            0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+            100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
         }
 
         /* Тонкий золотой скроллбар */
@@ -56,12 +91,12 @@
             background: var(--gold);
         }
 
-        /* ШАПКА САЙТА (ЕДИНАЯ) */
+        /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (КАК В КАЗНЕ) */
         .site-header {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            padding: 18px 20px;
+            padding: 12px 20px;
             border-bottom: 2px solid var(--line);
             background: rgba(18, 18, 20, 0.96);
             backdrop-filter: blur(12px);
@@ -71,22 +106,22 @@
             box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
         }
 
-        .site-logo {
-            font-size: 20px;
-            color: var(--gold-light);
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-            margin-bottom: 12px;
-            font-weight: bold;
-        }
-
         .site-nav {
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 22px;
             flex-wrap: wrap;
-            align-items: center;
+        }
+
+        .nav-logo {
+            height: 50px;
+            width: auto;
+            margin-right: 15px;
+            transition: transform 0.3s ease;
+        }
+        .nav-logo:hover {
+            transform: scale(1.1);
         }
 
         .site-nav a {
@@ -122,84 +157,112 @@
             text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
         }
 
-        /* ОСНОВНОЙ КОНТЕЙНЕР (САД ЛЕТОПИСИ) */
+        /* ОСНОВНОЙ КОНТЕЙНЕР (САД ЛЕТОПИСИ) ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ */
         .garden-wrap {
-            max-width: 1100px;
+            max-width: 1250px;
             margin: 30px auto 60px;
-            padding: 30px 40px;
-            text-align: center;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
 
+        .garden-card {
+            width: 100%;
+            background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+            border: 1px solid var(--line);
+            border-top: 2px solid var(--gold);
+            border-bottom: 2px solid var(--gold);
+            border-radius: 12px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+            padding: 40px 50px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .garden-card::before,
+        .garden-card::after {
+            content: '✦';
+            position: absolute;
+            color: var(--gold);
+            font-size: 12px;
+        }
+        .garden-card::before { top: 10px; left: 14px; }
+        .garden-card::after { top: 10px; right: 14px; }
+
         .garden-header {
-            margin-bottom: 40px;
+            text-align: center;
+            margin-bottom: 35px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 25px;
         }
 
         .garden-kicker {
+            margin: 0 0 6px;
             color: var(--gold-soft);
             font-size: 11px;
-            letter-spacing: 4px;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            margin-bottom: 8px;
             font-weight: bold;
         }
 
         .garden-title {
+            margin: 0 0 8px;
             color: var(--gold-light);
-            font-size: 32px;
-            letter-spacing: 4px;
+            font-size: 26px;
             text-transform: uppercase;
-            margin: 0 0 12px 0;
+            letter-spacing: 2px;
             font-weight: normal;
-            text-shadow: 0 3px 10px rgba(0,0,0,0.9);
+            font-family: 'Yipes', Georgia, serif !important;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
         }
 
         .garden-divider {
             color: var(--gold);
-            font-size: 16px;
-            letter-spacing: 10px;
+            font-size: 14px;
+            letter-spacing: 8px;
             opacity: 0.9;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
         }
 
         .garden-subtitle {
+            margin: 0;
             color: var(--muted);
-            font-size: 14px;
+            font-size: 13.5px;
             font-style: italic;
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
-        /* ИНТЕРАКТИВНОЕ КОЛЕСО / СЕТКА АРТЕФАКТОВ */
+        /* ИНТЕРАКТИВНАЯ СЕТКА АРТЕФАКТОВ */
         .artifacts-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 25px;
-            margin-bottom: 40px;
+            gap: 20px;
         }
 
         .artifact-card {
-            background: linear-gradient(145deg, rgba(22, 22, 26, 0.9), rgba(12, 12, 15, 0.95));
+            background: var(--panel-soft);
             border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 25px 20px;
-            cursor: pointer;
+            border-radius: 6px;
+            padding: 22px 18px;
+            text-decoration: none;
             position: relative;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
+            text-align: center;
         }
 
         .artifact-card::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
             opacity: 0;
-            transition: opacity 0.4s ease;
+            transition: opacity 0.3s ease;
         }
 
         .artifact-card:hover::before {
@@ -208,28 +271,29 @@
 
         .artifact-card:hover {
             border-color: var(--gold);
-            transform: translateY(-6px);
-            box-shadow: 0 15px 35px rgba(212, 175, 55, 0.25);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.2);
+            background: rgba(26, 26, 32, 0.95);
         }
 
         .artifact-icon {
-            font-size: 32px;
-            margin-bottom: 14px;
+            font-size: 30px;
+            margin-bottom: 12px;
             filter: drop-shadow(0 2px 5px rgba(212, 175, 55, 0.4));
-            transition: transform 0.4s ease;
+            transition: transform 0.3s ease;
         }
 
         .artifact-card:hover .artifact-icon {
-            transform: scale(1.15) rotate(5deg);
+            transform: scale(1.1) rotate(4deg);
         }
 
         .artifact-name {
             color: var(--gold-light);
-            font-size: 16px;
-            letter-spacing: 1.5px;
+            font-size: 15px;
+            letter-spacing: 1.2px;
             text-transform: uppercase;
-            margin-bottom: 8px;
-            font-weight: normal;
+            margin-bottom: 6px;
+            font-weight: bold;
         }
 
         .artifact-hint {
@@ -238,136 +302,60 @@
             font-style: italic;
         }
 
-        /* ЦАРСКИЙ СВИТОК (ВЫПАДАЮЩЕЕ ОКНО С ИНФОРМАЦИЕЙ) */
-        .scroll-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            animation: fadeInModal 0.3s ease;
-        }
-
-        @keyframes fadeInModal {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .scroll-window {
-            background: linear-gradient(145deg, #1b1b1f, #111113);
-            border: 2px solid var(--gold);
-            border-radius: 10px;
-            max-width: 650px;
-            width: 100%;
-            padding: 40px;
-            position: relative;
-            box-shadow: 0 25px 60px rgba(0,0,0,0.95), inset 0 0 35px rgba(212, 175, 55, 0.05);
-            text-align: center;
-            animation: slideUpModal 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-        }
-
-        @keyframes slideUpModal {
-            from { transform: translateY(30px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            background: none;
-            border: none;
-            color: var(--gold);
-            font-size: 24px;
-            cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .close-btn:hover {
-            color: var(--gold-light);
-        }
-
-        .scroll-window-icon {
-            font-size: 40px;
-            margin-bottom: 12px;
-        }
-
-        .scroll-window-title {
-            color: var(--gold-light);
-            font-size: 22px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        .scroll-window-text {
-            color: #ded6c2;
-            font-size: 15px;
-            line-height: 1.8;
-            font-style: italic;
-            margin-bottom: 30px;
-        }
-
-        .scroll-window-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            text-decoration: none;
-            color: #121008;
-            background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
-            padding: 12px 25px;
-            border-radius: 4px;
-            font-size: 13.5px;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            transition: all 0.3s;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.6);
-        }
-
-        .scroll-window-btn:hover {
-            background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
-        }
-
         /* Адаптив */
-        @media (max-width: 850px) {
+        @media (max-width: 900px) {
             .artifacts-grid {
                 grid-template-columns: repeat(2, 1fr);
-                gap: 15px;
             }
         }
 
-        @media (max-width: 550px) {
+        @media (max-width: 600px) {
             .artifacts-grid {
                 grid-template-columns: 1fr;
             }
-            .garden-wrap {
-                padding: 15px;
+            .garden-card {
+                padding: 25px 16px;
             }
-            .scroll-window {
-                padding: 25px 20px;
+            .garden-wrap {
+                padding: 10px;
+                margin: 15px auto;
+            }
+            .site-header {
+                padding: 12px 10px;
             }
             .site-nav {
-                gap: 12px 16px;
+                gap: 10px 15px;
+            }
+            .nav-logo {
+                height: 40px;
+                margin-right: 8px;
             }
             .site-nav a {
-                font-size: 11px;
+                font-size: 10px;
+                letter-spacing: 0.6px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- ШАПКА САЙТА (ЕДИНАЯ) -->
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ШАПКА САЙТА (ЕДИНАЯ СТРОГАЯ) -->
     <header class="site-header">
-        <div class="site-logo">Dowlаt-e Safaviyye</div>
         <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
             <a href="index.html">Главная</a>
             <a href="activity.html">Активность</a>
             <a href="ankets.html">Анкеты</a>
@@ -383,174 +371,85 @@
     </header>
 
 <div class="garden-wrap">
+  <div class="garden-card">
+    
     <header class="garden-header">
-        <div class="garden-kicker">✦ Bostan-e Tarikh ✦</div>
+        <p class="garden-kicker">✦ Bostan-e Tarikh ✦</p>
         <h1 class="garden-title">Имперская Летопись</h1>
         <div class="garden-divider">✦ ✧ ✦ ✧ ✦</div>
         <p class="garden-subtitle">Коснитесь любого священного артефакта или свитка в саду шахской памяти, чтобы открыть тайны эпохи Сефевидов.</p>
     </header>
 
-    <!-- СЕТКА ИНТЕРАКТИВНЫХ АРТЕФАКТОВ -->
+    <!-- СЕТКА ИНТЕРАКТИВНЫХ АРТЕФАКТОВ (ПРЯМЫЕ ССЫЛКИ В ТОМ ЖЕ ОКНЕ) -->
     <div class="artifacts-grid">
 
         <!-- 1. Вести и Слухи -->
-        <div class="artifact-card" onclick="openArtifact('rumors')">
+        <a href="news.html" class="artifact-card">
             <div class="artifact-icon">🪶</div>
             <h3 class="artifact-name">Вести и Слухи</h3>
             <span class="artifact-hint">Шепоты базара Исфахана</span>
-        </div>
+        </a>
 
         <!-- 2. Указы -->
-        <div class="artifact-card" onclick="openArtifact('decrees')">
+        <a href="decrees.html" class="artifact-card">
             <div class="artifact-icon">📜</div>
             <h3 class="artifact-name">Шахские Указы</h3>
             <span class="artifact-hint">Веления государя</span>
-        </div>
+        </a>
 
         <!-- 3. Религия -->
-        <div class="artifact-card" onclick="openArtifact('religion')">
+        <a href="religion.html" class="artifact-card">
             <div class="artifact-icon">✨</div>
             <h3 class="artifact-name">Религия</h3>
             <span class="artifact-hint">Оплот веры и закона</span>
-        </div>
+        </a>
 
         <!-- 4. Образование -->
-        <div class="artifact-card" onclick="openArtifact('education')">
+        <a href="education.html" class="artifact-card">
             <div class="artifact-icon">🏛️</div>
             <h3 class="artifact-name">Образование</h3>
             <span class="artifact-hint">Мудрость медресе</span>
-        </div>
+        </a>
 
         <!-- 5. География и Астрономия -->
-        <div class="artifact-card" onclick="openArtifact('geo')">
+        <a href="geography.html" class="artifact-card">
             <div class="artifact-icon">🔭</div>
             <h3 class="artifact-name">География и Звезды</h3>
             <span class="artifact-hint">Карты и небесные сферы</span>
-        </div>
+        </a>
 
         <!-- 6. Наука и Искусство -->
-        <div class="artifact-card" onclick="openArtifact('science')">
+        <a href="science.html" class="artifact-card">
             <div class="artifact-icon">🏺</div>
             <h3 class="artifact-name">Наука и Искусство</h3>
             <span class="artifact-hint">Ковры, трактаты и поэзия</span>
-        </div>
+        </a>
 
         <!-- 7. Доска почета -->
-        <div class="artifact-card" onclick="openArtifact('honor')">
+        <a href="pedestal.html" class="artifact-card">
             <div class="artifact-icon">🏆</div>
             <h3 class="artifact-name">Доска Почета</h3>
             <span class="artifact-hint">Герои и верные слуги</span>
-        </div>
+        </a>
 
         <!-- 8. Флэшбеки -->
-        <div class="artifact-card" onclick="openArtifact('flashbacks')">
+        <a href="flashbacks.html" class="artifact-card">
             <div class="artifact-icon">⏳</div>
             <h3 class="artifact-name">Флэшбеки</h3>
             <span class="artifact-hint">Воспоминания минувших дней</span>
-        </div>
+        </a>
 
         <!-- 9. Строительство -->
-        <div class="artifact-card" onclick="openArtifact('build')">
+        <a href="architecture.html" class="artifact-card">
             <div class="artifact-icon">🕌</div>
             <h3 class="artifact-name">Строительство</h3>
             <span class="artifact-hint">Дворцы, сады и мосты</span>
-        </div>
+        </a>
 
     </div>
+
+  </div>
 </div>
-
-<!-- ОКНО СВИТКА (МОДАЛЬНОЕ ОКНО) -->
-<div id="scrollModal" class="scroll-modal" onclick="closeOnOutside(event)">
-    <div class="scroll-window">
-        <button class="close-btn" onclick="closeModal()">×</button>
-        <div id="modalIcon" class="scroll-window-icon">📜</div>
-        <h2 id="modalTitle" class="scroll-window-title">Заголовок</h2>
-        <p id="modalText" class="scroll-window-text">Текст летописи...</p>
-        <a id="modalLink" href="#" class="scroll-window-btn" target="_blank">✦ Открыть полный свиток</a>
-    </div>
-</div>
-
-<script>
-    // Данные для каждого артефакта
-    const artifactsData = {
-        rumors: {
-            icon: "🪶",
-            title: "Вести и Слухи Исфахана",
-            text: "«Среди улочек и караван-сараев столичного Исфахана разносятся самые невероятные молвы. Торговцы шелком делятся вестями о прибытии заморских послов, а стражники шепотом обсуждают тайные ночные собрания знати у стен царского арсенала...»",
-            link: "rumors.html"
-        },
-        decrees: {
-            icon: "📜",
-            title: "Императорские Указы",
-            text: "«Волею Шаха Наримана I, тени Всевышнего на земле, издаются строгие законы о порядке в провинциях, сборе налогов и верности кызылбашских родов престолу. Неповиновение шахскому указу карается по всей строгости имперского права.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/указы"
-        },
-        religion: {
-            icon: "✨",
-            title: "Оплот Веры и Правосудия",
-            text: "«Духовные устои Сефевидского государства опираются на чистоту веры, мудрость исламских богословов и защиту священных традиций. Мечети Исфахана служат прибежищем для страждущих и светочем мудрости для правителей.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/религия"
-        },
-        education: {
-            icon: "🏛️",
-            title: "Мудрость Медресе",
-            text: "«В стенах великих медресе юноши из знатных семей постигают тонкости каллиграфии, поэзии Хафиза, астрономии и государственного управления. Знание — это меч ученого, острый сильнее кызылбашской сабли.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/образование"
-        },
-        geo: {
-            icon: "🔭",
-            title: "Звездные Карты и Земли",
-            text: "«От песчаных дюн Фарса до заснеженных вершин Азербайджана простираются владения шахского трона. Придворные астрономы сверяют движение планет, а картографы чертят новые дороги для купеческих караванов.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/география-и-астрономия"
-        },
-        science: {
-            icon: "🏺",
-            title: "Искусство и Наука Персии",
-            text: "«Мастера столицы создают непревзойденные шедевры: тончайшие шелковые ковры, ослепительные изразцы для мечетей и рукописные книги, украшенные золотом. Мудрецы постигают тайны металлов и лекарственных трав.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/искусство-и-наука"
-        },
-        honor: {
-            icon: "🏆",
-            title: "Доска Почета Державы",
-            text: "«Имена доблестных полководцев, мудрых визирей и преданных подданных золотыми буквами вписаны в историю государства. Их подвиги на полях сражений и в дипломатических миссиях служат примером для будущих поколений.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/доска-почета"
-        },
-        flashbacks: {
-            icon: "⏳",
-            title: "Воспоминания Минувших Дней",
-            text: "«Память хранит то, что скрыто от посторонних глаз: тайные клятвы под луной, старые обиды, детские игры во дворецких садах и переломные моменты, навсегда изменившие судьбы знатных мужей и дам.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/флэшбеки"
-        },
-        build: {
-            icon: "🕌",
-            title: "Зодчие Садов и Дворцов",
-            text: "«Зодчие Персии возводят величественные мосты через реки, разбивают райские сады с прохладными фонтанами и строят новые резиденции для знати, прославляя величие эпохи Шаха Аббаса и его наследников.»",
-            link: "https://sites.google.com/view/dowlate-safaviyye/летопись/строительство"
-        }
-    };
-
-    function openArtifact(key) {
-        const item = artifactsData[key];
-        if (!item) return;
-
-        document.getElementById('modalIcon').textContent = item.icon;
-        document.getElementById('modalTitle').textContent = item.title;
-        document.getElementById('modalText').textContent = item.text;
-        document.getElementById('modalLink').href = item.link;
-
-        document.getElementById('scrollModal').style.display = 'flex';
-    }
-
-    function closeModal() {
-        document.getElementById('scrollModal').style.display = 'none';
-    }
-
-    function closeOnOutside(event) {
-        if (event.target.id === 'scrollModal') {
-            closeModal();
-        }
-    }
-</script>
 
 </body>
 </html>
