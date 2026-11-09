@@ -955,9 +955,7 @@
 
   .toast.show { opacity: 1; }
 
-  /* ========================================= */
-  /* АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ        */
-  /* ========================================= */
+  /* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТОВ И СМАРТФОНОВ */
   @media (max-width: 1100px) {
     .ladder-track { grid-template-columns: repeat(3, 1fr); }
     .step-spotlight { grid-template-columns: 1fr; }
@@ -970,21 +968,20 @@
   }
 
   @media (max-width: 768px) {
-    /* Шапка на телефонах */
+    /* Шапка на телефонах: ТОЧНО КАК В БАНКЕ */
     .site-header {
-      padding: 10px 10px;
+      padding: 12px 10px;
     }
     .site-nav {
-      gap: 10px 18px; /* Уменьшили отступы */
+      gap: 10px 15px;
     }
-    /* Скрываем логотип на телефонах, чтобы не раздувать шапку */
     .nav-logo {
-      display: none;
+      height: 40px;
+      margin-right: 8px;
     }
     .site-nav a {
-      font-size: 11px;
-      letter-spacing: 1px;
-      padding: 2px 0;
+      font-size: 10px;
+      letter-spacing: 0.6px;
     }
     /* Остальной контент */
     .imperial-container { padding: 20px 12px 50px; }
@@ -1033,11 +1030,9 @@
 
         <!-- КНОПКИ ДЕЙСТВИЙ: ВЕДУТ НА СТРАНИЦЫ -->
         <div class="bank-actions-grid">
-            <!-- Ссылка на страницу Заявки -->
             <a href="requests.html" class="bank-action-btn">
                 Заявка для репутации
             </a>
-            <!-- Ссылка на страницу Шаблона -->
             <a href="template.html" class="bank-action-btn">
                 Шаблон для темы
             </a>
