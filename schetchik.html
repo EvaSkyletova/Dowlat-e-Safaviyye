@@ -9,7 +9,7 @@
 
 <title>Калькулятор постов</title>
 
-<!-- ПОДКЛЮЧАЕМ GSAP И SCROLLTRIGGER (не нужны для этого калькулятора, но оставим если вдруг пригодятся) -->
+<!-- ПОДКЛЮЧАЕМ GSAP И SCROLLTRIGGER -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
@@ -95,7 +95,7 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-  /* ЕДИНАЯ ШАПКА САЙТА */
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (КАК В КАЗНЕ) */
   .site-header {
     display: flex;
     justify-content: center;
@@ -528,6 +528,23 @@
       margin-top: 15px;
     }
   }
+
+  @media (max-width: 480px) {
+    .site-header {
+      padding: 12px 10px;
+    }
+    .site-nav {
+      gap: 10px 15px;
+    }
+    .nav-logo {
+      height: 40px;
+      margin-right: 8px;
+    }
+    .site-nav a {
+      font-size: 10px;
+      letter-spacing: 0.6px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -544,7 +561,7 @@
         });
     </script>
 
-    <!-- ШАПКА САЙТА -->
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (КАК В КАЗНЕ) -->
     <header class="site-header">
         <nav class="site-nav">
             <img src="logo.png" alt="Логотип" class="nav-logo">
