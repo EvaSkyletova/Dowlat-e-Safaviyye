@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Устройство Персии • Dowlat-e Safaviyye</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА YIPES                  */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.96);
+    --panel-soft: rgba(26, 26, 30, 0.92);
+    --panel-dark: rgba(12, 12, 14, 0.96);
+    --success: #88cb8b;
+    --danger: #d98888;
+  }
+
+  /* Золотая стрелочка для всего сайта */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 55%),
+        radial-gradient(circle at 15% 40%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
+        linear-gradient(to bottom, #161618, #0d0d0f);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Эффект «пуньк» (эхо) при клике */
+  .click-echo {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--gold-light);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+      z-index: 999999;
+  }
+
+  @keyframes echoPulse {
+      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ ШАПКА САЙТА */
+  .site-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(18, 18, 20, 0.96);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+  }
+
+  /* ЛОГОТИП В МЕНЮ */
+  .nav-logo {
+      height: 50px;
+      width: auto;
+      margin-right: 15px;
+      transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      padding: 4px 0;
+      position: relative;
+      font-weight: 500;
+  }
+
+  .site-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР */
+  .imperial-container {
+    width: 100%;
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 35px 24px 80px;
+  }
+
+  /* ВЕЛИЧЕСТВЕННЫЙ ТИТУЛЬНЫЙ БАННЕР С КНОПКАМИ (ТОЧНО КАК В РЕПУТАЦИИ) */
+  .imperial-crest-banner {
+    position: relative;
+    text-align: center;
+    padding: 38px 30px;
+    margin-bottom: 35px;
+    background: 
+      radial-gradient(ellipse at center, rgba(212, 175, 55, 0.12) 0%, transparent 70%),
+      linear-gradient(180deg, rgba(22, 22, 26, 0.95) 0%, rgba(14, 14, 16, 0.98) 100%);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  /* Лев сбоку в заголовке */
+  .banner-icon {
+    height: 90px;
+    width: auto;
+    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
+    transition: transform 0.3s ease;
+  }
+  .banner-icon:hover { transform: scale(1.05); }
+
+  .banner-text-container {
+    text-align: center;
+  }
+
+  .imperial-title {
+    margin: 0 0 12px;
+    font-size: 32px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    font-weight: normal;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .imperial-subtitle {
+    max-width: 820px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  /* КНОПКИ ДЕЙСТВИЙ (КАК В РЕПУТАЦИИ) */
+  .bank-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 35px;
+  }
+
+  .bank-action-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--text);
+      background: var(--panel-dark);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      padding: 12px 14px;
+      font-size: 12.5px;
+      text-align: center;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      font-weight: 500;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      width: 100%;
+      cursor: pointer;
+  }
+
+  .bank-action-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background-color: var(--gold);
+      transform: translateX(-50%);
+      transition: width 0.35s ease;
+  }
+
+  .bank-action-btn:hover::after { width: 100%; }
+  .bank-action-btn:hover {
+      color: var(--gold-light);
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.1);
+      box-shadow: 0 0 16px rgba(212, 175, 55, 0.25);
+      transform: translateY(-2px);
+  }
+
+  /* Активное состояние для кнопок палат */
+  .bank-action-btn.active {
+      color: var(--gold-light);
+      border-color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.15);
+      box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.2), 0 4px 12px rgba(0,0,0,0.4);
+  }
+  .bank-action-btn.active::after { width: 100%; }
+
+  /* =========================================================
+     ПАЛАТА I: ОСНОВЫ ВЛАСТИ
+     ========================================================= */
+  .hall-chamber {
+    display: none;
+    animation: chamberFade 0.35s ease;
+  }
+
+  .hall-chamber.active {
+    display: block;
+  }
+
+  @keyframes chamberFade {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .chamber-banner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .chamber-banner-left h2 {
+    margin: 4px 0 6px;
+    font-size: 24px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: normal;
+  }
+
+  .chamber-kicker {
+    margin: 0;
+    font-size: 11px;
+    color: var(--gold-soft);
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .chamber-desc {
+    margin: 0;
+    font-size: 13.5px;
+    color: var(--muted);
+    max-width: 780px;
+    line-height: 1.55;
+  }
+
+  /* Вкладки внутренние (как в репутации) */
+  .tabs-header { 
+      display: flex; 
+      gap: 10px; 
+      flex-wrap: wrap; 
+      width: 100%;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 15px;
+  }
+
+  .tab-btn { 
+      flex: 1; 
+      background: var(--panel-dark); 
+      color: var(--muted); 
+      border: 1px solid var(--line); 
+      border-radius: 4px; 
+      padding: 11px 12px; 
+      font-size: 12px; 
+      text-transform: uppercase; 
+      letter-spacing: 1px; 
+      text-align: center; 
+      transition: all 0.3s ease; 
+      white-space: nowrap; 
+      font-weight: bold; 
+  }
+
+  .tab-btn:hover { 
+      border-color: var(--gold); 
+      color: var(--gold-light); 
+      background: rgba(212, 175, 55, 0.1); 
+  }
+
+  .tab-btn.active { 
+      background: linear-gradient(90deg, #b89947, #d4af37, #b89947); 
+      color: #121008; 
+      border-color: var(--gold-light); 
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); 
+  }
+
+  .power-controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .power-search-input {
+    min-width: 290px;
+    flex: 1;
+    max-width: 380px;
+    padding: 10px 15px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--text);
+    font-size: 13px;
+    outline: none;
+    transition: 0.25s;
+  }
+
+  .power-search-input:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .state-panel {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    background: var(--panel);
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 22px 55px rgba(0, 0, 0, 0.85);
+    min-height: 540px;
+  }
+
+  .timeline-nav {
+    background: var(--panel-dark);
+    border-right: 1px solid var(--line);
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 700px;
+    overflow-y: auto;
+  }
+
+  .timeline-btn {
+    width: 100%;
+    text-align: left;
+    padding: 14px 16px;
+    background: rgba(24, 24, 28, 0.7);
+    border: 1px solid rgba(212, 175, 55, 0.2);
+    border-left: 3px solid transparent;
+    border-radius: 4px;
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .timeline-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .timeline-btn.active {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--gold-light);
+    border-left: 4px solid var(--gold-light);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+  }
+
+  .tb-category {
+    font-size: 10.5px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+  }
+
+  .tb-title {
+    font-size: 15px;
+    color: var(--gold-light);
+    font-weight: bold;
+    line-height: 1.3;
+  }
+
+  /* Правый свиток чтения */
+  .reader-frame {
+    padding: 34px 40px;
+    background: var(--panel);
+    overflow-y: auto;
+  }
+
+  .reader-header {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+  }
+
+  .reader-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(212, 175, 55, 0.14);
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    margin-bottom: 10px;
+  }
+
+  .reader-title {
+    margin: 0 0 6px;
+    font-size: 28px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: normal;
+  }
+
+  .reader-subtitle {
+    font-size: 14px;
+    color: var(--gold-soft);
+    letter-spacing: 0.5px;
+  }
+
+  .reader-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .reader-stat-box {
+    background: rgba(10, 10, 13, 0.75);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 12px 16px;
+  }
+
+  .reader-stat-label {
+    font-size: 10.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+  }
+
+  .reader-stat-val {
+    font-size: 14px;
+    color: var(--gold-light);
+    font-weight: bold;
+  }
+
+  .reader-content {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .reader-content p {
+    margin: 0 0 14px;
+    text-align: justify;
+  }
+
+  .reader-content ul {
+    margin: 0 0 18px;
+    padding-left: 20px;
+  }
+
+  .reader-content li {
+    margin-bottom: 10px;
+    text-align: justify;
+  }
+
+  .reader-content b {
+    color: var(--gold-light);
+  }
+
+  .duty-box {
+    margin-top: 18px;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px dashed var(--gold);
+    border-radius: 5px;
+    padding: 16px 20px;
+  }
+
+  .duty-title {
+    font-size: 12.5px;
+    color: var(--gold-light);
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+  }
+
+  .duty-box p {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  /* =========================================================
+     ПАЛАТА II: ИЕРАРХИЯ ТИТУЛОВ
+     ========================================================= */
+  .hierarchy-columns-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    position: relative;
+  }
+
+  .branch-column {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .branch-badge {
+    text-align: center;
+    padding: 12px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    color: var(--gold-light);
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    margin-bottom: 6px;
+  }
+
+  .rank-card {
+    position: relative;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 5px;
+    padding: 16px 20px;
+    transition: all 0.25s ease;
+  }
+
+  .rank-card:hover {
+    border-color: var(--gold-light);
+    transform: translateX(4px);
+  }
+
+  .rank-card.apex {
+    background: var(--panel-soft);
+    border: 1px solid var(--gold-light);
+    border-left: 5px solid var(--gold-light);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+  }
+
+  .rank-tier {
+    display: inline-block;
+    font-size: 10.5px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .rank-card.apex .rank-tier {
+    color: var(--gold-light);
+  }
+
+  .rank-name {
+    margin: 0 0 5px;
+    font-size: 19px;
+    color: var(--gold-light);
+    letter-spacing: 1px;
+    font-weight: normal;
+  }
+
+  .rank-desc {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* =========================================================
+     ПАЛАТА III: ВЕЛИКИЙ МЕДЖЛИС
+     ========================================================= */
+  .leaders-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .leader-card {
+    text-align: center;
+    padding: 28px 24px;
+    background: var(--panel);
+    border: 1px solid var(--gold);
+    border-top: 3px solid var(--gold-light);
+    border-radius: 6px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.85);
+    transition: transform 0.3s ease;
+  }
+
+  .leader-card:hover {
+    transform: translateY(-4px);
+  }
+
+  .leader-badge {
+    display: inline-block;
+    padding: 4px 14px;
+    background: rgba(212, 175, 55, 0.16);
+    border: 1px solid var(--gold);
+    border-radius: 3px;
+    font-size: 11px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+  }
+
+  .leader-name {
+    margin: 0 0 8px;
+    font-size: 25px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    font-weight: normal;
+  }
+
+  .leader-desc {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 460px;
+    margin: 0 auto;
+  }
+
+  .majlis-connector {
+    text-align: center;
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 6px;
+    margin-bottom: 24px;
+    opacity: 0.85;
+  }
+
+  .wings-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 22px;
+  }
+
+  .wing-column {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 22px;
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .wing-header {
+    text-align: center;
+    padding: 12px 10px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    color: var(--gold-light);
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 4px;
+  }
+
+  .council-card {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 5px;
+    padding: 16px 18px;
+    transition: all 0.25s ease;
+  }
+
+  .council-card:hover {
+    border-color: var(--gold-light);
+    transform: translateY(-2px);
+  }
+
+  .card-dept {
+    display: block;
+    font-size: 10.5px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .role-name {
+    margin: 0 0 6px;
+    font-size: 18px;
+    color: var(--gold-light);
+    font-weight: normal;
+    letter-spacing: 0.8px;
+  }
+
+  .role-desc {
+    font-size: 13.5px;
+    color: var(--text);
+    line-height: 1.55;
+  }
+
+  /* АДАПТИВНОСТЬ */
+  @media (max-width: 1100px) {
+    .hierarchy-columns-grid { grid-template-columns: 1fr; }
+    .leaders-grid { grid-template-columns: 1fr; }
+    .wings-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 900px) {
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .bank-actions-grid { grid-template-columns: 1fr; }
+    .state-panel { grid-template-columns: 1fr; }
+    .timeline-nav {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      flex-direction: row;
+      overflow-x: auto;
+      max-height: none;
+    }
+    .timeline-btn { min-width: 230px; }
+  }
+
+  @media (max-width: 650px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+    
+    .imperial-container { padding: 20px 12px 50px; }
+    .imperial-crest-banner { 
+        flex-direction: column; 
+        padding: 25px 15px; 
+        gap: 15px;
+    }
+    .banner-icon { height: 70px; }
+    .imperial-title { font-size: 24px; letter-spacing: 2px; }
+    
+    .reader-frame { padding: 22px 16px; }
+    .reader-title { font-size: 22px; }
+    .reader-stats-grid { grid-template-columns: 1fr; }
+    .power-search-input { min-width: 100%; max-width: 100%; }
+    
+    .tab-btn {
+        font-size: 11px;
+        padding: 9px 6px;
+        flex: 1 1 auto;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('.tab-btn') || e.target.closest('button') || e.target.closest('input')) return;
+
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html" class="active">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <div class="imperial-container">
+
+        <!-- ВЕЛИЧЕСТВЕННЫЙ БАННЕР С ЛЬВОМ -->
+        <header class="imperial-crest-banner">
+            <div class="banner-text-container">
+                <h1 class="imperial-title">Устройство Персии</h1>
+                <p class="imperial-subtitle">
+                    Священный свод государственной архитектуры Державы Сефевидов: нерушимая власть Шах-ан-шаха и Центрального Дивана, лестница благородных титулов мужского и женского двора, а также столпы Великого Меджлиса.
+                </p>
+            </div>
+        </header>
+
+        <!-- КНОПКИ НАВИГАЦИИ ПО ПАЛАТАМ (КАК В РЕПУТАЦИИ) -->
+        <div class="bank-actions-grid" style="margin-bottom: 40px;">
+            <button type="button" class="bank-action-btn active" onclick="openChamber('power', this)">
+                Палата I · Основы Власти
+            </button>
+            <button type="button" class="bank-action-btn" onclick="openChamber('titles', this)">
+                Палата II · Иерархия Титулов
+            </button>
+            <button type="button" class="bank-action-btn" onclick="openChamber('majlis', this)">
+                Палата III · Великий Меджлис
+            </button>
+        </div>
+
+        <!-- =========================================================
+             ПАЛАТА I: ОСНОВЫ ВЛАСТИ
+             ========================================================= -->
+        <section id="chamber-power" class="hall-chamber active">
+            <div class="chamber-banner">
+                <div class="chamber-banner-left">
+                    <p class="chamber-kicker">Низам-е Даулат ва Диван-е Падишахи</p>
+                    <h2>Основы власти</h2>
+                    <p class="chamber-desc">Иерархия шахского престола, центральный диван, баланс меча и пера, сокровищница коронных земель и городские магистраты</p>
+                </div>
+            </div>
+
+            <div class="power-controls-row">
+                <!-- Вкладки -->
+                <div class="tabs-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0; flex: 2;">
+                    <button class="tab-btn active" type="button" id="tabCentral" onclick="switchStateCategory('central')">Верховная Власть</button>
+                    <button class="tab-btn" type="button" id="tabElites" onclick="switchStateCategory('elites')">Элиты и Гарем</button>
+                    <button class="tab-btn" type="button" id="tabArmy" onclick="switchStateCategory('army')">Армия и Земли</button>
+                    <button class="tab-btn" type="button" id="tabDiwan" onclick="switchStateCategory('diwan')">Канцелярия и Казна</button>
+                    <button class="tab-btn" type="button" id="tabCity" onclick="switchStateCategory('city')">Город и Суд</button>
+                </div>
+
+                <input type="text" id="powerSearchInput" class="power-search-input" placeholder="🔍 Найти чин или институт (гулямы, хассэ, калантар)..." oninput="searchPowerDatabase(this.value)">
+            </div>
+
+            <div class="state-panel">
+                <nav class="timeline-nav" id="timelineNav"></nav>
+                <main class="reader-frame" id="readerFrame"></main>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             ПАЛАТА II: ИЕРАРХИЯ ТИТУЛОВ
+             ========================================================= -->
+        <section id="chamber-titles" class="hall-chamber">
+            <div class="chamber-banner">
+                <div class="chamber-banner-left">
+                    <p class="chamber-kicker">Мартаба-йе Алкаб ва Мансаб</p>
+                    <h2>Иерархия Титулов</h2>
+                    <p class="chamber-desc">Священная лестница достоинств Сефевидской империи: от венценосного трона Шахиншаха и величия Валиде до почтенных господ и дев благородных домов</p>
+                </div>
+                <!-- Кнопки фильтрации УДАЛЕНЫ, чтобы сразу показывать обе ветви -->
+            </div>
+
+            <div class="hierarchy-columns-grid" id="hierarchyGrid">
+                <!-- ЛЕВАЯ ВЕТВЬ: МУЖЧИНЫ -->
+                <section class="branch-column branch-male" aria-label="Мужские титулы">
+                    <div class="branch-badge">⚔️ Мужские титулы</div>
+
+                    <article class="rank-card apex">
+                        <span class="rank-tier">Верховный венец</span>
+                        <h3 class="rank-name">Шах-ан-Шах</h3>
+                        <div class="rank-desc">Царь царей, абсолютный владыка</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг I · Наместник</span>
+                        <h3 class="rank-name">Беглербег</h3>
+                        <div class="rank-desc">Правитель остана</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг II · Наследник</span>
+                        <h3 class="rank-name">Баш-мирза</h3>
+                        <div class="rank-desc">Сын Шах-ан-Шаха, престолонаследник</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг III · Шахский род</span>
+                        <h3 class="rank-name">Мирза</h3>
+                        <div class="rank-desc">Сын Шах-ан-Шаха</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг IV · Знать крови</span>
+                        <h3 class="rank-name">Амир-эфенди, Шах-заде</h3>
+                        <div class="rank-desc">Сын Беглербега, Амира-эфенди или Мирзы</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг V · Комендант</span>
+                        <h3 class="rank-name">Салахсалар-е Кулли</h3>
+                        <div class="rank-desc">Хранитель ключей от города</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг VI · Ученый муж</span>
+                        <h3 class="rank-name">Бей-эфенди, Муаллим-эфенди</h3>
+                        <div class="rank-desc">Уважаемый господин, ученый муж и наставник</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг VII · Младший ранг</span>
+                        <h3 class="rank-name">Бей, Ага</h3>
+                        <div class="rank-desc">Сын уважаемого господина или слуга</div>
+                    </article>
+                </section>
+
+                <!-- ПРАВАЯ ВЕТВЬ: ЖЕНЩИНЫ -->
+                <section class="branch-column branch-female" aria-label="Женские титулы">
+                    <div class="branch-badge">🌙 Женские титулы</div>
+
+                    <article class="rank-card apex">
+                        <span class="rank-tier">Верховная госпожа</span>
+                        <h3 class="rank-name">Валиде-кадын</h3>
+                        <div class="rank-desc">Мать правящего Шах-ан-Шаха, глава гарема</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг I · Царственная чета</span>
+                        <h3 class="rank-name">Шах-ан-шахи бану</h3>
+                        <div class="rank-desc">Законная супруга Шах-ан-Шаха из кызылбашского рода</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг II · Супруга правителя</span>
+                        <h3 class="rank-name">Шах-и-бегим</h3>
+                        <div class="rank-desc">Законная супруга Шах-ан-Шаха из числа невольниц</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг III · Чета наследника</span>
+                        <h3 class="rank-name">Баш-ханым</h3>
+                        <div class="rank-desc">Законная супруга Баш-мирзы из кызылбашского рода</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг IV · Дочь и госпожа</span>
+                        <h3 class="rank-name">Шах-бану, Ханум-бегим</h3>
+                        <div class="rank-desc">Дочь Шах-ан-Шаха, Мирзы или супруга Беглербега</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг V · Супруга мирзы</span>
+                        <h3 class="rank-name">Ханым-бану</h3>
+                        <div class="rank-desc">Законная супруга Мирзы</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг VI · Благородная дева</span>
+                        <h3 class="rank-name">Ханум</h3>
+                        <div class="rank-desc">Дочь Беглербега или Амира-эфенди</div>
+                    </article>
+
+                    <article class="rank-card">
+                        <span class="rank-tier">Ранг VII · Мать членов династии</span>
+                        <h3 class="rank-name">Улья-бегим, Кадынар-бану</h3>
+                        <div class="rank-desc">Мать сына/дочери Шах-ан-Шаха или Мирзы из числа невольниц</div>
+                    </article>
+                </section>
+            </div>
+        </section>
+
+        <!-- =========================================================
+             ПАЛАТА III: ВЕЛИКИЙ МЕДЖЛИС
+             ========================================================= -->
+        <section id="chamber-majlis" class="hall-chamber">
+            <div class="chamber-banner">
+                <div class="chamber-banner-left">
+                    <p class="chamber-kicker">Меджлис-е Ала ва Аркан-е Даулат</p>
+                    <h2>Великий Меджлис</h2>
+                    <p class="chamber-desc">Высший Государственный Совет и Столпы Державы Сефевидов: верховное военное командование, хранители монеты и казны, сакральное правосудие и вера</p>
+                </div>
+                <!-- Кнопки фильтрации УДАЛЕНЫ, чтобы сразу показывать все столпы -->
+            </div>
+
+            <!-- ВЕРХОВНЫЕ ГЛАВЫ СОВЕТА -->
+            <div class="leaders-grid" aria-label="Главы Государственного Совета">
+                <article class="leader-card">
+                    <span class="leader-badge">Самодержец и Повелитель</span>
+                    <h3 class="leader-name">Шах-ан-Шах</h3>
+                    <div class="leader-desc">Царь царей, абсолютный владыка</div>
+                </article>
+
+                <article class="leader-card">
+                    <span class="leader-badge">Второе лицо и Регент</span>
+                    <h3 class="leader-name">Великий Векил</h3>
+                    <div class="leader-desc">Второе лицо государства, регент. Обладает властью от имени Шах-ан-Шаха.</div>
+                </article>
+            </div>
+
+            <div class="majlis-connector">❖ ─── ✦ ─── ❖</div>
+
+            <!-- ТРИ ВЕТВИ ВЛАСТИ -->
+            <div class="wings-grid" id="wingsGrid">
+                <!-- 1. ВОЕННОЕ КОМАНДОВАНИЕ -->
+                <div class="wing-column wing-military">
+                    <div class="wing-header">⚔️ Военное Командование</div>
+
+                    <article class="council-card">
+                        <span class="card-dept">Верховный меч</span>
+                        <h4 class="role-name">Эмир аль-Умара</h4>
+                        <div class="role-desc">«Эмир над эмирами». Верховный главнокомандующий войсками кызылбашей.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Шахская гвардия</span>
+                        <h4 class="role-name">Курчи-баши</h4>
+                        <div class="role-desc">Командир элитной шахской гвардии и тяжелой кавалерии.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Корпус гулямов</span>
+                        <h4 class="role-name">Куллар-агаси</h4>
+                        <div class="role-desc">Командующий корпусом гулямов (личной регулярной кавалерии Шаха).</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Пушечный наряд</span>
+                        <h4 class="role-name">Топчи-баши</h4>
+                        <div class="role-desc">Главнокомандующий артиллерией и литейными дворами.</div>
+                    </article>
+                </div>
+
+                <!-- 2. КАЗНА И ДВОР -->
+                <div class="wing-column wing-finance">
+                    <div class="wing-header">🪙 Казна и Двор</div>
+
+                    <article class="council-card">
+                        <span class="card-dept">Главная казна</span>
+                        <h4 class="role-name">Мустоуфи аль-Мамалик</h4>
+                        <div class="role-desc">Главный казначей. Контролирует сбор налогов (малиата) со всех провинций.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Монетный двор</span>
+                        <h4 class="role-name">Муаййер аль-мамалик</h4>
+                        <div class="role-desc">Глава монетного двора. Контролирует чеканку монет и пробу драгоценных металлов.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Дворцовые врата</span>
+                        <h4 class="role-name">Ишикагаси-баши</h4>
+                        <div class="role-desc">Главный церемониймейстер и начальник дворцовой стражи. Владыка врат.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Летописание</span>
+                        <h4 class="role-name">Вакаенавис</h4>
+                        <div class="role-desc">Главный летописец и официальный протоколист Совета.</div>
+                    </article>
+                </div>
+
+                <!-- 3. ДУХОВЕНСТВО И СУД -->
+                <div class="wing-column wing-clergy">
+                    <div class="wing-header">⚖️ Духовенство и Суд</div>
+
+                    <article class="council-card">
+                        <span class="card-dept">Духовная чистота</span>
+                        <h4 class="role-name">Садр аль-Мамалик</h4>
+                        <div class="role-desc">Глава духовной власти Империи. Следит за идеологической чистотой государства.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Военный трибунал</span>
+                        <h4 class="role-name">Кади-аскар</h4>
+                        <div class="role-desc">Верховный военный судья. Разбирает споры среди офицеров и эмиров.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Богословие и фетвы</span>
+                        <h4 class="role-name">Шейх-уль-Ислам</h4>
+                        <div class="role-desc">Высший богослов. Выносит фетвы и толкует законы шариата.</div>
+                    </article>
+
+                    <article class="council-card">
+                        <span class="card-dept">Гражданский суд</span>
+                        <h4 class="role-name">Кади аль-Кузат</h4>
+                        <div class="role-desc">Верховный гражданский судья. Назначает судей в провинции и разбирает жалобы.</div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+<script>
+  // Переключение между тремя главными Палатами
+  function openChamber(chamberId, btnEl) {
+    document.querySelectorAll('.bank-action-btn').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+
+    document.querySelectorAll('.hall-chamber').forEach(c => c.classList.remove('active'));
+    document.getElementById('chamber-' + chamberId).classList.add('active');
+  }
+
+  // Полная база «Основ власти»
+  const stateDatabase = {
+    central: [
+      {
+        id: "shah",
+        category: "Верховная Власть",
+        name: "Шах-ан-шах",
+        subtitle: "Тень Аллаха на Земле и Муршид-и Камиль",
+        rank: "Абсолютный самодержец империи",
+        origin: "Династия Сефевидов",
+        text: `
+          <p>Власть Шах-ан-шах абсолютна, священна и непререкаема. В его фигуре неразрывно сплетены три великих начала:</p>
+          <ul>
+            <li><b>Шах-ан-шах</b> — традиционный венценосный монарх Ирана, «Тень Аллаха на Земле» (<i>Зелл-оллах</i>), обладатель божественной царской благодати (фарра).</li>
+            <li><b>Муршид-и Камиль</b> — совершенный верховный наставник суфийского ордена Сефевийе. Для воинственных кызылбашских племён шах является сакральным предводителем, которому они обязаны безусловным духовным повиновением.</li>
+            <li><b>Наместник Скрытого Имама</b> — защитник и меч шиитской веры имамитского толка на земле до сокрытого возвращения Махди.</li>
+          </ul>
+          <p>Слово шаха — закон. Монарх обладает неограниченным правом жизни и смерти над любым подданным империи.</p>
+        `
+      },
+      {
+        id: "shah_diwan",
+        category: "Центральный Диван",
+        name: "Шахский Диван",
+        subtitle: "Верховный орган государственного управления",
+        rank: "Высшая палата исполнительной власти",
+        origin: "Шах-ан-шах, Великий Векил, высшие советники и сановники",
+        text: `
+          <p><b>Шахский диван</b> — это высший орган государственного управления в Сефевидском государстве. Именно в стенах Дивана концентрируется вся административная, фискальная, дипломатическая и судебная власть империи.</p>
+          <p>Диван рассматривает дела первостепенной важности: принятие государственных уложений, подготовку монарших указов (фирманов), распределение доходов провинций, назначение беглербегов на шахских землях и прием иноземных посольств.</p>
+        `
+      },
+      {
+        id: "majlis",
+        category: "Центральный Диван",
+        name: "Великий Меджлис",
+        subtitle: "Государственный совет доверенных лиц Шах-ан-шаха",
+        rank: "Совещательный совет при монархе",
+        origin: "Шах, советники, ханы, шейхи, улемы",
+        text: `
+          <p><b>Великий Меджлис</b> — собрания высших советников и сановников для обсуждения ключевых вопросов бытия державы: войн, союзов, подавления мятежей, смены курса политики и преодоления кризисов.</p>
+          <p>Меджлисы созываются в двух форматах:</p>
+          <ul>
+            <li><b>В присутствии Шах-ан-шаха:</b> монарх восседает во главе собрания, выслушивая суждения советников, после чего оглашает свою непререкаемую шахскую волю.</li>
+            <li><b>Без участия Шаха:</b> заседания проводятся под председательством Великого Векила. На них вырабатывается согласованная позиция элит, улаживаются внутренние споры ведомств, а готовый проект решения подносится шаху на утверждение.</li>
+          </ul>
+          <p>В зависимости от степени секретности меджлис бывает <i>Меджлис-е Хасс</i> (узкий тайный совет за закрытыми дверями) или <i>Меджлис-е Ала</i> (парадное открытое собрание).</p>
+        `
+      },
+      {
+        id: "vizier",
+        category: "Центральный Диван",
+        name: "Великий Векил",
+        subtitle: "«Опора Государства» и премьер-министр империи",
+        rank: "Второе лицо в империи после Шаха",
+        origin: "Кызылбашская знать",
+        text: `
+          <p><b>Великий Векил</b> — глава правительственного аппарата и первый сановник Дивана. Титул введен на постоянной основе шахом Мохаммедом II.</p>
+          <p>Руководит гигантским бюрократическим аппаратом, сбором налогов, дипломатией, координирует деятельность всех министерств.</p>
+        `
+      },
+      {
+        id: "sepahsalar",
+        category: "Центральный Диван",
+        name: "Сепахсалар и Дворцовые Чины",
+        subtitle: "Меч престола и хранители аудиенций",
+        rank: "Военное командование и служба двора",
+        origin: "Кызылбашские ханы и высшие гулямы",
+        text: `
+          <p><b>Эмир аль-умара</b> — верховный военачальник армии империи (в случае, если шах лично не ведет войско в поход).</p>
+          <p>Главные придворные чины государства:</p>
+          <ul>
+            <li><b>Кушбеги</b> — начальник царской соколиной охоты, доверенное лицо монарха.</li>
+            <li><b>Мир-ахур</b> — хранитель шахских конюшен, ведающий элитными табунами и передвижением конвоев двора.</li>
+            <li><b>Садр</b> — верховный хранитель веры, контролирующий колоссальные богатства вакфных земель, назначающий судей (кадиев) и шейх-уль-исламов.</li>
+          </ul>
+        `
+      }
+    ],
+    elites: [
+      {
+        id: "qizilbash_lords",
+        category: "Кызылбашская Знать",
+        name: "Кызылбашские Ханы",
+        subtitle: "Ханы, Шейхи и Беглербеги земель «Мамалик»",
+        rank: "Потомственные правители с абсолютной властью",
+        origin: "Правящие кызылбашские роды",
+        text: `
+          <p>Кызылбаши правят своими останами на землях <b>«Мамалик»</b> и передают власть в них <b>по наследству от отца к сыну</b>.</p>
+          <p><b>Власть и статус правителя:</b></p>
+          <ul>
+            <li><b>Абсолютная власть:</b> на территории своих земель кызылбашские правители обладают неограниченной властью. Они <b>подчиняются исключительно Шах-ан-шаху</b> и несут ответ тоже только перед ним.</li>
+            <li><b>Налоговая автономия:</b> ханы сами регулируют налоги на своих землях и организуют их сбор по собственному усмотрению.</li>
+            <li><b>Распоряжение шахрестанами:</b> они лично распоряжаются внутренними шахрестанами и назначают всю администрацию.</li>
+          </ul>
+          <div class="duty-box">
+            <div class="duty-title">Титулы кызылбашского правителя</div>
+            <p>Кызылбаш-правитель остана официально является <b>Беглербегом</b>. Однако глава правящего останом племени также неизменно носит титул <b>Хан</b>. Кроме того, каждый хан вступает в орден Сефевийе и обзаводится еще одним сакральным титулом — <b>Шейх</b>.</p>
+          </div>
+        `
+      },
+      {
+        id: "triangle",
+        category: "Баланс Сил",
+        name: "Трёхстороннее Соперничество",
+        subtitle: "Тюрки, Персы и Кавказские Гулямы",
+        rank: "Столпы государственного баланса",
+        origin: "Тюркские кланы, оседлые персы, кавказцы",
+        text: `
+          <p>Внутренняя политика государства держится на жестком противостоянии трех могущественных сил:</p>
+          <ul>
+            <li><b>Кызылбаши</b> — тюркские оседлые племена. Они основали державу, считают войну своей исключительной монополией, с презрением взирают на чиновников-персов и ведут непрестанную борьбу за влияние на трон.</li>
+            <li><b>Таджики (Персы)</b> — коренная элита, «люди пера» (<i>ахль-и калам</i>). В их руках находятся визираты, дипломатия, сбор налогов, медицина и государственные архивы.</li>
+            <li><b>Гулямы</b> — корпус обращенных в ислам кавказцев (грузин, армян, черкесов), созданный для сдерживания строптивых кызылбашей. Они подчиняются лично шаху, занимая посты командующих гвардией (<i>куллар-агаси</i>) и беглербегов шахских земель.</li>
+          </ul>
+          <div class="duty-box">
+            <div class="duty-title">Пояснение</div>
+            <p><b>Таджик</b> — ксенофобное обращение к коренным жителям Персии (луры, курды, бахтиары, белуджи и т.д.). К историческим таджикам они не относятся, однако кызылбашская элита свысока называла всех персов таджиками.</p>
+          </div>
+        `
+      },
+      {
+        id: "harem",
+        category: "Теневая Власть",
+        name: "Гарем и Институт Евнухов",
+        subtitle: "Тайные покои дворца Али-Капу",
+        rank: "Теневой центр принятия решений",
+        origin: "Матери шаха, белые и черные евнухи (хваджа)",
+        text: `
+          <p>Решения государственной важности нередко куются во внутренних покоях дворца, скрытых от взоров непосвященных:</p>
+          <ul>
+            <li><b>Мать шаха (Махд-и Улья / Валиде-кадын)</b> — не всегда происходит из знатного рода; руководит гаремом и является первой женщиной Государства. Возглавляет Общество кызылбашских женщин.</li>
+            <li><b>Хваджа (Белые и черные евнухи)</b> — стражи гарема и привратники шахских покоев. Главный белый евнух (<i>риш-сефид</i>) и хранитель сокровищницы имеют постоянный доступ к шаху, порою обладая большим весом, чем министры Дивана.</li>
+          </ul>
+        `
+      }
+    ],
+    army: [
+      {
+        id: "corps",
+        category: "Армия Державы",
+        name: "Регулярные Корпуса и Ополчение",
+        subtitle: "Куллары, Топчи, Туфангчи и Конница",
+        rank: "Военная мощь империи",
+        origin: "Кавказские воины, персидские стрелки, тюркская конница",
+        text: `
+          <p>Сефевидская армия опирается на сочетание постоянных гвардейских частей и племенных ополчений:</p>
+          <ul>
+            <li><b>Куллары (Гвардия гулямов)</b> — отборная тяжелая конница, получающая высокое жалованье напрямую из личной шахской казны.</li>
+            <li><b>Туфангчи (Мушкетеры)</b> — регулярная пехота из свободных оседлых крестьян, вооруженная фитильными ружьями. Делится на полки по останам.</li>
+            <li><b>Топчи (Артиллерия)</b> — корпус литейщиков и пушкарей, защищающий крепости и решающий исходы полевых сражений.</li>
+            <li><b>Кызылбашская конница</b> — феодальное ополчение тюркских племенных ханов, мобилизуемое по первому шахскому призыву.</li>
+          </ul>
+        `
+      },
+      {
+        id: "lands",
+        category: "Экономика и Земля",
+        name: "Земли «Мамалик» и «Хассэ»",
+        subtitle: "Экономический хребет государства",
+        rank: "Две формы имперского землевладения",
+        origin: "Провинции ханов и коронный домен шаха",
+        text: `
+          <p>Вся земля империи разделена на два принципиальных статуса, определяющих финансовые потоки:</p>
+          <ul>
+            <li><b>Земли «Мамалик» (Государственные)</b> — находятся под полным наследственным управлением кызылбашских ханов и беглербегов (передаются от отца к сыну). Ханы обладают здесь абсолютной властью, сами регулируют налоги, распоряжаются шахрестанами и подчиняются только Шах-ан-шаху.</li>
+            <li><b>Земли «Хассэ» (Коронный домен шаха)</b> — провинции, находящиеся под прямым управлением шаха. Ими управляют визири-гулямы, а 100% податей направляется прямиком в личную казну шаха.</li>
+          </ul>
+        `
+      }
+    ],
+    diwan: [
+      {
+        id: "insha",
+        category: "Канцелярия (Дар аль-Инша)",
+        name: "Мастера Шахского Пера",
+        subtitle: "Мунши аль-Мамалик и хранители тугры",
+        rank: "Высшие секретари и дипломаты",
+        origin: "Персидские ученые мужи (ахль-и калам)",
+        text: `
+          <p>Центральная канцелярия ведет переписку на изысканном персидском языке высокой дипломатической прозы (<i>инша</i>):</p>
+          <ul>
+            <li><b>Мунши аль-Мамалик</b> — главный секретарь империи (государственный канцлер). Составляет судьбоносные указы (фарманы) и послания правителям мира.</li>
+            <li><b>Вакиа-невис (Меджлис-невис)</b> — протоколист личных аудиенций шаха, регистрирующий тайные дебаты Дивана и челобитные подданных.</li>
+            <li><b>Саркатеб</b> — старший писец, стоящий во главе многочисленного штата придворных мирз.</li>
+            <li><b>Тугракеш</b> — мастер шахской монограммы, имеющий исключительное право наносить золотую тугру шаха на государственные свитки.</li>
+          </ul>
+        `
+      },
+      {
+        id: "mostowfi",
+        category: "Финансовое Ведомство",
+        name: "Служба Мостовфи (Казначеи)",
+        subtitle: "Счетчики податей, шелка и дани",
+        rank: "Генеральные аудиторы и ревизоры",
+        origin: "Финансовая бюрократия столицы",
+        text: `
+          <p>Финансовая палата ведет строжайший учет всех золотых и серебряных потоков державы:</p>
+          <ul>
+            <li><b>Мустоуфи аль-Мамалик</b> — генеральный казначей и главный аудитор. Утверждает бюджет армии, сводит книги доходов и расходов всех провинций.</li>
+            <li><b>Мустоуфи-йи Хассэ</b> — казначей личных коронных земель шаха, подчиненный напрямую монарху и евнухам.</li>
+            <li><b>Аваредже-невис</b> — финансовый следователь по делам недоимок и чрезвычайных военных сборов.</li>
+            <li><b>Забит</b> — строгий инспектор-мытарь, взимающий причитающиеся подати в городах и на караванных путях.</li>
+          </ul>
+        `
+      }
+    ],
+    city: [
+      {
+        id: "magistrates",
+        category: "Городской Порядок",
+        name: "Власти Городов и Базаров",
+        subtitle: "Калантар, Даруга, Мухтасиб и Мир-аб",
+        rank: "Городское самоуправление и надзор",
+        origin: "Городская элита, стража, старейшины",
+        text: `
+          <p>Порядок в цветущих городах империи поддерживается слаженной системой городских сановников:</p>
+          <ul>
+            <li><b>Калантар</b> — городской предводитель или градоначальник. Выполняет административные и фискальные функции города.</li>
+            <li><b>Даруга</b> — начальник стражи (полицмейстер), отвечающий за патрули, ночные облавы и подавление бунтов силами стражников (<i>ахдас</i>).</li>
+            <li><b>Мухтасиб</b> — блюститель нравственности и цензор базара. Проверяет честность весов, цены на хлеб, пресекает азартные игры и распитие вина.</li>
+            <li><b>Мир-аб</b> — смотритель подземных каналов (кяризов) и арыков, распределяющий живительную воду по кварталам и садам.</li>
+            <li><b>Кадхуда</b> — староста квартала (махалли), знающий все тайны и семьи на своей улице.</li>
+          </ul>
+        `
+      },
+      {
+        id: "court",
+        category: "Правосудие и Двор",
+        name: "Шариатский Суд и Придворные Чины",
+        subtitle: "Шейх-уль-Ислам, Кадии, Лекари и Звездочеты",
+        rank: "Судебная власть и личная свита",
+        origin: "Богословы-улемы, ученые персы",
+        text: `
+          <p><b>Юстиция и Шариат:</b></p>
+          <ul>
+            <li><b>Садр аль-Мамалик</b> — глава духовной власти. Следит за идеологической чистотой государства.</li>
+            <li><b>Шейх-уль-Ислам</b> — высший шариатский судья провинции, выносящий окончательные религиозно-правовые фетвы.</li>
+            <li><b>Мир-газаб</b> — главный палач, исполнитель судебных и шахских приговоров.</li>
+          </ul>
+          <div class="duty-box">
+            <div class="duty-title">Дворцовые чины персидского происхождения</div>
+            <p><b>Хаким-баши:</b> главный лекарь двора, знаток противоядий и безоаров.<br>
+            <b>Мунаджим-баши:</b> верховный астролог, определяющий благословенные часы для походов и свадеб.<br>
+            <b>Шатер-баши:</b> начальник скороходов, доставляющих срочные монаршие послания.</p>
+          </div>
+        `
+      }
+    ]
+  };
+
+  let currentStateCategory = 'central';
+  let currentItemsList = stateDatabase.central;
+
+  function renderStateNav(items) {
+    const nav = document.getElementById('timelineNav');
+    nav.innerHTML = '';
+    currentItemsList = items;
+
+    if (!items.length) {
+      nav.innerHTML = `<div style="padding:18px; color:var(--muted); font-size:13px; text-align:center;">Ничего не найдено</div>`;
+      document.getElementById('readerFrame').innerHTML = `<div style="padding:40px; color:var(--muted); text-align:center;">По вашему запросу трактатов не обнаружено. Очистите строку поиска.</div>`;
+      return;
+    }
+
+    items.forEach((item, index) => {
+      const btn = document.createElement('button');
+      btn.className = `timeline-btn ${index === 0 ? 'active' : ''}`;
+      btn.type = 'button';
+      btn.onclick = () => selectStateItem(index, btn);
+      btn.innerHTML = `
+        <span class="tb-category">✦ ${item.category}</span>
+        <span class="tb-title">${item.name}</span>
+      `;
+      nav.appendChild(btn);
+    });
+
+    renderStateReader(items[0]);
+  }
+
+  function selectStateItem(index, btnElement) {
+    document.querySelectorAll('.timeline-btn').forEach(b => b.classList.remove('active'));
+    btnElement.classList.add('active');
+    renderStateReader(currentItemsList[index]);
+  }
+
+  function renderStateReader(item) {
+    const reader = document.getElementById('readerFrame');
+    reader.innerHTML = `
+      <header class="reader-header">
+        <span class="reader-badge">Сфера: ${item.category}</span>
+        <h3 class="reader-title">${item.name}</h3>
+        <div class="reader-subtitle">${item.subtitle}</div>
+      </header>
+
+      <div class="reader-stats-grid">
+        <div class="reader-stat-box">
+          <div class="reader-stat-label">Статус и Влияние</div>
+          <div class="reader-stat-val">${item.rank}</div>
+        </div>
+        <div class="reader-stat-box">
+          <div class="reader-stat-label">Сословие и Опора</div>
+          <div class="reader-stat-val">${item.origin}</div>
+        </div>
+      </div>
+
+      <div class="reader-content">
+        ${item.text}
+      </div>
+    `;
+    reader.scrollTop = 0;
+  }
+
+  function switchStateCategory(key) {
+    currentStateCategory = key;
+    document.getElementById('powerSearchInput').value = '';
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+
+    const activeTabMap = {
+      central: 'tabCentral',
+      elites: 'tabElites',
+      army: 'tabArmy',
+      diwan: 'tabDiwan',
+      city: 'tabCity'
+    };
+
+    if (activeTabMap[key]) {
+      document.getElementById(activeTabMap[key]).classList.add('active');
+    }
+
+    renderStateNav(stateDatabase[key]);
+  }
+
+  function searchPowerDatabase(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) {
+      switchStateCategory(currentStateCategory);
+      return;
+    }
+
+    document.querySelectorAll('.tab-btn').forEach(t => t.classList.remove('active'));
+    const allItems = Object.values(stateDatabase).flat();
+    const matched = allItems.filter(it =>
+      (it.name + ' ' + it.subtitle + ' ' + it.category + ' ' + it.rank + ' ' + it.origin + ' ' + it.text)
+        .toLowerCase()
+        .includes(q)
+    );
+    renderStateNav(matched);
+  }
+
+  // Инициализация
+  renderStateNav(stateDatabase.central);
+</script>
+
+</body>
+</html>
