@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Примеры оформления заявок</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА YIPES                  */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.96);
+    --panel-soft: rgba(26, 26, 30, 0.92);
+    --panel-dark: rgba(14, 14, 16, 0.95);
+    --success: #88cb8b;
+    --danger: #d98888;
+  }
+
+  /* Золотая стрелочка для всего сайта */
+  body, *, a, button, input, select, textarea, option, optgroup, .screenshot-frame {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 55%),
+        radial-gradient(circle at 15% 40%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
+        radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
+        linear-gradient(to bottom, #161618, #0d0d0f);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* Эффект «пуньк» (эхо) при клике */
+  .click-echo {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--gold-light);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+      z-index: 999999;
+  }
+
+  @keyframes echoPulse {
+      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ ШАПКА САЙТА */
+  .site-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(18, 18, 20, 0.96);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+  }
+
+  /* ЛОГОТИП В МЕНЮ */
+  .nav-logo {
+      height: 50px;
+      width: auto;
+      margin-right: 15px;
+      transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      padding: 4px 0;
+      position: relative;
+      font-weight: 500;
+  }
+
+  .site-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* ОБЕРТКА СТРАНИЦЫ */
+  .page-wrapper {
+    width: 100%;
+    max-width: 960px;
+    margin: 30px auto 60px;
+    padding: 0 20px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  /* КНОПКА НАЗАД */
+  .back-btn {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+    z-index: 10;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР */
+  .examples-container {
+    width: 100%;
+    margin-top: 50px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 35px 30px;
+    position: relative;
+  }
+
+  .examples-container::before,
+  .examples-container::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .examples-container::before { top: 10px; left: 14px; }
+  .examples-container::after { top: 10px; right: 14px; }
+
+  .examples-header {
+    text-align: center;
+    margin-bottom: 25px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .examples-main-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: normal;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .examples-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+  }
+
+  /* Кнопки переключения вкладок */
+  .examples-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 25px;
+  }
+
+  .tab-btn {
+    background: var(--panel-dark);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  }
+
+  .tab-btn:hover {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+
+  /* Сетка карточек */
+  .examples-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .example-item {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 20px 24px;
+    transition: border-color 0.2s;
+  }
+
+  .example-item.hidden {
+    display: none;
+  }
+
+  .example-badge {
+    display: inline-block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212, 175, 55, 0.35);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+
+  .example-title {
+    margin: 0 0 8px 0;
+    color: var(--gold-light);
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: normal;
+  }
+
+  .example-desc {
+    margin: 0 0 16px 0;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* Контейнер для скриншотов */
+  .screenshots-box {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .screenshot-frame {
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: var(--panel-dark);
+    cursor: zoom-in;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .screenshot-frame:hover {
+    border-color: var(--gold);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  .screenshot-frame img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* Модальное окно для увеличения скриншота по клику */
+  .lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(5px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: zoom-out;
+  }
+
+  .lightbox.open {
+    display: flex;
+  }
+
+  .lightbox img {
+    max-width: 96%;
+    max-height: 92vh;
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 0 40px rgba(212, 175, 55, 0.3);
+  }
+
+  /* Адаптив */
+  @media (max-width: 768px) {
+    .page-wrapper { margin: 20px auto 40px; padding: 0 10px; }
+    .back-btn { top: 0; left: 10px; padding: 6px 10px; font-size: 11px; }
+    .examples-container { margin-top: 40px; padding: 20px 15px; }
+    .examples-main-title { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html" class="active">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- ОБЕРТКА СТРАНИЦЫ (ДЛЯ ЦЕНТРИРОВАНИЯ И КНОПКИ) -->
+    <div class="page-wrapper">
+      
+      <!-- Кнопка возврата -->
+      <a href="requests.html" class="back-btn">← Вернуться назад</a>
+
+      <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+      <div class="examples-container">
+        
+        <div class="examples-header">
+          <h2 class="examples-main-title">Примеры оформления заявок</h2>
+          <p class="examples-subtitle">Нажмите на нужную вкладку или кликните по скриншоту, чтобы приблизить его</p>
+        </div>
+
+        <!-- Переключатель категорий -->
+        <div class="examples-tabs">
+          <button type="button" class="tab-btn active" onclick="filterExamples('all', this)">Все примеры</button>
+          <button type="button" class="tab-btn" onclick="filterExamples('single', this)">1. Одиночная заявка</button>
+          <button type="button" class="tab-btn" onclick="filterExamples('joint', this)">2. Совместная заявка</button>
+          <button type="button" class="tab-btn" onclick="filterExamples('gifts', this)">3. Подарки</button>
+        </div>
+
+        <div class="examples-list">
+
+          <!-- 1. ОДИНОЧНАЯ ЗАЯВКА -->
+          <div class="example-item" data-category="single">
+            <span class="example-badge">Вариант 1</span>
+            <h3 class="example-title">Одиночная заявка</h3>
+            <p class="example-desc">Только ваш персонаж.</p>
+            <div class="screenshots-box">
+              <div class="screenshot-frame" onclick="openLightbox(this.querySelector('img').src)">
+                <img src="https://sun9-82.vkuserphoto.ru/s/v1/ig2/mcEu32APKPSlCs__lIv9Gjjv60cUmqkn3il_UFPxy4uyywLSo3rpgU8iJ7o4VWmbOancubbkLurC7bEcduJ8PGVd.jpg?quality=95&as=32x17,48x25,72x38,108x57,160x84,240x127,360x190,480x253,540x285,640x338,720x380,980x517&from=bu&cs=980x0" alt="Одиночная заявка">
+              </div>
+            </div>
+          </div>
+
+          <!-- 2. СОВМЕСТНАЯ ЗАЯВКА -->
+          <div class="example-item" data-category="joint">
+            <span class="example-badge">Вариант 2</span>
+            <h3 class="example-title">Совместная заявка</h3>
+            <p class="example-desc">Пожертвование или иное дело от семьи.</p>
+            <div class="screenshots-box">
+              <div class="screenshot-frame" onclick="openLightbox(this.querySelector('img').src)">
+                <img src="https://sun9-72.vkuserphoto.ru/s/v1/ig2/YT31qPEGO1WTlQ_HuORr8gRdxm4ZKJVU-wzMBS726yJ4yRy5SU81219Offf3pis5jkVzj2Nswy4RN_JInREE2FUe.jpg?quality=95&as=32x26,48x39,72x59,108x89,160x132,240x197,360x296,480x395,540x444,640x527,720x592,988x813&from=bu&cs=988x0" alt="Совместная заявка">
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. ПОДАРКИ -->
+          <div class="example-item" data-category="gifts">
+            <span class="example-badge">Вариант 3</span>
+            <h3 class="example-title">Подарки</h3>
+            <p class="example-desc">Ваш персонаж и общая сумма трат, и по отдельности персонажи, которым дарите подарки.</p>
+            <div class="screenshots-box">
+              <div class="screenshot-frame" onclick="openLightbox(this.querySelector('img').src)">
+                <img src="https://sun9-65.vkuserphoto.ru/s/v1/ig2/6RbDdk7B7uyoScDnO4I1yQpWPTng8m-cnYrVoPCx-al12tr4pxJp5LfkRFF7HDV-SPMqDyafl6FgcwjUMmmFQ9QS.jpg?quality=95&as=32x20,48x30,72x46,108x69,160x102,240x152,360x229,480x305,540x343,640x406,720x457,989x628&from=bu&cs=989x0" alt="Подарки">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Всплывающее окно увеличения картинки -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+      <img id="lightboxImg" src="" alt="Увеличенный скриншот">
+    </div>
+
+<script>
+  function filterExamples(category, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    document.querySelectorAll('.example-item').forEach(item => {
+      if (category === 'all' || item.dataset.category === category) {
+        item.classList.remove('hidden');
+      } else {
+        item.classList.add('hidden');
+      }
+    });
+  }
+
+  function openLightbox(src) {
+    if (!src || src.includes('ССЫЛКА_НА_СКРИНШОТ')) return;
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightboxImg');
+    img.src = src;
+    lb.classList.add('open');
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+</script>
+
+</body>
+</html>
