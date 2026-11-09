@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Все постройки • Dowlаt-e Safaviyye</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР РАСШИРЕН ДО 1400PX (КНОПКИ ШИРЕ) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .builds-card {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .builds-card::before,
+  .builds-card::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .builds-card::before { top: 10px; left: 14px; }
+  .builds-card::after { top: 10px; right: 14px; }
+
+  .builds-header {
+    text-align: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+  }
+
+  .builds-kicker {
+    margin: 0 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .builds-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: normal;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .builds-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-style: italic;
+  }
+
+  /* ПОИСКОВАЯ СТРОКА */
+  .search-box {
+    margin-bottom: 22px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--text);
+    font-size: 13.5px;
+    outline: none;
+    transition: all 0.2s;
+  }
+  .search-input::placeholder { color: var(--muted); font-style: italic; }
+  .search-input:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  /* ВКЛАДКИ ПЕРЕКЛЮЧЕНИЯ (3 КНОПКИ В ШИРОКОЙ РАМКЕ) */
+  .tabs-container {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 25px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    background: var(--panel-dark);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+
+  .tab-btn:hover:not(.active) {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  /* ГРУППИРОВКА ПО ПЕРСОНАЖАМ */
+  .character-group {
+    margin-bottom: 24px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-soft);
+    overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+  }
+  .character-group:last-child { margin-bottom: 0; }
+
+  /* ИМЯ ПЕРСОНАЖА БЕЗ РОМБИКОВ (ЧИСТЫЙ ЗОЛОТОЙ ТЕКСТ) */
+  .character-group-header {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold-light);
+    padding: 12px 18px;
+    font-size: 13.5px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
+    text-align: center;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .character-content-flex {
+    display: flex;
+    align-items: stretch;
+  }
+
+  /* ФОТО ПЕРСОНАЖА СЛЕВА */
+  .character-avatar-box {
+    width: 140px;
+    min-width: 140px;
+    background: #111113;
+    border-right: 1px solid var(--line);
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .character-avatar {
+    width: 100px;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.7);
+    background: #1a1a1e;
+  }
+
+  .character-avatar-placeholder {
+    width: 100px;
+    height: 120px;
+    border: 1px dashed var(--line);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 24px;
+    background: #161618;
+  }
+
+  /* КОНТЕЙНЕР ТАБЛИЦЫ С ПРОКРУТКОЙ */
+  .table-box-scroll {
+    flex: 1;
+    overflow-x: auto;
+    background: rgba(14, 14, 16, 0.85);
+  }
+
+  .builds-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 11px; /* Уменьшенный шрифт чтобы всё аккуратно помещалось */
+    white-space: nowrap;
+  }
+
+  .builds-table th {
+    background: rgba(212, 175, 55, 0.1);
+    color: var(--gold-light);
+    padding: 8px 10px; /* Уменьшенные отступы в шапке таблиц */
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .builds-table td {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--line-soft);
+    color: var(--text);
+    vertical-align: middle;
+  }
+
+  .builds-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .builds-table tr:hover td {
+    background: rgba(212, 175, 55, 0.05);
+  }
+
+  .loading-state, .empty-state {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-style: italic;
+    font-size: 14px;
+  }
+
+  @media (max-width: 850px) {
+    .character-content-flex {
+      flex-direction: column;
+    }
+    .character-avatar-box {
+      width: 100%;
+      min-width: 100%;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      padding: 12px;
+    }
+    .character-avatar {
+      width: 90px;
+      height: 110px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .builds-card {
+      padding: 20px 16px;
+    }
+    .tabs-container {
+      flex-direction: column;
+      gap: 8px;
+    }
+    .back-nav-container {
+      padding: 0 10px;
+      margin-top: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-header {
+      padding: 12px 10px;
+    }
+    .site-nav {
+      gap: 10px 15px;
+    }
+    .nav-logo {
+      height: 40px;
+      margin-right: 8px;
+    }
+    .site-nav a {
+      font-size: 10px;
+      letter-spacing: 0.6px;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html" class="active">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="building.html" class="back-btn">← Назад к заявке</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР (РАСШИРЕН ДО 1400PX) -->
+    <div class="wrap">
+      <div class="builds-card">
+        
+        <header class="builds-header">
+          <p class="builds-kicker">✦ Məmar-e Mamalik ✦</p>
+          <h1 class="builds-title">Реестр Построек</h1>
+          <p class="builds-subtitle">Имперский учет возводимых зданий, помещений и сооружений Довлата</p>
+        </header>
+
+        <!-- ПОИСКОВАЯ СТРОКА -->
+        <div class="search-box">
+          <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
+        </div>
+
+        <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (В ШИРОКОЙ РАМКЕ) -->
+        <div class="tabs-container">
+          <button type="button" class="tab-btn" id="tabProcess" onclick="switchTab('process')">В процессе строительства</button>
+          <button type="button" class="tab-btn active" id="tabActive" onclick="switchTab('active')">Активные постройки</button>
+          <button type="button" class="tab-btn" id="tabArchive" onclick="switchTab('archive')">Архивные постройки</button>
+        </div>
+
+        <!-- КОНТЕЙНЕР ТАБЛИЦЫ -->
+        <div id="tableContent" class="loading-state">Загрузка данных из имперского реестра...</div>
+
+      </div>
+    </div>
+
+<script>
+  // ССЫЛКА НА ВАШ GOOGLE APPS SCRIPT
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlF49zvDWqEa117mHXB5RT0Z75cj9HUudJTK8gVGjAVfAH89DtHZSMtN7cLfylQ60L9A/exec";
+
+  // СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ (можно дописывать имена и ссылки на фото)
+  const CHARACTER_AVATARS = {
+    "Шах-ан-шах Нариман Сефеви": "", 
+    "Халид Афшар": "",
+    "Сефи Сефеви": ""
+  };
+
+  let sheetsData = {
+    process: [],
+    active: [],
+    archive: []
+  };
+
+  let currentTab = 'active'; // По умолчанию Активные постройки
+
+  function switchTab(tabName) {
+    currentTab = tabName;
+    document.getElementById('tabProcess').classList.toggle('active', tabName === 'process');
+    document.getElementById('tabActive').classList.toggle('active', tabName === 'active');
+    document.getElementById('tabArchive').classList.toggle('active', tabName === 'archive');
+    renderTable();
+  }
+
+  function getCharacterAvatar(name) {
+    const clean = name.trim();
+    if (CHARACTER_AVATARS[clean] && CHARACTER_AVATARS[clean].trim() !== "") {
+      return `<img src="${CHARACTER_AVATARS[clean]}" alt="${escapeHtml(clean)}" class="character-avatar" onerror="this.onerror=null; this.parentNode.innerHTML='<div class=\\'character-avatar-placeholder\\'>👤</div>';">`;
+    }
+    return `<div class="character-avatar-placeholder">👤</div>`;
+  }
+
+  function renderTable() {
+    const container = document.getElementById('tableContent');
+    const searchFilter = document.getElementById('searchInput').value.trim().toLowerCase();
+    const rows = sheetsData[currentTab] || [];
+
+    if (rows.length === 0) {
+      container.innerHTML = `<div class="empty-state">В этом реестре пока нет записей.</div>`;
+      return;
+    }
+
+    let nameIndex = (currentTab === 'archive') ? 1 : 0;
+
+    let grouped = {};
+    rows.forEach(row => {
+      let charName = (row[nameIndex] || "Без имени").trim();
+      if (searchFilter && !charName.toLowerCase().includes(searchFilter)) return;
+      if (!grouped[charName]) grouped[charName] = [];
+      grouped[charName].push(row);
+    });
+
+    if (Object.keys(grouped).length === 0) {
+      container.innerHTML = `<div class="empty-state">Персонажей по вашему запросу не найдено.</div>`;
+      return;
+    }
+
+    let html = ``;
+    for (let charName in grouped) {
+      let avatarHtml = getCharacterAvatar(charName);
+      
+      html += `
+        <div class="character-group">
+          <!-- ИМЯ ПЕРСОНАЖА БЕЗ РОМБИКОВ -->
+          <div class="character-group-header">${escapeHtml(charName)}</div>
+          <div class="character-content-flex">
+            <div class="character-avatar-box">
+              ${avatarHtml}
+            </div>
+            <div class="table-box-scroll">
+              <table class="builds-table">
+                <thead>
+                  <tr>
+      `;
+
+      // УМЕНЬШЕННЫЕ НАЗВАНИЯ КОЛОНОК ЧТОБЫ СТРОКИ НЕ РАСТЯГИВАЛИСЬ
+      if (currentTab === 'process') {
+        html += `<th>Название</th><th>Дата нач.</th><th>Год откр.</th><th>Место</th>`;
+      } else if (currentTab === 'active') {
+        html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Пожертвования</th><th>Взнос</th>`;
+      } else {
+        html += `<th>Дата</th><th>Название</th><th>Место</th><th>Статус</th>`;
+      }
+
+      html += `</tr></thead><tbody>`;
+
+      grouped[charName].forEach(r => {
+        html += `<tr>`;
+        if (currentTab === 'process') {
+          html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td>`;
+        } else if (currentTab === 'active') {
+          html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td><td>${escapeHtml(r[5] || '—')}</td><td>${escapeHtml(r[6] || '—')}</td><td>${escapeHtml(r[7] || '—')}</td>`;
+        } else {
+          html += `<td>${escapeHtml(r[0] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td>`;
+        }
+        html += `</tr>`;
+      });
+
+      html += `</tbody></table></div></div></div>`;
+    }
+
+    container.innerHTML = html;
+  }
+
+  function escapeHtml(text) {
+    return String(text).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+  }
+
+  async function fetchBuildsData() {
+    try {
+      const response = await fetch(SCRIPT_URL);
+      const data = await response.json();
+      if (data && data.sheets) {
+        sheetsData = data.sheets;
+      }
+      renderTable();
+    } catch (err) {
+      console.error("Ошибка загрузки данных из таблицы:", err);
+      // Демо-данные для проверки верстки
+      sheetsData = {
+        process: [
+          ["Сефи Сефеви", "Столовая для бедняков", "Октябрь 1645 года", "Октябрь 1646 года", "Исфахан"],
+          ["Халид Афшар", "Строительство кузни", "Октябрь 1645 года", "Сентябрь 1646 года", "Северный Хорасан"]
+        ],
+        active: [
+          ["Шах-ан-шах Нариман Сефеви", "Лечебница и библиотека для лекарей", "1636", "Казвин", "отличное (2/3)", "Внесен", "5000 (Мейлишах), 5000 (Мави-Лале)", "15000"],
+          ["Шах-ан-шах Нариман Сефеви", "Лечебница и библиотека для лекарей", "1636", "Кум", "отличное (2/3)", "Внесен", "5000 (Мейлишах), 20000 (Мави-Лале)", "—"],
+          ["Халид Афшар", "Строительство поместья", "1640", "Исфахан", "хорошее (3/3)", "Внесен", "—", "5000"]
+        ],
+        archive: [
+          ["01.11.2026", "Халид Афшар", "Строительство склада", "Исфахан", "Завершено"]
+        ]
+      };
+      renderTable();
+    }
+  }
+
+  // Загружаем данные при открытии страницы
+  fetchBuildsData();
+</script>
+
+</body>
+</html>
