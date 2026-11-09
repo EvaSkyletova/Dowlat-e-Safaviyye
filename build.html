@@ -150,14 +150,15 @@
     text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
-  /* КОНТЕЙНЕР ДЛЯ КНОПКИ НАЗАД (ШИРИНА 1250PX) */
+  /* КОНТЕЙНЕР ДЛЯ КНОПОК НАВИГАЦИИ (ШИРИНА 1250PX) */
   .back-nav-container {
     width: 100%;
     max-width: 1250px;
     margin: 25px auto 0 auto;
     padding: 0 20px;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
+    align-items: center;
     box-sizing: border-box;
   }
 
@@ -184,6 +185,32 @@
     background: rgba(212, 175, 55, 0.15);
     color: #fff;
     transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  .forward-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .forward-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(3px);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
   }
 
@@ -306,7 +333,7 @@
     resize: vertical;
   }
 
-  /* ВЫПАДАЮЩИЕ СПИСКИ И КАСТОМНЫЕ СЕЛЕКТЫ (КАК В ПОДСЛУШКЕ) */
+  /* ВЫПАДАЮЩИЕ СПИСКИ И КАСТОМНЫЕ СЕЛЕКТЫ */
   .custom-select-wrap {
     position: relative;
     width: 100%;
@@ -363,7 +390,7 @@
     color: var(--gold-light);
   }
 
-  /* КОМБОБОКСЫ С ПОИСКОМ (ИМЯ И ПОСТРОЙКА) */
+  /* КОМБОБОКСЫ С ПОИСКОМ */
   .combo-wrap {
     position: relative;
     width: 100%;
@@ -560,6 +587,9 @@
     .back-nav-container {
       padding: 0 10px;
       margin-top: 15px;
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
     }
   }
 </style>
@@ -597,9 +627,10 @@
         </nav>
     </header>
 
-    <!-- КНОПКА ВОЗВРАТА -->
+    <!-- КНОПКИ НАВИГАЦИИ (НАЗАД И ВПЕРЕД) -->
     <div class="back-nav-container">
         <a href="bank.html" class="back-btn">← Вернуться назад</a>
+        <a href="architecture.html" class="forward-btn">Все постройки →</a>
     </div>
 
     <!-- ОСНОВНОЙ КОНТЕНТ (ШИРИНА 1250PX КАК В КАЛЬКУЛЯТОРЕ ПОСТОВ) -->
@@ -632,7 +663,7 @@
             
             <div class="combo-wrap" id="buildingCombo">
               <input type="text" id="buildingInput" class="input-text" placeholder="Начните вводить или выберите постройку из списка..." required autocomplete="off">
-              <span class="combo-arrow">▼</span>
+              <div class="combo-arrow">▼</div>
               <div class="combo-menu" id="buildingMenu"></div>
             </div>
 
@@ -1077,7 +1108,7 @@
       resultPanel.innerHTML = `<strong>Шаблон скопирован, но возникла ошибка отправки в таблицу.</strong><br>Дата открытия: <strong>${openDateStr}</strong>`;
     } finally {
       btn.disabled = false;
-      btn.textContent = "Скопировать шаблон и отправить в таблицу";
+      btn.textContent = "Отправить в таблицу";
     }
   }
 
