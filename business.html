@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Торгово-экономическая механика («Бизнес») • Банк</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+    --danger: #d98888;
+    --success: #88cb8b;
+  }
+
+  /* Золотой курсор */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary,
+  .custom-select-box, .custom-select-dropdown, .custom-select-option {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 60%),
+        radial-gradient(circle at 10% 40%, rgba(212, 175, 55, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 90% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 50%),
+        linear-gradient(to bottom, #161618, #0a0b0d);
+    overflow-x: hidden;
+  }
+
+  /* Эффект пульсации-эха («пуньк») при клике */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* ГЛАВНЫЙ КОНТЕЙНЕР */
+  .business-wrapper {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 20px 80px;
+    box-sizing: border-box;
+    position: relative;
+  }
+
+  /* ВЕРХНЯЯ НАВИГАЦИЯ С КНОПКОЙ НАЗАД В БАНК */
+  .top-action-bar {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.12);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    color: #fff;
+    transform: translateX(-3px);
+  }
+
+  /* ГЛАВНАЯ ИМПЕРСКАЯ ПЛАШКА */
+  .imperial-crest-banner {
+    position: relative;
+    text-align: center;
+    padding: 34px 28px;
+    margin-bottom: 28px;
+    background: 
+      radial-gradient(ellipse at center, rgba(212, 175, 55, 0.14) 0%, transparent 70%),
+      linear-gradient(180deg, rgba(22, 22, 26, 0.96) 0%, rgba(14, 14, 16, 0.99) 100%);
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    overflow: hidden;
+  }
+
+  .imperial-crest-banner::before {
+    content: "❖ ── ✦ ── ❖";
+    display: block;
+    color: var(--gold);
+    font-size: 13px;
+    letter-spacing: 6px;
+    margin-bottom: 8px;
+    opacity: 0.85;
+  }
+
+  .imperial-title {
+    margin: 0 0 10px;
+    font-size: clamp(24px, 3.5vw, 32px);
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 3.5px;
+    font-weight: normal;
+    text-shadow: 0 4px 15px rgba(0, 0, 0, 0.9);
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .imperial-subtitle {
+    max-width: 840px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  /* ТРИПТИХ ПЕРЕКЛЮЧАТЕЛЕЙ (БЕЗ ЧЁРНЫХ ПОЛОС) */
+  .biz-mode-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+
+  .biz-tab-btn {
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 15px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
+    outline: none;
+  }
+
+  .biz-tab-btn:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  /* Активная кнопка: чистое благородное золото без темных полос снизу */
+  .biz-tab-btn.active {
+    background: linear-gradient(180deg, #dfbc4c 0%, #caa030 100%) !important;
+    border: 1px solid #fbe8a6 !important;
+    color: #171108 !important;
+    box-shadow: 0 6px 22px rgba(212, 175, 55, 0.35) !important;
+    font-weight: bold;
+  }
+
+  /* СЕКЦИИ КОНТЕНТА */
+  .biz-view-section {
+    display: none;
+    width: 100%;
+    animation: fadeInView 0.35s ease;
+  }
+  .biz-view-section.active { display: block; }
+
+  @keyframes fadeInView {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* СВОРАЧИВАЕМЫЕ КАРТОЧКИ СТАТЕЙ (СВЕРНУТЫЕ ОКНА) */
+  .biz-statute-card {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid rgba(212, 175, 55, 0.55);
+    border-radius: 6px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.55);
+  }
+
+  .biz-statute-card:hover {
+    border-color: var(--gold);
+  }
+
+  .biz-statute-card[open] {
+    border-color: var(--gold);
+    border-left-color: var(--gold-light);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.85);
+  }
+
+  .biz-statute-card summary {
+    padding: 16px 20px;
+    background: rgba(12, 12, 15, 0.7);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    color: var(--gold-light);
+    font-size: 15px;
+    letter-spacing: 1px;
+    user-select: none;
+    outline: none;
+    text-transform: uppercase;
+  }
+
+  .biz-statute-card summary::-webkit-details-marker { display: none; }
+  .biz-statute-card summary::after {
+    content: "+";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    color: var(--gold-light);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    margin-left: 12px;
+    flex-shrink: 0;
+    transition: transform 0.25s;
+  }
+
+  .biz-statute-card[open] summary::after {
+    content: "−";
+    color: #171108;
+    background: var(--gold);
+    border-color: var(--gold-light);
+  }
+
+  .biz-statute-body {
+    padding: 24px 26px;
+    background: var(--panel);
+    font-size: 14px;
+    line-height: 1.75;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .biz-statute-body p { margin: 0 0 14px; text-align: justify; }
+  .biz-statute-body p:last-child { margin-bottom: 0; }
+  .biz-statute-body strong { color: var(--gold-soft); }
+
+  .biz-statute-body h3 {
+    margin: 22px 0 12px;
+    padding: 8px 12px;
+    color: var(--gold-soft);
+    border-left: 2px solid var(--gold);
+    background: rgba(212, 175, 55, 0.08);
+    font-size: 13px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-weight: bold;
+    border-radius: 0 4px 4px 0;
+  }
+  .biz-statute-body h3:first-child { margin-top: 0; }
+
+  .biz-list { margin: 0 0 16px; padding-left: 22px; }
+  .biz-list li { margin-bottom: 8px; color: var(--text); }
+  .biz-list li::marker { color: var(--gold); }
+
+  /* ВЫНОСКИ (NOTE, WARN, SUCC) */
+  .box-note, .box-succ {
+    padding: 14px 18px;
+    margin: 16px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .box-note {
+    border-left: 3px solid var(--gold);
+    background: rgba(212, 175, 55, 0.08);
+    color: #f4df9d;
+    border: 1px dashed var(--gold);
+    border-left: 3px solid var(--gold);
+  }
+
+  .box-succ {
+    border-left: 3px solid var(--success);
+    background: rgba(136, 203, 139, 0.1);
+    color: #cceccc;
+  }
+
+  /* ТАБЛИЦЫ */
+  .table-box {
+    width: 100%;
+    overflow-x: auto;
+    margin: 14px 0 18px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+  }
+
+  .biz-table {
+    width: 100%;
+    min-width: 520px;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  .biz-table th {
+    padding: 12px 14px;
+    background: rgba(212, 175, 55, 0.14);
+    color: var(--gold-light);
+    text-align: left;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--line);
+    font-size: 12.5px;
+    letter-spacing: 0.5px;
+    font-weight: normal;
+  }
+
+  .biz-table td {
+    padding: 11px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    background: rgba(14, 14, 16, 0.6);
+  }
+  .biz-table tr:last-child td { border-bottom: none; }
+  .biz-table tr:hover td { background: rgba(212, 175, 55, 0.05); }
+
+  /* =========================================================
+     РАЗДЕЛ II: ИНТЕРАКТИВНЫЙ КАЛЬКУЛЯТОР
+     РАСТЯНУТ НА ВСЮ ШИРИНУ СТРАНИЦЫ (КАК В 1 И 3 ПУНКТАХ)
+     ========================================================= */
+  .calc-card-container {
+    width: 100%; /* Растянут на всю ширину страницы */
+    background: linear-gradient(150deg, rgba(24, 24, 28, 0.98), rgba(13, 13, 16, 0.99));
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 10px;
+    padding: 34px 32px 38px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.85);
+    box-sizing: border-box;
+  }
+
+  .calc-header {
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+  }
+
+  .calc-kicker {
+    margin: 0 0 4px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .calc-title {
+    margin: 0 0 6px;
+    font-size: 24px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Yipes', Georgia, serif !important;
+    font-weight: normal;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  }
+
+  .calc-desc {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .calc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 24px;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .form-group label {
+    font-size: 11.5px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+
+  .calc-input {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: #fff;
+    font-size: 14.5px;
+    outline: none;
+    transition: all 0.25s ease;
+  }
+  .calc-input:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  /* ВСПЛЫВАЮЩИЙ СЕЛЕКТ (КАК В ПОДСЛУШКЕ) */
+  .custom-select-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .custom-select-box {
+    width: 100%;
+    padding: 11px 14px;
+    background: var(--panel-dark);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 13.5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: all 0.3s;
+  }
+
+  .custom-select-box:hover {
+    border-color: var(--gold-light);
+  }
+
+  .custom-select-dropdown {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    background: #121215;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    z-index: 999;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.95);
+    overflow: hidden;
+  }
+
+  .custom-select-wrap.open .custom-select-dropdown {
+    display: block;
+  }
+
+  .custom-select-option {
+    padding: 11px 14px;
+    font-size: 13.5px;
+    color: var(--text);
+    transition: background 0.2s;
+  }
+
+  .custom-select-option:hover {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-light);
+  }
+
+  /* Панель результатов с полным отображением без обрезаний */
+  .calc-summary-panel {
+    background: rgba(10, 11, 14, 0.9);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    overflow: visible; /* Исключаем обрезание */
+  }
+
+  .calc-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed rgba(212, 175, 55, 0.15);
+  }
+  .calc-row-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .calc-label-text {
+    color: var(--text);
+  }
+  .calc-pct-tag {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-left: 4px;
+  }
+
+  .calc-value-text {
+    font-weight: bold;
+    font-size: 14.5px;
+    color: #fff;
+    white-space: nowrap;
+  }
+
+  /* Блок чистой прибыли - исправлен от обрезания */
+  .calc-total-highlight {
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin-top: 10px;
+    min-height: 54px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4), inset 0 0 15px rgba(212, 175, 55, 0.05);
+  }
+
+  .calc-total-highlight .calc-label-text {
+    color: var(--gold-light);
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    line-height: 1.3;
+  }
+
+  .calc-total-highlight .calc-value-text {
+    color: var(--gold-light);
+    font-size: 19px;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.35);
+    white-space: nowrap;
+    padding-left: 10px;
+  }
+
+  /* =========================================================
+     РАЗДЕЛ III: РЕЕСТР ПРЕДПРИЯТИЙ (СТРОГО 3 В РЯД)
+     ========================================================= */
+  .registry-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Ровно 3 в ряд на десктопе */
+    gap: 20px;
+    width: 100%;
+  }
+
+  .enterprise-card {
+    background: linear-gradient(150deg, rgba(24, 24, 28, 0.98), rgba(14, 14, 16, 0.99));
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 22px 20px;
+    box-shadow: 0 12px 35px rgba(0,0,0,0.7);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.25s, border-color 0.25s;
+    min-width: 0; /* защита от разрыва колонок */
+  }
+
+  .enterprise-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+
+  .enterprise-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .enterprise-title {
+    margin: 0;
+    font-size: 17px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'Yipes', Georgia, serif !important;
+    font-weight: normal;
+  }
+
+  .scale-tag {
+    padding: 3px 8px;
+    border-radius: 3px;
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid var(--gold);
+    color: var(--gold-light);
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  .meta-lines {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .meta-line-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 13px;
+    background: rgba(0, 0, 0, 0.35);
+    padding: 8px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .meta-lbl {
+    color: var(--gold-soft);
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    min-width: 95px;
+  }
+
+  .meta-txt {
+    color: var(--text);
+    text-align: right;
+    word-break: break-word;
+  }
+
+  .deals-vault {
+    background: rgba(10, 11, 14, 0.85);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 12px 14px;
+  }
+
+  .deals-vault-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+    padding-bottom: 6px;
+  }
+
+  .region-tag {
+    color: var(--gold);
+    font-size: 12.5px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .deal-item-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+    padding: 5px 0;
+    border-bottom: 1px dashed rgba(212, 175, 55, 0.1);
+  }
+  .deal-item-row:last-child { border-bottom: none; }
+
+  .deal-gold-amt {
+    color: var(--gold-light);
+    font-weight: bold;
+    text-align: right;
+  }
+
+  .deal-date {
+    font-weight: normal;
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: 4px;
+    display: inline-block;
+  }
+
+  .deal-empty {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    padding: 4px 0;
+  }
+
+  /* ========================================= */
+  /* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТОВ И СМАРТФОНОВ   */
+  /* ========================================= */
+  @media (max-width: 1050px) {
+    .registry-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 800px) {
+    .biz-mode-tabs {
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+    .registry-container {
+      grid-template-columns: 1fr;
+    }
+    .calc-grid {
+      grid-template-columns: 1fr;
+    }
+    .calc-card-container {
+      padding: 24px 18px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 8px 14px; }
+    .nav-logo { height: 38px; margin-right: 6px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.5px; }
+
+    .business-wrapper { padding: 14px 10px 50px; }
+    .top-action-bar { margin-bottom: 14px; }
+    .back-btn { padding: 8px 14px; font-size: 11px; }
+
+    .imperial-crest-banner { padding: 22px 14px; margin-bottom: 20px; }
+    .imperial-title { font-size: 20px; letter-spacing: 2px; }
+    .imperial-subtitle { font-size: 12px; line-height: 1.5; }
+
+    .biz-tab-btn { padding: 12px 10px; font-size: 11.5px; }
+
+    .biz-statute-card summary { padding: 13px 14px; font-size: 13px; }
+    .biz-statute-body { padding: 16px 12px; font-size: 12.5px; }
+
+    /* Калькулятор на телефоне */
+    .calc-card-container { padding: 18px 12px; }
+    .calc-title { font-size: 18px; }
+    .calc-summary-panel { padding: 16px 12px; }
+    
+    .calc-row-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 3px;
+    }
+    .calc-value-text {
+      align-self: flex-end;
+    }
+
+    .calc-total-highlight {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      padding: 14px 12px;
+    }
+    .calc-total-highlight .calc-value-text {
+      align-self: flex-end;
+      font-size: 17px;
+      padding-left: 0;
+    }
+
+    /* Карточки предприятий на телефоне */
+    .enterprise-card { padding: 18px 14px; }
+    .deal-item-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+    .deal-gold-amt {
+      align-self: flex-start;
+    }
+  }
+</style>
+</head>
+
+<body>
+
+    <!-- ЕДИНАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html" class="active">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <div class="business-wrapper">
+
+        <!-- ВЕРХНЯЯ КНОПКА ВОЗВРАТА В БАНК -->
+        <div class="top-action-bar">
+            <a href="bank.html" class="back-btn">← Вернуться назад в Банк</a>
+        </div>
+
+        <!-- ГЛАВНАЯ ВЕЛИЧЕСТВЕННАЯ ПЛАШКА -->
+        <header class="imperial-crest-banner">
+            <h1 class="imperial-title">Торгово-экономическая механика</h1>
+            <p class="imperial-subtitle">
+                Регламент коммерческих сделок Сефевидов, купеческое право, интерактивный счётный диван и открытый реестр действующих производств.
+            </p>
+        </header>
+
+        <!-- ТРИПТИХ ПЕРЕКЛЮЧАТЕЛЕЙ (БЕЗ ЧЁРНЫХ ПОЛОС) -->
+        <div class="biz-mode-tabs">
+            <button type="button" class="biz-tab-btn active" onclick="switchBizSection('rules', this)">
+                <span>📜</span> <span>1. Правила торговли</span>
+            </button>
+            <button type="button" class="biz-tab-btn" onclick="switchBizSection('calc', this)">
+                <span>💰</span> <span>2. Калькулятор сделок</span>
+            </button>
+            <button type="button" class="biz-tab-btn" onclick="switchBizSection('registry', this)">
+                <span>🏛️</span> <span>3. Действующий бизнес</span>
+            </button>
+        </div>
+
+        <!-- =========================================================
+             ВКЛАДКА 1: ПРАВИЛА ТОРГОВОЙ МЕХАНИКИ (СВЕРНУТЫЕ ОКНА)
+             ========================================================= -->
+        <div class="biz-view-section active" id="sec-rules">
+            
+            <details class="biz-statute-card">
+                <summary>1. Общие положения и суть механики</summary>
+                <div class="biz-statute-body">
+                    <p>1.1. Владельцы бизнеса имеют право заключать торговые сделки с NPC-останами или NPC-персонажами.</p>
+                    <p>1.2. Сделки подразделяются на два типа:</p>
+                    <ul class="biz-list">
+                        <li><strong>Единоразовая сделка</strong> — разовая поставка товаров. Полученная прибыль вносится в казну <strong>отдельной графой</strong> и расходуется по мере использования средств. Единоразовые сделки с нпс и игровыми персонажами/племенами/кланами и т.д. нельзя заключать чаще 1 раза в один игровой год (12 месяцев) с теми, с кем уже была заключена сделка.</li>
+                        <li><strong>Постоянная сделка</strong> — сделка на регулярные поставки. Доход от такой сделки <strong>навсегда прибавляется к казне</strong> семьи, племени или владельца, пока сделка не будет официально расторгнута. Спустя один игровой год (12 месяцев) от заключения сделки состоится дайс 50/50 на расторжение сделки. Если дайс на расторжение положительный, то из казны вычитаются 20% от чистой прибыли этой сделки. С игровыми персонажами/племенами/кланами и т.д. минимальный срок сделки — один игровой год (12 месяцев) от заключения сделки. При расторжении сделки из казны вычитаются 20% от чистой прибыли этой сделки.</li>
+                    </ul>
+
+                    <div class="box-note">
+                        <strong>Важно: открытие и размещение бизнеса</strong><br><br>
+                        • Открыть свой бизнес можно с <strong>18 лет</strong>, получив официальное позволение на выкуп земли и строительство на ней производства, торгового помещения или иной необходимой инфраструктуры.<br><br>
+                        • <strong>Покупка земли обязательна для любого бизнеса.</strong> Бизнес не может существовать без приобретённого земельного участка — вне зависимости от его масштаба, вида товара, способа торговли или места производства.<br><br>
+                        • Это правило распространяется в том числе на торговлю товарами, привезёнными из-за границы. Даже если владелец не производит товар самостоятельно, а занимается исключительно перевозкой и перепродажей, он обязан иметь землю для размещения построенных складов, караван-сарая, торгового двора, лавки, конюшен, мастерской или иных помещений.<br><br>
+                        • Привезённые товары должны иметь место для временного хранения, проверки, охраны, сортировки и дальнейшей отправки покупателю. Земля и расположенные на ней помещения считаются материальной основой любого предприятия.<br><br>
+                        • <strong>Без приобретённой земли и оформленного места ведения торговли сделки от имени бизнеса не заключаются.</strong>
+                    </div>
+
+                    <p>1.3. Все бизнесы на старте считаются малыми.</p>
+                    <p>1.4. Лимит сделок с останами Сефевидского государства, а также с любыми другими государствами, ханствами, султанатами, эмиратами, автономиями, племенными союзами или иными владениями, землями и уделами — не более <strong>3</strong>. Сделка считается заключенной, с кем бы на этих территориях вы ни вступили в договор — будь то шахская канцелярия/династия напрямую, правители останов и наместники шахрестанов, купеческие гильдии, главы торговых караванов, чужеземные факторы, ремесленники, лавочники или иные подданные, равно как и любые их посредники. Лимит обновляется согласно пункту 1.2.</p>
+                    
+                    <p><strong>1.5. Право на ведение бизнеса:</strong></p>
+                    <ul class="biz-list">
+                        <li>Бизнес могут вести только <strong>свободные граждане</strong> государства. Рабам прямо запрещено заниматься коммерческой деятельностью.</li>
+                        <li><strong>Сделки через посредника:</strong> раб имеет право вести бизнес исключительно через формального владельца — свободного гражданина. В этом случае из его чистой прибыли дополнительно вычитается <strong>20% в пользу посредника</strong>.</li>
+                    </ul>
+
+                    <div class="box-note">
+                        <strong>1.6. Лимит бизнесов и расширение ассортимента:</strong><br>
+                        • Персонаж может владеть <strong>только 1 бизнесом</strong>.<br>
+                        • Разрешено расширять ассортимент товаров смежной тематикой: конный бизнес — другой скот; маковый — сырьё для медицины, благовония или специи; мебельный — щиты, луки, гробы или каркасы палаток.
+                    </div>
+                </div>
+            </details>
+
+            <details class="biz-statute-card">
+                <summary>2. Порядок заключения сделки</summary>
+                <div class="biz-statute-body">
+                    <p>Сделка проходит в два этапа бросков.</p>
+
+                    <h3>Этап 1. Бросок на заключение сделки — d100</h3>
+                    <ul class="biz-list">
+                        <li><strong>Единоразовая сделка (шанс 50%):</strong> <span style="color:var(--success); font-weight:bold;">1–50 — успех</span> | <span style="color:var(--danger); font-weight:bold;">51–100 — отказ</span>.</li>
+                        <li><strong>Постоянная сделка (шанс 35%):</strong> <span style="color:var(--success); font-weight:bold;">1–35 — успех</span> | <span style="color:var(--danger); font-weight:bold;">36–100 — отказ</span>.</li>
+                    </ul>
+
+                    <h3>Этап 2. Бросок на согласование итоговой суммы S — d10</h3>
+                    <p>Игрок заявляет желаемую сумму <strong>X</strong>. Администрация бросает d10, определяя финальную сумму сделки <strong>S</strong>.</p>
+
+                    <div class="table-box">
+                        <table class="biz-table">
+                            <thead>
+                                <tr><th>d10</th><th>Реакция покупателя</th><th>Итоговая сумма S</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1–2</td><td>NPC сбивает цену</td><td>70% от X</td></tr>
+                                <tr><td>3–4</td><td>NPC торгуется</td><td>80% от X</td></tr>
+                                <tr><td>5–7</td><td>NPC соглашается</td><td>100% от X</td></tr>
+                                <tr><td>8–9</td><td>Покупатель заинтересован</td><td>110% от X</td></tr>
+                                <tr><td>10</td><td>Острая необходимость (только для единоразовых сделок)</td><td>120% от X</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="box-note">
+                        <strong>Сделки с игровыми персонажами и племенами:</strong><br><br>
+                        • Сделки с игровыми персонажами и племенами подразумевают реальное списание аббаси из их казны и перевод средств в казну владельца бизнеса, у которого приобретается товар или услуга.<br><br>
+                        • При <strong>единоразовой сделке</strong> средства списываются из казны покупателя только на один игровой месяц.<br><br>
+                        • При <strong>постоянной сделке</strong> средства списываются из казны покупателя на весь оговорённый сторонами срок действия сделки.
+                    </div>
+                </div>
+            </details>
+
+            <details class="biz-statute-card">
+                <summary>3. Налогообложение и распределение прибыли</summary>
+                <div class="biz-statute-body">
+                    <p>Все отчисления считаются от согласованной суммы сделки <strong>S</strong>:</p>
+                    <ul class="biz-list">
+                        <li><strong>20%</strong> — казна Сефевидов: государственный налог.</li>
+                        <li><strong>20%</strong> — сопутствующие затраты: сырьё, логистика, охрана, содержание.</li>
+                        <li><strong>10%</strong> — казна племени или клана, если персонаж состоит в племени.</li>
+                    </ul>
+
+                    <div class="box-succ">
+                        <strong>Чистая прибыль владельца бизнеса:</strong><br>
+                        • Для члена племени: <strong>50% от S</strong>.<br>
+                        • Для персонажа без племени: <strong>60% от S</strong>.<br>
+                        • Для раба через посредника: от итоговой чистой прибыли удерживается <strong style="color:var(--danger)">−20% посреднику</strong>.
+                    </div>
+                </div>
+            </details>
+
+            <details class="biz-statute-card">
+                <summary>4. Пошаговый алгоритм проведения сделки</summary>
+                <div class="biz-statute-body">
+                    <h3>Шаг 1. Действия игрока</h3>
+                    <ul class="biz-list">
+                        <li>Выбирает тип сделки: единоразовая или постоянная.</li>
+                        <li>Указывает контрагента: NPC-остан или NPC-персонажа.</li>
+                        <li>Указывает желаемую сумму X.</li>
+                    </ul>
+
+                    <h3>Шаг 2. Действия администратора</h3>
+                    <ul class="biz-list">
+                        <li>Совершает бросок d100 на успех заключения сделки.</li>
+                        <li>При успехе совершает бросок d10 и вычисляет итоговую сумму S.</li>
+                        <li>Производит расчёт выплат: государство, затраты, племя и чистая прибыль.</li>
+                        <li>Заносит данные в раздел «Действующий бизнес».</li>
+                        <li>Единоразовую прибыль вносит отдельной строкой в казну.</li>
+                        <li>Постоянную прибыль добавляет к регулярному доходу казны на постоянной основе.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="biz-statute-card">
+                <summary>5. Примеры расчёта сделок</summary>
+                <div class="biz-statute-body">
+                    <h3>Вариант А. Единоразовая сделка — X = 100 000 аббаси</h3>
+                    <ul class="biz-list">
+                        <li>d100 = 27 — успех; d10 = 7 — 100%.</li>
+                        <li>S = 100 000 аббаси.</li>
+                        <li>Государство: 20 000; затраты: 20 000; налог племени: 10 000.</li>
+                        <li>Чистая прибыль: <strong>50 000 аббаси</strong>.</li>
+                        <li>Сумма записывается в казну <em>отдельной разовой графой</em> и списывается по мере трат.</li>
+                    </ul>
+
+                    <h3>Вариант Б. Постоянная сделка — X = 100 000 аббаси</h3>
+                    <ul class="biz-list">
+                        <li>d100 = 14 — успех; d10 = 4 — 80%.</li>
+                        <li>S = 80 000 аббаси.</li>
+                        <li>Государство: 16 000; затраты: 16 000; налог племени: 8 000.</li>
+                        <li>Чистая прибыль: <strong>40 000 аббаси</strong>.</li>
+                        <li>40 000 аббаси <em>навсегда прибавляются к регулярной казне</em> и начисляются каждый игровой период, пока контракт действует.</li>
+                    </ul>
+                </div>
+            </details>
+
+            <details class="biz-statute-card">
+                <summary>6. Масштаб бизнеса, лимиты сделок и попытки заключения</summary>
+                <div class="biz-statute-body">
+                    <p>Количество сделок определяется масштабом бизнеса. Лимит обновляется в начале каждого игрового месяца.</p>
+
+                    <div class="table-box">
+                        <table class="biz-table">
+                            <thead>
+                                <tr><th>Масштаб</th><th>Сделок в месяц</th><th>1-я попытка</th><th>2-я попытка</th><th>3-я попытка</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>Малый</strong></td><td>1</td><td>Несгораемая</td><td>—</td><td>—</td></tr>
+                                <tr><td><strong>Средний</strong></td><td>2</td><td>Несгораемая</td><td>Сгораемая</td><td>—</td></tr>
+                                <tr><td><strong>Крупный</strong></td><td>3</td><td>Несгораемая</td><td>Сгораемая</td><td>Сгораемая</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="box-note">
+                        <strong>Несгораемая сделка:</strong> первая сделка месяца не расходуется при отказе NPC: попытки повторяются до успешного d100.<br><br>
+                        <strong>Сгораемая сделка:</strong> вторая и третья сделки имеют только одну попытку. При неудаче слот восстанавливается в следующем игровом месяце.
+                    </div>
+
+                    <p>• <strong>Малый масштаб:</strong> 1 сделка в месяц; не свыше <strong>30 000 аббаси единоразово и 20 000 на постоянной основе</strong>.</p>
+                    <p>• <strong>Средний масштаб:</strong> до 2 сделок в месяц; не свыше <strong>40 000 аббаси единоразово и 25 000 на постоянной основе</strong>.</p>
+                    <p>• <strong>Крупный масштаб:</strong> до 3 сделок в месяц; не свыше <strong>50 000 аббаси единоразово и 30 000 на постоянной основе</strong>.</p>
+                </div>
+            </details>
+
+            <details class="biz-statute-card">
+                <summary>7. Стимулирование покупателей: система репутации и престижа</summary>
+                <div class="biz-statute-body">
+                    <p>Покупатели — племена или персонажи — получают баллы репутации. <strong>Лимит:</strong> не более двух сделок в игровой месяц на одного покупателя.</p>
+
+                    <div class="table-box">
+                        <table class="biz-table">
+                            <thead>
+                                <tr><th>Баллы</th><th>Постоянные сделки</th><th>Единоразовые сделки</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>+1</strong></td><td>До 10 000</td><td>До 20 000</td></tr>
+                                <tr><td><strong>+2</strong></td><td>10 001–15 000</td><td>20 001–30 000</td></tr>
+                                <tr><td><strong>+3</strong></td><td>15 001–20 000</td><td>30 001–35 000</td></tr>
+                                <tr><td><strong>+4</strong></td><td>20 001–25 000</td><td>35 001–40 000</td></tr>
+                                <tr><td><strong>+5</strong></td><td>25 001–30 000</td><td>40 001–50 000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <ul class="biz-list">
+                        <li><strong>Конный бизнес Туре Каратурлу:</strong> до +5 военной репутации.</li>
+                        <li><strong>Маковый бизнес Малахат Устаджлы:</strong> до +5 репутации в остане / среди народа.</li>
+                        <li><strong>Мебельный бизнес Фарида Фавадари:</strong> до +5 светского престижа.</li>
+                    </ul>
+                </div>
+            </details>
+
+        </div>
+
+        <!-- =========================================================
+             ВКЛАДКА 2: ИНТЕРАКТИВНЫЙ КАЛЬКУЛЯТОР («СЧЁТНЫЙ ДИВАН»)
+             РАСТЯНУТ ПО ШИРИНЕ КАК В 1 И 3 ПУНКТАХ
+             ========================================================= -->
+        <div class="biz-view-section" id="sec-calc">
+            <div class="calc-card-container">
+                <header class="calc-header">
+                    <p class="calc-kicker">✦ Счётный Диван Державы ✦</p>
+                    <h2 class="calc-title">Калькулятор торговой сделки</h2>
+                    <p class="calc-desc">Моментальный расчёт государственной пошлины, производственных издержек и чистой прибыли</p>
+                </header>
+
+                <div class="calc-grid">
+                    <!-- Поле 1: Сумма сделки -->
+                    <div class="form-group">
+                        <label for="dealAmountInput">1. Сумма сделки (S) в аббаси</label>
+                        <input type="number" id="dealAmountInput" class="calc-input" value="40000" min="0" step="1000" oninput="calculateProfit()">
+                    </div>
+
+                    <!-- Поле 2: Кастомный селект статуса (как в подслушке) -->
+                    <div class="form-group">
+                        <label>2. Правовой статус торговца</label>
+                        <div class="custom-select-wrap" id="statusSelectWrap">
+                            <div class="custom-select-box" onclick="toggleCustomSelect('statusSelectWrap')">
+                                <span id="statusSelectVal" data-value="tribe">Состоит в племени (50%)</span>
+                                <span style="font-size:10px; color:var(--gold);">▼</span>
+                            </div>
+                            <div class="custom-select-dropdown">
+                                <div class="custom-select-option" onclick="selectCustomOption('statusSelectWrap', 'tribe', 'Состоит в племени (50%)')">Состоит в племени (50%)</div>
+                                <div class="custom-select-option" onclick="selectCustomOption('statusSelectWrap', 'free', 'Вольный без племени (60%)')">Вольный без племени (60%)</div>
+                                <div class="custom-select-option" onclick="selectCustomOption('statusSelectWrap', 'slave', 'Раб через посредника (−20% от чистой)')">Раб через посредника (−20% от чистой)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Блок расчета без обрезаний -->
+                <div class="calc-summary-panel">
+                    <div class="calc-row-item">
+                        <span class="calc-label-text">Казна Сефевидов (государственный налог): <span class="calc-pct-tag">(20%)</span></span>
+                        <span class="calc-value-text" id="valTax">8 000 аббаси</span>
+                    </div>
+
+                    <div class="calc-row-item">
+                        <span class="calc-label-text">Сопутствующие затраты (логистика, сырьё, охрана): <span class="calc-pct-tag">(20%)</span></span>
+                        <span class="calc-value-text" id="valCosts">8 000 аббаси</span>
+                    </div>
+
+                    <div class="calc-row-item" id="rowTribeTax">
+                        <span class="calc-label-text">Казна племени или клана: <span class="calc-pct-tag">(10%)</span></span>
+                        <span class="calc-value-text" id="valTribe">4 000 аббаси</span>
+                    </div>
+
+                    <div class="calc-row-item" id="rowAgentCommission" style="display:none;">
+                        <span class="calc-label-text" style="color:var(--danger);">Комиссия свободного посредника: <span class="calc-pct-tag">(20% от чистой)</span></span>
+                        <span class="calc-value-text" id="valAgent" style="color:var(--danger);">0 аббаси</span>
+                    </div>
+
+                    <div class="calc-row-item calc-total-highlight">
+                        <span class="calc-label-text">Итоговая чистая прибыль:</span>
+                        <span class="calc-value-text" id="valNetProfit">20 000 аббаси</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =========================================================
+             ВКЛАДКА 3: ДЕЙСТВУЮЩИЙ БИЗНЕС (РЕЕСТР СТРОГО 3 В РЯД)
+             ========================================================= -->
+        <div class="biz-view-section" id="sec-registry">
+            <div class="registry-container">
+
+                <!-- 1. Конный бизнес -->
+                <article class="enterprise-card">
+                    <div>
+                        <div class="enterprise-header">
+                            <h2 class="enterprise-title">1. Конный бизнес</h2>
+                            <span class="scale-tag">Средний</span>
+                        </div>
+                        <div class="meta-lines">
+                            <div class="meta-line-item">
+                                <span class="meta-lbl">Основатель:</span>
+                                <span class="meta-txt">Туре Каратурлу</span>
+                            </div>
+                            <div class="meta-line-item">
+                                <span class="meta-lbl">Принадлежность:</span>
+                                <span class="meta-txt">Клан Каратурлу</span>
+                            </div>
+                            <div class="meta-line-item" style="flex-direction:column; align-items:flex-start; gap:4px;">
+                                <span class="meta-lbl">Товар:</span>
+                                <span class="meta-txt" style="text-align:left;">Боевые и породистые кони, амуниция и шорные изделия</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deals-vault">
+                        <div class="deals-vault-head">
+                            <span>Открытые сделки</span>
+                            <span>3 / 3</span>
+                        </div>
+                        <div class="region-tag">◆ Остан Гилян</div>
+                        <div class="deal-item-row">
+                            <span>Анзуванды</span>
+                            <span class="deal-gold-amt">72.000 аббаси <span class="deal-date">(до Мехра 1025)</span></span>
+                        </div>
+                        <div class="deal-item-row">
+                            <span>Исмаилванды</span>
+                            <span class="deal-gold-amt">108.000 аббаси <span class="deal-date">(до Мехра 1025)</span></span>
+                        </div>
+                        <div class="deal-item-row">
+                            <span>Салуки</span>
+                            <span class="deal-gold-amt">12.000 аббаси <span class="deal-date">(до Абана 1025)</span></span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 2. Маковый бизнес -->
+                <article class="enterprise-card">
+                    <div>
+                        <div class="enterprise-header">
+                            <h2 class="enterprise-title">2. Маковый бизнес</h2>
+                            <span class="scale-tag">Средний</span>
+                        </div>
+                        <div class="meta-lines">
+                            <div class="meta-line-item">
+                                <span class="meta-lbl">Основатель:</span>
+                                <span class="meta-txt">Малахат Устаджлы</span>
+                            </div>
+                            <div class="meta-line-item">
+                                <span class="meta-lbl">Принадлежность:</span>
+                                <span class="meta-txt">Племя Устаджлы</span>
+                            </div>
+                            <div class="meta-line-item" style="flex-direction:column; align-items:flex-start; gap:4px;">
+                                <span class="meta-lbl">Товар:</span>
+                                <span class="meta-txt" style="text-align:left;">Опийный мак-сырец, медицинские и опийные снадобья</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deals-vault">
+                        <div class="deals-vault-head">
+                            <span>Открытые сделки</span>
+                            <span>Всего: 0</span>
+                        </div>
+                        <div class="deal-empty">Активных открытых сделок на данный момент нет.</div>
+                    </div>
+                </article>
+
+                <!-- 3. Мебельный бизнес -->
+                <article class="enterprise-card">
+                    <div>
+                        <div class="enterprise-header">
+                            <h2 class="enterprise-title">3. Мебельный бизнес</h2>
+                            <span class="scale-tag">Малый</span>
+                        </div>
+                        <div class="meta-lines">
+                            <div class="meta-line-item">
+                                <span class="meta-lbl">Основатель:</span>
+                                <span class="meta-txt">Фарид Фавадари</span>
+                            </div>
+                            <div class="meta-line-item">
+                                <span class="meta-lbl">Принадлежность:</span>
+                                <span class="meta-txt">Племя Каджар</span>
+                            </div>
+                            <div class="meta-line-item" style="flex-direction:column; align-items:flex-start; gap:4px;">
+                                <span class="meta-lbl">Товар:</span>
+                                <span class="meta-txt" style="text-align:left;">Мебель, товары военного назначения, инструменты</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deals-vault">
+                        <div class="deals-vault-head">
+                            <span>Открытые сделки</span>
+                            <span>Всего: 1</span>
+                        </div>
+                        <div class="region-tag">◆ Остан Хамадан (2/3)</div>
+                        <div class="deal-item-row">
+                            <span>Сараф</span>
+                            <span class="deal-gold-amt">16.500 аббаси <span class="deal-date">(до Азара 1024)</span></span>
+                        </div>
+                        <div class="deal-item-row">
+                            <span>Даяни</span>
+                            <span class="deal-gold-amt">11.000 аббаси <span class="deal-date">(до Абана 1025)</span></span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+
+    </div>
+
+<script>
+// Эффект «пуньк» при клике
+window.addEventListener('click', (e) => {
+    if (e.target.closest('a') || e.target.closest('button')) return;
+    const echo = document.createElement('div');
+    echo.className = 'click-echo';
+    echo.style.left = `${e.clientX}px`;
+    echo.style.top = `${e.clientY}px`;
+    document.body.appendChild(echo);
+    setTimeout(() => { echo.remove(); }, 550);
+});
+
+// ПЕРЕКЛЮЧЕНИЕ СЕКЦИЙ
+function switchBizSection(secId, btn) {
+  document.querySelectorAll(".biz-tab-btn").forEach(b => b.classList.remove("active"));
+  document.querySelectorAll(".biz-view-section").forEach(s => s.classList.remove("active"));
+
+  btn.classList.add("active");
+  const target = document.getElementById("sec-" + secId);
+  if (target) target.classList.add("active");
+
+  if (secId === 'calc') {
+    calculateProfit();
+  }
+}
+
+// ЛОГИКА ВСПЛЫВАЮЩИХ ОКОН (КАСТОМНЫЙ СЕЛЕКТ КАК В ПОДСЛУШКЕ)
+function toggleCustomSelect(wrapId) {
+  const wrap = document.getElementById(wrapId);
+  const isOpen = wrap.classList.contains('open');
+  document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
+  if (!isOpen) wrap.classList.add('open');
+}
+
+function selectCustomOption(wrapId, val, text) {
+  const wrap = document.getElementById(wrapId);
+  const valSpan = document.getElementById('statusSelectVal');
+  valSpan.textContent = text;
+  valSpan.setAttribute('data-value', val);
+  wrap.classList.remove('open');
+  
+  calculateProfit();
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.custom-select-wrap')) {
+    document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
+  }
+});
+
+// ИНТЕРАКТИВНЫЙ КАЛЬКУЛЯТОР ПРИБЫЛИ
+function calculateProfit() {
+  const amountInput = document.getElementById("dealAmountInput");
+  const S = Math.max(0, Number(amountInput.value) || 0);
+  const status = document.getElementById("statusSelectVal").getAttribute("data-value") || "tribe";
+
+  const govTax = Math.round(S * 0.20);
+  const costs = Math.round(S * 0.20);
+  let tribeTax = 0;
+  let agentComm = 0;
+  let netProfit = 0;
+
+  const rowTribe = document.getElementById("rowTribeTax");
+  const rowAgent = document.getElementById("rowAgentCommission");
+
+  if (status === "tribe") {
+    tribeTax = Math.round(S * 0.10);
+    netProfit = Math.round(S * 0.50);
+    rowTribe.style.display = "flex";
+    rowAgent.style.display = "none";
+  } else if (status === "free") {
+    tribeTax = 0;
+    netProfit = Math.round(S * 0.60);
+    rowTribe.style.display = "none";
+    rowAgent.style.display = "none";
+  } else if (status === "slave") {
+    tribeTax = 0;
+    const baseProfit = Math.round(S * 0.60);
+    agentComm = Math.round(baseProfit * 0.20);
+    netProfit = baseProfit - agentComm;
+    rowTribe.style.display = "none";
+    rowAgent.style.display = "flex";
+  }
+
+  const fmt = (n) => new Intl.NumberFormat('ru-RU').format(n) + " аббаси";
+
+  document.getElementById("valTax").textContent = fmt(govTax);
+  document.getElementById("valCosts").textContent = fmt(costs);
+  document.getElementById("valTribe").textContent = fmt(tribeTax);
+  document.getElementById("valAgent").textContent = fmt(agentComm);
+  document.getElementById("valNetProfit").textContent = fmt(netProfit);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  calculateProfit();
+});
+</script>
+
+</body>
+</html>
