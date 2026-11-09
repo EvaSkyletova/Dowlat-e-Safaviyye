@@ -11,7 +11,7 @@
 
 <style>
   /* ========================================= */
-  /* ПОДКЛЮЧЕНИЕ ШРИФТА YIPES                  */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
   /* ========================================= */
   @font-face {
     font-family: 'Yipes';
@@ -29,17 +29,19 @@
     --muted: #a69e88;
     --line: rgba(212, 175, 55, 0.3);
     --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
     --bg: #161618;
-    --panel: rgba(22, 22, 25, 0.96);
-    --panel-soft: rgba(26, 26, 30, 0.92);
-    --panel-dark: rgba(14, 14, 16, 0.95);
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
     --success: #88cb8b;
     --danger: #d98888;
   }
 
-  /* Золотая стрелочка для всего сайта */
-  body, *, a, button, input, select, textarea, option, optgroup, .combo-menu, .combo-option {
-      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  /* НАШ КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР БЕЗ КОНФЛИКТОВ */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary,
+  .combo-menu, .combo-option {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
   }
 
   *, *::before, *::after {
@@ -57,37 +59,31 @@
     background: var(--bg) !important;
     color: var(--text);
     background-image: 
-        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 55%),
-        radial-gradient(circle at 15% 40%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
-        radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
-        linear-gradient(to bottom, #161618, #0d0d0f);
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
     overflow-x: hidden;
     overflow-y: auto;
   }
 
-  /* Эффект «пуньк» (эхо) при клике */
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
   .click-echo {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      border: 2px solid var(--gold-light);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
-      z-index: 999999;
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
   }
-
   @keyframes echoPulse {
-      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
-      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
   }
 
   /* Фирменный золотой скроллбар */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--gold-dark) transparent;
-  }
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
   ::-webkit-scrollbar { width: 6px; height: 6px; }
   ::-webkit-scrollbar-track { background: var(--bg); }
   ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
@@ -95,80 +91,76 @@
 
   /* ЕДИНАЯ ШАПКА САЙТА */
   .site-header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 12px 20px;
-      border-bottom: 2px solid var(--line);
-      background: rgba(18, 18, 20, 0.96);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
   }
 
   .site-nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 22px;
-      flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
   }
 
   .nav-logo {
-      height: 50px;
-      width: auto;
-      margin-right: 15px;
-      transition: transform 0.3s ease;
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
   }
   .nav-logo:hover { transform: scale(1.1); }
 
   .site-nav a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-      padding: 4px 0;
-      position: relative;
-      font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
   }
 
   .site-nav a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 1px;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--gold);
-      transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
   }
-
   .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
   .site-nav a:hover, .site-nav a.active {
-      color: var(--gold-light);
-      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
-  /* ОБЕРТКА СТРАНИЦЫ */
-  .page-wrapper {
+  /* КОНТЕЙНЕР ДЛЯ КНОПКИ НАЗАД (ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ) */
+  .back-nav-container {
     width: 100%;
-    max-width: 1020px;
-    margin: 30px auto 60px;
+    max-width: 1250px;
+    margin: 25px auto 0 auto;
     padding: 0 20px;
-    position: relative;
+    display: flex;
+    justify-content: flex-start;
     box-sizing: border-box;
   }
 
-  /* КНОПКА НАЗАД */
   .back-btn {
-    position: absolute;
-    top: 0;
-    left: 20px;
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -184,7 +176,6 @@
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     font-weight: bold;
-    z-index: 10;
   }
 
   .back-btn:hover {
@@ -195,18 +186,28 @@
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
   }
 
-  /* ОСНОВНОЙ КОНТЕЙНЕР ФОРМЫ */
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ) */
+  .wrap {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
   .form-card {
     width: 100%;
-    margin-top: 50px;
     background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
     border: 1px solid var(--line);
     border-top: 2px solid var(--gold);
     border-bottom: 2px solid var(--gold);
     border-radius: 12px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(212, 175, 55, 0.05);
-    padding: 35px 30px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
     position: relative;
+    box-sizing: border-box;
   }
 
   .form-card::before,
@@ -231,78 +232,72 @@
     color: var(--gold-light);
     font-size: 26px;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     font-weight: normal;
     font-family: 'Yipes', Georgia, serif !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
   }
 
   .form-subtitle {
     margin: 0;
     color: var(--muted);
-    font-size: 14px;
+    font-size: 13.5px;
     font-style: italic;
   }
 
   .section-box {
     background: var(--panel-soft);
     border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 18px 20px;
+    border-radius: 4px;
+    padding: 18px 22px;
     margin-bottom: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
   }
 
   .section-label {
     display: block;
     color: var(--gold-light);
-    font-size: 14.5px;
+    font-size: 12.5px;
     font-weight: bold;
-    margin-bottom: 12px;
-    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
     text-transform: uppercase;
   }
 
   .input-text {
     width: 100%;
-    padding: 11px 14px;
+    padding: 12px 16px;
     background: var(--panel-dark);
     border: 1px solid var(--line);
     border-radius: 4px;
     color: #fff;
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 14px;
     outline: none;
     transition: 0.3s;
   }
 
-  .input-text:focus {
+  .input-text:focus, .input-textarea:focus {
     border-color: var(--gold-light);
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
   }
 
   .input-textarea {
     width: 100%;
-    height: 80px;
-    padding: 12px 15px;
+    height: 90px;
+    padding: 12px 16px;
     background: var(--panel-dark);
     border: 1px solid var(--line);
     border-radius: 4px;
     color: #fff;
     font-family: inherit;
-    font-size: 13.5px;
+    font-size: 14px;
     resize: vertical;
     outline: none;
     line-height: 1.4;
     transition: 0.3s;
   }
 
-  .input-textarea:focus {
-    border-color: var(--gold-light);
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
-  }
-
-  /* КАСТОМНЫЙ ВЫПАДАЮЩИЙ СПИСОК */
+  /* КАСТОМНЫЙ ВЫПАДАЮЩИЙ СПИСОК (КОМБОБОКС) */
   .combo-wrap {
     position: relative;
     width: 100%;
@@ -314,13 +309,12 @@
 
   .combo-arrow {
     position: absolute;
-    right: 12px;
+    right: 14px;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--gold-soft);
+    color: var(--gold);
     font-size: 11px;
     pointer-events: none;
-    opacity: 0.8;
   }
 
   .combo-menu {
@@ -330,10 +324,10 @@
     right: 0;
     max-height: 250px;
     overflow-y: auto;
-    background: #121215;
+    background: #161618;
     border: 1px solid var(--gold);
     border-radius: 4px;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.95);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
     z-index: 999;
     display: none;
   }
@@ -344,16 +338,16 @@
 
   .combo-option {
     padding: 10px 14px;
-    font-size: 13px;
+    font-size: 13.5px;
     color: var(--text);
     cursor: pointer;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: background 0.15s;
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+    transition: background 0.2s;
   }
 
   .combo-option:hover {
     background: rgba(212, 175, 55, 0.2);
-    color: #fff;
+    color: var(--gold-light);
   }
 
   .combo-empty {
@@ -391,7 +385,7 @@
   /* Сетка категорий */
   .categories-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 10px;
     margin-bottom: 15px;
   }
@@ -404,7 +398,7 @@
     color: var(--text);
     cursor: pointer;
     background: rgba(0, 0, 0, 0.25);
-    padding: 7px 10px;
+    padding: 8px 12px;
     border-radius: 4px;
     border: 1px solid transparent;
     transition: 0.2s;
@@ -423,20 +417,20 @@
 
   /* Поиск персонажа */
   .search-album-box {
-    margin-bottom: 12px;
+    margin-bottom: 14px;
   }
 
   /* Список альбомов */
   .albums-container {
-    max-height: 260px;
+    max-height: 280px;
     overflow-y: auto;
     background: var(--panel-dark);
     border: 1px solid var(--line);
     border-radius: 4px;
-    padding: 12px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 16px;
   }
 
   .clan-block-title {
@@ -446,13 +440,14 @@
     color: var(--gold-soft);
     border-bottom: 1px solid rgba(212, 175, 55, 0.2);
     padding-bottom: 4px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
+    font-weight: bold;
   }
 
   .clan-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-    gap: 6px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
   }
 
   .album-tag {
@@ -462,7 +457,7 @@
     font-size: 13px;
     color: var(--text);
     cursor: pointer;
-    padding: 4px 6px;
+    padding: 5px 8px;
     border-radius: 4px;
     transition: 0.2s;
   }
@@ -480,7 +475,7 @@
   /* Кнопка */
   .copy-btn {
     width: 100%;
-    padding: 15px;
+    padding: 14px;
     background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
     color: #121008;
     border: none;
@@ -489,49 +484,45 @@
     font-size: 13.5px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     margin-top: 10px;
   }
 
   .copy-btn:hover {
     background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
   }
 
   /* Всплывающее уведомление */
   .toast {
     position: fixed;
-    bottom: 24px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background: linear-gradient(90deg, #b89947, #d4af37);
+    background: rgba(136, 203, 139, 0.95);
     color: #121008;
-    padding: 12px 26px;
+    padding: 12px 24px;
     border-radius: 4px;
     font-size: 13.5px;
     font-weight: bold;
-    letter-spacing: 1px;
-    text-transform: uppercase;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.3s;
     z-index: 1000;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
   }
 
   .toast.show { opacity: 1; }
 
   /* Адаптив */
-  @media (max-width: 650px) {
-    .page-wrapper { margin: 20px auto 40px; padding: 0 10px; }
-    .back-btn { top: 0; left: 10px; padding: 6px 10px; font-size: 11px; }
-    .form-card { margin-top: 40px; padding: 20px 15px; }
+  @media (max-width: 768px) {
+    .form-card { padding: 20px 16px; }
     .categories-grid { grid-template-columns: 1fr; }
     .clan-grid { grid-template-columns: 1fr; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
   }
 </style>
 </head>
@@ -568,11 +559,13 @@
         </nav>
     </header>
 
-    <!-- ОБЕРТКА СТРАНИЦЫ -->
-    <div class="page-wrapper">
-      
-      <a href="reputation.html" class="back-btn">← Вернуться назад</a>
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="reputation.html" class="back-btn">← Вернуться назад</a>
+    </div>
 
+    <!-- ОСНОВНОЙ КОНТЕНТ (ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ) -->
+    <div class="wrap">
       <div class="form-card">
         
         <header class="form-header">
@@ -628,13 +621,13 @@
         <div class="section-box">
           <label class="section-label">3. Описание совершенного действия и подтверждение:</label>
           
-          <div style="margin-bottom: 12px;">
-            <span style="font-size: 13px; color: var(--gold-soft); display: block; margin-bottom: 5px;">3.1. Используемые призы, сюжетное событие или дело (краткое описание):</span>
+          <div style="margin-bottom: 14px;">
+            <span style="font-size: 13px; color: var(--gold-soft); display: block; margin-bottom: 6px;">3.1. Используемые призы, сюжетное событие или дело (краткое описание):</span>
             <textarea id="descAction" class="input-textarea" placeholder="Укажите призы, стоимость или опишите событие..."></textarea>
           </div>
 
           <div>
-            <span style="font-size: 13px; color: var(--gold-soft); display: block; margin-bottom: 5px;">3.2. Подтверждение совершенных действий (ссылка/скриншот/текст):</span>
+            <span style="font-size: 13px; color: var(--gold-soft); display: block; margin-bottom: 6px;">3.2. Подтверждение совершенных действий (ссылка/скриншот/текст):</span>
             <textarea id="descProof" class="input-textarea" placeholder="Прикрепите ссылку на пост, подтверждение или оставьте пустым..."></textarea>
           </div>
         </div>
@@ -644,7 +637,7 @@
           <label class="section-label">4. Выберите альбом(ы) персонажей:</label>
           
           <div class="search-album-box">
-            <input type="text" id="albumSearch" class="input-text" placeholder="Начните вводить имя персонажа для поиска..." oninput="filterAlbums()">
+            <input type="text" id="albumSearch" class="input-text" placeholder="Начните вводить имя персонажа для поиска..." oninput="filterAlbums()" autocomplete="off">
           </div>
 
           <div class="albums-container" id="albumsContainer">
@@ -820,7 +813,6 @@
     }
   ];
 
-  // Собираем плоский список всех имен для выпадающих списков 1 и 2
   const allNamesList = [];
   albumGroups.forEach(g => {
     g.items.forEach(it => {
@@ -828,7 +820,6 @@
     });
   });
 
-  // Универсальная функция для создания кастомного выпадающего списка
   function setupSimpleCombo(wrapEl) {
     const input = wrapEl.querySelector(".combo-input");
     const menu = wrapEl.querySelector(".combo-menu");
@@ -856,7 +847,6 @@
     }
 
     input.addEventListener("focus", () => {
-      // Закрываем другие меню
       document.querySelectorAll(".combo-menu.open").forEach(m => {
         if (m !== menu) m.classList.remove("open");
       });
@@ -876,11 +866,9 @@
     });
   }
 
-  // Инициализируем выпадающие списки для п.1 и п.2
   setupSimpleCombo(document.getElementById("applicantComboWrap"));
   setupSimpleCombo(document.getElementById("targetComboWrap"));
 
-  // Отрисовка альбомов для п.4 (как было)
   function renderAlbums() {
     const container = document.getElementById("albumsContainer");
     const query = document.getElementById("albumSearch").value.toLowerCase().trim();
@@ -993,7 +981,6 @@
     setTimeout(() => toast.classList.remove("show"), 2500);
   }
 
-  // Первый запуск
   renderAlbums();
 </script>
 
