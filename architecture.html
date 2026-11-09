@@ -523,7 +523,7 @@
 
         <!-- ПОИСКОВАЯ СТРОКА -->
         <div class="search-box">
-          <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
+          <input type="text" id="searchInput" class="search-input" placeholder="Post по имени персонажа..." oninput="renderTable()" autocomplete="off">
         </div>
 
         <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
@@ -601,55 +601,6 @@
     return (row[0] || "Без имени").trim();
   }
 
-  // Функция для поиска всех чисел во взносах и подсчета их суммы
-  function calculateTotalContribution(rowsForCharacter) {
-    let total = 0;
-    rowsForCharacter.forEach(r => {
-      // Колонка взноса в активных постройках — это r[7] (или r[6])
-      // Проверим все ячейки строки на наличие чисел
-      r.forEach(cell => {
-        if (typeof cell === 'string') {
-          // Ищем числа, которые похожи на суммы (например, 5000, 20000)
-          // Или конкретно извлекаем числа из строки
-          const matches = cell.match(/\d+/g);
-          if (matches) {
-            matches.forEach(numStr => {
-              const num = parseInt(numStr, 10);
-              // Если число достаточно большое, чтобы быть суммой взноса (> 99 или соответствовать взносам)
-              // Либо суммируем все найденные числа в колонке взносов
-            });
-          }
-        }
-      });
-    });
-
-    // Более точный подход для активных построек: колонка r[7] (Взнос) и r[6] (Пожертвования)
-    let sum = 0;
-    rowsForCharacter.forEach(r => {
-      // Проверим колонку взноса (r[7])
-      const vznosText = String(r[7] || '').trim();
-      const vznosMatch = vznosText.match(/\d+/);
-      if (vznosMatch) {
-        sum += parseInt(vznosMatch[0], 10);
-      }
-
-      // Проверим также пожертвования (r[6]), если там указаны суммы в скобках или через запятую
-      const donationsText = String(r[6] || '').trim();
-      const allNumbers = donationsText.match(/\d+/g);
-      if (allNumbers) {
-        // Если это суммы пожертвований, суммируем их
-        allNumbers.forEach(n => {
-          const num = parseInt(n, 10);
-          if (num >= 100) { // фильтруем мелкие цифры вроде номеров постов если они попали
-            sum += num;
-          }
-        });
-      }
-    });
-
-    return sum > 0 ? sum + " (общий итог)" : "—";
-  }
-
   function renderTable() {
     const container = document.getElementById('tableContent');
     const searchFilter = document.getElementById('searchInput').value.trim().toLowerCase();
@@ -679,46 +630,26 @@
     for (let charName in grouped) {
       let avatarHtml = getCharacterAvatar(charName);
       
-      // Если это активные постройки, посчитаем общую сумму взносов для шапки или карточки
+      // Считаем общую сумму взносов для активных построек
       let totalVznosHtml = "";
       if (currentTab === 'active') {
         let totalSum = 0;
         grouped[charName].forEach(r => {
-          // Ищем все числа в колонках платеж(5), пожертвования(6), взнос(7)
-          for (let i = 5; i <= 7; i++) {
-            const val = String(r[i] || '');
-            const nums = val.match(/\d+/g);
-            if (nums) {
-              nums.forEach(n => {
-                const num = parseInt(n, 10);
-                // Считаем только крупные имперские суммы (например от 500, исключая версии 2/3 и т.д.)
-                if (num >= 500 && !val.includes(num + '/3') && !val.includes(num + '/')) {
-                  // но если это конкретно взнос или пожертвование — суммируем
-                }
-              });
-            }
-          }
-
-          // Прямой парсинг колонки взноса r[7]
-          const vznos = parseInt(String(r[7] || '').replace(/\D/g, ''), 10);
-          if (!isNaN(vznos)) totalSum += vznos;
-
-          // Парсинг пожертвований r[6] (может содержать несколько сумм)
-          const donText = String(r[6] || '');
-          const donMatches = donText.match(/\d+/g);
-          if (donMatches) {
-            donMatches.forEach(dm => {
-              const dNum = parseInt(dm, 10);
-              // Если число похоже на сумму денег (> 999)
-              if (dNum >= 1000) {
-                totalSum += dNum;
+          // Колонка "Взнос" в активных — это r[7]. Извлекаем все цифры из ячейки.
+          const vznosCell = String(r[7] || '').trim();
+          const matches = vznosCell.match(/\d+/g);
+          if (matches) {
+            matches.forEach(m => {
+              const val = parseInt(m, 10);
+              if (!isNaN(val)) {
+                totalSum += val;
               }
             });
           }
         });
 
         if (totalSum > 0) {
-          totalVznosHtml = `<div style="font-size: 11px; color: var(--gold-light); margin-top: 4px; font-style: italic;">Общая сумма взносов: ${totalSum.toLocaleString()} монет</div>`;
+          totalVznosHtml = `<div style="font-size: 11px; color: var(--gold-light); margin-top: 4px; font-style: italic; letter-spacing: 1px;">ОБЩАЯ СУММА ВЗНОСОВ: ${totalSum.toLocaleString('ru-RU')} МОНЕТ</div>`;
         }
       }
 
