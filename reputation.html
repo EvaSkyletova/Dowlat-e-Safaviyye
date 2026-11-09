@@ -62,7 +62,7 @@
         radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.04) 0%, transparent 45%),
         linear-gradient(to bottom, #161618, #0d0d0f);
     overflow-x: hidden;
-    /* ИСПРАВЛЕНИЕ: одно колесико прокрутки */
+    /* Одно колесико прокрутки */
     overflow-y: auto;
   }
 
@@ -94,7 +94,7 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-  /* ЕДИНАЯ ШАПКА САЙТА */
+  /* ЕДИНАЯ ШАПКА САЙТА (КАК В БАНКЕ) */
   .site-header {
       display: flex;
       justify-content: center;
@@ -955,7 +955,9 @@
 
   .toast.show { opacity: 1; }
 
-  /* АДАПТИВНОСТЬ ДЛЯ ПЛАНШЕТОВ И СМАРТФОНОВ */
+  /* ========================================= */
+  /* АДАПТАЦИЯ ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ        */
+  /* ========================================= */
   @media (max-width: 1100px) {
     .ladder-track { grid-template-columns: repeat(3, 1fr); }
     .step-spotlight { grid-template-columns: 1fr; }
@@ -967,13 +969,30 @@
     .codex-bottom-grid { grid-template-columns: 1fr; }
   }
 
-  @media (max-width: 650px) {
-    .ladder-track { grid-template-columns: repeat(2, 1fr); }
-    .estates-selector { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 768px) {
+    /* Шапка на телефонах */
+    .site-header {
+      padding: 10px 10px;
+    }
+    .site-nav {
+      gap: 10px 18px; /* Уменьшили отступы */
+    }
+    /* Скрываем логотип на телефонах, чтобы не раздувать шапку */
+    .nav-logo {
+      display: none;
+    }
+    .site-nav a {
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 2px 0;
+    }
+    /* Остальной контент */
     .imperial-container { padding: 20px 12px 50px; }
     .imperial-title { font-size: 22px; letter-spacing: 2px; }
     .ascension-showcase, .estate-deeds-panel, .codex-box { padding: 18px 14px; }
-    .bank-actions-grid { grid-template-columns: repeat(2, 1fr); }
+    
+    /* Кнопки заявок */
+    .bank-actions-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
