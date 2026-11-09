@@ -7,7 +7,7 @@
 <!-- Иконка вкладки -->
 <link rel="icon" type="image/png" href="leo.png">
 
-<title>Заявка на подслушку</title>
+<title>Подслушать незащищённый разговор</title>
 
 <!-- ПОДКЛЮЧАЕМ GSAP И SCROLLTRIGGER -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
@@ -43,7 +43,7 @@
 
   /* Золотая стрелочка для всего сайта */
   body, *, a, button, input, select, textarea, option, optgroup, .combo-menu, .combo-opt, .custom-select-box, .custom-select-dropdown, .custom-select-option {
-      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
   }
 
   *, *::before, *::after {
@@ -61,27 +61,27 @@
     background: var(--bg) !important;
     color: var(--text);
     background-image:
-        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-        linear-gradient(to bottom, #161618, #0b0b0d);
+      radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+      linear-gradient(to bottom, #161618, #0b0b0d);
     overflow-x: hidden;
   }
 
   /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
   .click-echo {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      border: 2px solid var(--gold-light);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
-      z-index: 999999;
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
   }
 
   @keyframes echoPulse {
-      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
-      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
   }
 
   /* Фирменный золотой скроллбар */
@@ -89,101 +89,87 @@
     scrollbar-width: thin;
     scrollbar-color: var(--gold-dark) transparent;
   }
-
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: var(--bg);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--gold-dark);
-    border-radius: 4px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--gold);
-  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
   /* ЕДИНАЯ ШАПКА САЙТА */
   .site-header {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 12px 20px;
-      border-bottom: 2px solid var(--line);
-      background: rgba(18, 18, 20, 0.96);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
   }
 
   .site-nav {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 22px;
-      flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
   }
 
   .nav-logo {
-      height: 50px;
-      width: auto;
-      margin-right: 15px;
-      transition: transform 0.3s ease;
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
   }
-
   .nav-logo:hover {
-      transform: scale(1.1);
+    transform: scale(1.1);
   }
 
   .site-nav a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-      padding: 4px 0;
-      position: relative;
-      font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
   }
 
   .site-nav a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 1px;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--gold);
-      transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
   }
 
   .site-nav a:hover::after, .site-nav a.active::after {
-      width: 100%;
+    width: 100%;
   }
 
   .site-nav a:hover, .site-nav a.active {
-      color: var(--gold-light);
-      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
   /* СЕКЦИИ СТРОГО ПО ФОРМАТУ ЭКРАНА */
   .page-section {
     width: 100%;
-    height: calc(100vh - 85px);
+    /* Идеальная высота для ровной линии внизу */
+    height: calc(100vh - 78px);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    padding: 10px 20px 20px;
+    padding: 10px 20px 30px;
     box-sizing: border-box;
     overflow: hidden;
   }
@@ -193,7 +179,7 @@
     position: absolute;
     bottom: 0;
     height: 100%;
-    max-height: calc(100vh - 85px);
+    max-height: 100%;
     width: auto;
     object-fit: contain;
     object-position: bottom;
@@ -226,7 +212,7 @@
     border-radius: 12px;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
     z-index: 3;
-    margin-top: -15px;
+    margin-top: 0;
     position: relative;
   }
 
@@ -530,7 +516,7 @@
   /* ПОДСКАЗКА ПРОКРУТКИ */
   .scroll-hint {
     position: absolute;
-    bottom: 6px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
     color: var(--gold-light);
@@ -597,7 +583,7 @@
       font-size: 14px;
     }
     .page-section {
-      padding: 10px 10px 20px;
+      padding: 10px 10px 30px;
     }
   }
 </style>
@@ -716,7 +702,7 @@
       </div>
 
       <div class="rule-card">
-        <strong>Сцены в прошлом и флэшбеки:</strong> Подслушивать можно все сцены в прошлом: не только отдельные флэшбеки в темах, но и сцены, начатые в прошлых месяцах, если они не завершены в настоящем времени и не сокрыты. Подслушивать сцены во флэшбеке разрешено даже при наличии в них постов.
+        <strong>Сцены в прошлом и флэшбеки:</strong> Подслушивать можно все сцены в прошлом: не только отдельные флэшбеки в темах, но и сцены, начатые в прошлых месяцах, если они не завершены в настоящем времени и не сокрыты. Подслушивать сцены во флэшбеке разрешено даже при наличии в них постов. Однако нельзя подслушивать дальше 6 месяцев от настоящего времени.
       </div>
 
       <div class="rule-card">
