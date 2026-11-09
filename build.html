@@ -38,7 +38,7 @@
     --danger: #d98888;
   }
 
-  /* НАШ КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ БЕЗ ИСКЛЮЧЕНИЯ */
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ */
   body, *, a, button, input, select, textarea, option, optgroup, details, summary,
   .custom-select-box, .custom-select-dropdown, .custom-select-option,
   .combo-wrap, .combo-menu, .combo-option {
@@ -90,7 +90,7 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-  /* ЕДИНАЯ ШАПКА САЙТА */
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (КАК В КАЗНЕ) */
   .site-header {
     display: flex;
     justify-content: center;
@@ -577,7 +577,7 @@
     display: block;
   }
 
-  /* Уведомление (скрыто по умолчанию) */
+  /* Уведомление */
   .toast {
     position: fixed;
     bottom: 25px;
@@ -607,9 +607,25 @@
     .back-nav-container {
       padding: 0 10px;
       margin-top: 15px;
-      flex-direction: column;
+      flex-direction: row;
       gap: 10px;
-      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-header {
+      padding: 12px 10px;
+    }
+    .site-nav {
+      gap: 10px 15px;
+    }
+    .nav-logo {
+      height: 40px;
+      margin-right: 8px;
+    }
+    .site-nav a {
+      font-size: 10px;
+      letter-spacing: 0.6px;
     }
   }
 </style>
@@ -628,7 +644,7 @@
         });
     </script>
 
-    <!-- ЕДИНАЯ ШАПКА САЙТА -->
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (КАК В КАЗНЕ) -->
     <header class="site-header">
         <nav class="site-nav">
             <img src="logo.png" alt="Логотип" class="nav-logo">
@@ -781,7 +797,7 @@
 <div class="toast" id="toast">Заявка успешно отправлена в имперский реестр!</div>
 
 <script>
-  // Эффект «пуньк» при клике и кастомный курсор
+  // Эффект «пуньк» при клике
   window.addEventListener('click', (e) => {
       const echo = document.createElement('div');
       echo.className = 'click-echo';
