@@ -163,12 +163,13 @@
   /* СЕКЦИИ СТРОГО ПО ФОРМАТУ ЭКРАНА */
   .page-section {
     width: 100%;
-    height: calc(100vh - 85px);
+    /* Высота ровно по размеру экрана МИНУС высота шапки и минус погрешность */
+    height: calc(100vh - 78px);
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
-    padding: 10px 20px 20px;
+    padding: 10px 20px 30px;
     box-sizing: border-box;
     overflow: hidden;
   }
@@ -178,7 +179,7 @@
     position: absolute;
     bottom: 0;
     height: 100%;
-    max-height: calc(100vh - 85px);
+    max-height: 100%;
     width: auto;
     object-fit: contain;
     object-position: bottom;
@@ -209,7 +210,7 @@
     border-radius: 12px;
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
     z-index: 3;
-    margin-top: -15px;
+    margin-top: 0;
     position: relative;
   }
 
@@ -524,7 +525,7 @@
   /* ПОДСКАЗКА ПРОКРУТКИ */
   .scroll-hint {
     position: absolute;
-    bottom: 6px;
+    bottom: 8px;
     left: 50%;
     transform: translateX(-50%);
     color: var(--gold-light);
@@ -591,7 +592,7 @@
       font-size: 14px;
     }
     .page-section {
-      padding: 10px 10px 20px;
+      padding: 10px 10px 30px;
     }
   }
 </style>
