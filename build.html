@@ -2,9 +2,24 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Заявка для строительства • Dowlаt-e Safaviyye</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Заявка для строительства</title>
+
 <style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
   :root {
     --gold-dark: #8c6a08;
     --gold: #d4af37;
@@ -14,135 +29,203 @@
     --muted: #a69e88;
     --line: rgba(212, 175, 55, 0.3);
     --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
     --bg: #161618;
-    --panel: rgba(22, 22, 25, 0.95);
-    --panel-soft: rgba(26, 26, 30, 0.9);
-    --panel-dark: rgba(14, 14, 16, 0.95);
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
     --success: #88cb8b;
     --danger: #d98888;
+  }
+
+  /* НАШ КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ БЕЗ ИСКЛЮЧЕНИЯ */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary,
+  .custom-select-box, .custom-select-dropdown, .custom-select-option,
+  .combo-wrap, .combo-menu, .combo-option {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
   }
 
   *, *::before, *::after {
     box-sizing: border-box;
     -webkit-tap-highlight-color: transparent;
     font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
   }
 
-  body {
+  html, body {
     margin: 0;
     padding: 0;
-    background: var(--bg);
-    color: var(--text);
+    width: 100%;
     min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
     background-image: 
-        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.07) 0%, transparent 60%),
-        linear-gradient(to bottom, #161618, #0f0f11);
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
-  /* Тонкий золотой скроллбар */
-  * {
-      scrollbar-width: thin;
-      scrollbar-color: var(--gold-dark) transparent;
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
   }
-  ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-      background: var(--bg);
-  }
-  ::-webkit-scrollbar-thumb {
-      background: var(--gold-dark);
-      border-radius: 4px;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-      background: var(--gold);
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
   }
 
-  /* ШАПКА САЙТА (ЕДИНАЯ ДЛЯ ВСЕХ СТРАНИЦ) */
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ ШАПКА САЙТА */
   .site-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 18px 20px;
-      border-bottom: 2px solid var(--line);
-      background: rgba(18, 18, 20, 0.96);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
-  }
-
-  .site-logo {
-      font-size: 20px;
-      color: var(--gold-light);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-      margin-bottom: 12px;
-      font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
   }
 
   .site-nav {
-      display: flex;
-      justify-content: center;
-      gap: 22px;
-      flex-wrap: wrap;
-      align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
   }
 
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
   .site-nav a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-      padding: 4px 0;
-      position: relative;
-      font-weight: 500;
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
   }
 
   .site-nav a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 1px;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--gold);
-      transition: width 0.3s ease;
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
   }
-
-  .site-nav a:hover::after, .site-nav a.active::after {
-      width: 100%;
-  }
-
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
   .site-nav a:hover, .site-nav a.active {
-      color: var(--gold-light);
-      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
-  /* ОСНОВНОЙ КОНТЕЙНЕР СТРОИТЕЛЬСТВА */
-  .build-container {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 40px;
+  /* КОНТЕЙНЕР ДЛЯ КНОПКИ НАЗАД (ШИРИНА 1250PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1250px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР СТРОИТЕЛЬСТВА (ШИРИНА 1250PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 20px 20px 60px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .build-card {
+    width: 100%;
     background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
     border: 1px solid var(--line);
     border-top: 2px solid var(--gold);
     border-bottom: 2px solid var(--gold);
-    border-radius: 6px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(212, 175, 55, 0.03);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
   }
+
+  .build-card::before,
+  .build-card::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .build-card::before { top: 10px; left: 14px; }
+  .build-card::after { top: 10px; right: 14px; }
 
   .build-header {
     text-align: center;
     margin-bottom: 30px;
-    padding-bottom: 20px;
     border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
   }
 
   .build-kicker {
@@ -155,80 +238,132 @@
   }
 
   .build-title {
-    margin: 0 0 10px;
+    margin: 0 0 8px;
     color: var(--gold-light);
     font-size: 26px;
-    letter-spacing: 3px;
     text-transform: uppercase;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    letter-spacing: 2px;
     font-weight: normal;
+    font-family: 'Yipes', Georgia, serif !important;
   }
 
   .build-subtitle {
     margin: 0;
     color: var(--muted);
-    font-size: 14px;
+    font-size: 13.5px;
     font-style: italic;
-    line-height: 1.5;
-    letter-spacing: 0.5px;
   }
 
+  /* КАРТОЧКИ ПОЛЕЙ ФОРМЫ */
   .field-card {
     background: var(--panel-soft);
     border: 1px solid var(--line);
-    border-radius: 6px;
-    padding: 18px 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    border-radius: 4px;
+    padding: 18px 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.5);
   }
 
   .field-label {
     display: block;
     color: var(--gold-light);
-    font-size: 13.5px;
+    font-size: 12.5px;
     font-weight: bold;
     margin-bottom: 6px;
-    letter-spacing: 0.8px;
+    letter-spacing: 1px;
     text-transform: uppercase;
   }
 
   .field-hint {
     display: block;
     color: var(--muted);
-    font-size: 12.5px;
+    font-size: 12px;
     margin-top: -2px;
     margin-bottom: 10px;
     font-style: italic;
+    line-height: 1.4;
   }
 
-  .input-text, .select-box, .textarea-box {
+  .input-text, .textarea-box {
     width: 100%;
     background: var(--panel-dark);
     color: var(--text);
     border: 1px solid var(--line);
     border-radius: 4px;
-    padding: 11px 14px;
-    font-size: 13.5px;
+    padding: 12px 16px;
+    font-size: 14px;
     outline: none;
-    transition: all 0.3s;
+    transition: all 0.2s;
   }
 
-  .input-text:focus, .select-box:focus, .textarea-box:focus {
+  .input-text:focus, .textarea-box:focus {
     border-color: var(--gold-light);
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
   }
 
-  .select-box option {
-    background: #161618;
-    color: var(--text);
-  }
-
   .textarea-box {
-    min-height: 80px;
+    min-height: 90px;
     resize: vertical;
   }
 
-  /* Выпадающий список построек */
+  /* ВЫПАДАЮЩИЕ СПИСКИ И КАСТОМНЫЕ СЕЛЕКТЫ (КАК В ПОДСЛУШКЕ) */
+  .custom-select-wrap {
+    position: relative;
+    width: 100%;
+  }
+
+  .custom-select-box {
+    width: 100%;
+    padding: 12px 16px;
+    background: var(--panel-dark);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: all 0.3s;
+  }
+
+  .custom-select-box:hover {
+    border-color: var(--gold-light);
+  }
+
+  .custom-select-dropdown {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(100% + 4px);
+    background: #121215;
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    z-index: 999;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.95);
+    overflow: hidden;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  .custom-select-wrap.open .custom-select-dropdown {
+    display: block;
+  }
+
+  .custom-select-option {
+    padding: 11px 14px;
+    font-size: 13.5px;
+    color: var(--text);
+    transition: background 0.2s;
+  }
+
+  .custom-select-option:hover {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-light);
+  }
+
+  /* КОМБОБОКСЫ С ПОИСКОМ (ИМЯ И ПОСТРОЙКА) */
   .combo-wrap {
     position: relative;
     width: 100%;
@@ -250,13 +385,13 @@
     left: 0;
     right: 0;
     top: calc(100% + 4px);
-    max-height: 240px;
+    max-height: 250px;
     overflow-y: auto;
-    background: #121215;
+    background: #161618;
     border: 1px solid var(--gold);
     border-radius: 4px;
     z-index: 999;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.95);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.9);
   }
 
   .combo-menu.open {
@@ -268,10 +403,11 @@
     font-size: 13.5px;
     color: var(--text);
     cursor: pointer;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.1);
     display: flex;
     justify-content: space-between;
     gap: 10px;
+    transition: background 0.2s;
   }
 
   .combo-option:hover {
@@ -285,13 +421,13 @@
     white-space: nowrap;
   }
 
-  /* Под-блок выбора минаретов */
+  /* ВЫБОР МИНАРЕТОВ */
   .minaret-box {
     display: none;
     margin-top: 12px;
     padding: 12px 14px;
     background: rgba(212, 175, 55, 0.08);
-    border: 1px dashed var(--line);
+    border: 1px dashed var(--gold);
     border-radius: 4px;
   }
 
@@ -299,7 +435,7 @@
     display: block;
   }
 
-  /* Календарь */
+  /* КАЛЕНДАРЬ */
   .cal-tabs {
     display: flex;
     gap: 10px;
@@ -312,7 +448,7 @@
     color: var(--muted);
     border: 1px solid var(--line);
     border-radius: 4px;
-    padding: 9px 12px;
+    padding: 10px 12px;
     font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
@@ -322,7 +458,7 @@
   }
 
   .cal-tab.active {
-    background: var(--gold);
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
     color: #121008;
     border-color: var(--gold-light);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
@@ -330,8 +466,8 @@
 
   .date-grid {
     display: grid;
-    grid-template-columns: 1fr 150px;
-    gap: 12px;
+    grid-template-columns: 1fr 160px;
+    gap: 14px;
   }
 
   .date-preview {
@@ -341,17 +477,17 @@
     font-style: italic;
   }
 
-  /* Кнопки */
+  /* КНОПКИ */
   .btn-group {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 24px;
   }
 
   .submit-btn {
     width: 100%;
-    padding: 14px 22px;
+    padding: 14px;
     background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
     color: #121008;
     border: none;
@@ -359,16 +495,15 @@
     font-size: 13.5px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
   }
 
   .submit-btn:hover:not(:disabled) {
     background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
   }
 
   .submit-btn:disabled {
@@ -379,7 +514,7 @@
   .sheet-link-btn {
     display: block;
     width: 100%;
-    padding: 12px 22px;
+    padding: 12px;
     text-align: center;
     text-decoration: none;
     background: var(--panel-dark);
@@ -397,7 +532,6 @@
     border-color: var(--gold);
     background: rgba(212, 175, 55, 0.15);
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
-    transform: translateY(-2px);
   }
 
   .result-panel {
@@ -408,7 +542,7 @@
     border: 1px solid var(--gold);
     background: rgba(212, 175, 55, 0.12);
     color: var(--gold-light);
-    font-size: 14px;
+    font-size: 13.5px;
     line-height: 1.6;
   }
 
@@ -417,33 +551,43 @@
   }
 
   @media (max-width: 768px) {
-    .build-container {
-      margin: 20px 10px;
-      padding: 25px 15px;
+    .build-card {
+      padding: 20px 16px;
     }
     .date-grid {
       grid-template-columns: 1fr;
     }
-    .site-nav {
-      gap: 12px 16px;
-    }
-    .site-nav a {
-      font-size: 11px;
+    .back-nav-container {
+      padding: 0 10px;
+      margin-top: 15px;
     }
   }
 </style>
 </head>
 <body>
 
-    <!-- ШАПКА САЙТА (ЕДИНАЯ ДЛЯ ВСЕХ СТРАНИЦ) -->
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ ШАПКА САЙТА -->
     <header class="site-header">
-        <div class="site-logo">Dowlаt-e Safaviyye</div>
         <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+
             <a href="index.html">Главная</a>
             <a href="activity.html">Активность</a>
             <a href="ankets.html">Анкеты</a>
             <a href="pravila.html">Правила</a>
-            <a href="bank.html">Банк</a>
+            <a href="bank.html" class="active">Банк</a>
             <a href="reputation.html">Репутация</a>
             <a href="structure.html">Устройство Персии</a>
             <a href="army.html">Армия</a>
@@ -453,127 +597,175 @@
         </nav>
     </header>
 
-<div class="build-container">
-  <div class="build-header">
-    <p class="build-kicker">✦ Məmar-e Mamalik ✦</p>
-    <h1 class="build-title">Заявка для строительства</h1>
-    <p class="build-subtitle">Рандом сроков возведения и отправка в имперский реестр построек</p>
-  </div>
-
-  <form id="buildForm" onsubmit="submitBuildingForm(event)">
-
-    <!-- 1. ИМЯ ПЕРСОНАЖА -->
-    <div class="field-card">
-      <label class="field-label" for="charName">1. Имя вашего персонажа:</label>
-      <input type="text" id="charName" class="input-text" placeholder="Введите имя персонажа..." required autocomplete="off">
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="bank.html" class="back-btn">← Вернуться назад</a>
     </div>
 
-    <!-- 2. НАИМЕНОВАНИЕ ПОСТРОЙКИ -->
-    <div class="field-card">
-      <label class="field-label" for="buildingInput">2. Наименование постройки:</label>
-      <span class="field-hint">Название строго как в банке! Если постройки нет в списке, впишите её название (срок будет выбран случайно от 1 до 12 месяцев).</span>
-      
-      <div class="combo-wrap" id="buildingCombo">
-        <input type="text" id="buildingInput" class="input-text" placeholder="Начните вводить или выберите постройку из списка..." required autocomplete="off">
-        <span class="combo-arrow">▼</span>
-        <div class="combo-menu" id="buildingMenu"></div>
+    <!-- ОСНОВНОЙ КОНТЕНТ (ШИРИНА 1250PX КАК В КАЛЬКУЛЯТОРЕ ПОСТОВ) -->
+    <div class="wrap">
+      <div class="build-card">
+        
+        <header class="build-header">
+          <p class="build-kicker">✦ Məmar-e Mamalik ✦</p>
+          <h1 class="build-title">Заявка для строительства</h1>
+          <p class="build-subtitle">Расчёт случайных сроков возведения зданий и отправка в имперский реестр</p>
+        </header>
+
+        <form id="buildForm" onsubmit="submitBuildingForm(event)">
+
+          <!-- 1. ИМЯ ПЕРСОНАЖА (С ВЫПАДАЮЩИМ СПИСКОМ И ПОИСКОМ) -->
+          <div class="field-card">
+            <label class="field-label" for="charNameInput">1. Имя вашего персонажа:</label>
+            <span class="field-hint">Начните вводить имя для быстрого поиска или выберите из списка придворных.</span>
+            
+            <div class="combo-wrap" id="charCombo">
+              <input type="text" id="charNameInput" class="input-text" placeholder="Введите или выберите имя персонажа..." required autocomplete="off">
+              <div class="combo-menu" id="charMenu"></div>
+            </div>
+          </div>
+
+          <!-- 2. НАИМЕНОВАНИЕ ПОСТРОЙКИ -->
+          <div class="field-card">
+            <label class="field-label" for="buildingInput">2. Наименование постройки:</label>
+            <span class="field-hint">Название строго как в банке! Если постройки нет в списке, впишите её название (срок будет выбран случайно от 1 до 12 месяцев).</span>
+            
+            <div class="combo-wrap" id="buildingCombo">
+              <input type="text" id="buildingInput" class="input-text" placeholder="Начните вводить или выберите постройку из списка..." required autocomplete="off">
+              <span class="combo-arrow">▼</span>
+              <div class="combo-menu" id="buildingMenu"></div>
+            </div>
+
+            <!-- Выбор минаретов для мечети -->
+            <div class="minaret-box" id="minaretBox">
+              <label class="field-label" for="minaretSelect" style="margin-bottom: 6px; font-size: 12px;">Количество минаретов у мечети:</label>
+              <div class="custom-select-wrap" id="minaretSelectWrap">
+                <div class="custom-select-box" onclick="toggleCustomSelect('minaretSelectWrap')">
+                  <span id="minaretSelectVal" data-value="1">1 минарет (срок: 2 года)</span>
+                  <span style="font-size:10px; color:var(--gold);">▼</span>
+                </div>
+                <div class="custom-select-dropdown">
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '1', '1 минарет (срок: 2 года)')">1 минарет (срок: 2 года)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '2', '2 минарета (срок: 3 года)')">2 минарета (срок: 3 года)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '3', '3 минарета (срок: 4 года)')">3 минарета (срок: 4 года)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '4', '4 минарета (срок: 5 лет)')">4 минарета (срок: 5 лет)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '5', '5 минаретов (срок: 6 лет)')">5 минаретов (срок: 6 лет)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '6', '6 минаретов (срок: 7 лет)')">6 минаретов (срок: 7 лет)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '7', '7 минаретов (срок: 8 лет)')">7 минаретов (срок: 8 лет)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '8', '8 минаретов (срок: 9 лет)')">8 минаретов (срок: 9 лет)</div>
+                  <div class="custom-select-option" onclick="selectCustomOption('minaretSelectWrap', '9', '9 и более минаретов (срок: 10 лет)')">9 и более минаретов (срок: 10 лет)</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. ДАТА НАЧАЛА СТРОИТЕЛЬСТВА -->
+          <div class="field-card">
+            <label class="field-label">3. Дата начала строительства (месяц, год):</label>
+            <div class="cal-tabs">
+              <button type="button" class="cal-tab active" id="tabGreg" onclick="setCalMode('greg')">Григорианский календарь</button>
+              <button type="button" class="cal-tab" id="tabIran" onclick="setCalMode('iran')">Иранский календарь</button>
+            </div>
+
+            <!-- Григорианский -->
+            <div class="date-grid" id="gregInputs">
+              <div class="custom-select-wrap" id="monthGregWrap">
+                <div class="custom-select-box" onclick="toggleCustomSelect('monthGregWrap')">
+                  <span id="monthGregVal" data-value="2">Март</span>
+                  <span style="font-size:10px; color:var(--gold);">▼</span>
+                </div>
+                <div class="custom-select-dropdown" id="monthGregDropdown">
+                  <!-- Заполняется JS -->
+                </div>
+              </div>
+              <input type="number" id="yearGreg" class="input-text" value="1645" min="1500" max="1900" oninput="updateDatePreview()">
+            </div>
+
+            <!-- Иранский -->
+            <div class="date-grid" id="iranInputs" style="display: none;">
+              <div class="custom-select-wrap" id="monthIranWrap">
+                <div class="custom-select-box" onclick="toggleCustomSelect('monthIranWrap')">
+                  <span id="monthIranVal" data-value="0">Фарвардин</span>
+                  <span style="font-size:10px; color:var(--gold);">▼</span>
+                </div>
+                <div class="custom-select-dropdown" id="monthIranDropdown">
+                  <!-- Заполняется JS -->
+                </div>
+              </div>
+              <input type="number" id="yearIran" class="input-text" value="1024" min="900" max="1300" oninput="updateDatePreview()">
+            </div>
+
+            <div class="date-preview" id="startPreview"></div>
+          </div>
+
+          <!-- 4. МЕСТОНАХОЖДЕНИЕ -->
+          <div class="field-card">
+            <label class="field-label" for="locationInput">4. Местонахождение постройки:</label>
+            <input type="text" id="locationInput" class="input-text" placeholder="Укажите остан, шахрестан, улицу или дворец/поместье..." required autocomplete="off">
+          </div>
+
+          <!-- 5. ССЫЛКА НА ПОСТ -->
+          <div class="field-card">
+            <label class="field-label" for="postLinkInput">5. Ссылка на пост с началом строительства:</label>
+            <input type="text" id="postLinkInput" class="input-text" placeholder="Вставьте ссылку на пост..." required autocomplete="off">
+          </div>
+
+          <!-- 6. КОММЕНТАРИЙ -->
+          <div class="field-card">
+            <label class="field-label" for="commentInput">6. Комментарий (если необходим):</label>
+            <textarea id="commentInput" class="textarea-box" placeholder="Например, строительство для другого персонажа или уточнения по постройке..."></textarea>
+          </div>
+
+          <div class="btn-group">
+            <button type="submit" class="submit-btn" id="submitBtn">Скопировать шаблон и отправить в таблицу</button>
+            <a href="https://docs.google.com/spreadsheets/d/1C5nF0EyHwIJYAJ0aW-gna-9qbSDx003ECmjy3bIL7iw/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="sheet-link-btn">Смотреть таблицу строительства</a>
+          </div>
+        </form>
+
+        <div class="result-panel" id="resultPanel"></div>
+
       </div>
-
-      <!-- Выбор минаретов для мечети -->
-      <div class="minaret-box" id="minaretBox">
-        <label class="field-label" for="minaretSelect" style="margin-bottom: 6px; font-size: 12.5px;">Количество минаретов у мечети:</label>
-        <select id="minaretSelect" class="select-box">
-          <option value="1">1 минарет (срок: 2 года)</option>
-          <option value="2">2 минарета (срок: 3 года)</option>
-          <option value="3">3 минарета (срок: 4 года)</option>
-          <option value="4">4 минарета (срок: 5 лет)</option>
-          <option value="5">5 минаретов (срок: 6 лет)</option>
-          <option value="6">6 минаретов (срок: 7 лет)</option>
-          <option value="7">7 минаретов (срок: 8 лет)</option>
-          <option value="8">8 минаретов (срок: 9 лет)</option>
-          <option value="9">9 и более минаретов (срок: 10 лет)</option>
-        </select>
-      </div>
     </div>
 
-    <!-- 3. ДАТА НАЧАЛА СТРОИТЕЛЬСТВА -->
-    <div class="field-card">
-      <label class="field-label">3. Дата начала строительства (месяц, год):</label>
-      <div class="cal-tabs">
-        <button type="button" class="cal-tab active" id="tabGreg" onclick="setCalMode('greg')">Григорианский календарь</button>
-        <button type="button" class="cal-tab" id="tabIran" onclick="setCalMode('iran')">Иранский календарь</button>
-      </div>
-
-      <!-- Григорианский -->
-      <div class="date-grid" id="gregInputs">
-        <select id="monthGreg" class="select-box" onchange="updateDatePreview()">
-          <option value="0">Январь</option>
-          <option value="1">Февраль</option>
-          <option value="2" selected>Март</option>
-          <option value="3">Апрель</option>
-          <option value="4">Май</option>
-          <option value="5">Июнь</option>
-          <option value="6">Июль</option>
-          <option value="7">Август</option>
-          <option value="8">Сентябрь</option>
-          <option value="9">Октябрь</option>
-          <option value="10">Ноябрь</option>
-          <option value="11">Декабрь</option>
-        </select>
-        <input type="number" id="yearGreg" class="input-text" value="1645" min="1500" max="1900" oninput="updateDatePreview()">
-      </div>
-
-      <!-- Иранский -->
-      <div class="date-grid" id="iranInputs" style="display: none;">
-        <select id="monthIran" class="select-box" onchange="updateDatePreview()">
-          <option value="0" selected>Фарвардин</option>
-          <option value="1">Ордибехешт</option>
-          <option value="2">Хордад</option>
-          <option value="3">Тир</option>
-          <option value="4">Мордад</option>
-          <option value="5">Шахривар</option>
-          <option value="6">Мехр</option>
-          <option value="7">Абан</option>
-          <option value="8">Азар</option>
-          <option value="9">Дей</option>
-          <option value="10">Бахман</option>
-          <option value="11">Эсфанд</option>
-        </select>
-        <input type="number" id="yearIran" class="input-text" value="1024" min="900" max="1300" oninput="updateDatePreview()">
-      </div>
-
-      <div class="date-preview" id="startPreview"></div>
-    </div>
-
-    <!-- 4. МЕСТОНАХОЖДЕНИЕ -->
-    <div class="field-card">
-      <label class="field-label" for="locationInput">4. Местонахождение постройки:</label>
-      <input type="text" id="locationInput" class="input-text" placeholder="Укажите остан, шахрестан, улицу или дворец/поместье..." required autocomplete="off">
-    </div>
-
-    <!-- 5. ССЫЛКА НА ПОСТ -->
-    <div class="field-card">
-      <label class="field-label" for="postLinkInput">5. Ссылка на пост с началом строительства:</label>
-      <input type="text" id="postLinkInput" class="input-text" placeholder="Вставьте ссылку на пост..." required autocomplete="off">
-    </div>
-
-    <!-- 6. КОММЕНТАРИЙ -->
-    <div class="field-card">
-      <label class="field-label" for="commentInput">6. Комментарий (если необходим):</label>
-      <textarea id="commentInput" class="textarea-box" placeholder="Например, строительство для другого персонажа или уточнения по постройке..."></textarea>
-    </div>
-
-    <div class="btn-group">
-      <button type="submit" class="submit-btn" id="submitBtn">Скопировать шаблон и отправить в таблицу</button>
-      <a href="https://docs.google.com/spreadsheets/d/1C5nF0EyHwIJYAJ0aW-gna-9qbSDx003ECmjy3bIL7iw/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer" class="sheet-link-btn">Смотреть таблицу строительства</a>
-    </div>
-  </form>
-
-  <div class="result-panel" id="resultPanel"></div>
-</div>
+<div class="toast" id="toast">Скопировано в буфер обмена!</div>
 
 <script>
+  // Эффект «пуньк» при клике и кастомный курсор
+  window.addEventListener('click', (e) => {
+      const echo = document.createElement('div');
+      echo.className = 'click-echo';
+      echo.style.left = `${e.clientX}px`;
+      echo.style.top = `${e.clientY}px`;
+      document.body.appendChild(echo);
+      setTimeout(() => { echo.remove(); }, 550);
+  });
+
+  // Внедрение кастомного золотого курсора везде
+  const customCursorCSS = document.createElement('style');
+  customCursorCSS.innerHTML = `
+    body, *, a, button, input, select, textarea, option, optgroup, details, summary,
+    .custom-select-box, .custom-select-dropdown, .custom-select-option,
+    .combo-wrap, .combo-menu, .combo-option {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+    }
+  `;
+  document.head.appendChild(customCursorCSS);
+
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlF49zvDWqEa117mHXB5RT0Z75cj9HUudJTK8gVGjAVfAH89DtHZSMtN7cLfylQ60L9A/exec";
+
+  const CHARACTER_NAMES = [
+    "Нариман", "Сефи", "Эльдениз", "Солейман Амин", "Саид Джаханфар", "Хамза Шахмир", "Рамазан", "Тахмасп", "Царсе", "Рухангиз", 
+    "Зулейка аль-Саламат", "Хайзуран", "Танзиля", "Хафсанур", "Нурхаят", "Хюр‑ан‑Ниса", "Кетеван", "Султанум", "Алия", "Амаль", 
+    "Хаснахан", "Шади", "Марджана", "Бахадур", "Савалан", "Фахаад", "Теймур‑Амин", "Альтан", "Малахат", "Майсарат", 
+    "Мехруниса", "Инджи", "Аббас", "Алекбер", "Орхан", "Мохаммед", "Амрулла", "Сафие", "Салтанат", "Аяна", 
+    "Фарангис", "Рукие", "Мави‑Лале", "Дашдемир", "Джаваншир", "Джахангир", "Джандемир", "Умай", "Сениепервер", "Карахан", 
+    "Ханин", "Рузи", "Сейфулла", "Фарид", "Мейлишах", "Гохар", "Инайат", "Товусур", "Хусейн", "Арслан", 
+    "Исмаил", "Алаэддин", "Ибрагим", "Рустем", "Камиль", "Симин", "Нур‑Джахан", "Джухейна", "Томирис", "Бадрия", 
+    "Селин", "Боран", "Халид", "Фатих", "Макпал", "Джессамин", "Мехвеш", "Бахарназ", "Гаресах", "Саади", 
+    "Мансур", "Бахтияр", "Алан", "Сайе", "Джавидан", "Асиль‑Муна", "Нуширеван", "Эфсун", "Джафар", "Алиаскар", 
+    "Шахрияр", "Сайна", "Мах‑и‑Мелек", "Адила", "Махзарин", "Фереште", "Туре", "Усман‑ад‑Дин", "Башар Аран", "Джахан Зейнеп", 
+    "Бутадже", "Элахех Хити", "Ибрисам", "Ситаре", "Арья Боранай", "Мадиян"
+  ];
 
   const BUILDINGS = [
     { name: "Строительство охотничьего домика", label: "от 2 до 3 лет", minM: 24, maxM: 36 },
@@ -624,13 +816,17 @@
     return `${GREG_MONTHS[gMonth]} ${gYear} года (${IRAN_MONTHS[iMonth]} ${iYear} года)`;
   }
 
+  function getSelectedMonth(wrapId) {
+    return parseInt(document.getElementById(wrapId).querySelector('span').getAttribute('data-value'), 10) || 0;
+  }
+
   function getCurrentStartAbsMonths() {
     if (calMode === 'greg') {
-      const m = parseInt(document.getElementById('monthGreg').value, 10);
+      const m = getSelectedMonth('monthGregWrap');
       const y = parseInt(document.getElementById('yearGreg').value, 10) || 1645;
       return gregToAbsMonths(y, m);
     } else {
-      const m = parseInt(document.getElementById('monthIran').value, 10);
+      const m = getSelectedMonth('monthIranWrap');
       const y = parseInt(document.getElementById('yearIran').value, 10) || 1024;
       return iranToAbsMonths(y, m);
     }
@@ -650,11 +846,20 @@
     const iYear = Math.floor(iranTotal / 12);
     const iMonth = ((iranTotal % 12) + 12) % 12;
 
-    document.getElementById('monthGreg').value = gMonth;
+    setSelectedMonthUI('monthGregWrap', gMonth, GREG_MONTHS[gMonth]);
     document.getElementById('yearGreg').value = gYear;
-    document.getElementById('monthIran').value = iMonth;
+
+    setSelectedMonthUI('monthIranWrap', iMonth, IRAN_MONTHS[iMonth]);
     document.getElementById('yearIran').value = iYear;
+
     updateDatePreview();
+  }
+
+  function setSelectedMonthUI(wrapId, val, text) {
+    const wrap = document.getElementById(wrapId);
+    const span = wrap.querySelector('span');
+    span.textContent = text;
+    span.setAttribute('data-value', val);
   }
 
   function updateDatePreview() {
@@ -662,6 +867,99 @@
     document.getElementById('startPreview').textContent = "Будет записано как: " + formatDualDateFromAbs(abs);
   }
 
+  // ЗАПОЛНЕНИЕ ВЫПАДАЮЩИХ СПИСКОВ МЕСЯЦЕВ КАСТОМНЫМИ ОКНАМИ
+  function initCustomMonthDropdowns() {
+    const gregDropdown = document.getElementById('monthGregDropdown');
+    gregDropdown.innerHTML = '';
+    GREG_MONTHS.forEach((name, idx) => {
+      const opt = document.createElement('div');
+      opt.className = 'custom-select-option';
+      opt.textContent = name;
+      opt.onclick = () => {
+        setSelectedMonthUI('monthGregWrap', idx, name);
+        document.getElementById('monthGregWrap').classList.remove('open');
+        updateDatePreview();
+      };
+      gregDropdown.appendChild(opt);
+    });
+
+    const iranDropdown = document.getElementById('monthIranDropdown');
+    iranDropdown.innerHTML = '';
+    IRAN_MONTHS.forEach((name, idx) => {
+      const opt = document.createElement('div');
+      opt.className = 'custom-select-option';
+      opt.textContent = name;
+      opt.onclick = () => {
+        setSelectedMonthUI('monthIranWrap', idx, name);
+        document.getElementById('monthIranWrap').classList.remove('open');
+        updateDatePreview();
+      };
+      iranDropdown.appendChild(opt);
+    });
+  }
+
+  // ЛОГИКА КАСТОМНЫХ СЕЛЕКТОВ
+  function toggleCustomSelect(wrapId) {
+    const wrap = document.getElementById(wrapId);
+    const isOpen = wrap.classList.contains('open');
+    document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
+    if (!isOpen) wrap.classList.add('open');
+  }
+
+  function selectCustomOption(wrapId, val, text) {
+    const wrap = document.getElementById(wrapId);
+    const span = wrap.querySelector('span');
+    span.textContent = text;
+    span.setAttribute('data-value', val);
+    wrap.classList.remove('open');
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.custom-select-wrap')) {
+      document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
+    }
+    if (!document.getElementById('charCombo').contains(e.target)) {
+      document.getElementById('charMenu').classList.remove('open');
+    }
+    if (!document.getElementById('buildingCombo').contains(e.target)) {
+      document.getElementById('buildingMenu').classList.remove('open');
+    }
+  });
+
+  // 1. ЛОГИКА ВЫПАДАЮЩЕГО СПИСКА ИМЕН С ПОИСКОМ
+  const charNameInput = document.getElementById('charNameInput');
+  const charMenu = document.getElementById('charMenu');
+
+  function renderCharMenu(filter = "") {
+    const q = filter.trim().toLowerCase();
+    charMenu.innerHTML = "";
+    const filtered = CHARACTER_NAMES.filter(name => !q || name.toLowerCase().includes(q));
+
+    if (filtered.length === 0) {
+      const customDiv = document.createElement("div");
+      customDiv.className = "combo-option";
+      customDiv.innerHTML = `<span>Имя: «${filter}»</span><span class="combo-option-term">своё имя</span>`;
+      customDiv.onclick = () => { charMenu.classList.remove("open"); };
+      charMenu.appendChild(customDiv);
+      return;
+    }
+
+    filtered.forEach(name => {
+      const opt = document.createElement("div");
+      opt.className = "combo-option";
+      opt.innerHTML = `<span>${name}</span>`;
+      opt.onclick = () => {
+        charNameInput.value = name;
+        charMenu.classList.remove("open");
+      };
+      charMenu.appendChild(opt);
+    });
+  }
+
+  charNameInput.addEventListener("focus", () => { renderCharMenu(charNameInput.value); charMenu.classList.add("open"); });
+  charNameInput.addEventListener("input", () => { renderCharMenu(charNameInput.value); charMenu.classList.add("open"); });
+
+  // 2. ЛОГИКА ВЫПАДАЮЩЕГО СПИСКА ПОСТРОЕК
   const buildingInput = document.getElementById('buildingInput');
   const buildingMenu = document.getElementById('buildingMenu');
   const minaretBox = document.getElementById('minaretBox');
@@ -704,14 +1002,10 @@
   buildingInput.addEventListener("focus", () => { renderBuildingMenu(buildingInput.value); buildingMenu.classList.add("open"); });
   buildingInput.addEventListener("input", () => { renderBuildingMenu(buildingInput.value); buildingMenu.classList.add("open"); checkMosqueField(buildingInput.value); });
 
-  document.addEventListener("click", (e) => {
-    if (!document.getElementById("buildingCombo").contains(e.target)) { buildingMenu.classList.remove("open"); }
-  });
-
   function rollDurationMonths(buildingName) {
     const clean = buildingName.trim().toLowerCase();
     if (clean.includes("мечет")) {
-      const minarets = parseInt(document.getElementById("minaretSelect").value, 10) || 1;
+      const minarets = parseInt(document.getElementById('minaretSelectVal').getAttribute('data-value'), 10) || 1;
       const years = minarets + 1;
       return { months: years * 12, text: `${years} г. (${minarets} минар.)` };
     }
@@ -737,7 +1031,7 @@
 
   async function submitBuildingForm(e) {
     e.preventDefault();
-    const charName = document.getElementById("charName").value.trim();
+    const charName = document.getElementById("charNameInput").value.trim();
     let buildingName = document.getElementById("buildingInput").value.trim();
     const locationVal = document.getElementById("locationInput").value.trim();
     const postLink = document.getElementById("postLinkInput").value.trim();
@@ -746,7 +1040,7 @@
     if (!charName || !buildingName || !locationVal || !postLink) return;
 
     if (buildingName.toLowerCase().includes("мечет")) {
-      const minarets = parseInt(document.getElementById("minaretSelect").value, 10) || 1;
+      const minarets = parseInt(document.getElementById('minaretSelectVal').getAttribute('data-value'), 10) || 1;
       if (minarets > 1 && buildingName === "Строительство мечети с 1 минаретом") {
         buildingName = `Строительство мечети (${minarets} минарета/ов)`;
       }
@@ -787,6 +1081,7 @@
     }
   }
 
+  initCustomMonthDropdowns();
   updateDatePreview();
 </script>
 
