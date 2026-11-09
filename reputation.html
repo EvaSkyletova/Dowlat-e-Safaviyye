@@ -1012,15 +1012,16 @@
 
     <div class="imperial-container">
 
-        <!-- КНОПКИ ДЕЙСТВИЙ: В ЕДИНОМ СТИЛЕ С КНОПКАМИ БАНКА -->
+        <!-- КНОПКИ ДЕЙСТВИЙ: ВЕДУТ НА СТРАНИЦЫ -->
         <div class="bank-actions-grid">
-            <!-- Тип button, чтобы форма никуда не отправлялась -->
-            <button type="button" class="bank-action-btn" onclick="copyTemplate('request')">
+            <!-- Ссылка на страницу Заявки -->
+            <a href="requests.html" class="bank-action-btn">
                 Заявка для репутации
-            </button>
-            <button type="button" class="bank-action-btn" onclick="copyTemplate('topic')">
+            </a>
+            <!-- Ссылка на страницу Шаблона -->
+            <a href="template.html" class="bank-action-btn">
                 Шаблон для темы
-            </button>
+            </a>
         </div>
 
         <!-- КОРОЛЕВСКИЙ ТИТУЛЬНЫЙ БАННЕР -->
@@ -1685,37 +1686,6 @@
     });
 
     container.innerHTML = html || `<div style="text-align:center; padding: 30px; color: var(--muted);">В выбранном сословии не найдено деяний по вашему запросу.</div>`;
-  }
-
-  function copyTemplate(type) {
-    let text = "";
-    if (type === 'request') {
-      text = `1. Имя персонажа:\n2. Название категории репутации (Тюркский народ / Светский престиж и т.д.):\n3. Ссылка на отыгрыш / обоснование:\n4. Запрашиваемое изменение (повышение / понижение):`;
-    } else {
-      text = `[b][center][color=#d4af37]ЗАЯВКА НА ИЗМЕНЕНИЕ РЕПУТАЦИИ[/color][/center][/b]\n\n1. Имя персонажа:\n2. Категория:\n3. Обоснование / Ссылка на посты:`;
-    }
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(() => showToast("Шаблон скопирован в буфер обмена!")).catch(() => fallback(text));
-    } else {
-      fallback(text);
-    }
-  }
-
-  function fallback(text) {
-    const area = document.createElement("textarea");
-    area.value = text;
-    area.style.position = "fixed";
-    area.style.left = "-9999px";
-    document.body.appendChild(area);
-    area.select();
-    try {
-      document.execCommand('copy');
-      showToast("Шаблон скопирован в буфер обмена!");
-    } catch(e) {
-      prompt("Скопируйте шаблон:", text);
-    }
-    area.remove();
   }
 
   function showToast(msg) {
