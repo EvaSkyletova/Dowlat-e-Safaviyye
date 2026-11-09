@@ -322,7 +322,7 @@
   .character-group-header {
     background: rgba(212, 175, 55, 0.15);
     color: var(--gold-light);
-    padding: 10px 16px;
+    padding: 12px 16px;
     font-size: 13px;
     font-weight: bold;
     letter-spacing: 1.5px;
@@ -523,7 +523,7 @@
 
         <!-- ПОИСКОВАЯ СТРОКА -->
         <div class="search-box">
-          <input type="text" id="searchInput" class="search-input" placeholder="Post по имени персонажа..." oninput="renderTable()" autocomplete="off">
+          <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
         </div>
 
         <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
@@ -551,7 +551,7 @@
     "Сефи Сефеви": "sefi.jpg",
     "Гаресах": "garesah.jpg",
     "Малахат Устаджлы": "malahat.jpg",
-    "Зулейка аль-Саламат Чехарленг": "salamat.jpg"
+    "Зулейка аль-Саламат Чехарленг": "salamat.jpg",
     "Рухангиз Баят": "ruhangiz.jpg"
   };
 
@@ -636,7 +636,6 @@
       if (currentTab === 'active') {
         let totalSum = 0;
         grouped[charName].forEach(r => {
-          // Колонка "Взнос" в активных — это r[7]. Извлекаем все цифры из ячейки.
           const vznosCell = String(r[7] || '').trim();
           const matches = vznosCell.match(/\d+/g);
           if (matches) {
@@ -650,15 +649,15 @@
         });
 
         if (totalSum > 0) {
-          totalVznosHtml = `<div style="font-size: 11px; color: var(--gold-light); margin-top: 4px; font-style: italic; letter-spacing: 1px;">ОБЩАЯ СУММА ВЗНОСОВ: ${totalSum.toLocaleString('ru-RU')} МОНЕТ</div>`;
+          totalVznosHtml = `<div style="font-size: 12px; color: #fff; background: linear-gradient(90deg, rgba(140, 106, 8, 0.4), rgba(212, 175, 55, 0.35), rgba(140, 106, 8, 0.4)); padding: 6px 14px; border-radius: 4px; border: 1px solid rgba(251, 232, 166, 0.5); margin-top: 6px; font-style: normal; letter-spacing: 1.5px; display: inline-block; box-shadow: 0 3px 10px rgba(0,0,0,0.5);">ОБЩАЯ СУММА ВЗНОСОВ: ${totalSum.toLocaleString('ru-RU')} АББАСИ</div>`;
         }
       }
 
       html += `
         <div class="character-group">
           <div class="character-group-header">
-            ${escapeHtml(charName)}
-            ${totalVznosHtml}
+            <span style="font-size: 14px; letter-spacing: 2px; color: var(--gold-light);">${escapeHtml(charName)}</span>
+            <div>${totalVznosHtml}</div>
           </div>
           <div class="character-content-flex">
             <div class="character-avatar-box">
