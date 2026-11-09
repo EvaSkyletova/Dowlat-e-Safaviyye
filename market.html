@@ -134,7 +134,9 @@
     margin-right: 15px;
     transition: transform 0.3s ease;
   }
-  .nav-logo:hover { transform: scale(1.1); }
+  .nav-logo:hover {
+    transform: scale(1.1);
+  }
 
   .site-nav a {
     color: var(--text);
@@ -159,10 +161,42 @@
     background-color: var(--gold);
     transition: width 0.3s ease;
   }
-  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+
+  .site-nav a:hover::after, .site-nav a.active::after {
+    width: 100%;
+  }
+
   .site-nav a:hover, .site-nav a.active {
     color: var(--gold-light);
     text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* Кнопка назад, как на странице «Шпион» */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 18px;
+    padding: 10px 18px;
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    transform: translateX(-3px);
+  }
+  @media (max-width: 850px) {
+    .back-btn { padding: 8px 12px; font-size: 11px; }
   }
 
   /* ГЛАВНЫЙ КОНТЕЙНЕР БАНКА */
@@ -189,7 +223,7 @@
   .imperial-crest-banner {
     position: relative;
     text-align: center;
-    padding: 36px 30px;
+    padding: 22px 24px;
     border-bottom: 2px solid var(--gold);
     background: 
       radial-gradient(ellipse at center, rgba(212, 175, 55, 0.14) 0%, transparent 70%),
@@ -209,8 +243,8 @@
   }
 
   .imperial-title {
-    margin: 0 0 10px;
-    font-size: clamp(24px, 3.5vw, 32px);
+    margin: 0 0 6px;
+    font-size: clamp(21px, 2.8vw, 27px);
     color: var(--gold-light);
     text-transform: uppercase;
     letter-spacing: 3.5px;
@@ -534,7 +568,7 @@
 
   @media(max-width: 520px) {
     .wrap { padding: 10px 6px; }
-    .imperial-crest-banner { padding: 24px 14px; }
+    .imperial-crest-banner { padding: 16px 12px; }
     .imperial-title { font-size: 20px; letter-spacing: 2px; }
     .catalog, .cart-panel { padding: 14px; }
     .item-row { align-items: flex-start; gap: 8px; padding: 12px 10px; }
@@ -575,6 +609,7 @@
     </header>
 
     <div class="wrap">
+      <a href="index.html" class="back-btn">← Вернуться назад</a>
       <div class="market">
 
         <!-- ВЕЛИЧЕСТВЕННАЯ ПЛАШКА В СТИЛЕ РЕПУТАЦИИ -->
