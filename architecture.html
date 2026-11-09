@@ -183,7 +183,7 @@
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
   }
 
-  /* ОСНОВНОЙ КОНТЕЙНЕР РАСШИРЕН ДО 1400PX (КНОПКИ ШИРЕ) */
+  /* ОСНОВНОЙ КОНТЕЙНЕР РАСШИРЕН ДО 1400PX */
   .wrap {
     width: 100%;
     max-width: 1400px;
@@ -271,7 +271,7 @@
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
   }
 
-  /* ВКЛАДКИ ПЕРЕКЛЮЧЕНИЯ (3 КНОПКИ В ШИРОКОЙ РАМКЕ) */
+  /* ВКЛАДКИ ПЕРЕКЛЮЧЕНИЯ (3 КНОПКИ) */
   .tabs-container {
     display: flex;
     gap: 12px;
@@ -309,7 +309,7 @@
 
   /* ГРУППИРОВКА ПО ПЕРСОНАЖАМ */
   .character-group {
-    margin-bottom: 24px;
+    margin-bottom: 20px;
     border: 1px solid var(--line);
     border-radius: 8px;
     background: var(--panel-soft);
@@ -318,12 +318,12 @@
   }
   .character-group:last-child { margin-bottom: 0; }
 
-  /* ИМЯ ПЕРСОНАЖА БЕЗ РОМБИКОВ (ЧИСТЫЙ ЗОЛОТОЙ ТЕКСТ) */
+  /* ИМЯ ПЕРСОНАЖА */
   .character-group-header {
     background: rgba(212, 175, 55, 0.15);
     color: var(--gold-light);
-    padding: 12px 18px;
-    font-size: 13.5px;
+    padding: 10px 16px;
+    font-size: 13px;
     font-weight: bold;
     letter-spacing: 1.5px;
     border-bottom: 1px solid var(--line);
@@ -337,13 +337,13 @@
     align-items: stretch;
   }
 
-  /* ФОТО ПЕРСОНАЖА СЛЕВА */
+  /* ФОТО ПЕРСОНАЖА СЛЕВА (КОМПАКТНОЕ НАПКЕЛЕ) */
   .character-avatar-box {
-    width: 140px;
-    min-width: 140px;
+    width: 90px;
+    min-width: 90px;
     background: #111113;
     border-right: 1px solid var(--line);
-    padding: 14px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -351,8 +351,8 @@
   }
 
   .character-avatar {
-    width: 100px;
-    height: 120px;
+    width: 65px;
+    height: 80px;
     object-fit: cover;
     border: 1px solid var(--gold);
     border-radius: 4px;
@@ -361,15 +361,15 @@
   }
 
   .character-avatar-placeholder {
-    width: 100px;
-    height: 120px;
+    width: 65px;
+    height: 80px;
     border: 1px dashed var(--line);
     border-radius: 4px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: var(--muted);
-    font-size: 24px;
+    font-size: 20px;
     background: #161618;
   }
 
@@ -384,14 +384,14 @@
     width: 100%;
     border-collapse: collapse;
     text-align: left;
-    font-size: 11px; /* Уменьшенный шрифт чтобы всё аккуратно помещалось */
+    font-size: 11px;
     white-space: nowrap;
   }
 
   .builds-table th {
     background: rgba(212, 175, 55, 0.1);
     color: var(--gold-light);
-    padding: 8px 10px; /* Уменьшенные отступы в шапке таблиц */
+    padding: 7px 10px;
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -399,7 +399,7 @@
   }
 
   .builds-table td {
-    padding: 9px 10px;
+    padding: 8px 10px;
     border-bottom: 1px solid var(--line-soft);
     color: var(--text);
     vertical-align: middle;
@@ -421,27 +421,23 @@
     font-size: 14px;
   }
 
+  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ (КОМПАКТНЫЙ ВИД) */
   @media (max-width: 850px) {
-    .character-content-flex {
-      flex-direction: column;
-    }
     .character-avatar-box {
-      width: 100%;
-      min-width: 100%;
-      border-right: none;
-      border-bottom: 1px solid var(--line);
-      padding: 12px;
+      width: 75px;
+      min-width: 75px;
+      padding: 8px;
     }
-    .character-avatar {
-      width: 90px;
-      height: 110px;
+    .character-avatar, .character-avatar-placeholder {
+      width: 55px;
+      height: 70px;
+    }
+    .builds-card {
+      padding: 20px 14px;
     }
   }
 
   @media (max-width: 768px) {
-    .builds-card {
-      padding: 20px 16px;
-    }
     .tabs-container {
       flex-direction: column;
       gap: 8px;
@@ -508,7 +504,7 @@
         <a href="letopis.html" class="back-btn">← Вернуться назад</a>
     </div>
 
-    <!-- ОСНОВНОЙ КОНТЕЙНЕР (РАСШИРЕН ДО 1400PX) -->
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
     <div class="wrap">
       <div class="builds-card">
         
@@ -523,7 +519,7 @@
           <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
         </div>
 
-        <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК (В ШИРОКОЙ РАМКЕ) -->
+        <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
         <div class="tabs-container">
           <button type="button" class="tab-btn" id="tabProcess" onclick="switchTab('process')">В процессе строительства</button>
           <button type="button" class="tab-btn active" id="tabActive" onclick="switchTab('active')">Активные постройки</button>
@@ -540,7 +536,7 @@
   // ССЫЛКА НА ВАШ GOOGLE APPS SCRIPT
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlF49zvDWqEa117mHXB5RT0Z75cj9HUudJTK8gVGjAVfAH89DtHZSMtN7cLfylQ60L9A/exec";
 
-  // СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ (можно дописывать имена и ссылки на фото)
+  // СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ
   const CHARACTER_AVATARS = {
     "Шах-ан-шах Нариман Сефеви": "", 
     "Халид Афшар": "",
@@ -553,7 +549,7 @@
     archive: []
   };
 
-  let currentTab = 'active'; // По умолчанию Активные постройки
+  let currentTab = 'active';
 
   function switchTab(tabName) {
     currentTab = tabName;
@@ -602,7 +598,6 @@
       
       html += `
         <div class="character-group">
-          <!-- ИМЯ ПЕРСОНАЖА БЕЗ РОМБИКОВ -->
           <div class="character-group-header">${escapeHtml(charName)}</div>
           <div class="character-content-flex">
             <div class="character-avatar-box">
@@ -614,7 +609,6 @@
                   <tr>
       `;
 
-      // УМЕНЬШЕННЫЕ НАЗВАНИЯ КОЛОНОК ЧТОБЫ СТРОКИ НЕ РАСТЯГИВАЛИСЬ
       if (currentTab === 'process') {
         html += `<th>Название</th><th>Дата нач.</th><th>Год откр.</th><th>Место</th>`;
       } else if (currentTab === 'active') {
@@ -632,7 +626,7 @@
         } else if (currentTab === 'active') {
           html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td><td>${escapeHtml(r[5] || '—')}</td><td>${escapeHtml(r[6] || '—')}</td><td>${escapeHtml(r[7] || '—')}</td>`;
         } else {
-          html += `<td>${escapeHtml(r[0] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td>`;
+          html += `<td>${escapeHtml(r.r[0] || r[0] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td>`;
         }
         html += `</tr>`;
       });
@@ -665,11 +659,11 @@
         ],
         active: [
           ["Шах-ан-шах Нариман Сефеви", "Лечебница и библиотека для лекарей", "1636", "Казвин", "отличное (2/3)", "Внесен", "5000 (Мейлишах), 5000 (Мави-Лале)", "15000"],
-          ["Шах-ан-шах Нариман Сефеви", "Лечебница и библиотека для лекарей", "1636", "Кум", "отличное (2/3)", "Внесен", "5000 (Мейлишах), 20000 (Мави-Лале)", "—"],
+          ["Ша-ан-шах Нариман Сефеви", "Лечебница и библиотека для лекарей", "1636", "Кум", "отличное (2/3)", "Внесен", "5000 (Мейлишах), 20000 (Мави-Лале)", "—"],
           ["Халид Афшар", "Строительство поместья", "1640", "Исфахан", "хорошее (3/3)", "Внесен", "—", "5000"]
         ],
         archive: [
-          ["01.11.2026", "Халид Афшар", "Строительство склада", "Исфахан", "Завершено"]
+          ["01.11.2026", "Халид-афшар", "Строительство склада", "Исфахан", "Завершено"]
         ]
       };
       renderTable();
