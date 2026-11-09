@@ -158,7 +158,7 @@
     padding: 28px 20px 80px;
   }
 
-  /* ВЕЛИЧЕСТВЕННЫЙ ТИТУЛЬНЫЙ БАННЕР (ТОЧНО КАК В РЕПУТАЦИИ) */
+  /* ВЕЛИЧЕСТВЕННЫЙ ТИТУЛЬНЫЙ БАННЕР (КАК В РЕПУТАЦИИ) */
   .imperial-crest-banner {
     position: relative;
     text-align: center;
@@ -204,7 +204,7 @@
     line-height: 1.7;
   }
 
-  /* РЕЖИМ 1: КОДЕКС ЗАКОНОВ (ФОЛИАНТ С ЛЕВОЙ ЛЕНТОЙ ГЛАВ) */
+  /* КОДЕКС ЗАКОНОВ (ФОЛИАНТ С ЛЕВОЙ ЛЕНТОЙ ГЛАВ) */
   .codex-layout {
     display: grid;
     grid-template-columns: 310px 1fr;
@@ -353,49 +353,61 @@
   .statute-card {
     background: var(--panel-soft);
     border: 1px solid var(--line);
+    border-left: 3px solid rgba(212, 175, 55, 0.5);
     border-radius: 4px;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
     overflow: hidden;
-    transition: border-color 0.2s;
+    transition: all 0.2s ease;
   }
 
-  .statute-card:hover { border-color: rgba(212, 175, 55, 0.5); }
+  .statute-card:hover { border-color: rgba(212, 175, 55, 0.6); }
   .statute-card.search-hidden { display: none; }
   .statute-card[open] {
     border-color: var(--gold);
-    box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    border-left-color: var(--gold-light);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
   }
 
   .statute-card summary {
     padding: 16px 20px;
-    background: rgba(12, 12, 15, 0.6);
+    background: rgba(12, 12, 15, 0.65);
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     color: var(--gold-light);
-    font-size: 15px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 15.5px;
+    letter-spacing: 0.8px;
     user-select: none;
     outline: none;
   }
 
   .statute-card summary::-webkit-details-marker { display: none; }
   .statute-card summary::after {
-    content: "▼";
-    font-size: 10px;
-    color: var(--gold);
-    transition: transform 0.25s;
-    margin-left: 10px;
+    content: "+";
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    color: var(--gold-light);
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    margin-left: 12px;
+    flex-shrink: 0;
   }
 
   .statute-card[open] summary::after {
-    transform: rotate(180deg);
+    content: "−";
+    color: #171108;
+    background: var(--gold);
+    border-color: var(--gold-light);
   }
 
   .statute-content {
-    padding: 22px 24px;
+    padding: 24px 26px;
     background: var(--panel);
     font-size: 14px;
     line-height: 1.75;
@@ -404,51 +416,62 @@
 
   .statute-content p { margin: 0 0 14px; text-align: justify; }
   .statute-content p:last-child { margin-bottom: 0; }
-  .statute-content strong { color: var(--gold-light); }
+  .statute-content strong { color: var(--gold-soft); }
 
   .statute-content h3 {
-    margin: 20px 0 10px;
-    padding: 6px 12px;
+    margin: 22px 0 12px;
+    padding: 8px 12px;
     color: var(--gold-soft);
     border-left: 2px solid var(--gold);
     background: rgba(212, 175, 55, 0.08);
     font-size: 13px;
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
   }
   .statute-content h3:first-child { margin-top: 0; }
 
   .statute-content h4 {
-    margin: 14px 0 8px;
+    margin: 16px 0 8px;
     color: var(--gold-light);
-    font-size: 13px;
+    font-size: 13.5px;
+    font-weight: normal;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
   }
 
-  .statute-list { margin: 0 0 14px; padding-left: 22px; }
+  .statute-list { margin: 0 0 16px; padding-left: 22px; }
   .statute-list li { margin-bottom: 7px; color: var(--text); }
   .statute-list li::marker { color: var(--gold); }
 
-  .point-item {
-    margin-bottom: 20px;
-    padding-bottom: 18px;
-    border-bottom: 1px dashed var(--line);
+  /* Оформление пунктов внутри правил активности и интриг */
+  .activity-point {
+    position: relative;
+    margin: 0 0 24px;
+    padding: 0 0 22px;
+    border-bottom: 1px solid var(--line-soft);
   }
-  .point-item:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+  .activity-point:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
 
-  .point-num-tag {
+  .statute-content .point-number {
     display: inline-block;
-    padding: 3px 10px;
+    min-width: 55px;
+    margin: 0 0 12px;
+    padding: 5px 12px;
     color: var(--gold-light);
     border-left: 3px solid var(--gold);
+    border-radius: 0 4px 4px 0;
     background: rgba(212, 175, 55, 0.12);
-    font-size: 13.5px;
-    font-weight: bold;
-    margin-bottom: 8px;
+    font-size: 14.5px;
+    font-weight: normal;
+    letter-spacing: 1px;
   }
 
   /* Таблицы дайсов */
-  .table-box {
+  .table-wrap {
     width: 100%;
     overflow-x: auto;
     margin: 12px 0 16px;
@@ -456,70 +479,97 @@
     border-radius: 4px;
   }
 
-  .rules-table {
+  .dice-table {
     width: 100%;
-    min-width: 480px;
+    min-width: 500px;
     border-collapse: collapse;
     font-size: 13px;
   }
 
-  .rules-table th {
+  .dice-table th {
     padding: 10px 14px;
     background: rgba(212, 175, 55, 0.14);
     color: var(--gold-light);
     text-align: left;
     text-transform: uppercase;
     border-bottom: 1px solid var(--line);
+    font-weight: normal;
   }
 
-  .rules-table td {
+  .dice-table td {
     padding: 10px 14px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
     background: rgba(14, 14, 16, 0.6);
+    vertical-align: top;
   }
-  .rules-table tr:last-child td { border-bottom: none; }
+  .dice-table tr:last-child td { border-bottom: none; }
+  .dice-table td:first-child {
+    width: 130px;
+    color: var(--gold-soft);
+    font-weight: bold;
+    white-space: nowrap;
+  }
 
-  /* Цветные плашки */
-  .box-note, .box-warn, .box-succ, .box-ex {
-    padding: 12px 16px;
-    margin: 14px 0;
-    border-radius: 0 4px 4px 0;
+  /* Цветные плашки-выноски */
+  .note-box, .warning-box, .success-box, .example-box {
+    margin: 16px 0;
+    padding: 13px 16px 13px 18px;
+    border-radius: 0 6px 6px 0;
     font-size: 13px;
     line-height: 1.6;
   }
 
-  .box-note {
+  .note-box {
+    color: #f4df9d;
     border-left: 3px solid var(--gold);
     background: rgba(212, 175, 55, 0.08);
-    color: var(--gold-light);
   }
 
-  .box-warn {
+  .warning-box {
+    color: #f0c7c7;
     border-left: 3px solid var(--danger);
     background: rgba(217, 136, 136, 0.1);
-    color: #f2a6a6;
   }
 
-  .box-succ {
+  .success-box {
+    color: #cceccc;
     border-left: 3px solid var(--success);
     background: rgba(136, 203, 139, 0.1);
-    color: #a8e6ac;
   }
 
-  .box-ex {
+  .example-box {
     border-left: 3px solid var(--gold);
-    background: rgba(212, 175, 55, 0.05);
+    background: rgba(212, 175, 55, 0.065);
     color: var(--text);
   }
 
-  .box-ex-title {
-    font-size: 11px;
+  .example-title {
+    display: block;
+    margin-bottom: 6px;
     color: var(--gold-light);
+    font-size: 11px;
     font-weight: bold;
+    letter-spacing: 1px;
     text-transform: uppercase;
+  }
+
+  .note-box::before, .warning-box::before, .success-box::before {
     display: block;
     margin-bottom: 4px;
+    font-size: 9px;
+    letter-spacing: 1px;
+    font-weight: bold;
   }
+  .note-box::before { content: "ПРИМЕЧАНИЕ"; color: var(--gold-light); }
+  .warning-box::before { content: "ВАЖНО"; color: var(--danger); }
+  .success-box::before { content: "ИСХОД"; color: var(--success); }
+
+  .activity-point .warning-box,
+  .activity-point .success-box,
+  .activity-point .example-box { margin-bottom: 0; }
+  .activity-point .example-box + .example-box,
+  .activity-point .example-box + .warning-box,
+  .activity-point .warning-box + .example-box { margin-top: 14px; }
 
   /* АДАПТИВНОСТЬ */
   @media (max-width: 900px) {
@@ -528,7 +578,6 @@
   }
 
   @media (max-width: 768px) {
-    /* Шапка на телефонах: ТОЧНО КАК В БАНКЕ */
     .site-header { padding: 12px 10px; }
     .site-nav { gap: 10px 15px; }
     .nav-logo { height: 40px; margin-right: 8px; }
@@ -542,7 +591,7 @@
     .chapter-title { font-size: 20px; }
     .statute-card summary { padding: 12px 14px; font-size: 13.5px; }
     .statute-content { padding: 16px 14px; font-size: 13px; }
-    .rules-table { font-size: 11.5px; }
+    .dice-table { font-size: 11.5px; }
   }
 </style>
 </head>
@@ -608,11 +657,11 @@
                     </button>
                     <button type="button" class="toc-nav-btn" onclick="switchCodexChapter('activity', this)">
                         <span class="toc-nav-num">II</span>
-                        <span class="toc-nav-label">Активность и служба</span>
+                        <span class="toc-nav-label">Активность</span>
                     </button>
                     <button type="button" class="toc-nav-btn" onclick="switchCodexChapter('intrigues', this)">
                         <span class="toc-nav-num">III</span>
-                        <span class="toc-nav-label">Интриги и тени</span>
+                        <span class="toc-nav-label">Интриги</span>
                     </button>
                     <button type="button" class="toc-nav-btn" onclick="switchCodexChapter('poisons', this)">
                         <span class="toc-nav-num">IV</span>
@@ -624,7 +673,9 @@
             <!-- Правая читальня статей -->
             <main class="codex-body-panel">
                 
-                <!-- ГЛАВА 1: БЕРЕМЕННОСТЬ -->
+                <!-- =========================================================
+                     ГЛАВА 1: БЕРЕМЕННОСТЬ
+                     ========================================================= -->
                 <div class="codex-chapter active" id="ch-pregnancy">
                     <div class="chapter-header">
                         <div>
@@ -637,36 +688,47 @@
                         <summary>1. Общие положения</summary>
                         <div class="statute-content">
                             <p><strong>Беременность</strong> — одно из самых важных событий в жизни любой женщины ролевой, а также нелёгкое испытание для её организма.</p>
+
                             <ol class="statute-list">
-                                <li>Беременность длится <strong>9 игровых месяцев</strong> и <strong>2–6 реальных месяцев</strong> в зависимости от темпа игры.</li>
-                                <li>О своём положении женщина узнаёт на сроке <strong>10–14 недель</strong> (3–4 месяц). Главный симптом — отсутствие регул.</li>
+                                <li>Беременность длится <strong>9 игровых месяцев</strong> и <strong>2–6 реальных месяцев</strong>, в зависимости от темпа игры.</li>
+                                <li>О своём положении женщина узнаёт на сроке <strong>10–14 недель</strong>, равных 3–4 месяцу. Главный симптом — отсутствие регул.</li>
                                 <li>Без покупки товаров из раздела «Беременность» всё определяется последовательными дайсами: беременность, пол ребёнка, вероятность выкидыша, здоровье ребёнка и возможный недуг.</li>
-                                <li>Потери беременности до <strong>20-й недели включительно</strong> не несут угрозы жизни матери. Потеря на поздних сроках грозит тяжёлыми последствиями вплоть до гибели.</li>
+                                <li>Если после дайса без покупки «Беременность» выясняется, что женщина беременна, то игрокам даются сутки на то, чтобы докупить необходимые им товары. По истечении суток, если ничего дополнительно не приобретено, дайс проводится по системе «Беременность без покупки товаров».</li>
+                                <li>Покупки из раздела «Беременность» совершаются один раз на вероятность зачатия в сцене. Если покупки одного игрока не привели к нужному результату, партнёр не может докупить те же товары для повторных дайсов в рамках той же сцены.</li>
+                                <li>Многоплодная беременность не предусмотрена для всех персонажей. Товара для её покупки в банке нет; в редких случаях приз может выпасть в лотерее или розыгрыше призов ушедших игроков.</li>
+                                <li>Дайс на многоплодную беременность доступен персонажам, которые сами рождены из многоплодной беременности либо чьи родители родились из многоплодной беременности.</li>
+                                <li>Потеря беременности до <strong>20-й недели включительно</strong> не несёт угрозы жизни и здоровью матери. Потеря на поздних сроках может повлечь тяжёлые последствия, вплоть до смерти женщины.</li>
+                                <li>Нападение, покушение, отравление, физическая травма, тяжёлая болезнь или сильное психическое потрясение беременной женщины могут спровоцировать выкидыш или преждевременные роды — в зависимости от срока.</li>
+                                <li>Дайс по таблице потери беременности проводится один раз на одно травмирующее сюжетное событие. Повторный дайс возможен только при новом самостоятельном происшествии.</li>
+                                <li>В спорных ситуациях и в ситуациях, когда невозможно точно определить, какая неделя беременности у женщины, администрация прокидывает дайс на точное определение недели беременности.</li>
                             </ol>
-                            <div class="box-warn">
-                                Травмы, сильные отравления и потрясения ведут к броску дайса на потерю беременности по таблицам статьи 5.
+
+                            <div class="warning-box">
+                                При событиях, перечисленных выше, проводится дайс на потерю беременности по соответствующей текущему сроку таблице из статьи 5.
                             </div>
                         </div>
                     </details>
 
                     <details class="statute-card">
-                        <summary>2. Дайсы наступления беременности</summary>
+                        <summary>2. Наступление беременности: дайсы</summary>
                         <div class="statute-content">
-                            <h3>2.1. С покупкой «Беременность после хальвета»</h3>
-                            <div class="table-box">
-                                <table class="rules-table">
-                                    <tr><th>Бросок</th><th>Результат</th></tr>
-                                    <tr><td>1–85</td><td>Женщина беременна</td></tr>
-                                    <tr><td>86–100</td><td>Женщина не беременна</td></tr>
+                            <h3>2.1. При покупке «Беременность после хальвета»</h3>
+
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат дайса</th><th>Итог</th></tr>
+                                    <tr><td>1–85</td><td>Женщина беременна.</td></tr>
+                                    <tr><td>86–100</td><td>Женщина не беременна.</td></tr>
                                 </table>
                             </div>
 
-                            <h3>2.2. Без покупки товаров</h3>
-                            <div class="table-box">
-                                <table class="rules-table">
-                                    <tr><th>Бросок</th><th>Результат</th></tr>
-                                    <tr><td>1–30</td><td>Женщина беременна</td></tr>
-                                    <tr><td>31–100</td><td>Женщина не беременна</td></tr>
+                            <h3>2.2. Без покупки товара</h3>
+
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат дайса</th><th>Итог</th></tr>
+                                    <tr><td>1–30</td><td>Женщина беременна.</td></tr>
+                                    <tr><td>31–100</td><td>Женщина не беременна.</td></tr>
                                 </table>
                             </div>
                         </div>
@@ -675,120 +737,952 @@
                     <details class="statute-card">
                         <summary>3. Защита от выкидыша</summary>
                         <div class="statute-content">
-                            <p>При покупке «Защиты от выкидыша до 20-й недели» (1–97 — плод сохранен, 98–100 — прерывание без вреда для матери). Без покупки защита не действует при покушениях и травмах.</p>
+                            <h3>3.1. При покупке защиты до 20-й недели</h3>
+
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат дайса</th><th>Итог</th></tr>
+                                    <tr><td>1–97</td><td>Беременность сохранится.</td></tr>
+                                    <tr><td>98–100</td><td>Беременность прервётся.</td></tr>
+                                </table>
+                            </div>
+
+                            <div class="success-box">
+                                Прерванная беременность в данном случае не несёт вреда матери.
+                            </div>
+
+                            <p>Товар «Защита от выкидыша до 20-й недели беременности» защищает от внешнего покушения на плод, но вероятность естественного прерывания беременности сохраняется. Он также защищает от травмирующих событий до 20-й недели беременности включительно.</p>
+
+                            <h3>3.2. Без покупки защиты</h3>
+
+                            <p>Вероятность естественного прерывания определяется согласно статье 6.3. При травме, нападении, отравлении, тяжёлой болезни или сильном потрясении дайс проводится по таблице статьи 5, соответствующей текущему сроку беременности.</p>
                         </div>
                     </details>
 
                     <details class="statute-card">
-                        <summary>4. Здоровье и недуги новорожденного</summary>
+                        <summary>4. Здоровье ребёнка</summary>
                         <div class="statute-content">
-                            <p><strong>С покупкой исключения болезни:</strong> 1–99 — здоров, 100 — лёгкий недуг.<br>
-                            <strong>Без покупки:</strong> 1–90 — здоров, 91–100 — болен (дополнительно бросается вид 1-50 физ / 51-100 псих, и тяжесть 1-50 лёгкий / 51-100 тяжёлый).</p>
+                            <p>Дайс на здоровье ребёнка проводится во время последовательного определения беременности. После рождения повторный дайс не проводится, кроме случая рождения слабого младенца, выхоженного повитухами.</p>
+
+                            <h3>4.1. С товаром «Исключение вероятности больного ребёнка»</h3>
+
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат</th><th>Итог</th></tr>
+                                    <tr><td>1–99</td><td>Здоровый ребёнок.</td></tr>
+                                    <tr><td>100</td><td>Больной ребёнок.</td></tr>
+                                </table>
+                            </div>
+
+                            <div class="note-box">
+                                При покупке товара вероятность болезни остаётся, но степень тяжести недуга всегда будет <strong>лёгкой</strong>.
+                            </div>
+
+                            <h3>4.2. Без покупки товара</h3>
+
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат</th><th>Итог</th></tr>
+                                    <tr><td>1–90</td><td>Здоровый ребёнок.</td></tr>
+                                    <tr><td>91–100</td><td>Больной ребёнок.</td></tr>
+                                </table>
+                            </div>
+
+                            <h3>4.3. Дополнительные дайсы</h3>
+
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Этап</th><th>Итог</th></tr>
+                                    <tr><td>Вид: 1–50</td><td>Физический недуг.</td></tr>
+                                    <tr><td>Вид: 51–100</td><td>Умственный недуг.</td></tr>
+                                    <tr><td>Тяжесть: 1–50</td><td>Лёгкий недуг.</td></tr>
+                                    <tr><td>Тяжесть: 51–100</td><td>Тяжёлый недуг.</td></tr>
+                                </table>
+                            </div>
+
+                            <p>После этого точное определение недуга выбирается по утверждённому списку.</p>
                         </div>
                     </details>
 
                     <details class="statute-card">
-                        <summary>5. Таблицы осложнений и потери беременности</summary>
+                        <summary>5. Потеря беременности: таблицы дайсов</summary>
                         <div class="statute-content">
-                            <h3>I этап (1–12 недель)</h3>
-                            <p>1–25 — скат плода, мать невредима; 26–50 — угроза, строгий покой; 51–100 — угроза миновала.</p>
-                            <h3>II этап (13–20 недель)</h3>
-                            <p>1–20 — поздний выкидыш, мать невредима; 21–45 — тонус/схватки, нужны отвары; 46–100 — угроза миновала.</p>
-                            <h3>III этап (21–28 недель)</h3>
-                            <p>1–15 — опасные роды, плод гибнет, опрос на жизнь матери (Да [4] / Нет [2]); 16–30 — слабый младенец; 31–50 — тяжелый тонус; 51–100 — ребенок дозревает.</p>
-                            <h3>IV этап (29–40 недель)</h3>
-                            <p>1–10 — мертворождение, опрос на мать (Да [3] / Нет [3]); 11–30 — ранние роды со слабым младенцем; 31–50 — крепкий недоношенный; 51–100 — роды в срок.</p>
+                            <div class="warning-box">
+                                Дайс на потерю беременности не проводится на каждый триместр. Эти показатели учитываются только при травмирующих событиях и если не приобретён товар «Защита от выкидыша до 20-й недели беременности».
+                            </div>
+
+                            <h3>I: 1–12 недель — 1–3 лунные месяцы</h3>
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат</th><th>Последствие</th></tr>
+                                    <tr>
+                                        <td>1–25</td>
+                                        <td>Скат плода. Беременность прерывается. Мать невредима.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>26–50</td>
+                                        <td>Угроза выкидыша. Кровотечение и боли. Персонаж сохраняет ребёнка, но отправляется на строгий покой. Мать невредима.</td>
+                                    </tr>
+                                    <tr><td>51–100</td><td>Угроза миновала.</td></tr>
+                                </table>
+                            </div>
+
+                            <h3>II: 13–20 недель — 4–5 лунные месяцы</h3>
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат</th><th>Последствие</th></tr>
+                                    <tr>
+                                        <td>1–20</td>
+                                        <td>Поздний выкидыш. Плод потерян. Мать полностью невредима; повитухи останавливают кровь. Опросы на смерть матери не проводятся.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>21–45</td>
+                                        <td>Сильный тонус / схватки от испуга. Требуются отвары макового молока, примочки с розовой водой и покой. Мать невредима.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>46–100</td>
+                                        <td>Угроза миновала. Дитя и мать справляются без последствий.</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <h3>III: 21–28 недель — 5,5–7 лунные месяцы</h3>
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат</th><th>Последствие</th></tr>
+                                    <tr>
+                                        <td>1–15</td>
+                                        <td>Опасные ранние роды. Плод погибает. У матери начинается родильная горячка. Запускается опрос на выживание матери: Да [4] / Нет [2].</td>
+                                    </tr>
+                                    <tr>
+                                        <td>16–30</td>
+                                        <td>Ранние роды. Слабый младенец. Проводится дайс на выживаемость.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>31–50</td>
+                                        <td>Тяжёлый тонус утробы. Высокий риск ранних родов. Нужен главный хаким и полный покой.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>51–100</td>
+                                        <td>Угроза миновала. Ребёнок дозревает дальше.</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <h3>Слабый младенец при ранних родах</h3>
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат</th><th>Выживаемость</th></tr>
+                                    <tr><td>1–40</td><td>Младенец погибает в течение суток.</td></tr>
+                                    <tr><td>41–100</td><td>Младенца выхаживают повитухи.</td></tr>
+                                </table>
+                            </div>
+
+                            <p>Если младенца выхаживают повитухи: <strong>1–90 — ребёнок здоров; 91–100 — ребёнок болен.</strong> Если основной дайс уже определил ребёнка больным, повторный результат «болен» означает второй недуг или осложнение недоношенности.</p>
+
+                            <h3>IV: 29–40 недель — 7,5–9 лунные месяцы</h3>
+                            <div class="table-wrap">
+                                <table class="dice-table">
+                                    <tr><th>Результат</th><th>Последствие</th></tr>
+                                    <tr>
+                                        <td>1–10</td>
+                                        <td>Мертворождение и родильная горячка. Ребёнок рождается неживым. Мать в тяжёлом состоянии. Запускается опрос на выживание матери: Да [3] / Нет [3].</td>
+                                    </tr>
+                                    <tr>
+                                        <td>11–30</td>
+                                        <td>Преждевременные роды. Слабый младенец. Проводится дайс на выживаемость.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>31–50</td>
+                                        <td>Преждевременные роды. Крепкий младенец, жизнеспособен и выживает.</td>
+                                    </tr>
+                                    <tr>
+                                        <td>51–100</td>
+                                        <td>Угроза миновала. Роды не начались, ребёнок останется во чреве до срока.</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <p>При слабом младенце: <strong>1–40 — погибает в течение суток; 41–100 — выхаживают повитухи.</strong> После выхаживания проводится дополнительный дайс на здоровье: 1–90 — здоров, 91–100 — болен.</p>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>6. Беременность без покупки товаров</summary>
+                        <div class="statute-content">
+                            <p>Дайсы проводятся последовательно. Каждый следующий проводится только если предыдущий результат не завершил беременность.</p>
+
+                            <h3>Последовательность дайсов</h3>
+
+                            <ol class="statute-list">
+                                <li><strong>Беременна / не беременна:</strong> 1–30 — беременна; 31–100 — не беременна. При результате «не беременна» дальнейшие дайсы не проводятся.</li>
+                                <li><strong>Пол ребёнка:</strong> 1–50 — мальчик; 51–100 — девочка.</li>
+                                <li><strong>Вероятность выкидыша:</strong> по таблице I этапа статьи 5. Если беременность прервалась, дальнейшие дайсы не проводятся.</li>
+                                <li><strong>Смерть ребёнка в родах:</strong> 1–50 — ребёнок выживет; 51–100 — ребёнок умрёт. При смерти ребёнка дальнейшие дайсы не проводятся.</li>
+                                <li><strong>Болен / не болен:</strong> 1–90 — ребёнок здоров; 91–100 — ребёнок болен.</li>
+                                <li><strong>Вид и тяжесть недуга:</strong> 1–50 — физический; 51–100 — умственный; 1–50 — лёгкий; 51–100 — тяжёлый.</li>
+                                <li><strong>Точное определение недуга:</strong> выбирается по утверждённому списку.</li>
+                            </ol>
+
+                            <div class="warning-box">
+                                Перед родами дайс на смерть матери проводится только если ранее по статье 5 выпал результат с риском для жизни матери: опасные ранние роды, мертворождение и родильная горячка либо другое тяжёлое осложнение, определённое администрацией.
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>7. Беременность со всеми покупками товаров</summary>
+                        <div class="statute-content">
+                            <p>Дайсы проводятся последовательно. Каждый следующий проводится только если предыдущий результат не завершил беременность.</p>
+
+                            <ol class="statute-list">
+                                <li><strong>Беременна / не беременна:</strong> 1–85 — беременна; 86–100 — не беременна. Если не беременна, дальнейшие дайсы не проводятся.</li>
+                                <li><strong>Пол ребёнка:</strong> 1–50 — мальчик; 51–100 — девочка.</li>
+                                <li><strong>Вероятность выкидыша:</strong> 1–97 — беременность сохранится; 98–100 — беременность прервётся. Прерванная беременность не несёт вреда матери.</li>
+                                <li><strong>Болен / не болен:</strong> 1–99 — ребёнок здоров; 100 — ребёнок болен.</li>
+                                <li><strong>Вид недуга:</strong> 1–50 — физический; 51–100 — умственный.</li>
+                                <li><strong>Тяжесть недуга:</strong> всегда лёгкая.</li>
+                                <li><strong>Точное определение:</strong> выбирается по утверждённому списку.</li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>8. Список болезней для дайса</summary>
+                        <div class="statute-content">
+                            <div class="note-box">
+                                Список болезней со временем будет дополняться и корректироваться.
+                            </div>
+
+                            <h3>Легкие:</h3>
+                            <h4>Физические недуги:</h4>
+                            <ol class="statute-list">
+                                <li>Нарушение слуха на одно ухо (расшифровка после дайса)</li>
+                                <li>Хрупкие сосуды (носовые кровотечения; расшифровка после дайса)</li>
+                                <li>Ослабленное зрение на один глаз (поликория; расшифровка после дайса)</li>
+                                <li>Скачки давления (расшифровка после дайса)</li>
+                            </ol>
+
+                            <h4>Психические недуги:</h4>
+                            <ol class="statute-list">
+                                <li>Неконтролируемая дрожь рук при стрессе и волнении (расшифровка после дайса)</li>
+                                <li>Приступы удушья на нервной почве (расшифровка после дайса)</li>
+                                <li>Эмоциональная неустойчивость (расшифровка после дайса)</li>
+                                <li>Срыв реальности при сильном стрессе (расшифровка после дайса)</li>
+                            </ol>
+
+                            <h3>Тяжелые:</h3>
+                            <h4>Физические:</h4>
+                            <ol class="statute-list">
+                                <li>Врождённая хромота / деформация конечности</li>
+                                <li>Хроническая тяжёлая астма / чахоточный синдром</li>
+                                <li>Тяжёлый врождённый кифосколиоз / горб</li>
+                                <li>Врождённая кривошея с лицевой асимметрией (спастический паралич мышц шеи и лица)</li>
+                                <li>«Заячья губа» и глубокое «волчье нёбо» (расщелина губы и нёба)</li>
+                                <li>Врождённая гидроцефалия / водянка головного мозга</li>
+                            </ol>
+
+                            <h4>Психические:</h4>
+                            <ol class="statute-list">
+                                <li>Тяжёлая задержка развития / слабоумие</li>
+                                <li>Компульсивное самоистязание</li>
+                                <li>Тяжёлая абулия и регресс / кататонический мутизм</li>
+                                <li>Эхолалия и компульсивный крик</li>
+                                <li>Тяжёлая фотофобическая истерия с манией преследования</li>
+                                <li>Шизофрения</li>
+                            </ol>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>9. Влияние смертельного отравления или травмы матери на беременность</summary>
+                        <div class="statute-content">
+                            <p>Если беременная женщина подверглась отравлению или тяжёлому травмирующему событию (отравление, нападение, пожар и т.д.), в результате которого по дайсам ей выпала смерть, но игрок применил товар «Откуп от смерти», состояние тяжелейшего токсического шока матери наносит непоправимый вред плоду.</p>
+
+                            <p>В таких ситуациях применяются следующие правила:</p>
+
+                            <ol class="statute-list">
+                                <li>
+                                    <strong>Гарантированная болезнь:</strong> ребёнок выживает, но рождается гарантированно больным (100%). Дайс на вероятность болезни не проводится.
+                                </li>
+                                <li>
+                                    <strong>Сгорание стартовых гарантий:</strong> действие ранее купленного товара «Исключение вероятности больного ребёнка» в этой ситуации аннулируется. Товар защищает исключительно от естественных и врождённых патологий, но не способен уберечь плод от последствий смертельных доз яда или фатальных травм матери.
+                                </li>
+                                <li>
+                                    <strong>Дайсы на последствия:</strong> после применения откупа администрация проводит дайсы на текущее состояние ребёнка:
+                                    <div class="table-wrap">
+                                        <table class="dice-table">
+                                            <tr><th>Этап</th><th>Итог</th></tr>
+                                            <tr><td>Вид недуга: 1-50</td><td>Физический недуг.</td></tr>
+                                            <tr><td>Вид недуга: 51–100</td><td>Умственный недуг.</td></tr>
+                                            <tr><td>Тяжесть недуга: 1–50</td><td>Лёгкий недуг.</td></tr>
+                                            <tr><td>Тяжесть недуга: 51–100</td><td>Тяжёлый недуг.</td></tr>
+                                        </table>
+                                    </div>
+                                </li>
+                                <li>
+                                    <strong>Утрата предыдущих результатов:</strong> если до инцидента уже были проведены дайсы, показавшие, что ребёнок здоров, их результаты отменяются и заменяются пунктом 3.
+                                </li>
+                            </ol>
+
+                            <div class="note-box">
+                                <strong>Примечание:</strong> если по таблицам из статьи 5 в результате самого травмирующего события уже выпало «Мертворождение» или «Смерть плода», то ребёнок считается погибшим. Откуп от смерти матери в этом случае воскрешает саму женщину, но не возвращает к жизни плод, если он погиб по таблице потери беременности.
+                            </div>
                         </div>
                     </details>
                 </div>
 
-                <!-- ГЛАВА 2: АКТИВНОСТЬ -->
+                <!-- =========================================================
+                     ГЛАВА 2: АКТИВНОСТЬ
+                     ========================================================= -->
                 <div class="codex-chapter" id="ch-activity" style="display:none;">
                     <div class="chapter-header">
                         <div>
                             <span class="chapter-kicker">Глава II • Устав Державы</span>
-                            <h2 class="chapter-title">Активность и служба</h2>
+                            <h2 class="chapter-title">Активность</h2>
                         </div>
                     </div>
 
                     <details class="statute-card">
-                        <summary>1. Норматив постов и снятие с роли</summary>
+                        <summary>𝟏. Минимум постов.</summary>
                         <div class="statute-content">
-                            <div class="point-item">
-                                <span class="point-num-tag">1.1</span>
-                                <p>Обязательный минимум: <strong>1 пост в месяц</strong>. При отсутствии постов накладывается штраф <strong>10.000 аббаси</strong> и дается 3 дня на отпись, затем следует снятие с роли.</p>
+                            <div class="activity-point">
+                                <h3 class="point-number">1.1.</h3>
+
+                                <p>Минимум постов един для всех: <strong>1 пост в месяц</strong>, чтобы не лишиться роли.</p>
+
+                                <div class="warning-box">
+                                    Если при проверке актива за персонажа не было написано ни единого поста, то игроку выносится штраф в размере <strong>10.000 аббаси</strong> и дается <strong>3 дня</strong> для написания поста. Если игрок по прошествии 3 дней не отписывает необходимый пост, то <strong>администрация снимает его с роли.</strong>
+                                </div>
                             </div>
-                            <div class="point-item">
-                                <span class="point-num-tag">1.2</span>
-                                <p>После снятия действует мораторий 3 дня на повторное занятие этой роли.</p>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.2.</h3>
+
+                                <p>После снятия с роли игроку <strong>запрещено восстанавливаться на потерянной роли в течение 3-ех дней</strong> с момента снятия. В то время, пока действует запрет на восстановление, <strong>роль может быть занята любым игроком.</strong></p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.3.</h3>
+
+                                <p>Банковский счет игрока, снятого <strong>со всех (!) ролей</strong> за неактив или ушедшего по собственному желанию, сохраняется в течение <strong>7 дней</strong> с момента снятия/ухода, после чего, если игрок не восстанавливается на роли, <strong>разыгрывается между действующими игроками ролевой.</strong></p>
+
+                                <div class="warning-box">
+                                    Если игрок возвращается на роль после того, как счет был разыгран, для игрока действуют <strong>те же правила, что и для новеньких игроков.</strong>
+                                </div>
                             </div>
                         </div>
                     </details>
 
                     <details class="statute-card">
-                        <summary>2. Активация и продление защит</summary>
+                        <summary>𝟐. Активация защит.</summary>
                         <div class="statute-content">
-                            <p>При регистрации выдается бесплатная защита на первый месяц. Для продления защиты на следующий месяц требуется написать минимум <strong>2 поста в текущем месяце</strong>.</p>
+                            <div class="activity-point">
+                                <h3 class="point-number">2.1.</h3>
+
+                                <p>При регистрации персонажа игрок имеет право активировать <strong>первую защиту до конца текущего месяца</strong> без соблюдения обязательного лимита постов. <strong>Первые сутки после принятия анкеты взятый персонаж неуязвим для интриг.</strong></p>
+
+                                <div class="warning-box">
+                                    По истечении суток, если игрок не активировал на него первую бесплатную защиту, <strong>интриги против персонажа допустимы.</strong>
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">2.2.</h3>
+
+                                <p>Если игрок пришел <strong>во второй половине месяца</strong> и активировал защиту, ему необходимо написать в текущем месяце <strong>хотя бы 1 пост</strong>, чтобы взять защиту в следующем месяце.</p>
+
+                                <div class="example-box">
+                                    <span class="example-title">Пример:</span>
+                                    Вы пришли в ролевую <strong>20 сентября</strong> и активировали бесплатную защиту. Она истекает <strong>20 октября</strong>, однако в октябре остается еще <strong>11 дней</strong>, в которые вы будете беззащитны. Чтобы защитить себя и активировать защиту, в сентябре вам необходимо написать <strong>хотя бы 1 пост.</strong> Далее действует <strong>правило 2.3.</strong>
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">2.3.</h3>
+
+                                <p>Для активации защиты на персонажа игроку необходимо написать <strong>2 поста в текущем месяце.</strong></p>
+
+                                <div class="example-box">
+                                    <span class="example-title">Пример:</span>
+                                    Для того, чтобы активировать защиту на персонажа <strong>в октябре</strong>, вам необходимо написать за него минимум <strong>2 поста в сентябре</strong>, для активации защиты <strong>в ноябре</strong> необходимо написать <strong>2 поста в октябре</strong>, и так далее.
+                                </div>
+
+                                <div class="warning-box">
+                                    Если вами не было написано <strong>2 поста за персонажа в прошлом месяце</strong>, активировать защиту вы сможете <strong>только через месяц</strong>, после того, как напишете 2 поста в текущем месяце.
+                                </div>
+
+                                <div class="example-box">
+                                    <span class="example-title">Пример:</span>
+                                    Вы не написали <strong>2 поста в сентябре</strong>, соответственно <strong>в октябре вы взять защиту не можете.</strong> Следующую защиту вы сможете активировать только <strong>в ноябре</strong>, предварительно написав в октябре <strong>2 поста.</strong>
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">2.4.</h3>
+
+                                <p>Для тех, кто находится в морозе, действует правило <strong>«Выполненной нормы предыдущего месяца».</strong></p>
+
+                                <div class="example-box">
+                                    <span class="example-title">Пример I:</span>
+                                    Вы взяли мороз <strong>на весь сентябрь</strong>, но написали норму постов <strong>в августе.</strong> По выходу из мороза вы можете взять защиту <strong>на октябрь.</strong> Данная система работает и в обратную сторону, если норма не была выполнена в августе, а в сентябре вы были в морозе, <strong>в октябре вы не сможете взять защиту.</strong> Это не касается случая, когда вы вышли из мороза раньше срока. Тогда для вас действует правило из <strong>Примера II.</strong>
+                                </div>
+
+                                <div class="example-box">
+                                    <span class="example-title">Пример II:</span>
+                                    Если вы взяли мороз <strong>на 15 и более дней в сентябре</strong>, вы можете активировать защиту на оставшиеся дни в сентябре, если в августе была выполнена норма постов для взятия защиты. Чтобы взять защиту в октябре, вам необходимо написать <strong>минимум 1 пост</strong> для взятия защиты в октябре.
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">2.5.</h3>
+
+                                <p>Активированная защита действует <strong>до «дня» включительно.</strong> Продлить защиту можно <strong>в день ее истечения или позже</strong>, но <strong>запрещено активировать защиту раньше ее истечения.</strong></p>
+
+                                <div class="example-box">
+                                    <span class="example-title">Пример I:</span>
+                                    Вы активировали защиту <strong>20 сентября.</strong> Защита будет действовать <strong>до 20 октября включительно.</strong> Продлить защиту вы сможете <strong>20 октября или позже</strong>, но запрещено ее продлевать раньше 20 октября.
+                                </div>
+                            </div>
                         </div>
                     </details>
 
                     <details class="statute-card">
-                        <summary>3. Призы за посты и мороз</summary>
+                        <summary>𝟑. Начисление призов за актив.</summary>
                         <div class="statute-content">
-                            <p>Призы разыгрываются за каждый 3-й написанный пост. Максимальный срок мороза — 30 календарных дней подряд.</p>
+                            <div class="activity-point">
+                                <h3 class="point-number">3.1.</h3>
+
+                                <p>При проверке актива администрация начисляет игрокам <strong>призы за каждый 3 пост</strong>, написанный в месяце, за который проводится проверка. Список призов определен администрацией и <strong>публикуется перед розыгрышем.</strong></p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">3.2.</h3>
+
+                                <p>Самых активных игроков по результатам месяца оформляют на <strong>«Доску почета»</strong> и разыгрывают между ними <strong>уникальные призы за каждый 3 пост</strong>, написанный в месяце, за который проводится проверка. Список призов определен администрацией и публикуется перед розыгрышем. А также <strong>скидку на 1 товар из банка в размере 70%, 50% или 25%</strong> в зависимости от занятого места. </p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>𝟒. Мороз.</summary>
+                        <div class="statute-content">
+                            <div class="activity-point">
+                                <h3 class="point-number">4.1.</h3>
+
+                                <p>Мороз является <strong>уважительной причиной</strong> для отсутствия установленных правилом постов.</p>
+
+                                <div class="warning-box">
+                                    Однако мороз считается <strong>закрытым</strong>, если в его период был отписан пост игроком.
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.2.</h3>
+
+                                <p>Если игрок, находясь в морозе, написал посты за персонажа, он имеет право <strong>получить причитающиеся ему призы</strong> после проверки актива.</p>
+
+                                <div class="warning-box">
+                                    <p>Однако если за остальных персонажей не было написано ни одного поста, то игрок получает <strong>установленный правилами штраф при проверке актива.</strong></p>
+                                    <p>Также правило «Выполненной нормы предыдущего месяца» из <strong>пункта 2.4</strong> перестает для него действовать.</p>
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.3.</h3>
+
+                                <p>Срок мороза <strong>не может превышать 30 дней подряд.</strong> Исключениями являются особые случаи, с которыми следует <strong>обращаться к администрации.</strong></p>
+                            </div>
                         </div>
                     </details>
                 </div>
 
-                <!-- ГЛАВА 3: ИНТРИГИ -->
+                <!-- =========================================================
+                     ГЛАВА 3: ИНТРИГИ
+                     ========================================================= -->
                 <div class="codex-chapter" id="ch-intrigues" style="display:none;">
                     <div class="chapter-header">
                         <div>
                             <span class="chapter-kicker">Глава III • Тени двора</span>
-                            <h2 class="chapter-title">Искусство интриг</h2>
+                            <h2 class="chapter-title">Интриги</h2>
                         </div>
                     </div>
 
                     <details class="statute-card">
-                        <summary>1. Порядок совершения интриг</summary>
+                        <summary>1. Основные положения</summary>
                         <div class="statute-content">
-                            <p>Интрига — действие, наносящее физический, репутационный или душевный урон. На реакцию стороне защиты дается <strong>7 дней</strong>.</p>
-                            <p>Строгая последовательность: покупка в Банке -> отпись постов -> активация одной записью с прямыми ссылками.</p>
+                            <div class="activity-point">
+                                <h3 class="point-number">1.1.</h3>
+
+                                <p>
+                                    <strong>Интрига</strong> — это любое скрытое или явное действие,
+                                    направленное на причинение прямого физического, психологического
+                                    или репутационного вреда другому персонажу. К этой категории
+                                    относятся покушения, отравления, кража, раскрытие тайн, подрыв
+                                    репутации и т. д. В процессе игры любые интриги могут быть как
+                                    успешно сокрыты, так и обнаружены другими участниками.
+                                </p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.2.</h3>
+
+                                <p>
+                                    Любое негативное воздействие на земли или остан — поджог полей,
+                                    переманивание рабочих, разрушение построек и т. д. — является
+                                    интригой, однако может совершаться вне зависимости от того,
+                                    есть на персонаже защита или нет.
+                                </p>
+
+                                <div class="note-box">
+                                    Интриги такого рода дозволены в обход защиты именно потому,
+                                    что не несут прямого физического, психологического или
+                                    репутационного вреда другому персонажу.
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.3.</h3>
+
+                                <p>
+                                    Интриги не отыгрываются флэшбеком, который может изменить ход
+                                    событий настоящего времени. Необходимо подготовить все условия
+                                    в настоящем времени и дать реакцию в ответ на интригу против
+                                    вас прежде, чем наступят неминуемые последствия.
+                                </p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.4.</h3>
+
+                                <p>
+                                    Для реакции на интригу отведено <strong>7 дней</strong>
+                                    (включая последний день). За это время администрация разберётся
+                                    в деталях, прокинет необходимые дайсы, если они предусмотрены,
+                                    и разрешит спорные вопросы, если таковые возникнут.
+                                </p>
+
+                                <p>
+                                    Игроку, на которого совершена интрига, также отведено
+                                    <strong>7 дней на реакцию и ответ</strong> с момента прокинутого
+                                    дайса, если он предусмотрен. Если дайс не предусмотрен —
+                                    7 дней от последнего поста в интриге.
+                                </p>
+
+                                <div class="warning-box">
+                                    За это время повторные интриги на его персонажа запрещены.
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.5.</h3>
+
+                                <p>
+                                    Для совершения интриги необходимо соблюсти чёткую
+                                    последовательность действий. В противном случае интрига
+                                    будет отклонена:
+                                </p>
+
+                                <ol class="statute-list" type="I">
+                                    <li>Приобрести соответствующие товары в банке.</li>
+                                    <li>Отправить посты в игровые темы.</li>
+                                    <li>
+                                        Активировать купленные товары <strong>одной записью</strong>,
+                                        обязательно приложив прямые ссылки на опубликованные посты
+                                        из игровых тем.
+                                    </li>
+                                </ol>
+
+                                <div class="warning-box">
+                                    Редактировать заявки о покупке и активации товаров после
+                                    отправки постов запрещено. Если вы что-то не докупили,
+                                    не скрыли или не активировали вовремя — недопустимо делать это
+                                    после публикации записи с активацией из пункта III.
+                                </div>
+                            </div>
                         </div>
                     </details>
 
                     <details class="statute-card">
                         <summary>2. Подслушивание и шпионаж</summary>
                         <div class="statute-content">
-                            <p>Подслушать несокрытый разговор можно без отдельного поста (совершается только покупка). Шпион нанимается анонимно на 3 игры подряд через сайт Банка.</p>
+                            <div class="activity-point">
+                                <h3 class="point-number">2.1.</h3>
+
+                                <p>
+                                    Персонажи могут подслушать <strong>незащищённый разговор</strong>
+                                    без отдельного поста с активацией соответствующего товара:
+                                    совершается только покупка, как при подслушивании флэшбеков.
+                                    Сведения из разговора ваш персонаж может получить и позже.
+                                </p>
+
+                                <p>
+                                    Это упрощает механизм подслушивания: теперь не нужно выходить
+                                    из начатой сцены, чтобы успеть активировать товар до завершения
+                                    нужной сцены.
+                                </p>
+
+                                <ol class="statute-list" type="I">
+                                    <li>
+                                        Подслушивать можно все сцены в настоящем времени,
+                                        если они не сокрыты.
+                                    </li>
+                                    <li>
+                                        Подслушивать можно все сцены в прошлом: не только отдельные
+                                        флэшбеки в темах, но и сцены, начатые в прошлых месяцах,
+                                        если они не завершены в настоящем времени и не сокрыты
+                                        от чужих глаз.
+                                    </li>
+                                    <li>
+                                        Подслушивать сцены во флэшбеке можно даже в том случае,
+                                        если там есть посты.
+                                    </li>
+                                </ol>
+
+                                <div class="note-box">
+                                    Если сцена не завершена — например, игрок ушёл или отыгрыш
+                                    давно тянется, — она считается открытой. Если её не скрыли
+                                    и не попросили закрыть в соответствующей теме с заявками,
+                                    такую сцену можно подслушать.
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">2.2.</h3>
+
+                                <p>
+                                    Товар <strong>«Услуга шпиона»</strong> активируется анонимно
+                                    на сайте в разделе «Банк» -&gt; «Анонимный шпион» и не оформляется в банке.
+                                </p>
+
+                                <p>
+                                    Вы должны открыто написать в ЛСГ имена персонажей,
+                                    на которых активировали шпионов. Однако если среди них есть
+                                    персонажи кого-то из состава администрации, вы в праве не писать в ЛСГ, а направить расшифровку в личные сообщения одному
+                                    из администраторов.
+                                </p>
+
+                                <p>
+                                    Принцип раскрытия имен:
+                                </p>
+
+                                <ol class="statute-list" type="I">
+                                    <li>Имя персонажа.</li>
+                                    <li>«Оформляю на [имя], [имя]».</li>
+                                </ol>
+
+                                <p>
+                                    В постах не обязательно сразу раскрывать покупку шпиона.
+                                    Всю собранную информацию можно узнать позже или вовсе
+                                    не использовать в игре.
+                                </p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>3. Пояснения к товарам</summary>
+                        <div class="statute-content">
+                            <div class="activity-point">
+                                <h3 class="point-number">3.1.</h3>
+
+                                <p>
+                                    Товары <strong>«Сокрытие разговора»</strong> и
+                                    <strong>«Сокрытие сцены»</strong> не сохранят встречу или беседу
+                                    в тайне, если другой непосредственный участник сцены решит
+                                    о ней рассказать.
+                                </p>
+
+                                <p>
+                                    Если вы не сокрыли сцену с подкупом или выполнением своих
+                                    действий либо действий подкупленного NPC-персонажа, сцена
+                                    автоматически считается открытой и о ней можно узнать.
+                                </p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">3.2.</h3>
+
+                                <p>
+                                    Товар <strong>«Подкуп одного NPC-персонажа»</strong> гарантирует
+                                    верность NPC-персонажа вам либо его предательство своего
+                                    хозяина. Подкупить NPC-персонажа можно для выполнения дела,
+                                    которое вы не хотите выполнять собственными руками:
+                                    отравления, поджога, кражи, подкидывания улик и т. д.
+                                </p>
+
+                                <div class="warning-box">
+                                    Один подкуп равняется подкупу одного NPC-персонажа.
+                                    Если вас заметили несколько человек или подкупить нужно
+                                    нескольких слуг, товар необходимо оформить на каждого.
+                                </div>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">3.3.</h3>
+
+                                <p>
+                                    Товар <strong>«Кража личной вещи»</strong> позволяет выкрасть
+                                    одну вещь персонажа. Его необходимо приобрести, если вы хотите
+                                    подкинуть эту вещь кому-то или использовать её в иных целях.
+                                </p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">3.4.</h3>
+
+                                <p>
+                                    Товар <strong>«Тайный выход из дворца/поместья»</strong>
+                                    гарантирует возможность тайно покинуть дворец или поместье
+                                    без дополнительных подкупов.
+                                </p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">3.5.</h3>
+
+                                <p>
+                                    Товар <strong>«Пустить слухи в гареме/народе/остане/при дворе
+                                    шаха/в религиозной среде»</strong> не равняется прямому
+                                    обвинению в преступлении. Он воздействует только на репутацию
+                                    персонажа: выносить наказание или приговор, основываясь лишь
+                                    на слухах, нельзя.
+                                </p>
+
+                                <p>
+                                    Другие персонажи могут использовать услышанные слухи
+                                    по своему усмотрению: поверить в них или нет, а также
+                                    строить собственные интриги на этой почве.
+                                </p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">3.6.</h3>
+
+                                <p>
+                                    Товар <strong>«Услуги шпиона»</strong> покупается на
+                                    <strong>3 актуальные игры подряд</strong> в настоящем времени,
+                                    начиная с первой игры после анонимной активации на сайте в разделе «Банк» -> «Анонимный шпион»
+                                </p>
+
+                                <div class="warning-box">
+                                    Шпионаж прекращается, если заказчик раскрыл работу шпиона
+                                    и запустил расследование либо выдвинул обвинения.
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>4. Раскрытие интриг</summary>
+                        <div class="statute-content">
+                            <div class="activity-point">
+                                <h3 class="point-number">4.1.</h3>
+
+                                <p>
+                                    Игроки могут раскрыть интригу или её часть, если в ней есть
+                                    бреши: например, не подкуплены стража или слуги, выполнявшие
+                                    поручения, либо не сокрыта сцена подкупа.
+                                </p>
+
+                                <p>
+                                    При допросе NPC-участников интриги используется дайсовая
+                                    система и репутация персонажа, от лица которого совершена
+                                    интрига (см. Правила репутации).
+                                </p>
+
+                                <ol class="statute-list" type="I">
+                                    <li>
+                                        Если NPC-персонажи не были подкуплены, при дайсе они могут
+                                        раскрыть факт подкупа и имя заказчика, даже если на персонаже
+                                        активирована месячная защита. В этом случае проводится
+                                        <strong>2 дайса</strong>.
+                                    </li>
+                                    <li>
+                                        Если NPC-персонажи были подкуплены, но сцена подкупа
+                                        не сокрыта и/или эти NPC попались на глаза слугам, страже,
+                                        горожанам и т. д., а на персонаже активирована месячная
+                                        защита, при допросе они могут раскрыть факт подкупа,
+                                        но имя заказчика не назовут.
+                                    </li>
+                                </ol>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.2.</h3>
+
+                                <p>
+                                    Шпион, активированный до совершения интриги, узнает обо всех
+                                    деталях этой интриги, в которой физически участвует персонаж,
+                                    за которым он следит.
+                                </p>
+
+                                <div class="example-box">
+                                    <span class="example-title">Пример</span>
+                                    Ваш персонаж отдаёт приказ слуге отравить врага или украсть
+                                    его родовую печать. Если на этого персонажа активирован
+                                    шпион до того, как был отдан приказ, шпион узнает о нём
+                                    и доложит вам.
+                                </div>
+
+                                <p>
+                                    Шпион не способен перехватывать письма. Однако если заказчики
+                                    и исполнители интриги общаются только перепиской, шпион может
+                                    узнать детали интриги из писем, но не может вмешаться
+                                    в интригу или перехватить письма.
+                                </p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.3.</h3>
+
+                                <p>
+                                    Если шпион докладывает вашему персонажу детали интриги,
+                                    а вы публично объявляете о ней либо сообщаете шаху,
+                                    беглербегу, кади или главе семьи, шпион подтвердит
+                                    показания. Если будет начато расследование и допрос
+                                    NPC-персонажа, проводится дайс на его признание.
+                                </p>
+
+                                <ol class="statute-list" type="I">
+                                    <li>
+                                        Если на персонаже, совершившем интригу, <strong>нет
+                                        защиты</strong>, допрашиваемые могут раскрыть факт
+                                        подкупа и имя заказчика. Проводится
+                                        <strong>2 дайса</strong> на основе репутации персонажа.
+                                    </li>
+                                    <li>
+                                        Если на персонаже, совершившем интригу,
+                                        <strong>активирована защита</strong>, допрашиваемые могут
+                                        раскрыть факт подкупа, но имя заказчика остаётся скрытым.
+                                        Проводится <strong>1 дайс</strong> на основе репутации
+                                        персонажа.
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>5. Решения администрации и консультации</summary>
+                        <div class="statute-content">
+                            <p>
+                                Администрация вправе принимать решение
+                                <strong>по принципу прецедента</strong>. Если аналогичный
+                                или близкий по смыслу случай уже рассматривался, но по каким-то
+                                причинам не оговорён в правилах, применяется ранее принятое
+                                решение.
+                            </p>
+
+                            <p>
+                                При отсутствии аналогичного прецедента администрация выносит
+                                решение после коллективного обсуждения в чате администраторов
+                                и публично закрепляет правило.
+                            </p>
+
+                            <div class="note-box">
+                                Если вы не уверены в собственной интриге или не знаете,
+                                какие призы нужно для неё использовать, обратитесь
+                                в личные сообщения группы. Если интрига направлена против
+                                персонажа одного из администраторов, за консультацией можно
+                                обратиться в личные сообщения другого администратора.
+                            </div>
                         </div>
                     </details>
                 </div>
 
-                <!-- ГЛАВА 4: ЯДЫ -->
+                <!-- =========================================================
+                     ГЛАВА 4: ЯДЫ И НЕДУГИ
+                     ========================================================= -->
                 <div class="codex-chapter" id="ch-poisons" style="display:none;">
                     <div class="chapter-header">
                         <div>
                             <span class="chapter-kicker">Глава IV • Аптекарский трактат</span>
-                            <h2 class="chapter-title">Яды, дурман и недуги</h2>
+                            <h2 class="chapter-title">Яды и недуги</h2>
                         </div>
                     </div>
 
                     <details class="statute-card">
-                        <summary>1. Яды и дурман</summary>
+                        <summary>1. Яды общие</summary>
                         <div class="statute-content">
-                            <p>• <strong>Белладонна:</strong> расширение зрачков, тахикардия, галлюцинации.<br>
-                            • <strong>Майоран:</strong> предотвращение зачатия, сонливость, сбой женского цикла.<br>
-                            • <strong>Спорынья и горец:</strong> тонус матки, угроза выкидыша.<br>
-                            • <strong>Цикута:</strong> судороги, паралич дыхания, посинение кожи.<br>
-                            • <strong>Опиум:</strong> обезболивание, эйфория, при передозировке — смерть от остановки дыхания.</p>
+                            <div class="activity-point">
+                                <h3 class="point-number">1.1.</h3>
+                                <p><strong>Настойка белладонны</strong> содержит алкалоиды (в первую очередь атропин), которые блокируют часть нервных сигналов. Последствия: повышение внутриглазного давления (при малой дозировке ухудшается зрение вблизи, при передозировке возможны галлюцинации); тахикардия; запоры; снижается потоотделение, выше шанс словить тепловой удар.</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.2.</h3>
+                                <p><strong>Майоран</strong> влияет на снижение способности зачать. Влияет на женский организм, пока персонаж употребляет в пищу настойку из данной травы. Для избавления от горечи часто добавляют именно мёд. При длительном употреблении вызывает сонливость и сбои в цикле.</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.3.</h3>
+                                <p><strong>Горец почечуйный и спорынья.</strong> Провоцируют тонус шейки матки в женском организме, что является причиной частых выкидышей. На поздних сроках (после 20 недели), отверженный плод влечет за собой обильные кровотечения, которые в редких случаях могут стать причиной смерти. Опрос на смерть матери проводится в соответствии с 5 статьей «Потеря беременности: таблицы дайсов» правил «Беременность».</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">1.4.</h3>
+                                <p><strong>Свинцовый сахар.</strong> Свинец — токсичный тяжёлый металл с кумулятивным эффектом: он накапливается в теле (в костях, мозге, печени, почках), и даже небольшие, но регулярные поступления со временем приводят к интоксикации. Последствия: возможны головные боли, раздражительность, нарушения памяти, в тяжёлых случаях онемение в конечностях; провоцирует анемию. У беременных женщин свинец повышает риск преждевременных родов и задержки развития плода. Длительное воздействие повышает риск развития нефропатии (почечная недостаточность). Свинец можно распознать при накопительном эффекте по лилово-серой полоске вдоль десен и ногтей.</p>
+                            </div>
                         </div>
                     </details>
 
                     <details class="statute-card">
-                        <summary>2. Эпидемии и болезни</summary>
+                        <summary>2. Яды</summary>
                         <div class="statute-content">
-                            <p>Описания и последствия заражения: Жёлтая лихорадка, Холера, Брюшной и сыпной тиф, Оспа, Бубонная и лёгочная чума.</p>
+                            <div class="activity-point">
+                                <h3 class="point-number">2.1.</h3>
+                                <p><strong>Змеиный яд.</strong> Легко узнать по характерным следам и краснеющей, опухающей коже. Часто присоединяются общие симптомы: тошнота, рвота, головокружение, слабость, падение артериального давления, потливость. Возможна и сильная аллергическая реакция, вплоть до анафилактического шока. Так как у змей встречаются разные виды яда, перед покупкой проконсультируйтесь с администрацией.</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">2.2.</h3>
+                                <p><strong>Порошок цикуты.</strong> Вёх ядовитый — одно из самых ядовитых растений в мире. Главное действующее вещество — цикутотоксин, судорожный яд, который не разрушается даже при температурной обработке. Смертельная доза для человека около 20 граммов корневища. Последствия: в малых дозах возникает седация и шаткая походка, в больших — эпилептиформные припадки с судорогами; через 15–30 минут после приёма появляются сладкий, затем горький вкус во рту, слюнотечение, тошнота, рвота, боль в животе, диарея; возникает тахикардия, в тяжёлых случаях — острая сердечно-сосудистая недостаточность. При плохом развитии событий случается паралич дыхательного центра, что может привести к остановке дыхания. Распознать отравление цикутой можно по посиневшей коже и неспособности согреться.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>3. Дурман</summary>
+                        <div class="statute-content">
+                            <div class="activity-point">
+                                <h3 class="point-number">3.1.</h3>
+                                <p><strong>Опиум.</strong> Активно используется в медицине для облегчения острого болевого синдрома. При длительном и обильном употреблении может вызывать привыкание. Последствия: сонливость, заторможенность реакций, замедляется речь; дыхание становится редким, при передозировке возможна его полная остановка; запоры; встречаются проблемы с памятью, концентрацией, могут возникать тревожные расстройства, депрессия, психозы.</p>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="statute-card">
+                        <summary>4. Недуги</summary>
+                        <div class="statute-content">
+                            <div class="activity-point">
+                                <h3 class="point-number">4.1.</h3>
+                                <p><strong>Жёлтая лихорадка.</strong> Это острое вирусное заболевание, его главная опасность в том, что вирус, попав в кровь, разносится по телу и целенаправленно поражает несколько ключевых органов и систем. Вирус активно размножается в печёночных клетках, вызывая их повреждение. Это может привести к желтухе, увеличению печени, а в тяжёлых случаях — к печёночной недостаточности. Вирус повреждает стенки кровеносных сосудов, из-за чего возникают кровоизлияния. Проявляется это мелкоточечной сыпью на коже, носовыми кровотечениями, кровоточивостью дёсен, а в тяжёлых случаях — кровавой рвотой или чёрным стулом. На фоне тяжёлой интоксикации возможны спутанность сознания, бред, иногда буйное поведение. У переболевших формируется пожизненный иммунитет.</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.2.</h3>
+                                <p><strong>Холера.</strong> Попав в организм, в тонкой кишке она вырабатывает особый токсин (холероген). Этот токсин нарушает работу клеток кишечника: он запускает цепочку реакций, из-за которой клетки начинают активно отдавать воду и важные электролиты (натрий, калий, хлор). Последствия: появляется неутолимая жажда, сухость во рту и на слизистых, снижается тургор кожи (кожная складка расправляется медленно), могут западать глаза; потеря калия и натрия вызывает болезненные судороги; нарушается кислотно-щелочной баланс. В критических случаях это ведёт к острой почечной недостаточности, серьёзным сбоям в работе сердца и нервной системы (вплоть до нарушений сознания, комы). Вычисляется по лихорадке и болям в животе. Тяжёлое обезвоживание может привести к летальному исходу в течение 1–2 суток.</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.3.</h3>
+                                <p><strong>Тиф.</strong> Делится на два вида: брюшной и сыпной.</p>
+                                <p><strong>Брюшной тиф.</strong> После попадания бактерии в организм (через рот, с заражённой водой или едой) возбудитель внедряется в лимфатическую систему тонкого кишечника, размножается там, а затем попадает в кровь. Бактерии гибнут в крови и выделяют эндотоксин, что даёт высокую, долго держащуюся лихорадку, слабость, головную боль, нарушения сна. В лимфатических образованиях кишки развиваются изменения: сначала набухание, затем некроз, а позже отторжение тканей с образованием язв. Это чревато серьёзными осложнениями: кишечным кровотечением или перфорацией стенки кишки.</p>
+                                <p><strong>Сыпной тиф</strong> вызывают риккетсии (бактерии). Заражение происходит через вшей: риккетсии попадают в организм через мелкие повреждения кожи (при расчёсывании, когда в ранку втираются инфицированные фекалии вши). Дальше возбудитель проникает в кровь и целенаправленно поражает сосуды. Развивается васкулит: клетки набухают, разрушаются, вокруг формируются специфические узелки. Могут возникать тромбозы, кровоизлияния. Характерны при сыпном тифе сильная головная боль, нарушения сна, гиперестезия (повышенная чувствительность к свету, звукам, прикосновениям), в тяжёлых случаях — бред, инфекционные психозы.</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.4.</h3>
+                                <p><strong>Оспа.</strong> Вирусное заболевание с длительным инкубационным периодом, после которого резко поднимается температура, появляются сильная головная боль, озноб, слабость, ломота в мышцах и пояснице, иногда рвота. Возбудитель попадает в кровь и активно размножается в лимфоидных тканях, а потом «оседает» в коже, слизистых оболочках (в том числе во рту) и некоторых внутренних органах. В результате на коже и слизистых формируются характерные высыпания. Они проходят несколько стадий: от пятен (розеол) через папулы и везикулы (пузырьки) к пустулам (гнойничкам). Позже пустулы подсыхают, покрываются корочкой, а после её отхождения на коже часто остаются глубокие рубцы. При некоторых формах (например, геморрагической, которую иногда называли «чёрной оспой») возникают обширные подкожные кровоизлияния. В тяжёлых случаях развивается полиорганная недостаточность, инфекционно-токсический шок — это и становится причиной летального исхода.</p>
+                            </div>
+
+                            <div class="activity-point">
+                                <h3 class="point-number">4.5.</h3>
+                                <p><strong>Чума.</strong> Эта болезнь имеет крайне короткий инкубационный период: от 2 до 4 дней, и начинается она сразу с острой фазы. Мгновенно поднимается температура до 39–40 °C, появляется озноб, сильная слабость, головная и мышечная боль. Выделяют несколько основных форм, и у каждой свой «акцент»:</p>
+                                <p><strong>Бубонная форма.</strong> Бактерии с током лимфы попадают в лимфатические узлы, вызывают сильное воспаление. Чаще поражаются паховые, подмышечные или шейные узлы. Со временем бубон может нагноиться. Если барьерная функция узла нарушается, бактерии прорываются в кровоток.</p>
+                                <p><strong>Лёгочная форма.</strong> Если возбудитель сразу попадает в дыхательные пути (первично) или туда заносится с кровью из другого очага (вторично), развивается поражение лёгких. Возникает стремительное воспаление с некрозом (отмиранием) ткани, в мокроте появляются кровянистые вкрапления (иногда её описывают как «малиновое желе»). Человек становится заразным для окружающих при кашле.</p>
+                            </div>
                         </div>
                     </details>
                 </div>
