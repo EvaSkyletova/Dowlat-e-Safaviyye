@@ -174,6 +174,35 @@
     overflow: hidden;
   }
 
+  /* КНОПКА НАЗАД */
+  .back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    transform: translateX(-3px);
+  }
+
   /* ЧЕРНО-БЕЛЫЕ КАРТИНКИ */
   .side-decoration {
     position: absolute;
@@ -555,6 +584,13 @@
     .rules-title {
       font-size: 20px;
     }
+    /* Адаптив кнопки назад */
+    .back-btn {
+      top: 10px;
+      left: 10px;
+      padding: 8px 12px;
+      font-size: 11px;
+    }
   }
 
   @media (max-width: 480px) {
@@ -611,6 +647,10 @@
 
 <!-- СЕКЦИЯ 1: ФОРМА ЗАКАЗА -->
 <section class="page-section" id="section1">
+  
+  <!-- КНОПКА ВОЗВРАТА В БАНК -->
+  <a href="bank.html" class="back-btn">← Вернуться назад</a>
+
   <img src="https://fs.oblakoteka.ru/d.fotovssylku.ru/2026/11/02/0fc6cabcca9f6e8b6b96526cb9559eba_a97b8c49-e1ac-4db1-bf4b-b5cdd73301b0-1.png" alt="Decoration Left" class="side-decoration left" id="leftImg">
 
   <div class="spy-wrap">
