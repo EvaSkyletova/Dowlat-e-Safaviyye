@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Фирманы и Указы</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .archive-card {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .archive-card::before,
+  .archive-card::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .archive-card::before { top: 10px; left: 14px; }
+  .archive-card::after { top: 10px; right: 14px; }
+
+  /* ПАРАДНЫЙ ЗАГОЛОВОК (ТОЧНО КАК В АРМИИ ДЛЯ КИКЕРА И ЗАГОЛОВКА) */
+  .archive-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+  }
+
+  .archive-pretitle {
+    margin: 0 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .archive-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: normal;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .archive-subtitle {
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-style: italic;
+    max-width: 750px;
+    line-height: 1.6;
+  }
+
+  /* ФИЛЬТРЫ ПО АВТОРАМ */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .filter-btn {
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .filter-btn:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .filter-btn.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+  }
+
+  /* СПИСОК УКАЗОВ */
+  .edicts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* КАРТОЧКА УКАЗА */
+  .edict-card {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .edict-card[open] {
+    border-color: var(--gold-light);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+  }
+
+  .edict-card.hidden {
+    display: none;
+  }
+
+  /* АККОРДЕОН */
+  .edict-summary {
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.2);
+    transition: background 0.2s;
+  }
+
+  .edict-summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .edict-summary:hover {
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .edict-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .edict-date {
+    color: var(--gold-light);
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  .edict-badges {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .badge-author {
+    background: rgba(212, 175, 55, 0.15);
+    border: 1px solid var(--line);
+    color: var(--gold-soft);
+    font-size: 10.5px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+  }
+
+  .badge-tag {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: var(--muted);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+  }
+
+  .edict-heading {
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .toggle-icon {
+    color: var(--gold-soft);
+    font-size: 20px;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .edict-card[open] .toggle-icon {
+    transform: rotate(45deg);
+    color: var(--gold-light);
+  }
+
+  /* ТЕКСТ УКАЗА */
+  .edict-body {
+    padding: 22px 24px 26px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text);
+    background: rgba(14, 14, 17, 0.6);
+  }
+
+  .edict-body p {
+    margin: 0 0 14px;
+  }
+
+  .edict-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .edict-quote {
+    border-left: 2px solid var(--gold);
+    padding: 10px 16px;
+    margin: 14px 0;
+    background: rgba(212, 175, 55, 0.05);
+    font-style: italic;
+    color: var(--gold-light);
+  }
+
+  .edict-list {
+    margin: 10px 0 16px;
+    padding-left: 20px;
+  }
+
+  .edict-list li {
+    margin-bottom: 8px;
+  }
+
+  .edict-seal {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--line-soft);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-soft);
+    font-size: 12px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .seal-symbol {
+    font-size: 14px;
+    color: var(--gold-light);
+  }
+
+  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .archive-card { padding: 25px 15px; }
+    .archive-header { padding: 20px 14px 16px; }
+    .archive-title { font-size: 22px; }
+    .filter-btn { padding: 6px 10px; font-size: 11px; }
+    .edict-summary { padding: 13px 14px; }
+    .edict-heading { font-size: 15px; }
+    .edict-body { padding: 16px 14px 20px; font-size: 13.5px; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html" class="active">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="letopis.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="archive-card">
+        
+        <!-- Шапка архива -->
+        <header class="archive-header">
+            <div class="archive-pretitle">✦ Ali Əmrlərin və Fərmanların Məcmuəsi ✦</div>
+            <h1 class="archive-title">Свод Высочайших Указов и Фирманов</h1>
+            <p class="archive-subtitle">
+                Хронологический архив государственных постановлений, шахских указов, военных реформ и установлений гарема от эпохи Шаха Исмаила III до правления Шаха Наримана.
+            </p>
+
+            <!-- Фильтры по авторам -->
+            <div class="filter-bar" id="filterBar">
+                <button class="filter-btn active" data-author="all">Все указы</button>
+                <button class="filter-btn" data-author="nariman">Шах-ан-шах Нариман</button>
+                <button class="filter-btn" data-author="ruhangiz">Махд-и Улья Рухангиз</button>
+                <button class="filter-btn" data-author="mohammed2">Шах-ан-шах Мохаммед II</button>
+                <button class="filter-btn" data-author="simuzar">Валиде-кадын Симузар</button>
+                <button class="filter-btn" data-author="bahadur">Шейх Бахадур</button>
+                <button class="filter-btn" data-author="ismail3">Шах-ан-шах Исмаил III</button>
+                <button class="filter-btn" data-author="miher">Валиде-кадын Михер</button>
+            </div>
+        </header>
+
+        <!-- Список указов -->
+        <main class="edicts-list" id="edictsList">
+
+            <!-- 1. ОКТЯБРЬ 1645 / АБАН 1024 -->
+            <details class="edict-card" data-author="nariman">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Абан, 1024 / Октябрь, 1645</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Нариман</span>
+                            <span class="badge-tag">Переименование</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Фирман о переименовании улицы Магсудие в Тебризе в честь бракосочетания Хюр-ан-Нисы</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Во имя Аллаха, Милостивого, Милосердного!</p>
+                    <p>Властью, данной нам Всевышним и под благословением святых имамов.</p>
+                    <p>Мы, избранник небес, тень Аллаха на земле, опора веры, шах-ан-шах Ирана и Турана, Нариман Сефеви, направляем сию непреклонную волю нашу градоначальнику Тебриза, чиновникам и кадиям, стражникам и всему благословенному народу этого города.</p>
+                    <p>В ознаменование бракосочетания высокочтимой шах-бану Хюр-ан-Нисы бинт Тахмасп ас-Сефеви <em>(да пребудет с ней вечное благословение Аллаха)</em>, повелеваем от сегодня и во веки веков:</p>
+                    <p>Именовать улицу Магсудие, где обитают славные мастера изящных искусств, каллиграфы, зодчие и хранители древностей исключительно именем Хюр-ан-Нисы — <strong>Хиябан-е Хюр-ан-Ниса</strong>.</p>
+                    <p>Градоначальнику Тебриза немедленно созвать мастеров, дабы они начертали на камнях квартала новое имя златыми буквами. Пусть глашатаи под бой барабанов разнесут наш фарман по всем площадям города!»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Скреплено золотой печатью Шах-ан-шаха Наримана Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 2. АВГУСТ 1645 / ШАХРИВАР 1024 (ШАХ НАРИМАН) -->
+            <details class="edict-card" data-author="nariman">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Шахривар, 1024 / Август, 1645</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Нариман</span>
+                            <span class="badge-tag">Назначение Лал</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Указ о назначении наставников (лал) к наследникам престола Сефевидской империи</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Указ Шах-ан-шаха Сефевидского государства:</p>
+                    <p>Блаженство народов и безопасность державы зиждется на мудрости тех, кто наставляет нашу священную кровь.</p>
+                    <p>Мы, волей Всевышнего Нариман бин Мохаммед ас-Сефеви, шах-ан-шах Ирана и Турана, тень Аллаха на земле, объявляю свою волю главам племён, государственным чиновникам и всему правоверному народу Сефевидской империи.</p>
+                    <p>Дабы юные ветви нашего благословенного древа взрастали в благочестии, доблести и познании наук, мы назначаем новых лал к наследникам престола:</p>
+                    <ol class="edict-list">
+                        <li>К нашему брату, <strong>Эльденизу-мирзе</strong>, наставником отныне утверждается шейх племени Бахтиар — <strong>Саади Чехарленг</strong>.</li>
+                        <li>К <strong>Солейману Амину-мирзе</strong> наставником назначается верная опора нашего престола — великий векил, <strong>шейх Аббас Баят</strong>.</li>
+                        <li>К <strong>Хамзе Шахмиру-мирзе</strong>, в грядущем 1025 году, по достижению мирзой десятилетнего возраста, обязанности лалы примет на себя <strong>шейх Бахадур Устаджлы</strong>.</li>
+                    </ol>
+                    <p>Указ сей вступает в силу немедленно.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Скреплено личной печатью Шах-ан-шаха
+                    </div>
+                </div>
+            </details>
+
+            <!-- 3. АВГУСТ 1645 / ШАХРИВАР 1024 (МАХД-И УЛЬЯ) -->
+            <details class="edict-card" data-author="ruhangiz">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Шахривар, 1024 / Август, 1645</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Махд-и Улья Рухангиз</span>
+                            <span class="badge-tag">Безопасность Гарема</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Официальный указ о порядке, пломбировании и безопасности внутренних покоев Али-Капу</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Во имя Всевышнего Аллаха, Милостивого и Милосердного.</p>
+                    <p>Поскольку безопасность шахского дома, его женщин и детей вверена попечению Махд-и Ульи, а недавнее покушение на жизнь Шах-ан-шахи бану Зулейки аль-Саламат показало, что существующий порядок нуждается в дальнейшем укреплении, отныне и впредь повелеваю соблюдать нижеследующее:</p>
+                    <ol class="edict-list">
+                        <li><strong>Вход во внутренние покои Али-Капу</strong> дозволяется исключительно тем слугам, женщинам и евнухам, чья служба непосредственно связана с гаремом. Посторонним слугам, гонцам, ремесленникам, лекарям и иным лицам проход без особого дозволения Махд-и Ульи воспрещается. Каждый допущенный сопровождается назначенным евнухом.</li>
+                        <li><strong>Каждая служанка впредь закрепляется за определённой госпожой</strong>, покоями или поручением. Самовольный переход, посещение кухни, кладовых, хаммама, лекарственных палат без служебной необходимости запрещается. Для перемещения требуется дозволение старшей калфы.</li>
+                        <li><strong>Ни одна служанка не может быть внезапно заменена другой</strong> без ведома старшей калфы. О каждой новой служанке, переводе или увольнении надлежит докладывать Махд-и Улье.</li>
+                        <li><strong>Разделение цепочки питания:</strong> приготовление пищи, её принятие из кухни и доставка в покои поручаются разным лицам. Ни один человек не должен иметь одновременного доступа к кухне, хранению и доставке. Пища шахских жён и детей хранится отдельно.</li>
+                        <li><strong>Обязательное пломбирование:</strong> все напитки, щербеты, лекарства, масла, благовония, духи и косметика принимаются ответственным лицом и пломбируются специальной печатью, срываемой строго перед употреблением. Остатки немедленно утилизируются или повторно пломбируются. Неопломбированные вещества принимать запрещено.</li>
+                        <li><strong>Запрет прямого принятия даров:</strong> ни одна женщина гарема не принимает подарков, еды, тканей или украшений напрямую от слуг или посторонних лиц. Все дары сперва передаются старшей калфе или назначенному евнуху для досмотра.</li>
+                        <li><strong>Контроль источников воды:</strong> питьевая вода поступает строго из проверенных источников, принимается назначенными служителями, сосуды не оставляются без присмотра и пломбируются.</li>
+                        <li><strong>Порядок лекарей:</strong> запрещено оставлять приготовленные снадобья у постели больных. Средство выдаётся непосредственно перед приёмом, остаток сдаётся приготовившему лекарю. Все лекарства пломбируются.</li>
+                        <li><strong>Охрана беременных и матерей:</strong> при их перемещении по дворцу, посещении сада или хаммама назначается усиленный конвой из проверенных служанок и евнухов.</li>
+                        <li><strong>Ночной режим:</strong> после наступления темноты перемещение служанок между покоями ограничивается. Ночные поручения требуют одобрения калфы или дежурного евнуха.</li>
+                        <li><strong>Зональная ответственность евнухов:</strong> за каждым сектором закрепляется определённый евнух, обязанный немедленно докладывать о любых посторонних лицах и нарушениях.</li>
+                        <li><strong>Ротация дежурств:</strong> дежурства и обязанности евнухов периодически сменяются, дабы исключить постоянный бесконтрольный доступ одного лица к покоям или складам.</li>
+                        <li><strong>Тайна распорядка:</strong> сведения о распорядке дня шахских жён, перемещениях, хаммаме и лекарях не подлежат разглашению. Разглашение карается как государственное преступление.</li>
+                        <li><strong>Финансовый учёт подарков и прислуги:</strong> старшим калфам надлежит следить за поведением служанок. Внезапные деньги, дорогие вещи, тайная переписка подлежат немедленному докладу. Все вознаграждения, повышение жалованья и подарки рабам вносятся в книгу учёта у Хазнедар гарема. Неучтённые дары расцениваются как нарушение с суровым наказанием.</li>
+                        <li><strong>Ежемесячная отчётность:</strong> раз в месяц калфы и евнухи представляют Махд-и Улье полные списки служащих, их замен и назначений.</li>
+                        <li><strong>Принцип круговой ответственности:</strong> в случае раскрытия нарушения расследованию подлежит вся цепь лиц: тот, кто впустил; тот, кто передал; тот, кто промолчал; и тот, кто сокрыл.</li>
+                        <li><strong>Соучастие:</strong> всякий, кто заметил нарушение и умышленно утаил его, признаётся прямым соучастником злодеяния.</li>
+                    </ol>
+                    <p>Отныне безопасность Али-Капу не должна зависеть от привычки, доверия или доброй воли отдельных людей. Каждый, кто служит внутри дворца, должен знать своё место, свои обязанности и ответственность за их исполнение. Настоящий указ вступает в силу со дня оглашения.</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Махд-и Улья Бика-Рухангиз бинт Алекбер ас-Баят, Управляющая гаремом Али-Капу
+                    </div>
+                </div>
+            </details>
+
+            <!-- 4. ФЕВРАЛЬ 1645 / ЭСФАНД 1011 -->
+            <details class="edict-card" data-author="simuzar">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Эсфанд, 1011 / Февраль, 1645</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Валиде-кадын Симузар</span>
+                            <span class="badge-tag">Вера и Наложницы</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Указ об обязательном обращении рабынь в веру, ограничении европейских наложниц и намазе</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Я, Симузар Айсель Валиде кадын, следуя своему законному праву владать и учинять порядок в стенах гарема, приказываю:</p>
+                    <p>Отныне все девушки должны быть обращены в веру истинную до их полного попадания в гарем. Ежели за кем будет замечено служение иной вере, тот будет немедленно выслан, а значит лишён последней возможности прожить долгую, полную изобилия жизнь. Того, кто будет искать себе последователей среди остальных жителей гарема, ждёт неминуемая казнь.</p>
+                    <p>Девушки, что привезены с земель польской, греческой, французской и английской, отныне не имеют права быть зачисленными к наложницам шаха и не могут более ступать по золотому пути. Указанное не распространяется на гаремы, коими владеют мирзы, однако такие наложницы в случае рождения наследников мужского пола будут лишены возможности участвовать в воспитании сыновей, контроль за их поведением усилен вдвое.</p>
+                    <p>Впредь ни одна причина, кроме болезни, не должна стать препятствием к совершению намаза. На отказ от пятничного намаза последует жёсткое наказание.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Валиде-кадын Симузар-Айсель
+                    </div>
+                </div>
+            </details>
+
+            <!-- 5. МАРТ 1634 / ЭСФАНД 1012 -->
+            <details class="edict-card" data-author="mohammed2">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Эсфанд, 1012 / Февраль-Март, 1634</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Мохаммед II</span>
+                            <span class="badge-tag">Освобождение</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Высочайший манифест о даровании вольной рабыне Хайзуран</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Во имя Аллаха, Милостивого, Милосердного.</p>
+                    <p>Мы, Шах Мохаммед, государь Сефевидской империи, правитель Персидской земли, Халиф всех правоверных, обращаемся к нашему народу и всем нашим подданным.</p>
+                    <p>С данным указом мы провозглашаем о свободе рабыни Хайзуран, которая долгие годы была в нашем доме. Слагая все обязательства и узлы, мы решаем освободить её от всех оков и даровать ей право на личную свободу.</p>
+                    <p>Это решение принято в соответствии с нашими убеждениями о справедливости, милосердии и благородстве. Мы призываем всех наших подданных относиться к ней с уважением и поддерживать её на новом пути жизни праведной мусульманки.</p>
+                    <p>Да будет Аллах щедр к нам всем и дарует нам мудрость в наших делах. Дано в сердце мира, Исфахане, в месяц Эсфанд 1012 года.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> VII-ой Шах-ан-шах Сефевидского государства, Халиф шиитского народа, Мохаммед II Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 6. ИЮЛЬ 1632 / ТИР 1011 -->
+            <details class="edict-card" data-author="mohammed2">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Тир, 1011 / Июль, 1632</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Мохаммед II</span>
+                            <span class="badge-tag">Измена и Опала</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Снятие с должности главы корпуса Курчи Шейха Аяза Зулькадара и арест его рода</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Указ Падишаха Сефевидского государства:</p>
+                    <p>Я, Шах Мохаммед II Сефеви, снимаю Шейха Аяза Зулькадара с должности верховного начальника корпуса Курчи, в связи с обвинением в предательстве шахской власти и всего сефевидского народа.</p>
+                    <p>Приказываю:</p>
+                    <ol class="edict-list">
+                        <li>Заключить Аяза Зулькадара под стражу и начать расследование по обвинению в предательстве и сговоре с суннитскими врагами против верховной власти. Все члены его семьи тоже должны быть взяты под стражу и размещены в гареме Али-Капу под строгим надзирательством. Любое сопротивление и попытка связаться с кем-то извне будут расценены как доказательство вины. В поместье Зулькадаров разрешаю провести полный обыск, а также в любом другом месте, связанном с делом.</li>
+                        <li>Временным исполняющим обязанности главы корпуса Курчи назначаю Шейха Илькина Устаджлы. Отныне каждый воин корпуса обязуется подчиняться бегу. Неисполнение приказов Шейха Устаджлы и пособничество Шейху Зулькадару будет равняться предательству и наказываться смертью без суда. Приказываю усилить охрану дворца и выделяю отряд гулямов в количестве 50 человек для задержания и обыска.</li>
+                        <li>Утверждаю созыв экстренного тайного совета незамедлительно. Приглашённые Шейхи: Бахадур-бег Устаджлы, Мири-Мурад-бег Шамлу, Илькин-бег Устаджлы, а также и.о. Великого Векила Аббаса-бега Баята. К моменту заседания повелеваю собрать все имеющиеся доказательства против Шейха Аяза Зулькадара.</li>
+                    </ol>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> VII-ой Шах-ан-шах Сефевидского государства, Мохаммед II Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 7. АПРЕЛЬ 1630 / ОРДИБЕХЕШТ 1009 (ВОЕННЫЕ КОРПУСА) -->
+            <details class="edict-card" data-author="mohammed2">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Ордибехешт, 1009 / Апрель, 1630</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Мохаммед II</span>
+                            <span class="badge-tag">Военная реформа</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Учреждение трёх регулярных армейских корпусов: Курчи, Топчи и Тофангчи</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Великий Шах-ан-шах Сефевидского государства, Мохаммед II Сефеви, Халиф шиитов и защитник иранской земли, утверждает создание следующих корпусов под своей властью: корпус Курчи, корпус Топчи, корпус Тофангчи. Во благо государства корпуса будут нести верную службу под властью Падишаха.</p>
+                    <p><strong>Корпус Курчи</strong> отныне будет заниматься моей личной охраной и состоять из выходцев кызылбашских племён. В частности из племён проживающих на территориях Азербайджана, Казвина, Исфахана. Приказываю каждому присутствующему Шейху выделить отряды бравых воинов. Я доверяю каждому из вас свою защиту, а взамен возлагаю на царскую казну их содержание. Утверждаю должность Курчи-баши. Назначаю на эту должность <em>Шейха Аяза Зулькадара</em>.</p>
+                    <p><strong>Корпус Топчи (артиллерия)</strong> будет набран из коренных персов по всей иранской земле, что доселе не допускались к верхушке управления. Отныне они ответственны за порядок не меньше тюркских воинов. Утверждаю должность Топчи-баши. Назначаю на эту должность <em>Шейха Саади из клана Чехарленг</em>. Отныне он ведает всеми делами коренных персов и несёт за них ответ перед Шахом.</p>
+                    <p><strong>Корпус Тофангчи (мушкетёры)</strong> будет состоять из крестьянских мужчин, арабов и туркменов возрастом от 15 до 35 лет. С каждого остана приказываю набрать по 1 000 мужчин-добровольцев. Они будут разделены на отряды по местности (например, „тофангчиан-э Исфахан“). Утверждаю должность Тофангчи-баши. Временно назначаю на эту должность <em>гуляма Шамиля-агу</em>, поручаю ему обучение новобранцев.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Великий Шах-ан-шах Мохаммед II Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 8. АПРЕЛЬ 1630 / ОРДИБЕХЕШТ 1009 (БУШИР) -->
+            <details class="edict-card" data-author="mohammed2">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Ордибехешт, 1009 / Апрель, 1630</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Мохаммед II</span>
+                            <span class="badge-tag">Освобождение Бушира</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Указ об очищении Бушира, низложении шейха Варсак и прямом шахском управлении останом</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Я, Шах Мохаммед II Сефеви, объявляю остан Бушир очищенным от аравийской скверны. Шейх племени Варсак, утративший доверие государства, будет призван к ответу на Великом Меджлисе. Отныне Бушир находится под прямым управлением Шах-ан-шаха. Приказываю:</p>
+                    <ol class="edict-list">
+                        <li>Назначить <strong>минбаши Тугана-агу</strong> ответственным за порядок и безопасность остана Бушир. Наказываю племени Варсак подчиняться ему, как своему Шейху.</li>
+                        <li>Выделить из казны <strong>100 000 аббаси</strong> на восстановление пострадавших обителей, верфей и городов Бушира. Ответственным назначить минбаши Тугана-агу.</li>
+                        <li>Объявить награду за поимку предателей в размере <strong>100 аббаси за голову</strong>. Правосудие поручается местному Кади.</li>
+                        <li>Племени <strong>Шамлу (младшей ветви)</strong> выделить награду в размере <strong>50 000 аббаси</strong> за помощь и содействие на буширских рубежах.</li>
+                        <li>Шейху Хузестана <strong>Илькину-бегу</strong> и его воинам пожаловать награду в <strong>70 000 аббаси</strong> за доблестное командование и устранение угрозы.»</li>
+                    </ol>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> VII-ой Шах-ан-шах Сефевидского государства, Мохаммед II Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 9. ФЕВРАЛЬ 1630 / ЭСФАНД 1008 (МЕДЖЛИС И ГРАНИЦЫ) -->
+            <details class="edict-card" data-author="mohammed2">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Эсфанд, 1008 (1108) / Февраль, 1630</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Мохаммед II</span>
+                            <span class="badge-tag">Орден и Наместники</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Собрания Шейхов ордена Сефевиййе, передача Багдада Румлу и Курдистана Шамлу</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Отныне 6-го числа каждого месяца двери зала для аудиенций будут открыты для Шейхов ордена Сефевиййе, дабы проводить государственное собрание с падишахом во главе. В случае невозможности присутствия беглербеги обязаны найти тому вескую причину и заблаговременно известить Шейха Бахадура Устаджлы и государя.</p>
+                    <p>Следующим указом Мохаммед-шах постановил: завоёванный остан <strong>Багдад</strong> со всеми прилежащими землями передать под управление беглербегу Керманшаха — <em>Дашдемиру Румлу</em>. <strong>Курдистан</strong>, лежащий севернее Багдада, вверить <em>Хандамиру Шамлу</em>.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Повеление Шах-ан-шаха Мохаммеда II Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 10. ФЕВРАЛЬ 1630 / ЭСФАНД 1008 (КАРАНТИН ШАХА) -->
+            <details class="edict-card" data-author="mohammed2">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Эсфанд, 1008 / Февраль, 1630</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Мохаммед II</span>
+                            <span class="badge-tag">Борьба с оспой</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Общегосударственные санитарные меры против эпидемии черной оспы</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Я, Шах-ан-шах Мохаммед II, седьмой падишах Сефевидского государства, сын покойного Исмаила бин Аббаса ас-Сефеви, наказываю принять следующие меры против оспы на всей территории государства:</p>
+                    <ul class="edict-list">
+                        <li>Все бордели временно закрыть;</li>
+                        <li>Питейные и игорные заведения до отмены указа закрывать на 2 часа раньше и открывать на 2 часа позже;</li>
+                        <li>На торговых площадях и базарах расставить дополнительную стражу для пресечения беспорядков;</li>
+                        <li>Школам и приютам усилить меры чистоты и еженедельно допускать лекарей для осмотра;</li>
+                        <li>Муллам надлежит чаще совершать соборные молитвы во имя здравия державы.»</li>
+                    </ul>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Скреплено шахской печатью
+                    </div>
+                </div>
+            </details>
+
+            <!-- 11. ФЕВРАЛЬ 1630 / ЭСФАНД 1008 (ГАРЕМНЫЙ КАРАНТИН СИМУЗАР) -->
+            <details class="edict-card" data-author="simuzar">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Эсфанд, 1008 / Февраль, 1630</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Валиде-кадын Симузар</span>
+                            <span class="badge-tag">Карантин Гарема</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Закрытие гарема Али-Капу на строгий карантин и изоляция матерей наследников</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Я, Валиде-кадын Симузар-Айсель, приказываю со дня подписания сего указа:</p>
+                    <p>Ограничить свободный доступ ко всем входам и выходам из гарема. Не допускать посторонних лиц, не принадлежащих гарему Шах-ан-шаха Мохаммеда-Амина, Тахмаспа-мирзы и Туре-Муратшаха-мирзы.</p>
+                    <p>Матерям наследников и маленьких шах-бану надлежит оставаться в покоях с детьми, покидая их только с прямого одобрения Валиде-кадын. Лекарям ежедневно осматривать обитательниц, покои трижды в день проветривать и окуривать травами.</p>
+                    <p>Строжайше запрещено покидать дворец кому бы то ни было, кроме выделенной группы евнухов (коим строго запрещён контакт с госпожами). Вдвое увеличить число омовений рабынь в хаммаме, дабы искоренить симптомы заразы.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Валиде-кадын Симузар-Айсель
+                    </div>
+                </div>
+            </details>
+
+            <!-- 12. ДЕКАБРЬ 1629 / АЗАР-ДЕЙ 1008 (БАХАДУР УСТАДЖЛЫ) -->
+            <details class="edict-card" data-author="bahadur">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Азар-Дей, 1008 / Зима, 1629</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шейх Бахадур Устаджлы</span>
+                            <span class="badge-tag">Статус Женщин</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Титул «Ханум-бегим», поучение жён по кызылбашским обычаям и Ардебильский суд</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <div class="edict-quote">
+                        «Женщина, входящая в дом мужа, отныне именуется по роду супруга и принимает титул Ханум-бегим, исключая Шах-бану из правящей династии, что значит неизбежное вовлечение в дела племени.<br><br>
+                        Когда женщина бездействует и пренебрегает своими обязанностями перед государством и подданными мужа, её следует поучать так, как того требуют обычаи кызылбашских общин.<br><br>
+                        За серьезные деяния дозволяется созывать суд в Ардебиле, чтобы не держать ответ за чужой грех.<br><br>
+                        Перед справедливостью равными станут и госпожи династии Сефеви, и госпожи от малых до великих семей государства, входящие на правах супруг в знатное общество…»
+                    </div>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Постановление Шейха Бахадура Устаджлы
+                    </div>
+                </div>
+            </details>
+
+            <!-- 13. 1627 ГОД / 1006 ГОД -->
+            <details class="edict-card" data-author="ismail3">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">1006 г. х. / 1627 год</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Исмаил III</span>
+                            <span class="badge-tag">Великий Поход</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Подготовка к военным походам на Багдад и Дамаск, регентство Симузар-Айсель</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Я — Шах-ан-шах Исмаил III, сын Аббаса-шаха Великого, объявляю о подготовке к походу:</p>
+                    <ul class="edict-list">
+                        <li>Старшего наследника — <strong>Мохаммеда Амина-мирзу</strong> назначаю главой конного корпуса Гулямов; он выступит с Шейхом Дашдемиром Румлу на Багдад 29-го числа месяца Мордад 1006 года;</li>
+                        <li>Наследник <strong>Тахмасп-мирза</strong> присоединится к армии Царя Теймураза вместе с Шейхом Кахраманом Каджаром и Шейхом Исмаилом-Асланом Афшаром в месяц Хордад;</li>
+                        <li><strong>Туре Муратшах-мирза</strong> отправится вместе с Шейхом Бахадуром Устаджлы и Шейхом Хандамиром Шамлу в Дамаск в месяц Шахривар.</li>
+                    </ul>
+                    <p>В своё отсутствие защиту столицы поручаю <strong>Шейху Аббасу Баяту</strong> и <strong>Шейху Мири-Мураду Шамлу</strong>. Шах-ан-шахи бану <strong>Симузар-Айсель</strong> допускается до ведения дел внутренней политики. Вверяю ей заботу о народе, проживающем в Исфахане, встречи иностранных послов и покровительство жителей останов.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Шестой Падишах Сефевидского государства, Исмаил III Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 14. ДО 1627 ГОДА (ШАХ ИСМАИЛ III) -->
+            <details class="edict-card" data-author="ismail3">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Эпоха Шаха Исмаила III / нач. XVII в.</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Шах-ан-шах Исмаил III</span>
+                            <span class="badge-tag">Престолонаследие</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Закон о престолонаследии от отца к сыновьям и лишение братьев титула «Мирза»</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Я — Шах-ан-шах Исмаил III, сын Шах-ан-шаха Аббаса I, шестой падишах Сефевидского государства.</p>
+                    <p>Сохраняя здравый рассудок, утверждаю наследование трона от отца к старшему сыну, от старшего сына к младшему сыну, от младшего сына к детям старшего, после трон достанется детям младшего сына.</p>
+                    <p>Таким образом, вашим неоспоримым правителем, после моей смерти, станет <strong>Мохаммед Амин-мирза</strong>. Своих братьев я лишаю титула «Мирза» и даю им титул «Шахзаде».»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Шестой Падишах Сефевидского государства, Исмаил III Сефеви
+                    </div>
+                </div>
+            </details>
+
+            <!-- 15. КОНЕЦ МАРТА 1613 ГОДА (ВАЛИДЕ МИХЕР) -->
+            <details class="edict-card" data-author="miher">
+                <summary class="edict-summary">
+                    <div class="edict-meta-row">
+                        <span class="edict-date">Конец марта, 1613 года</span>
+                        <div class="edict-badges">
+                            <span class="badge-author">Валиде-кадын Михер</span>
+                            <span class="badge-tag">Порядок и Охрана</span>
+                        </div>
+                    </div>
+                    <div class="edict-heading">
+                        <span>Указ о всеобщем подчинении гарема, дегустации блюд и каре за слухи и интриги</span>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                </summary>
+                <div class="edict-body">
+                    <p>«Пока оспа буйствует в Крымском ханстве, на землях Шах-ан-шаха Исмаила спеют реформы, касающиеся дел дворца и государства. Волей законной жены покойного Шаха Аббаса — Михер Валиде-кадын, издан указ в гареме Падишаха.</p>
+                    <p>С момента оглашения его пунктов на женской половине дворца Али-Капу, все представительницы семьи Исмаила и Идриса Сефеви, калфы и рабыни обязаны исполнять следующие условия:</p>
+                    <ul class="edict-list">
+                        <li>Ни одно дело, даже самое малое и пустяковое, не должно решаться без ведома Михер Валиде-кадын;</li>
+                        <li>Никто не смеет покидать территорию гарема и заходить на неё без разрешения Валиде-кадын. Исключением являюсь сама госпожа, повелитель Шах-ан-шах Исмаил и Шах-ан-заде Инал Идрис;</li>
+                        <li>Пища всех Госпожей и Господ в обязательном порядке должна пробоваться перед подачей отведенными на это слугами. Лишь в случае полного их здравия после дегустации блюда будут подаваться на стол;</li>
+                        <li>Ужесточаются в два раза наказания за все дисциплинарные проступки, увеличивается количество верных Валиде-кадын евнухов для надзора над рабынями;</li>
+                        <li>Увеличивается количество круглосуточной стражи.</li>
+                    </ul>
+                    <p>За любой ложный слух, за причинение и попытку причинения вреда династии и плетение интриг против династии последует одно из наказаний, зависящее от тяжести преступления: лишение денежного жалования, порка мокрыми розгами или ссылка из дворца.»</p>
+                    <div class="edict-seal">
+                        <span class="seal-symbol">◈</span> Вдовствующая супруга Шаха Аббаса, Михер Валиде-кадын
+                    </div>
+                </div>
+            </details>
+
+        </main>
+
+      </div>
+    </div>
+
+<!-- Скрипт фильтрации указов по авторам -->
+<script>
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const edictCards = document.querySelectorAll('.edict-card');
+
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+
+            const selectedAuthor = button.getAttribute('data-author');
+
+            edictCards.forEach(card => {
+                const cardAuthor = card.getAttribute('data-author');
+                if (selectedAuthor === 'all' || cardAuthor === selectedAuthor) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
