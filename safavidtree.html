@@ -1,0 +1,1591 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Древо династии Сефевидов • Dowlаt-e Safaviyye</title>
+<style>
+@font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.45);
+    --line-soft: rgba(212, 175, 55, 0.18);
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+}
+
+/* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ */
+body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+.click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+}
+@keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+}
+
+/* Фирменный золотой скроллбар */
+* { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+.site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+}
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+}
+.nav-logo:hover { transform: scale(1.1); }
+
+.site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+}
+
+.site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+}
+.site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+.site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+}
+
+/* БЕЗ РАМОК — ПРОЗРАЧНЫЙ ФОН И МАКСИМАЛЬНАЯ ШИРИНА */
+.tree-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 40px auto 60px auto;
+    padding: 0 20px;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: center;
+}
+
+/* Шапка древа в нашем фирменном стиле */
+.tree-header {
+    position: relative;
+    overflow: hidden;
+    padding: 25px;
+    margin-bottom: 35px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.tree-header:after {
+    content: "✦  ✦  ✦";
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    color: rgba(212, 175, 55, 0.3);
+    font-size: 13px;
+    letter-spacing: 6px;
+}
+
+.tree-kicker {
+    margin: 0 0 6px 0;
+    font-size: 11px;
+    color: var(--gold-soft);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.tree-title {
+    margin: 0 0 8px 0;
+    font-size: 26px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+    font-weight: normal;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+.tree-hint {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.tree-hint span {
+    color: var(--gold-light);
+}
+
+.tree-viewport {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.tree-fit {
+    display: inline-block;
+    transform-origin: top center;
+}
+
+.tree {
+    display: inline-block;
+    white-space: nowrap;
+    padding: 20px 16px;
+}
+
+.tree ul {
+    padding-top: 32px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    padding-left: 0;
+    margin: 0;
+}
+
+.tree li {
+    text-align: center;
+    list-style-type: none;
+    position: relative;
+    padding: 32px 8px 0 8px;
+}
+
+.tree li::before,
+.tree li::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 50%;
+    border-top: 2px solid var(--gold);
+    width: 50%;
+    height: 32px;
+}
+
+.tree li::after {
+    right: auto;
+    left: 50%;
+    border-left: 2px solid var(--gold);
+}
+
+.tree li:only-child::after,
+.tree li:only-child::before {
+    display: none;
+}
+
+.tree li:only-child {
+    padding-top: 0;
+}
+
+.tree li:first-child::before,
+.tree li:last-child::after {
+    border: 0 none;
+}
+
+.tree li:first-child::after {
+    border-radius: 6px 0 0 0;
+}
+
+.tree li:last-child::before {
+    border-right: 2px solid var(--gold);
+    border-radius: 0 6px 0 0;
+}
+
+.tree ul ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    border-left: 2px solid var(--gold);
+    width: 0;
+    height: 32px;
+    transform: translateX(-1px);
+}
+
+/* =====================================================================
+   РАССТАНОВКА И УВЕЛИЧЕННЫЕ ИКОНКИ С ПЕРСОНАЖАМИ (КРУПНЕЕ)
+   ===================================================================== */
+.abbas-top-row {
+    position: relative;
+    display: inline-flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.bahtiyar-side-branch {
+    position: absolute;
+    right: calc(100% + 44px);
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.bahtiyar-side-branch::after {
+    content: '';
+    position: absolute;
+    top: -16px;
+    left: 50%;
+    width: calc(100% + 110px);
+    height: 16px;
+    border-top: 2px solid var(--gold);
+    border-left: 2px solid var(--gold);
+    border-right: 2px solid var(--gold);
+    border-radius: 8px 8px 0 0;
+    pointer-events: none;
+}
+
+.bahtiyar-child-line {
+    width: 2px;
+    height: 28px;
+    background: var(--gold);
+    margin: 4px 0;
+}
+
+/* Продление линии от Аббаса I вниз */
+.abbas-branch > ul {
+    padding-top: 260px !important;
+}
+.abbas-branch > ul::before {
+    height: 260px !important;
+}
+
+/* Ветка Исмаила III */
+.ismail-branch > ul {
+    padding-top: 75px !important;
+    margin-left: -210px !important;
+    margin-right: -210px !important;
+}
+.ismail-branch > ul::before {
+    height: 75px !important;
+}
+
+/* Потомки Мохаммеда II */
+.mohammed-branch > ul {
+    padding-top: 280px !important;
+    margin-left: -200px !important;
+    margin-right: -200px !important;
+}
+.mohammed-branch > ul::before {
+    height: 280px !important;
+}
+
+.tahmasp-branch > ul {
+    padding-top: 50px !important;
+}
+.tahmasp-branch > ul::before {
+    height: 50px !important;
+}
+
+.wife-children-group > li:only-child {
+    padding-top: 28px !important;
+}
+
+.couple-root,
+.node-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+/* === УВЕЛИЧЕННЫЙ УЗЕЛ ПЕРСОНАЖА (145x145px) === */
+.person {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 150px;
+}
+
+.person img {
+    width: 145px;
+    height: 145px;
+    border-radius: 22px;
+    object-fit: cover;
+    border: 3px solid var(--gold);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.85);
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    background: rgba(12, 14, 18, 0.92);
+}
+
+.person img:hover {
+    transform: scale(1.07);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 22px rgba(255, 215, 0, 0.6);
+}
+
+img.deceased {
+    filter: grayscale(100%) contrast(1.06);
+    border-color: rgba(191, 144, 0, 0.48);
+}
+
+.person-name {
+    font-size: 17px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    line-height: 1.25;
+    color: var(--text);
+    white-space: normal;
+    font-weight: bold;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95);
+}
+
+.person-dates {
+    font-size: 14px;
+    color: var(--gold-soft);
+    margin-top: 4px;
+    font-weight: bold;
+    letter-spacing: 0.4px;
+}
+
+.marriage {
+    font-size: 24px;
+    color: var(--gold-light);
+    padding: 55px 6px 0 6px;
+    text-shadow: 0 0 10px rgba(191, 144, 0, 0.5);
+}
+
+.star {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 6px;
+    font-size: 22px;
+    color: var(--gold-light);
+    line-height: 1;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.65);
+}
+
+/* =====================================================================
+   УВЕЛИЧЕННЫЕ ИКОНКИ ЖЁН И НАЛОЖНИЦ В БОКОВОЙ ПАНЕЛИ (78x78px)
+   ===================================================================== */
+.simstree-partners {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    padding: 8px 10px;
+    background: rgba(14, 14, 17, 0.92);
+    border: 1.5px solid var(--line);
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
+}
+
+.partners-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.partner-slot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.partner-slot:hover {
+    background: rgba(212, 175, 55, 0.12);
+    border-color: var(--line);
+}
+
+.partner-slot.active-wife {
+    background: rgba(212, 175, 55, 0.24);
+    border-color: var(--gold-light);
+    box-shadow: 0 0 14px rgba(255, 215, 0, 0.25);
+}
+
+.partner-slot.hidden-slot {
+    display: none;
+}
+
+.partner-rel-icon {
+    font-size: 18px;
+    color: var(--gold-light);
+    width: 22px;
+    text-align: center;
+    user-select: none;
+}
+
+.partner-mini-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-align: left;
+}
+
+.partner-mini-avatar {
+    width: 78px;
+    height: 78px;
+    border-radius: 16px;
+    object-fit: cover;
+    border: 2.5px solid var(--gold);
+    background: #101216;
+    cursor: pointer;
+    transition: 0.2s ease;
+    flex-shrink: 0;
+}
+
+.partner-slot.active-wife .partner-mini-avatar {
+    border-color: var(--gold-light);
+}
+
+.partner-mini-name {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--text);
+    text-transform: uppercase;
+    line-height: 1.2;
+    max-width: 130px;
+    white-space: normal;
+}
+
+.partner-mini-sub {
+    display: block;
+    font-size: 12px;
+    color: var(--gold-soft);
+    font-weight: normal;
+    text-transform: none;
+    margin-top: 3px;
+}
+
+.partners-pager {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding-left: 6px;
+    border-left: 1px dashed var(--line);
+}
+
+.pager-arrow {
+    background: none;
+    border: none;
+    color: var(--gold-light);
+    font-size: 18px;
+    line-height: 1;
+    padding: 4px 6px;
+    cursor: pointer;
+    opacity: 0.85;
+    transition: 0.2s;
+}
+
+.pager-arrow:hover {
+    opacity: 1;
+    transform: scale(1.2);
+}
+
+.pager-total {
+    font-size: 15px;
+    font-weight: bold;
+    color: var(--gold-light);
+    line-height: 1.1;
+}
+
+.wife-children-group {
+    display: none !important;
+}
+
+.wife-children-group.active-group {
+    display: flex !important;
+}
+
+/* Подсказки */
+.tooltip-target {
+    position: relative;
+    cursor: help;
+}
+
+.tooltip-target::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 6px;
+    width: 210px;
+    padding: 10px 14px;
+    background: linear-gradient(135deg, rgba(22, 22, 26, 0.98), rgba(14, 14, 17, 0.99));
+    border: 1px solid var(--gold);
+    border-radius: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.85);
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.4;
+    text-align: center;
+    white-space: normal;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.25s ease;
+    z-index: 30;
+    pointer-events: none;
+}
+
+.tooltip-target:hover::after {
+    opacity: 1;
+    visibility: visible;
+    margin-bottom: 10px;
+}
+
+/* Модальное окно портрета */
+.photo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 12, 0.92);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    padding: 20px;
+}
+
+.photo-modal.active {
+    display: flex;
+}
+
+.photo-modal-content { 
+    position: relative; 
+    max-width: 320px; 
+    text-align: center; 
+    background: var(--panel-dark); 
+    padding: 14px; 
+    border: 2px solid var(--gold); 
+    border-radius: 10px; 
+    box-shadow: 0 0 50px rgba(0,0,0,0.9); 
+}
+
+.photo-modal img { 
+    max-width: 280px !important; 
+    max-height: 360px !important; 
+    width: auto;
+    height: auto; 
+    border-radius: 8px; 
+    border: 2px solid var(--gold); 
+    background: #101216; 
+    display: block; 
+    margin: 0 auto; 
+}
+
+.photo-modal-name {
+    margin-top: 14px;
+    color: var(--gold-light);
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Yipes', Georgia, serif !important;
+}
+
+.photo-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--gold);
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    font-size: 22px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    transition: all 0.2s;
+}
+
+.photo-modal-close:hover {
+    background: rgba(212, 175, 55, 0.2);
+    transform: scale(1.1);
+}
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html" class="active">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<div class="tree-container">
+    <header class="tree-header">
+        <p class="tree-kicker">Шаджаре-наме-йе эйлат</p>
+        <h1 class="tree-title">Древо династии Сефевидов</h1>
+        <p class="tree-hint">Нажмите на <span>супругу или наложницу в боковой панели</span>, чтобы переключить ветвь её детей, или на портрет, чтобы увеличить фото.</p>
+    </header>
+
+    <div class="tree-viewport" id="treeViewport">
+        <div class="tree-fit" id="treeFit">
+            <div class="tree" id="tree">
+
+                <!-- =========================================================================
+                     1 ПОКОЛЕНИЕ: АББАС I и рядом слева его брат БАХТИЯР (с дочерью Симин)
+                     ========================================================================= -->
+                <ul>
+                    <li class="abbas-branch">
+                        <div class="abbas-top-row">
+
+                            <!-- Брат Аббаса I: Бахтияр -> дочь Симин (муж Хандамир Шамлу) стоит прямо слева от Аббаса I -->
+                            <div class="bahtiyar-side-branch">
+                                <div class="person">
+                                    <img class="deceased" src="images/bakhtiyar.jpg" data-full="images/bakhtiyar.jpg" data-name="Бахтияр Сефеви" alt="Бахтияр" onclick="openPersonPhoto(this)">
+                                    <div class="person-name">Бахтияр</div>
+                                </div>
+                                <div class="bahtiyar-child-line"></div>
+                                <div class="node-row">
+                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Шамлу">
+                                        <img src="images/simin.jpg" data-full="images/simin.jpg" data-name="Симин Сефеви" alt="Симин" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Симин</div>
+                                    </div>
+                                    <div class="marriage">⚭</div>
+                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Шамлу">
+                                        <img class="deceased" src="images/handamir.jpg" data-full="images/khandamir.jpg" data-name="Хандамир Шамлу" alt="Хандамир Шамлу" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Хандамир<br>Шамлу</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ШАХ АББАС I + 2 его жены сбоку (Михер и Майсун) -->
+                            <div class="node-row">
+                                <div class="person">
+                                    <div class="star" title="Шах Ирана">✸</div>
+                                    <img class="deceased" src="images/abbas.jpg" data-full="images/abbas1.jpg" data-name="Шах Аббас I (1587–1615)" alt="Аббас I" onclick="openPersonPhoto(this)">
+                                    <div class="person-name">Аббас I</div>
+                                    <div class="person-dates">1587 – 1615</div>
+                                </div>
+
+                                <!-- 2 жены Аббаса I -->
+                                <div class="simstree-partners" data-visible="2" data-owner="abbas">
+                                    <div class="partners-stack">
+                                        <div class="partner-slot active-wife" data-target="abbas-miher" onclick="selectWifeBranch(this, event)">
+                                            <span class="partner-rel-icon">⚭</span>
+                                            <div class="partner-mini-card">
+                                                <img class="partner-mini-avatar deceased" src="images/miher.jpg" data-full="images/miher.jpg" data-name="Михер (1-я жена Аббаса I)" alt="Михер" onclick="openPersonPhoto(this, event)">
+                                                <div class="partner-mini-name">
+                                                    Михер
+                                                    <span class="partner-mini-sub">1-я жена (6 детей)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="partner-slot" data-target="abbas-maysun" onclick="selectWifeBranch(this, event)">
+                                            <span class="partner-rel-icon">⚭</span>
+                                            <div class="partner-mini-card">
+                                                <img class="partner-mini-avatar deceased" src="images/maysun.jpg" data-full="images/maysun.jpg" data-name="Майсун (2-я жена Аббаса I)" alt="Майсун" onclick="openPersonPhoto(this, event)">
+                                                <div class="partner-mini-name">
+                                                    Майсун
+                                                    <span class="partner-mini-sub">2-я жена (2 детей)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- ==================== 2 ПОКОЛЕНИЕ (Дети Аббаса I от 1-й жены Михер) ==================== -->
+                        <ul id="abbas-miher" class="wife-children-group active-group" data-owner="abbas">
+
+                            <!-- 1. Абдулхамид -->
+                            <li>
+                                <div class="node-row">
+                                    <div class="person">
+                                        <img class="deceased" src="images/abdulhamid.jpg" data-full="images/abdulhamid.jpg" data-name="Абдулхамид Сефеви" alt="Абдулхамид" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Абдулхамид</div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 2. Хевва -->
+                            <li>
+                                <div class="node-row">
+                                    <div class="person">
+                                        <img class="deceased" src="images/hevva.jpg" data-full="images/hevva.jpg" data-name="Хевва Сефеви" alt="Хевва" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Хевва</div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 3. ИСМАИЛ III (1615-1629) -->
+                            <li class="ismail-branch">
+                                <div class="node-row">
+                                    <div class="person">
+                                        <div class="star" title="Шах Ирана">✸</div>
+                                        <img class="deceased" src="images/ismail.jpg" data-full="images/ismail.jpg" data-name="Шах Исмаил III (1615–1629)" alt="Исмаил III" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Исмаил III</div>
+                                        <div class="person-dates">1615 – 1629</div>
+                                    </div>
+
+                                    <!-- 3 жены Исмаила III сбоку -->
+                                    <div class="simstree-partners" data-visible="3" data-owner="ismail">
+                                        <div class="partners-stack">
+                                            <div class="partner-slot active-wife" data-target="ismail-simuzar" onclick="selectWifeBranch(this, event)">
+                                                <span class="partner-rel-icon">⚭</span>
+                                                <div class="partner-mini-card">
+                                                    <img class="partner-mini-avatar deceased" src="images/simuzar.jpg" data-full="images/simuzar.jpg" data-name="Симузар Устаджлы (1-я жена Исмаила III)" alt="Симузар Устаджлы" onclick="openPersonPhoto(this, event)">
+                                                    <div class="partner-mini-name">
+                                                        Симузар Устаджлы
+                                                        <span class="partner-mini-sub">1-я жена (3 детей)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="partner-slot" data-target="ismail-zumrud" onclick="selectWifeBranch(this, event)">
+                                                <span class="partner-rel-icon">⚭</span>
+                                                <div class="partner-mini-card">
+                                                    <img class="partner-mini-avatar" src="images/zumrud.jpg" data-full="images/zumrud.jpg" data-name="Зумруд (2-я жена Исмаила III)" alt="Зумруд" onclick="openPersonPhoto(this, event)">
+                                                    <div class="partner-mini-name">
+                                                        Зумруд
+                                                        <span class="partner-mini-sub">2-я жена (3 детей)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="partner-slot" data-target="ismail-sittishah" onclick="selectWifeBranch(this, event)">
+                                                <span class="partner-rel-icon">♥</span>
+                                                <div class="partner-mini-card">
+                                                    <img class="partner-mini-avatar deceased" src="images/sittishah.jpg" data-full="images/sittishah.jpg" data-name="Ситтишах (Наложница Исмаила III)" alt="Ситтишах" onclick="openPersonPhoto(this, event)">
+                                                    <div class="partner-mini-name">
+                                                        Ситтишах
+                                                        <span class="partner-mini-sub">Наложница (1 дочь)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ==================== 3 ПОКОЛЕНИЕ: Дети Исмаила III от 1-й жены Симузар Устаджлы ==================== -->
+                                <ul id="ismail-simuzar" class="wife-children-group active-group" data-owner="ismail">
+
+                                    <!-- 3.1. ТАХМАСП -->
+                                    <li class="tahmasp-branch">
+                                        <div class="node-row">
+                                            <div class="person">
+                                                <img src="images/tahmasp.jpg" data-full="images/tahmasp.jpg" data-name="Тахмасп Сефеви" alt="Тахмасп" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Тахмасп</div>
+                                            </div>
+
+                                            <!-- 2 жены Тахмаспа сбоку -->
+                                            <div class="simstree-partners" data-visible="2" data-owner="tahmasp">
+                                                <div class="partners-stack">
+                                                    <div class="partner-slot active-wife" data-target="tahmasp-ballysylu" onclick="selectWifeBranch(this, event)">
+                                                        <span class="partner-rel-icon">♥</span>
+                                                        <div class="partner-mini-card">
+                                                            <img class="partner-mini-avatar" src="images/ballysylu.jpg" data-full="images/ballysylu.jpg" data-name="Баллысылу (Наложница Тахмаспа)" alt="Баллысылу" onclick="openPersonPhoto(this, event)">
+                                                            <div class="partner-mini-name">
+                                                                Баллысылу
+                                                                <span class="partner-mini-sub">Наложница (1 дочь)</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="partner-slot" data-target="tahmasp-ketevan" onclick="selectWifeBranch(this, event)">
+                                                        <span class="partner-rel-icon">⚭</span>
+                                                        <div class="partner-mini-card">
+                                                            <img class="partner-mini-avatar" src="images/ketevan.jpg" data-full="images/ketevan.jpg" data-name="Кетеван Багратиони (Жена Тахмаспа)" alt="Кетеван Багратиони" onclick="openPersonPhoto(this, event)">
+                                                            <div class="partner-mini-name">
+                                                                Кетеван Багратиони
+                                                                <span class="partner-mini-sub">Жена (4 детей)</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Дети Тахмаспа от 1-й жены Баллысылу -->
+                                        <ul id="tahmasp-ballysylu" class="wife-children-group active-group" data-owner="tahmasp">
+                                            <li>
+                                                <div class="node-row">
+                                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Баят">
+                                                        <img src="images/hurannisa.jpg" data-full="images/hurannisa.jpg" data-name="Хюр-ан-Ниса Сефеви" alt="Хюр-ан-Ниса" onclick="openPersonPhoto(this)">
+                                                        <div class="person-name">Хюр-ан-Ниса</div>
+                                                    </div>
+                                                    <div class="marriage">⚭</div>
+                                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Баят">
+                                                        <img src="images/alekber.jpg" data-full="images/alekber.jpg" data-name="Алекбер Баят" alt="Алекбер Баят" onclick="openPersonPhoto(this)">
+                                                        <div class="person-name">Алекбер<br>Баят</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <!-- Дети Тахмаспа от 2-й жены Кетеван -->
+                                        <ul id="tahmasp-ketevan" class="wife-children-group" data-owner="tahmasp">
+                                            <li>
+                                                <div class="person">
+                                                    <img src="images/tsarse.jpg" data-full="images/tarse.jpg" data-name="Царсе Сефеви" alt="Царсе" onclick="openPersonPhoto(this)">
+                                                    <div class="person-name">Царсе</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="person">
+                                                    <img src="images/haydar.jpg" data-full="images/haydar.jpg" data-name="Хайдар Сефеви" alt="Хайдар" onclick="openPersonPhoto(this)">
+                                                    <div class="person-name">Хайдар</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="person">
+                                                    <img src="images/ildar.jpg" data-full="images/ildar.jpg" data-name="Ильдар Сефеви" alt="Ильдар" onclick="openPersonPhoto(this)">
+                                                    <div class="person-name">Ильдар</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="person">
+                                                    <img src="images/hevva2.jpg" data-full="images/hevva2.jpg" data-name="Хевва Сефеви" alt="Хевва" onclick="openPersonPhoto(this)">
+                                                    <div class="person-name">Хевва</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+<!-- 3.2. МОХАММЕД II (1629-1645) -->
+<li class="mohammed-branch">
+    <div class="node-row">
+        <div class="person">
+            <div class="star" title="Шах Ирана">✸</div>
+            <img class="deceased" src="images/mohammed.jpg" data-full="images/mohammed.jpg" data-name="Шах Мохаммед II (1629–1645)" alt="Мохаммед II" onclick="openPersonPhoto(this)">
+            <div class="person-name">Мохаммед II</div>
+            <div class="person-dates">1629 – 1645</div>
+        </div>
+
+        <!-- 5 жён/наложниц Мохаммеда II сбоку -->
+        <div class="simstree-partners" data-visible="4" data-owner="mohammed">
+            <div class="partners-stack">
+                <div class="partner-slot active-wife" data-target="mohammed-akbanu" onclick="selectWifeBranch(this, event)">
+                    <span class="partner-rel-icon">♥</span>
+                    <div class="partner-mini-card">
+                        <img class="partner-mini-avatar" src="images/akbanu.jpg" data-full="images/akbanu.jpg" data-name="Акбану (Наложница Мохаммеда II)" alt="Акбану" onclick="openPersonPhoto(this, event)">
+                        <div class="partner-mini-name">
+                            Акбану
+                            <span class="partner-mini-sub">Наложница (2 детей)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="partner-slot" data-target="mohammed-sibel" onclick="selectWifeBranch(this, event)">
+                    <span class="partner-rel-icon">⚭</span>
+                    <div class="partner-mini-card">
+                        <img class="partner-mini-avatar deceased" src="images/sibel.jpg" data-full="images/sibel.jpg" data-name="Сибель Румлу (1-я жена Мохаммеда II)" alt="Сибель Румлу" onclick="openPersonPhoto(this, event)">
+                        <div class="partner-mini-name">
+                            Сибель Румлу
+                            <span class="partner-mini-sub">1-я жена (1 сын)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="partner-slot" data-target="mohammed-ruhangiz" onclick="selectWifeBranch(this, event)">
+                    <span class="partner-rel-icon">⚭</span>
+                    <div class="partner-mini-card">
+                        <img class="partner-mini-avatar" src="images/ruhangiz.jpg" data-full="images/ruhangiz.jpg" data-name="Рухангиз Баят (2-я жена Мохаммеда II)" alt="Рухангиз Баят" onclick="openPersonPhoto(this, event)">
+                        <div class="partner-mini-name">
+                            Рухангиз Баят
+                            <span class="partner-mini-sub">2-я жена (4 детей)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="partner-slot" data-target="mohammed-haizuran" onclick="selectWifeBranch(this, event)">
+                    <span class="partner-rel-icon">⚭</span>
+                    <div class="partner-mini-card">
+                        <img class="partner-mini-avatar" src="images/haizuran.jpg" data-full="images/haizuran.jpg" data-name="Хайзуран (3-я жена Мохаммеда II)" alt="Хайзуран" onclick="openPersonPhoto(this, event)">
+                        <div class="partner-mini-name">
+                            Хайзуран
+                            <span class="partner-mini-sub">3-я жена (6 детей)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="partner-slot" data-target="mohammed-shadi" onclick="selectWifeBranch(this, event)">
+                    <span class="partner-rel-icon">♥</span>
+                    <div class="partner-mini-card">
+                        <img class="partner-mini-avatar" src="images/shadi.jpg" data-full="images/shadi.jpg" data-name="Шади (Наложница Мохаммеда II)" alt="Шади" onclick="openPersonPhoto(this, event)">
+                        <div class="partner-mini-name">
+                            Шади
+                            <span class="partner-mini-sub">Наложница (3 детей)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="partners-pager">
+                <button type="button" class="pager-arrow" onclick="scrollPartners(this, -1)">︿</button>
+                <span class="pager-total">5</span>
+                <button type="button" class="pager-arrow" onclick="scrollPartners(this, 1)">﹀</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 4 ПОКОЛЕНИЕ (Дети Мохаммеда II по женам) ==================== -->
+
+    <!-- 1. Дети Мохаммеда II от 1-й жены Акбану -->
+    <ul id="mohammed-akbanu" class="wife-children-group active-group" data-owner="mohammed">
+        <li>
+            <div class="node-row">
+                <div class="person">
+                    <div class="star" title="Шах Ирана">✸</div>
+                    <img src="images/nariman.jpg" data-full="images/nariman.jpg" data-name="Шах Нариман I (1645 – ...)" alt="Нариман I" onclick="openPersonPhoto(this)">
+                    <div class="person-name">Нариман I</div>
+                    <div class="person-dates">1645 – ...</div>
+                </div>
+
+                <!-- 2 жены Наримана I сбоку + сын Саид Джаханфар -->
+                <div class="simstree-partners" data-visible="2">
+                    <div class="partners-stack">
+                        <div class="partner-slot">
+                            <span class="partner-rel-icon">⚭</span>
+                            <div class="partner-mini-card">
+                                <img class="partner-mini-avatar" src="images/salamat.jpg" data-full="images/zuleyka.jpg" data-name="ЗУЛЕЙКА аль-Саламат Чехарленг (Жена Наримана I)" alt="ЗУЛЕЙКА аль-Саламат Чехарленг" onclick="openPersonPhoto(this, event)">
+                                <div class="partner-mini-name">
+                                    ЗУЛЕЙКА аль-Саламат<br>Чехарленг
+                                    <span class="partner-mini-sub">Жена (сын Саид)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="partner-slot">
+                            <span class="partner-rel-icon">♥</span>
+                            <div class="partner-mini-card">
+                                <img class="partner-mini-avatar" src="images/marjana.jpg" data-full="images/marjana.jpg" data-name="Марджана (Наложница Наримана I)" alt="Марджана" onclick="openPersonPhoto(this, event)">
+                                <div class="partner-mini-name">
+                                    Марджана
+                                    <span class="partner-mini-sub">Наложница</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Сын Наримана I и Зулейки аль-Саламат: Саид Джаханфар -->
+            <ul>
+                <li>
+                    <div class="node-row">
+                        <div class="person">
+                            <img src="images/said.jpg" data-full="images/said.jpg" data-name="Саид Джаханфар Сефеви" alt="Саид Джаханфар" onclick="openPersonPhoto(this)">
+                            <div class="person-name">Саид<br>Джаханфар</div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </li>
+
+        <li>
+            <div class="node-row">
+                <div class="person">
+                    <img src="images/nurhayat.jpg" data-full="images/nurhayat.jpg" data-name="Нурхаят Сефеви" alt="Нурхаят" onclick="openPersonPhoto(this)">
+                    <div class="person-name">Нурхаят</div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- 2. Дети Мохаммеда II от 2-й жены Сибель Румлу -->
+    <ul id="mohammed-sibel" class="wife-children-group" data-owner="mohammed">
+        <li>
+            <div class="node-row">
+                <div class="person">
+                    <img src="images/eldeniz.jpg" data-full="images/eldeniz.jpg" data-name="Эльдениз Сефеви" alt="Эльдениз" onclick="openPersonPhoto(this)">
+                    <div class="person-name">Эльдениз</div>
+                </div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- 3. Дети Мохаммеда II от 3-й жены Рухангиз Баят -->
+    <ul id="mohammed-ruhangiz" class="wife-children-group" data-owner="mohammed">
+        <li>
+            <div class="person">
+                <img src="images/sultanum.jpg" data-full="images/sultanum.jpg" data-name="Султанум Сефеви" alt="Султанум" onclick="openPersonPhoto(this)">
+                <div class="person-name">Султанум</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img src="images/shahmir.jpg" data-full="images/shahmir.jpg" data-name="Шахмир Сефеви" alt="Шахмир" onclick="openPersonPhoto(this)">
+                <div class="person-name">Шахмир</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img src="images/ramazan.jpg" data-full="images/ramazan.jpg" data-name="Рамазан Сефеви" alt="Рамазан" onclick="openPersonPhoto(this)">
+                <div class="person-name">Рамазан</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img class="deceased" src="images/alimuhammad.jpg" data-full="images/alimuhammad.jpg" data-name="Али-Мухаммад Сефеви" alt="Али-Мухаммад" onclick="openPersonPhoto(this)">
+                <div class="person-name">Али-<br>Мухаммад</div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- 4. Дети Мохаммеда II от 4-й жены Хайзуран -->
+    <ul id="mohammed-haizuran" class="wife-children-group" data-owner="mohammed">
+        <li>
+            <div class="node-row">
+                <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Каджар">
+                    <img src="images/tanzilya.jpg" data-full="images/tanzilya.jpg" data-name="Танзиля Сефеви" alt="Танзиля" onclick="openPersonPhoto(this)">
+                    <div class="person-name">Танзиля</div>
+                </div>
+                <div class="marriage">⚭</div>
+                <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Каджар">
+                    <img class="deceased" src="images/kayya.jpg" data-full="images/kayya.jpg" data-name="Кайя Каджар" alt="Кайя Каджар" onclick="openPersonPhoto(this)">
+                    <div class="person-name">Кайя<br>Каджар</div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img src="images/hafsanur.jpg" data-full="images/hafsanur.jpg" data-name="Хафсанур Сефеви" alt="Хафсанур" onclick="openPersonPhoto(this)">
+                <div class="person-name">Хафсанур</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img class="deceased" src="images/soleyman.jpg" data-full="images/soleyman.jpg" data-name="Солейман Сефеви" alt="Солейман" onclick="openPersonPhoto(this)">
+                <div class="person-name">Солейман</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img src="images/soleiman.jpg" data-full="images/soleymanamin.jpg" data-name="Солейман-Амин Сефеви" alt="Солейман-Амин" onclick="openPersonPhoto(this)">
+                <div class="person-name">Солейман-<br>Амин</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img src="images/hasnahan.jpg" data-full="images/hasnahan.jpg" data-name="Хаснахан Сефеви" alt="Хаснахан" onclick="openPersonPhoto(this)">
+                <div class="person-name">Хаснахан</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img class="deceased" src="images/aysel.jpg" data-full="images/aysel.jpg" data-name="Айсель Сефеви" alt="Айсель" onclick="openPersonPhoto(this)">
+                <div class="person-name">Айсель</div>
+            </div>
+        </li>
+    </ul>
+
+    <!-- 5. Дети Мохаммеда II от наложницы Шади -->
+    <ul id="mohammed-shadi" class="wife-children-group" data-owner="mohammed">
+        <li>
+            <div class="person">
+                <img src="images/sefi.jpg" data-full="images/sefi.jpg" data-name="Сефи Сефеви" alt="Сефи" onclick="openPersonPhoto(this)">
+                <div class="person-name">Сефи</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img src="images/aliya.jpg" data-full="images/aliya.jpg" data-name="Алия Сефеви" alt="Алия" onclick="openPersonPhoto(this)">
+                <div class="person-name">Алия</div>
+            </div>
+        </li>
+        <li>
+            <div class="person">
+                <img src="images/amal.jpg" data-full="images/amal.jpg" data-name="Амаль Сефеви" alt="Амаль" onclick="openPersonPhoto(this)">
+                <div class="person-name">Амаль</div>
+            </div>
+        </li>
+    </ul>
+</li>
+
+                                    <!-- 3.3. Мах-и-Мелек -->
+                                    <li>
+                                        <div class="node-row">
+                                            <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Текели">
+                                                <img src="images/melek.jpg" data-full="images/mahimelek.jpg" data-name="Мах-и-Мелек Сефеви" alt="Мах-и-Мелек" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Мах-и-<br>Мелек</div>
+                                            </div>
+
+                                            <div class="simstree-partners" data-visible="2">
+                                                <div class="partners-stack">
+                                                    <div class="partner-slot">
+                                                        <span class="partner-rel-icon" title="1-й муж">⚮</span>
+                                                        <div class="partner-mini-card">
+                                                            <img class="partner-mini-avatar deceased" src="images/ayaz.jpg" data-full="images/ayaz.jpg" data-name="Аяз Зулькадар (1-й муж Мах-и-Мелек)" alt="Аяз Зулькадар" onclick="openPersonPhoto(this, event)">
+                                                            <div class="partner-mini-name">
+                                                                Аяз Зулькадар
+                                                                <span class="partner-mini-sub">1-й муж</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="partner-slot">
+                                                        <span class="partner-rel-icon" title="2-й муж">⚭</span>
+                                                        <div class="partner-mini-card">
+                                                            <img class="partner-mini-avatar" src="images/jafar.jpg" data-full="images/jafar.jpg" data-name="Джафар Текели (2-й муж Мах-и-Мелек)" alt="Джафар Текели" onclick="openPersonPhoto(this, event)">
+                                                            <div class="partner-mini-name">
+                                                                Джафар Текели
+                                                                <span class="partner-mini-sub">2-й муж</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <!-- ==================== 3 ПОКОЛЕНИЕ: Дети Исмаила III от 2-й жены Зумруд ==================== -->
+                                <ul id="ismail-zumrud" class="wife-children-group" data-owner="ismail">
+                                    <li>
+                                        <div class="node-row">
+                                            <div class="person">
+                                                <img src="images/ture.jpg" data-full="images/ture.jpg" data-name="Туре Сефеви" alt="Туре" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Туре</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="node-row">
+                                            <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Каджар">
+                                                <img src="images/meylishah.jpg" data-full="images/meylishah.jpg" data-name="Мейлишах Сефеви" alt="Мейлишах" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Мейлишах</div>
+                                            </div>
+                                            <div class="marriage">⚭</div>
+                                            <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Каджар">
+                                                <img class="deceased" src="images/tahir.jpg" data-full="images/tahir.jpg" data-name="Тахир Каджар" alt="Тахир Каджар" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Тахир<br>Каджар</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="node-row">
+                                            <div class="person tooltip-target" data-tooltip="Продолжение рода в древах Устаджлы и Афшар">
+                                                <img src="images/makpal.jpg" data-full="images/makpal.jpg" data-name="Макпал Сефеви" alt="Макпал" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Макпал</div>
+                                            </div>
+
+                                            <div class="simstree-partners" data-visible="2">
+                                                <div class="partners-stack">
+                                                    <div class="partner-slot">
+                                                        <span class="partner-rel-icon" title="Бывший муж">⚮</span>
+                                                        <div class="partner-mini-card">
+                                                            <img class="partner-mini-avatar deceased" src="images/ilkin.jpg" data-full="images/ilkin.jpg" data-name="Илькин Устаджлы (1-й муж Макпал)" alt="Илькин Устаджлы" onclick="openPersonPhoto(this, event)">
+                                                            <div class="partner-mini-name">
+                                                                Илькин Устаджлы
+                                                                <span class="partner-mini-sub">Бывший муж</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="partner-slot">
+                                                        <span class="partner-rel-icon" title="Муж">⚭</span>
+                                                        <div class="partner-mini-card">
+                                                            <img class="partner-mini-avatar" src="images/boran.jpg" data-full="images/boran.jpg" data-name="Боран Афшар (2-й муж Макпал)" alt="Боран Афшар" onclick="openPersonPhoto(this, event)">
+                                                            <div class="partner-mini-name">
+                                                                Боран Афшар
+                                                                <span class="partner-mini-sub">Муж</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <!-- ==================== 3 ПОКОЛЕНИЕ: Дети Исмаила III от 3-й жены Ситтишах ==================== -->
+                                <ul id="ismail-sittishah" class="wife-children-group" data-owner="ismail">
+                                    <li>
+                                        <div class="node-row">
+                                            <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Афшар">
+                                                <img class="deceased" src="images/hevva3.jpg" data-full="images/hevva3.jpg" data-name="Хевва Сефеви" alt="Хевва" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Хевва</div>
+                                            </div>
+                                            <div class="marriage">⚭</div>
+                                            <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Афшар">
+                                                <img src="images/aslan.jpg" data-full="images/aslan.jpg" data-name="Аслан Афшар" alt="Аслан Афшар" onclick="openPersonPhoto(this)">
+                                                <div class="person-name">Аслан<br>Афшар</div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <!-- 4. Фарангис -->
+                            <li>
+                                <div class="node-row">
+                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Баят">
+                                        <img class="deceased" src="images/farangis.jpg" data-full="images/farangis.jpg" data-name="Фарангис Сефеви" alt="Фарангис" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Фарангис</div>
+                                    </div>
+                                    <div class="marriage">⚭</div>
+                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Баят">
+                                        <img class="deceased" src="images/alekber2.jpg" data-full="images/alekber2.jpg" data-name="Алекбер Баят" alt="Алекбер Баят" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Алекбер<br>Баят</div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 5. Мехрангиз -->
+                            <li>
+                                <div class="node-row">
+                                    <div class="person">
+                                        <img class="deceased" src="images/mehrangiz.jpg" data-full="images/mehrangiz.jpg" data-name="Мехрангиз Сефеви" alt="Мехрангиз" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Мехрангиз</div>
+                                    </div>
+                                    <div class="marriage">⚭</div>
+                                    <div class="person">
+                                        <img class="deceased" src="images/haydar2.jpg" data-full="images/haydar2.jpg" data-name="Хайдар II Гирей" alt="Хайдар II Гирей" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Хайдар II<br>Гирей</div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <!-- 6. Мелекнисе -->
+                            <li>
+                                <div class="node-row">
+                                    <div class="person">
+                                        <img class="deceased" src="images/meleknise.jpg" data-full="images/meleknise.jpg" data-name="Мелекнисе Сефеви" alt="Мелекнисе" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Мелекнисе</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                        <!-- ==================== 2 ПОКОЛЕНИЕ (Дети Аббаса I от 2-й жены Майсун) ==================== -->
+                        <ul id="abbas-maysun" class="wife-children-group" data-owner="abbas">
+                            <li>
+                                <div class="node-row">
+                                    <div class="person">
+                                        <img src="images/farid.jpg" data-full="images/farid.jpg" data-name="Фарид Сефеви" alt="Фарид" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Фарид</div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="node-row">
+                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Устаджлы">
+                                        <img src="images/malahat.jpg" data-full="images/malahat.jpg" data-name="Малахат Сефеви" alt="Малахат" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Малахат</div>
+                                    </div>
+                                    <div class="marriage">⚭</div>
+                                    <div class="person tooltip-target" data-tooltip="Продолжение рода в древе Устаджлы">
+                                        <img src="images/bahadur.jpg" data-full="images/bahadur.jpg" data-name="Бахадур Устаджлы" alt="Бахадур Устаджлы" onclick="openPersonPhoto(this)">
+                                        <div class="person-name">Бахадур<br>Устаджлы</div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно портрета -->
+<div class="photo-modal" id="photoModal" onclick="closePersonPhoto(event)">
+    <div class="photo-modal-content">
+        <button class="photo-modal-close" onclick="closePersonPhoto(event)">×</button>
+        <img id="modalPhoto" src="" alt="">
+        <div class="photo-modal-name" id="modalName"></div>
+    </div>
+</div>
+
+<script>
+function fitTreeToContainer() {
+    var viewport = document.getElementById('treeViewport');
+    var fit = document.getElementById('treeFit');
+    var tree = document.getElementById('tree');
+
+    if (!viewport || !fit || !tree) return;
+
+    fit.style.transform = 'none';
+    fit.style.height = 'auto';
+    tree.style.marginLeft = '0px';
+    tree.style.marginRight = '0px';
+
+    var treeRect = tree.getBoundingClientRect();
+    var minLeft = treeRect.left;
+    var maxRight = treeRect.right;
+    var maxBottom = treeRect.bottom;
+
+    var elements = tree.querySelectorAll('.person, .simstree-partners');
+    elements.forEach(function(el) {
+        if (el.offsetParent === null) return;
+        var r = el.getBoundingClientRect();
+        if (r.width === 0 && r.height === 0) return;
+        if (r.left < minLeft) minLeft = r.left;
+        if (r.right > maxRight) maxRight = r.right;
+        if (r.bottom > maxBottom) maxBottom = r.bottom;
+    });
+
+    var leftOverflow = Math.max(0, treeRect.left - minLeft);
+    var rightOverflow = Math.max(0, maxRight - treeRect.right);
+
+    if (leftOverflow > 0) {
+        tree.style.marginLeft = (leftOverflow + 20) + 'px';
+    }
+    if (rightOverflow > 0) {
+        tree.style.marginRight = (rightOverflow + 20) + 'px';
+    }
+
+    var totalWidth = (maxRight - minLeft) + 40;
+    var totalHeight = (maxBottom - treeRect.top) + 30;
+    var availableWidth = viewport.clientWidth - 10;
+
+    var scale = availableWidth / totalWidth;
+    if (scale > 1) scale = 1;
+
+    fit.style.transform = 'scale(' + scale + ')';
+    fit.style.height = Math.ceil(totalHeight * scale) + 'px';
+}
+
+function selectWifeBranch(slotEl, evt) {
+    if (evt) evt.stopPropagation();
+
+    var targetId = slotEl.getAttribute('data-target');
+    if (!targetId) return;
+
+    var widget = slotEl.closest('.simstree-partners');
+    var owner = widget ? widget.getAttribute('data-owner') : null;
+    if (!owner) return;
+
+    widget.querySelectorAll('.partner-slot').forEach(function(s) {
+        s.classList.remove('active-wife');
+    });
+    slotEl.classList.add('active-wife');
+
+    document.querySelectorAll('.wife-children-group[data-owner="' + owner + '"]').forEach(function(group) {
+        if (group.id === targetId) {
+            group.classList.add('active-group');
+        } else {
+            group.classList.remove('active-group');
+        }
+    });
+
+    fitTreeToContainer();
+}
+
+function initSimsTreePartners() {
+    var widgets = document.querySelectorAll('.simstree-partners');
+    widgets.forEach(function(widget) {
+        var maxVisible = parseInt(widget.getAttribute('data-visible') || '3', 10);
+        var slots = widget.querySelectorAll('.partner-slot');
+        var pager = widget.querySelector('.partners-pager');
+        var totalEl = widget.querySelector('.pager-total');
+
+        widget.dataset.startIndex = '0';
+        if (totalEl) totalEl.textContent = slots.length;
+
+        if (slots.length <= maxVisible && pager) {
+            pager.style.display = 'none';
+        }
+        renderPartnersSlice(widget);
+    });
+}
+
+function renderPartnersSlice(widget) {
+    var maxVisible = parseInt(widget.getAttribute('data-visible') || '3', 10);
+    var start = parseInt(widget.dataset.startIndex || '0', 10);
+    var slots = widget.querySelectorAll('.partner-slot');
+
+    slots.forEach(function(slot, idx) {
+        if (idx >= start && idx < start + maxVisible) {
+            slot.classList.remove('hidden-slot');
+        } else {
+            slot.classList.add('hidden-slot');
+        }
+    });
+}
+
+function scrollPartners(btn, direction) {
+    var widget = btn.closest('.simstree-partners');
+    if (!widget) return;
+
+    var maxVisible = parseInt(widget.getAttribute('data-visible') || '3', 10);
+    var slots = widget.querySelectorAll('.partner-slot');
+    var start = parseInt(widget.dataset.startIndex || '0', 10);
+
+    var maxStart = Math.max(0, slots.length - maxVisible);
+    start += direction;
+
+    if (start < 0) start = maxStart;
+    if (start > maxStart) start = 0;
+
+    widget.dataset.startIndex = String(start);
+    renderPartnersSlice(widget);
+}
+
+function openPersonPhoto(element, evt) {
+    if (evt) {
+        var parentSlot = element.closest('.partner-slot');
+        if (parentSlot && parentSlot.hasAttribute('data-target') && !parentSlot.classList.contains('active-wife')) {
+            selectWifeBranch(parentSlot, evt);
+            return;
+        }
+        evt.stopPropagation();
+    }
+
+    var modal = document.getElementById('photoModal');
+    var modalPhoto = document.getElementById('modalPhoto');
+    var modalName = document.getElementById('modalName');
+
+    var fullImage = element.getAttribute('data-full') || element.getAttribute('src');
+    var personName = element.getAttribute('data-name') || element.getAttribute('alt') || '';
+
+    modalPhoto.src = fullImage;
+    modalPhoto.alt = personName;
+    modalName.textContent = personName;
+
+    if (element.classList.contains('deceased')) {
+        modalPhoto.classList.add('deceased');
+    } else {
+        modalPhoto.classList.remove('deceased');
+    }
+
+    modal.classList.add('active');
+}
+
+function closePersonPhoto(event) {
+    if (
+        event.target.id === 'photoModal' ||
+        event.target.classList.contains('photo-modal-close')
+    ) {
+        document.getElementById('photoModal').classList.remove('active');
+    }
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        document.getElementById('photoModal').classList.remove('active');
+    }
+});
+
+window.addEventListener('load', function() {
+    initSimsTreePartners();
+    fitTreeToContainer();
+});
+window.addEventListener('resize', fitTreeToContainer);
+
+setTimeout(fitTreeToContainer, 300);
+setTimeout(fitTreeToContainer, 1000);
+</script>
+
+</body>
+</html>
