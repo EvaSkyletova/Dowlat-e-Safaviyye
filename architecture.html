@@ -427,24 +427,34 @@
     border-collapse: collapse;
     text-align: left;
     font-size: 11px;
-    white-space: nowrap;
+    /* ИСПРАВЛЕНИЕ: убрали white-space: nowrap, разрешаем перенос длинных названий построек */
+    white-space: normal; 
   }
 
   .builds-table th {
     background: rgba(212, 175, 55, 0.1);
     color: var(--gold-light);
-    padding: 7px 10px;
+    padding: 9px 12px;
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 1px solid var(--line);
+    white-space: nowrap; /* Шапке оставляем nowrap для красоты */
   }
 
   .builds-table td {
-    padding: 8px 10px;
+    padding: 10px 12px;
     border-bottom: 1px solid var(--line-soft);
     color: var(--text);
     vertical-align: middle;
+    /* Разрешаем перенос текста для ячеек */
+    word-break: break-word;
+  }
+
+  /* Задаем столбцу с названием постройки (первому) нормальный комфортный перенос и ширину */
+  .builds-table td:first-child {
+    min-width: 250px;
+    max-width: 400px;
   }
 
   .builds-table tr:last-child td {
@@ -667,7 +677,7 @@
     for (let charName in grouped) {
       let avatarHtml = getCharacterAvatar(charName);
       
-      // Считаем общую сумму взносов для активных построек (СТИЛЬ КАК В activity.html)
+      // Считаем общую сумму взносов для активных построек
       let totalVznosHtml = "";
       if (currentTab === 'active') {
         let totalSum = 0;
@@ -708,7 +718,7 @@
       if (currentTab === 'process') {
         html += `<th>Название</th><th>Дата нач.</th><th>Год откр.</th><th>Место</th>`;
       } else if (currentTab === 'active') {
-        html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Пожертвования</th><th>Взнос</th>`;
+        html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Poжертвования</th><th>Взнос</th>`;
       } else {
         html += `<th>Название</th><th>Год открытия</th><th>Место</th><th>Пожертвования</th>`;
       }
