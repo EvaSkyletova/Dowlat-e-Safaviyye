@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Астролябия Судеб</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ (ВКЛЮЧАЯ DROPDOWN) */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary,
+  .custom-select-dropdown, .custom-select-option {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .fate-card {
+    width: 100%;
+    max-width: 650px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 45px;
+    position: relative;
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  .fate-card::before,
+  .fate-card::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .fate-card::before { top: 10px; left: 14px; }
+  .fate-card::after { top: 10px; right: 14px; }
+
+  /* Шапка */
+  .fate-header {
+    position: relative;
+    overflow: hidden;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+  }
+
+  .fate-header:after {
+    content: "✦  ✦  ✦";
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+    color: rgba(212, 175, 55, 0.3);
+    font-size: 13px;
+    letter-spacing: 6px;
+  }
+
+  .fate-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 24px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .fate-desc {
+    margin: 0 auto;
+    max-width: 500px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.5;
+    font-style: italic;
+  }
+
+  /* Форма ввода */
+  .form-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+
+  input {
+    padding: 12px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    color: var(--text);
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  input:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  #day { width: 28%; text-align: center; }
+  #year { width: 28%; text-align: center; }
+
+  /* КАСТОМНЫЙ ВЫПАДАЮЩИЙ СПИСОК */
+  .custom-select {
+    position: relative;
+    user-select: none;
+    text-align: left;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+  }
+
+  .custom-select:hover {
+    border-color: var(--gold);
+  }
+
+  .custom-select.open {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .custom-select-trigger {
+    padding: 12px 14px;
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  .custom-select-trigger::after {
+    content: "▾";
+    color: var(--gold);
+    font-size: 14px;
+    transition: transform 0.2s;
+  }
+
+  .custom-select.open .custom-select-trigger::after {
+    transform: rotate(180deg);
+  }
+
+  .custom-select-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #141417;
+    border: 1px solid var(--line-strong);
+    border-radius: 6px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.85);
+    z-index: 999;
+    max-height: 220px;
+    overflow-y: auto;
+  }
+
+  .custom-select.open .custom-select-dropdown {
+    display: block;
+  }
+
+  .custom-select-option {
+    padding: 11px 14px;
+    font-size: 14px;
+    color: var(--text);
+    transition: background 0.2s, color 0.2s;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .custom-select-option:last-child {
+    border-bottom: none;
+  }
+
+  .custom-select-option:hover {
+    background: rgba(212, 175, 55, 0.15);
+    color: var(--gold-light);
+  }
+
+  .custom-select-option.selected {
+    background: rgba(212, 175, 55, 0.25);
+    color: var(--gold-light);
+    font-weight: bold;
+  }
+
+  #monthSelectContainer { width: 44%; }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 6px;
+    padding: 13px 20px;
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+
+  .submit-btn:hover {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px);
+  }
+
+  /* Блок результата */
+  .result-container {
+    display: none;
+    margin-top: 25px;
+    border-top: 1px dashed var(--line);
+    padding-top: 22px;
+    animation: fadeIn 0.35s ease-out;
+  }
+
+  .fate-date-display {
+    color: var(--gold-soft);
+    font-size: 12.5px;
+    font-style: italic;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .fate-symbol {
+    font-size: 52px;
+    line-height: 1.1;
+    margin: 6px 0 10px;
+    filter: drop-shadow(0 0 12px rgba(212, 175, 55, 0.4));
+  }
+
+  .sign-title {
+    font-size: 20px;
+    color: var(--gold-light);
+    font-weight: normal;
+    font-family: 'Yipes', Georgia, serif !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .sign-sub {
+    font-size: 13px;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 20px;
+  }
+
+  /* Сетка сфер судьбы */
+  .spheres-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .sphere-block {
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--gold);
+    padding: 12px 6px;
+    border-radius: 0 6px 6px 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+  }
+
+  .sphere-name {
+    font-size: 11px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+
+  .sphere-val {
+    font-size: 13.5px;
+    font-weight: bold;
+    color: var(--text);
+    line-height: 1.25;
+  }
+
+  /* Свиток пророчества */
+  .omen-box {
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    color: var(--text);
+    padding: 14px 18px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13.5px;
+    line-height: 1.7;
+    text-align: left;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+    margin-bottom: 14px;
+  }
+
+  .omen-box::before {
+    content: "✦ Небесное знамение мунаджжима:";
+    display: block;
+    color: var(--gold-light);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+    font-size: 12px;
+    text-transform: uppercase;
+  }
+
+  /* Золотое предостережение */
+  .warning-box {
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold-soft);
+    color: var(--gold-light);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: left;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Адаптация для телефонов */
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .fate-card { padding: 25px 15px; }
+    .fate-header { padding: 20px 15px; }
+    .fate-title { font-size: 21px; }
+    .spheres-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+
+        // Закрытие кастомных селектов при клике вне их
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-select')) {
+                document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
+            }
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html" class="active">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="guide.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="fate-card">
+        <header class="fate-header">
+            <h1 class="fate-title">Астролябия Судеб</h1>
+            <p class="fate-desc">Движение зодиакальных башен (бурдж), влияние небесных светил и астрологические предсказания для подданных державы.</p>
+        </header>
+        
+        <div class="form-section">
+            <div class="input-group">
+                <input type="number" id="day" placeholder="День" min="1" max="31">
+                
+                <!-- Кастомный селект для месяцев -->
+                <div class="custom-select" id="monthSelectContainer">
+                    <div class="custom-select-trigger" id="monthTrigger">-- Выберите месяц --</div>
+                    <div class="custom-select-dropdown" id="monthDropdown">
+                        <div class="custom-select-option" data-value="1">1. Фарвардин (Овен / Хамаль)</div>
+                        <div class="custom-select-option" data-value="2">2. Ордибехешт (Телец / Саур)</div>
+                        <div class="custom-select-option" data-value="3">3. Хордад (Близнецы / Джауза)</div>
+                        <div class="custom-select-option" data-value="4">4. Тир (Рак / Саратан)</div>
+                        <div class="custom-select-option" data-value="5">5. Мордад (Лев / Асад)</div>
+                        <div class="custom-select-option" data-value="6">6. Шахривар (Дева / Сумбула)</div>
+                        <div class="custom-select-option" data-value="7">7. Мехр (Весы / Мизан)</div>
+                        <div class="custom-select-option" data-value="8">8. Абан (Скорпион / Акраб)</div>
+                        <div class="custom-select-option" data-value="9">9. Азар (Стрелец / Каус)</div>
+                        <div class="custom-select-option" data-value="10">10. Дей (Козерог / Джади)</div>
+                        <div class="custom-select-option" data-value="11">11. Бахман (Водолей / Дальв)</div>
+                        <div class="custom-select-option" data-value="12">12. Эсфанд (Рыбы / Хут)</div>
+                    </div>
+                    <input type="hidden" id="month" value="">
+                </div>
+
+                <input type="number" id="year" placeholder="Год" value="1024">
+            </div>
+
+            <button type="button" class="submit-btn" onclick="revealFate()">Повернуть диск судеб</button>
+        </div>
+
+        <div id="resultBox" class="result-container">
+            <div id="fateDateDisplay" class="fate-date-display"></div>
+            <div class="fate-symbol" id="fateSymbol">♈</div>
+            <div class="sign-title" id="signTitle">Бурдж аль-Хамаль (Овен)</div>
+            <div class="sign-sub" id="signSub">Стихия: Огонь · Владыка: Миррих (Марс)</div>
+
+            <!-- Сферы жизни -->
+            <div class="spheres-grid">
+                <div class="sphere-block">
+                    <div class="sphere-name">Власть</div>
+                    <div class="sphere-val" id="valPower">Триумф</div>
+                </div>
+                <div class="sphere-block">
+                    <div class="sphere-name">Любовь</div>
+                    <div class="sphere-val" id="valLove">Страсть</div>
+                </div>
+                <div class="sphere-block">
+                    <div class="sphere-name">Казна</div>
+                    <div class="sphere-val" id="valWealth">Прибыль</div>
+                </div>
+                <div class="sphere-block">
+                    <div class="sphere-name">Интриги</div>
+                    <div class="sphere-val" id="valIntrigue">Осторожность</div>
+                </div>
+            </div>
+
+            <!-- Свиток знамения -->
+            <div class="omen-box" id="omenText">
+                Текст пророчества.
+            </div>
+
+            <!-- Предостережение -->
+            <div class="warning-box" id="warningText">
+                Совет дня.
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        // Логика кастомного селекта
+        function setupCustomSelect(containerId) {
+            const container = document.getElementById(containerId);
+            const trigger = container.querySelector('.custom-select-trigger');
+            const dropdown = container.querySelector('.custom-select-dropdown');
+            const hiddenInput = container.querySelector('input[type="hidden"]');
+            const options = container.querySelectorAll('.custom-select-option');
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                document.querySelectorAll('.custom-select').forEach(el => {
+                    if (el !== container) el.classList.remove('open');
+                });
+                container.classList.toggle('open');
+            });
+
+            options.forEach(opt => {
+                opt.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    options.forEach(o => o.classList.remove('selected'));
+                    opt.classList.add('selected');
+                    trigger.textContent = opt.textContent;
+                    hiddenInput.value = opt.getAttribute('data-value');
+                    container.classList.remove('open');
+                });
+            });
+        }
+
+        setupCustomSelect('monthSelectContainer');
+
+        const zodiacSigns = [
+            { name: "Хамаль (Овен)", icon: "♈", element: "Огонь (Аташ)", planet: "Миррих (Марс)", nature: "Воинственный, дерзкий, неудержимый" },
+            { name: "Саур (Телец)", icon: "♉", element: "Земля (Хак)", planet: "Зухра (Венера)", nature: "Упорный, щедрый, непоколебимый" },
+            { name: "Джауза (Близнецы)", icon: "♊", element: "Воздух (Бад)", planet: "Утарид (Меркурий)", nature: "Красноречивый, переменчивый, проницательный" },
+            { name: "Саратан (Рак)", icon: "♋", element: "Вода (Аб)", planet: "Мах (Луна)", nature: "Осторожный, скрытный, хранящий тайны" },
+            { name: "Асад (Лев)", icon: "♌", element: "Огонь (Аташ)", planet: "Хуршид (Солнце)", nature: "Царственный, властный, благородный" },
+            { name: "Сумбула (Дева)", icon: "♍", element: "Земля (Хак)", planet: "Утарид (Меркурий)", nature: "Расчетливый, мудрый, внимательный к мелочам" },
+            { name: "Мизан (Весы)", icon: "♎", element: "Воздух (Бад)", planet: "Зухра (Венера)", nature: "Справедливый, изящный, дипломатичный" },
+            { name: "Акраб (Скорпион)", icon: "♏", element: "Вода (Аб)", planet: "Миррих (Марс)", nature: "Грозный, коварный, видящий чужую слабость" },
+            { name: "Каус (Стрелец)", icon: "♐", element: "Огонь (Аташ)", planet: "Муштари (Юпитер)", nature: "Стремительный, удачливый в походах" },
+            { name: "Джади (Козерог)", icon: "♑", element: "Земля (Хак)", planet: "Зухаль (Сатурн)", nature: "Суровый, хладнокровный, терпеливый" },
+            { name: "Дальв (Водолей)", icon: "♒", element: "Воздух (Бад)", planet: "Зухаль (Сатурн)", nature: "Мятежный, прозорливый, чуждый оковам" },
+            { name: "Хут (Рыбы)", icon: "♓", element: "Вода (Аб)", planet: "Муштари (Юпитер)", nature: "Таинственный, вдохновенный, чувствующий рок" }
+        ];
+
+        const monthNamesGenitive = [
+            "Фарвардина", "Ордибехешта", "Хордада",
+            "Тира", "Мордада", "Шахривара",
+            "Мехра", "Абана", "Азара",
+            "Дея", "Бахмана", "Эсфанда"
+        ];
+
+        const powerStates = ["Триумф", "Милость Шаха", "Опала", "Укрепление", "Испытание", "Слава"];
+        const loveStates = ["Пылкая страсть", "Холодность", "Сладкий яд", "Верность", "Ревность", "Тайный взор"];
+        const wealthStates = ["Златой дождь", "Трата казны", "Щедрый дар", "Стабильность", "Убыток", "Богатство"];
+        const intrigueStates = ["Бдительность", "Удар в спину", "Ясный взор", "Сети врагов", "Успешный план", "Тень за спиной"];
+
+        const omens = [
+            "Звезды сошлись в благословенный аспект: речи, произнесенные перед сильными мира сего, найдут отклик, а давние споры утихнут.",
+            "Зухаль (Сатурн) бросает тяжелый взор на дела двора. Не подписывайте важных договоров и не отправляйте гонцов с тайными письмами до заката.",
+            "Владыка воинской чести Миррих входит в апогей. Клинки жаждут обнажения, однако победу одержит не тот, кто скор на гнев, а тот, кто выждет чужую ошибку.",
+            "Зухра освещает женские покои и сады. Благоприятный день для признаний, роскошных подарков, заключения брачных уз и примирения враждующих родов.",
+            "Мерцание неподвижных звезд предвещает коварство слуг или подкупленных стражников. Проверяйте яства и не оставайтесь наедине с чужими гулямами.",
+            "Врата изобилия приоткрыты Муштари. Купцы получат редкую прибыль, а прошения о выделении земель из казны будут встречены с благосклонностью.",
+            "Мгла скрывает истинные намерения врагов. Слухи, распущенные сегодня на базаре, способны пошатнуть авторитет даже старейших шейхов племени."
+        ];
+
+        const warnings = [
+            "⚠️ Совет звездочетов: Воздержитесь от дальних конных переходов в сумерках.",
+            "⚠️ Совет звездочетов: Не принимайте подарков из непроверенных рук — в золоте может таиться дурной глаз.",
+            "⚠️ Совет звездочетов: Благоприятно раздавать милостыню дервишам для отведения гнева небес.",
+            "⚠️ Совет звездочетов: Остерегайтесь клятв, данных при свете растущей луны.",
+            "⚠️ Совет звездочетов: Сегодня молчание в присутствии шаха дороже слитка чистейшего серебра."
+        ];
+
+        function seededRandom(seed) {
+            let x = Math.sin(seed) * 10000;
+            return x - Math.floor(x);
+        }
+
+        function revealFate() {
+            const dayInput = document.getElementById('day').value;
+            const monthInput = document.getElementById('month').value;
+            const yearInput = document.getElementById('year').value;
+
+            if(!monthInput) {
+                alert("Пожалуйста, выберите месяц персидского календаря!");
+                return;
+            }
+
+            const day = parseInt(dayInput, 10);
+            const month = parseInt(monthInput, 10);
+            const year = parseInt(yearInput, 10);
+
+            if(!day || !year || day < 1 || day > 31) {
+                alert("Укажите правильный день (от 1 до 31) и год!");
+                return;
+            }
+
+            const sign = zodiacSigns[month - 1];
+            const mGen = monthNamesGenitive[month - 1];
+
+            const seed = year * 10000 + month * 100 + day;
+
+            const pIdx = Math.floor(seededRandom(seed + 1) * powerStates.length);
+            const lIdx = Math.floor(seededRandom(seed + 2) * loveStates.length);
+            const wIdx = Math.floor(seededRandom(seed + 3) * wealthStates.length);
+            const iIdx = Math.floor(seededRandom(seed + 4) * intrigueStates.length);
+
+            const oIdx = Math.floor(seededRandom(seed + 5) * omens.length);
+            const warnIdx = Math.floor(seededRandom(seed + 6) * warnings.length);
+
+            document.getElementById('fateDateDisplay').innerText = `Гороскоп начертан: ${day} ${mGen} ${year} года`;
+            document.getElementById('fateSymbol').innerText = sign.icon;
+            document.getElementById('signTitle').innerText = `Бурдж аль-${sign.name}`;
+            document.getElementById('signSub').innerText = `Стихия: ${sign.element} · Планета: ${sign.planet} · Нрав: ${sign.nature}`;
+
+            document.getElementById('valPower').innerText = powerStates[pIdx];
+            document.getElementById('valLove').innerText = loveStates[lIdx];
+            document.getElementById('valWealth').innerText = wealthStates[wIdx];
+            document.getElementById('valIntrigue').innerText = intrigueStates[iIdx];
+
+            document.getElementById('omenText').innerText = omens[oIdx];
+            document.getElementById('warningText').innerText = warnings[warnIdx];
+
+            document.getElementById('resultBox').style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
