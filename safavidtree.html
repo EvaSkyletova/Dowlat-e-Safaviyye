@@ -47,11 +47,11 @@ html, body {
     padding: 0;
     width: 100%;
     min-height: 100vh;
-    background: var(--bg) !important;
+    background: #161618 !important;
     color: var(--text);
     background-image: 
         radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-        linear-gradient(to bottom, #161618, #0b0b0d);
+        linear-gradient(to bottom, #161618, #0b0b0d) !important;
     overflow-x: hidden;
     overflow-y: auto;
 }
@@ -140,7 +140,7 @@ html, body {
     text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
 }
 
-/* БЕЗ РАМОК — ПРОЗРАЧНЫЙ ФОН И МАКСИМАЛЬНАЯ ШИРИНА */
+/* БЕЗ РАМОК — ПОЛНОСТЬЮ НА СВОБОДНОМ ФОНЕ САЙТА */
 .tree-container {
     width: 100%;
     max-width: 1400px;
@@ -1052,20 +1052,20 @@ img.deceased {
                     <div class="person-dates">1645 – ...</div>
                 </div>
 
-                <!-- 2 жены Наримана I сбоку + сын Саид Джаханфар -->
-                <div class="simstree-partners" data-visible="2">
+                <!-- 2 жены Наримана I сбоку: Зулейка (активная, с сыном Саидом) и Марджана -->
+                <div class="simstree-partners" data-visible="2" data-owner="nariman">
                     <div class="partners-stack">
-                        <div class="partner-slot">
+                        <div class="partner-slot active-wife" data-target="nariman-zuleyka" onclick="selectWifeBranch(this, event)">
                             <span class="partner-rel-icon">⚭</span>
                             <div class="partner-mini-card">
                                 <img class="partner-mini-avatar" src="images/salamat.jpg" data-full="images/zuleyka.jpg" data-name="ЗУЛЕЙКА аль-Саламат Чехарленг (Жена Наримана I)" alt="ЗУЛЕЙКА аль-Саламат Чехарленг" onclick="openPersonPhoto(this, event)">
                                 <div class="partner-mini-name">
-                                    ЗУЛЕЙКА аль-Саламат<br>Чехарленг
+                                    ЗУЛЕЙКА аль-Саламат
                                     <span class="partner-mini-sub">Жена (сын Саид)</span>
                                 </div>
                             </div>
                         </div>
-                        <div class="partner-slot">
+                        <div class="partner-slot" data-target="nariman-marjana" onclick="selectWifeBranch(this, event)">
                             <span class="partner-rel-icon">♥</span>
                             <div class="partner-mini-card">
                                 <img class="partner-mini-avatar" src="images/marjana.jpg" data-full="images/marjana.jpg" data-name="Марджана (Наложница Наримана I)" alt="Марджана" onclick="openPersonPhoto(this, event)">
@@ -1079,8 +1079,8 @@ img.deceased {
                 </div>
             </div>
 
-            <!-- Сын Наримана I и Зулейки аль-Саламат: Саид Джаханфар -->
-            <ul>
+            <!-- Ветка детей Наримана I по жёнам (Зулейка -> Саид Джаханфар) -->
+            <ul id="nariman-zuleyka" class="wife-children-group active-group" data-owner="nariman">
                 <li>
                     <div class="node-row">
                         <div class="person">
@@ -1089,6 +1089,10 @@ img.deceased {
                         </div>
                     </div>
                 </li>
+            </ul>
+
+            <ul id="nariman-marjana" class="wife-children-group" data-owner="nariman">
+                <!-- Пусто для Марджаны пока нет детей -->
             </ul>
         </li>
 
