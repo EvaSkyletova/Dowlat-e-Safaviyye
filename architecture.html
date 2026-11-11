@@ -279,30 +279,31 @@
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
   }
 
+  /* СТИЛЬ КНОПКИ КАК В activity.html */
   .refresh-btn {
-    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
-    color: #121008;
-    border: none;
+    background: var(--panel-dark);
+    color: var(--muted);
+    border: 1px solid var(--line);
     border-radius: 4px;
-    padding: 12px 22px;
-    font-size: 12.5px;
+    padding: 10px 16px;
+    font-size: 12px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .refresh-btn:hover {
-    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
-    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-    transform: translateY(-1px);
-  }
-
-  .refresh-btn:active {
-    transform: translateY(1px);
+    background: var(--gold);
+    color: #111;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+    transform: none;
   }
 
   /* ВКЛАДКИ ПЕРЕКЛЮЧЕНИЯ (3 КНОПКИ) */
@@ -566,7 +567,7 @@
           <div class="search-box">
             <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
           </div>
-          <button type="button" class="refresh-btn" onclick="fetchBuildsData()">🔄 Обновить</button>
+          <button type="button" class="refresh-btn" onclick="fetchBuildsData()">↻ Обновить</button>
         </div>
 
         <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
@@ -666,7 +667,7 @@
     for (let charName in grouped) {
       let avatarHtml = getCharacterAvatar(charName);
       
-      // Считаем общую сумму взносов для активных построек
+      // Считаем общую сумму взносов для активных построек (СТИЛЬ КАК В activity.html)
       let totalVznosHtml = "";
       if (currentTab === 'active') {
         let totalSum = 0;
@@ -684,7 +685,7 @@
         });
 
         if (totalSum > 0) {
-          totalVznosHtml = `<div style="font-size: 12px; color: #fff; background: linear-gradient(90deg, rgba(140, 106, 8, 0.4), rgba(212, 175, 55, 0.35), rgba(140, 106, 8, 0.4)); padding: 6px 14px; border-radius: 4px; border: 1px solid rgba(251, 232, 166, 0.5); margin-top: 6px; font-style: normal; letter-spacing: 1.5px; display: inline-block; box-shadow: 0 3px 10px rgba(0,0,0,0.5);">ОБЩАЯ СУММА ВЗНОСОВ: ${totalSum.toLocaleString('ru-RU')} АББАСИ</div>`;
+          totalVznosHtml = `<div style="font-size: 11.5px; color: var(--gold-light); background: rgba(0, 0, 0, 0.6); border: 1px solid var(--line); padding: 4px 10px; border-radius: 4px; margin-top: 6px; font-style: normal; letter-spacing: 1px; display: inline-block;">Общая сумма взносов: <b>${totalSum.toLocaleString('ru-RU')} аббаси</b></div>`;
         }
       }
 
@@ -709,7 +710,6 @@
       } else if (currentTab === 'active') {
         html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Пожертвования</th><th>Взнос</th>`;
       } else {
-        // Архивные постройки: Колонка A (имя), Колонка B (название), Колонка C (год откр.), Колонка D (место), Колонка E (пожертвования)
         html += `<th>Название</th><th>Год открытия</th><th>Место</th><th>Пожертвования</th>`;
       }
 
@@ -718,24 +718,18 @@
       grouped[charName].forEach(r => {
         html += `<tr>`;
         if (currentTab === 'process') {
-          const name = r[1] || '—';
-          const start = r[2] || '—';
-          const open = r[3] || '—';
-          const loc = r[4] || '—';
+          const name = r[1] || '–';
+          const start = r[2] || '–';
+          const open = r[3] || '–';
+          const loc = r[4] || '–';
           html += `<td>${escapeHtml(name)}</td><td>${escapeHtml(start)}</td><td>${escapeHtml(open)}</td><td>${escapeHtml(loc)}</td>`;
         } else if (currentTab === 'active') {
-          html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td><td>${escapeHtml(r[5] || '—')}</td><td>${escapeHtml(r[6] || '—')}</td><td>${escapeHtml(r[7] || '—')}</td>`;
+          html += `<td>${escapeHtml(r[1] || '–')}</td><td>${escapeHtml(r[2] || '–')}</td><td>${escapeHtml(r[3] || '–')}</td><td>${escapeHtml(r[4] || '–')}</td><td>${escapeHtml(r[5] || '–')}</td><td>${escapeHtml(r[6] || '–')}</td><td>${escapeHtml(r[7] || '–')}</td>`;
         } else {
-          // Архивные постройки:
-          // r[0] = Имя персонажа (в шапке)
-          // r[1] = Название постройки (Колонка B)
-          // r[2] = Год открытия (Колонка C)
-          // r[3] = Местонахождение (Колонка D)
-          // r[4] = Пожертвования (Колонка E)
-          const name = r[1] || '—';
-          const year = r[2] || '—';
-          const loc = r[3] || '—';
-          const donations = r[4] || '—';
+          const name = r[1] || '–';
+          const year = r[2] || '–';
+          const loc = r[3] || '–';
+          const donations = r[4] || '–';
           html += `<td>${escapeHtml(name)}</td><td>${escapeHtml(year)}</td><td>${escapeHtml(loc)}</td><td>${escapeHtml(donations)}</td>`;
         }
         html += `</tr>`;
