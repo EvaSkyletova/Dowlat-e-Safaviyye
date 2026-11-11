@@ -7,7 +7,7 @@
 <!-- Иконка вкладки -->
 <link rel="icon" type="image/png" href="leo.png">
 
-<title>Армия • Dowlаt-e Safaviyye</title>
+<title>Армия</title>
 
 <style>
   /* ========================================= */
@@ -34,6 +34,13 @@
     --panel: rgba(22, 22, 26, 0.96);
     --panel-soft: rgba(26, 26, 32, 0.92);
     --panel-dark: rgba(14, 14, 17, 0.97);
+
+    --green-bg: rgba(74, 160, 115, 0.25);
+    --green-border: #5bc48d;
+    --brown-bg: rgba(140, 95, 50, 0.3);
+    --brown-border: #c88a4b;
+    --pink-bg: rgba(205, 95, 95, 0.25);
+    --pink-border: #e57c7c;
   }
 
   /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
@@ -56,7 +63,7 @@
     background: var(--bg) !important;
     color: var(--text);
     background-image: 
-        radial-gradient(circle at 50% 15%, rgba(212, 175, 55, 0.1) 0%, transparent 65%),
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
         linear-gradient(to bottom, #161618, #0b0b0d);
     overflow-x: hidden;
     overflow-y: auto;
@@ -150,164 +157,113 @@
   .wrap {
     width: 100%;
     max-width: 1400px;
-    margin: 40px auto 60px auto;
-    padding: 0 20px;
+    margin: 30px auto;
+    padding: 0 20px 60px;
     display: flex;
     justify-content: center;
     box-sizing: border-box;
   }
 
-  /* УНИКАЛЬНЫЙ ИМПЕРСКИЙ ШАТЕР АРМИИ */
-  .army-grand-arena {
+  .army-card {
     width: 100%;
-    background: radial-gradient(circle at 50% 0%, rgba(35, 30, 20, 0.95), rgba(16, 16, 18, 0.99));
-    border: 2px solid var(--gold);
-    border-radius: 16px;
-    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), inset 0 0 40px rgba(212, 175, 55, 0.08);
-    padding: 50px 60px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
     position: relative;
     box-sizing: border-box;
   }
 
-  /* Декоративные уголки */
-  .army-grand-arena::before,
-  .army-grand-arena::after {
-    content: '⚔️';
+  .army-card::before,
+  .army-card::after {
+    content: '✦';
     position: absolute;
-    font-size: 16px;
-    opacity: 0.6;
+    color: var(--gold);
+    font-size: 12px;
   }
-  .army-grand-arena::before { top: 16px; left: 20px; }
-  .army-grand-arena::after { top: 16px; right: 20px; }
+  .army-card::before { top: 10px; left: 14px; }
+  .army-card::after { top: 10px; right: 14px; }
 
   .army-header {
     text-align: center;
-    margin-bottom: 45px;
-    position: relative;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
   }
 
   .army-kicker {
-    margin: 0 0 8px;
+    margin: 0 0 6px;
     color: var(--gold-soft);
-    font-size: 12px;
-    letter-spacing: 4px;
+    font-size: 11px;
+    letter-spacing: 3px;
     text-transform: uppercase;
     font-weight: bold;
   }
 
   .army-title {
-    margin: 0 0 12px;
+    margin: 0 0 8px;
     color: var(--gold-light);
-    font-size: 34px;
+    font-size: 26px;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
     font-weight: normal;
     font-family: 'Yipes', Georgia, serif !important;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-  }
-
-  .army-divider {
-    color: var(--gold);
-    font-size: 14px;
-    letter-spacing: 8px;
-    opacity: 0.8;
-    margin-bottom: 15px;
   }
 
   .army-subtitle {
-    margin: 0 auto;
+    margin: 0;
     color: var(--muted);
-    font-size: 14px;
+    font-size: 13.5px;
     font-style: italic;
-    max-width: 650px;
-    line-height: 1.6;
   }
 
-  /* 3 КРУПНЫЕ КАРТОЧКИ-ПОРТАЛА (ВКЛАДКИ) С ГРАВЮРНЫМ СТИЛЕМ */
-  .army-tabs-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 25px;
-    margin-bottom: 40px;
+  /* ВКЛАДКИ ПЕРЕКЛЮЧЕНИЯ (3 КНОПКИ) */
+  .tabs-container {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 30px;
   }
 
-  .army-tab-card {
-    background: linear-gradient(145deg, rgba(26, 26, 32, 0.95), rgba(16, 16, 20, 0.98));
+  .tab-btn {
+    flex: 1;
+    background: var(--panel-dark);
+    color: var(--muted);
     border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 30px 24px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  }
-
-  .army-tab-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.18) 0%, transparent 70%);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-  }
-
-  .army-tab-card:hover::before, .army-tab-card.active::before {
-    opacity: 1;
-  }
-
-  .army-tab-card:hover, .army-tab-card.active {
-    border-color: var(--gold);
-    transform: translateY(-6px);
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.25);
-    background: linear-gradient(145deg, rgba(32, 32, 38, 0.98), rgba(20, 20, 24, 0.99));
-  }
-
-  .army-tab-icon {
-    font-size: 38px;
-    margin-bottom: 15px;
-    filter: drop-shadow(0 3px 8px rgba(212, 175, 55, 0.4));
-    transition: transform 0.4s ease;
-  }
-
-  .army-tab-card:hover .army-tab-icon, .army-tab-card.active .army-tab-icon {
-    transform: scale(1.12) rotate(5deg);
-  }
-
-  .army-tab-name {
-    color: var(--gold-light);
-    font-size: 18px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-bottom: 8px;
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 13px;
     font-weight: bold;
-    font-family: 'Yipes', Georgia, serif !important;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   }
 
-  .army-tab-desc {
-    color: var(--muted);
-    font-size: 12.5px;
-    font-style: italic;
-    line-height: 1.4;
+  .tab-btn.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
   }
 
-  /* КОНТЕЙНЕР КОНТЕНТА ВКЛАДОК */
-  .army-content-box {
-    background: rgba(14, 14, 17, 0.85);
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    padding: 35px 40px;
-    min-height: 250px;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
-    position: relative;
+  .tab-btn:hover:not(.active) {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.1);
   }
 
-  .tab-pane {
+  /* КОНТЕНТ ВКЛАДОК */
+  .tab-content {
     display: none;
-    animation: fadeIn 0.4s ease;
+    animation: fadeIn 0.4s ease forwards;
   }
-  .tab-pane.active {
+
+  .tab-content.active {
     display: block;
   }
 
@@ -316,60 +272,452 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .pane-title {
-    color: var(--gold-light);
-    font-size: 20px;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-family: 'Yipes', Georgia, serif !important;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 10px;
+  /* ========================================= */
+  /* СТИЛИ ДЛЯ ВКЛАДКИ «ВОЙСКА»                 */
+  /* ========================================= */
+  .troops-viewport {
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    align-items: center;
+    width: 100%;
   }
 
-  .pane-text {
-    color: var(--text);
-    font-size: 14px;
-    line-height: 1.8;
+  .clan-card {
+    width: 100%;
+    background: 
+        radial-gradient(circle at 15% 30%, rgba(212, 175, 55, 0.07), transparent 45%),
+        radial-gradient(circle at 85% 70%, rgba(212, 175, 55, 0.04), transparent 50%),
+        #14161b;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: 
+        0 18px 50px rgba(0, 0, 0, 0.85),
+        inset 0 0 35px rgba(212, 175, 55, 0.03);
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 28px;
+    padding: 30px;
+    align-items: center;
+    position: relative;
+  }
+
+  .card-emblem-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding-right: 20px;
+    border-right: 1px solid rgba(212, 175, 55, 0.2);
+    min-height: 180px;
+  }
+
+  .emblem-img {
+    width: 100%;
+    max-width: 160px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 5px 12px rgba(0, 0, 0, 0.65));
+    transition: transform 0.3s ease;
+  }
+
+  .card-emblem-wrap:hover .emblem-img {
+    transform: scale(1.04);
+  }
+
+  .emblem-title {
+    font-family: 'Yipes', Georgia, serif !important;
+    font-size: 20px;
+    letter-spacing: 4px;
+    color: var(--gold-light);
+    margin: 14px 0 0 0;
+    text-transform: uppercase;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+
+  .card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  .scale-title {
+    font-family: Georgia, serif !important;
+    color: var(--gold-light);
+    font-size: 18px;
+    font-weight: 700;
     margin: 0;
-    font-style: italic;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    line-height: 1.35;
+  }
+
+  .scale-track {
+    width: 100%;
+    height: 22px;
+    background-color: #08090b;
+    border-radius: 11px;
+    box-shadow: inset 0 3px 8px rgba(0,0,0,0.95), 0 0 0 1px rgba(255,255,255,0.04);
+    display: flex;
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .scale-base {
+    height: 100%;
+    background: linear-gradient(90deg, #8a6d1c, #d4af37, #ffd700);
+    border-radius: 11px;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.45);
+    z-index: 2;
+    transition: border-radius 0.3s;
+    flex-shrink: 0;
+  }
+
+  .scale-potential {
+    height: 100%;
+    width: 0%;
+    background: repeating-linear-gradient(
+        45deg,
+        #2e7d32,
+        #2e7d32 10px,
+        #1b5e20 10px,
+        #1b5e20 20px
+    );
+    border-radius: 0 11px 11px 0;
+    transition: width 0.4s ease-out;
+    box-shadow: 0 0 15px rgba(46, 125, 50, 0.4);
+    z-index: 1;
+    margin-left: -10px; 
+    padding-left: 10px;
+  }
+
+  .tooltip {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: #1c1e24;
+    border: 1px solid var(--gold);
+    padding: 12px 14px;
+    border-radius: 6px;
+    width: min(320px, calc(100vw - 50px));
+    box-shadow: 0 12px 30px rgba(0,0,0,0.95);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 30;
+  }
+
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -7px;
+    border-width: 7px;
+    border-style: solid;
+    border-color: var(--gold) transparent transparent transparent;
+  }
+
+  .tooltip.tooltip-down {
+    bottom: auto;
+    top: calc(100% + 12px);
+    transform: translateX(-50%) translateY(-10px);
+  }
+
+  .tooltip.tooltip-down::after {
+    top: auto;
+    bottom: 100%;
+    border-color: transparent transparent var(--gold) transparent;
+  }
+
+  .tooltip p {
+    margin: 0 0 6px 0;
+    font-size: 12px;
+    color: #b0b0b0;
+    line-height: 1.4;
+  }
+
+  .tooltip ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+  }
+
+  .tooltip li {
+    margin-bottom: 4px;
+  }
+
+  .tooltip b {
+    color: #66bb6a;
+  }
+
+  .scale-track:hover .tooltip,
+  .scale-track.active .tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .scale-track:hover .scale-potential,
+  .scale-track.active .scale-potential {
+    width: 25%;
+  }
+
+  .scale-track:hover .scale-base,
+  .scale-track.active .scale-base {
+    border-radius: 11px 0 0 11px;
+  }
+
+  .regions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .list-subtitle {
+    font-size: 13.5px;
+    font-weight: bold;
+    color: var(--gold-light);
+    margin: 0 0 4px 0;
+  }
+
+  .region-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 6px;
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  .region-item::before {
+    content: "•";
+    color: var(--gold);
+    font-size: 15px;
+    margin-right: 4px;
+  }
+
+  .region-name {
+    font-weight: 500;
+    color: var(--gold-light);
+  }
+
+  .region-total {
     color: var(--muted);
   }
 
-  /* АДАПТИВНОСТЬ */
-  @media (max-width: 950px) {
-    .army-tabs-grid {
+  .region-warriors {
+    color: var(--gold-soft);
+    font-weight: 500;
+  }
+
+  /* ========================================= */
+  /* СТИЛИ ДЛЯ ВКЛАДКИ «ВОЕННЫЕ КОРПУСЫ»       */
+  /* (ИМПЕРСКИЙ ДИЗАЙН В СТИЛЕ САЙТА)          */
+  /* ========================================= */
+  .corps-guide {
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      box-sizing: border-box;
+  }
+
+  .corps-header-box {
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      text-align: center;
+      background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+      margin-bottom: 25px;
+  }
+
+  .corps-kicker {
+      margin-bottom: 8px;
+      color: var(--gold-soft);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: bold;
+  }
+
+  .corps-header-box h2 {
+      margin: 0 0 10px;
+      color: var(--gold-light);
+      font-size: 26px;
+      font-weight: normal;
+      font-family: 'Yipes', Georgia, serif !important;
+      letter-spacing: 1.5px;
+  }
+
+  .corps-header-box p {
+      max-width: 750px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 14.5px;
+      line-height: 1.65;
+      font-style: italic;
+  }
+
+  .corps-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 25px;
+  }
+
+  .corps-tab {
+      padding: 11px 20px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--panel-dark);
+      color: var(--muted);
+      font-size: 12.5px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  .corps-tab:hover,
+  .corps-tab.active {
+      border-color: var(--gold-light);
+      background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+      color: #121008;
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      transform: translateY(-1px);
+  }
+
+  .corps-scroll {
+      width: 100%;
+  }
+
+  .corps-panel {
+      display: none;
+      padding: 35px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--panel-soft);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85);
+      box-sizing: border-box;
+      position: relative;
+  }
+
+  .corps-panel.active {
+      display: block;
+      animation: fadeIn 0.4s ease forwards;
+  }
+
+  .corps-title {
+      margin: 0 0 6px;
+      color: var(--gold-light);
+      font-size: 24px;
+      font-weight: normal;
+      font-family: 'Yipes', Georgia, serif !important;
+      letter-spacing: 1.5px;
+  }
+
+  .corps-subtitle {
+      margin: 0 0 24px;
+      color: var(--muted);
+      font-size: 14px;
+      font-style: italic;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+  }
+
+  .corps-panel p {
+      margin: 0 0 16px;
+      color: var(--text);
+      font-size: 14.5px;
+      line-height: 1.7;
+  }
+
+  .corps-info {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 25px;
+  }
+
+  .corps-info-card {
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--gold);
+      background: var(--panel-dark);
+      border-radius: 6px;
+      box-sizing: border-box;
+      box-shadow: 0 6px 15px rgba(0,0,0,0.4);
+  }
+
+  .corps-info-card.full {
+      grid-column: 1 / -1;
+  }
+
+  .corps-info-card h4 {
+      margin: 0 0 10px;
+      color: var(--gold-light);
+      font-size: 11.5px;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+  }
+
+  .corps-info-card div {
+      color: var(--text);
+      font-size: 13.5px;
+      line-height: 1.65;
+  }
+
+  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .army-card { padding: 25px 15px; }
+    .clan-card {
       grid-template-columns: 1fr;
-      gap: 15px;
+      gap: 18px;
+      padding: 20px 15px;
     }
-    .army-grand-arena {
-      padding: 30px 20px;
+    .card-emblem-wrap {
+      padding-right: 0;
+      padding-bottom: 15px;
+      border-right: none;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      min-height: auto;
     }
-    .army-content-box {
-      padding: 25px 20px;
-    }
+    .emblem-img { max-width: 120px; }
+    .emblem-title { font-size: 18px; letter-spacing: 3px; }
+    .scale-title { font-size: 15px; }
+    .tooltip { width: 92%; font-size: 11.5px; padding: 10px; }
+
+    .corps-header-box { padding: 22px 16px; }
+    .corps-header-box h2 { font-size: 22px; }
+    .corps-panel { padding: 22px 16px; }
+    .corps-info { grid-template-columns: 1fr; }
+    .corps-info-card.full { grid-column: auto; }
+    .corps-tab { padding: 9px 14px; font-size: 11.5px; }
   }
 
   @media (max-width: 480px) {
-    .site-header {
-      padding: 12px 10px;
-    }
-    .site-nav {
-      gap: 10px 15px;
-    }
-    .nav-logo {
-      height: 40px;
-      margin-right: 8px;
-    }
-    .site-nav a {
-      font-size: 10px;
-      letter-spacing: 0.6px;
-    }
-    .wrap {
-      margin: 20px auto;
-      padding: 0 10px;
-    }
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+    .tabs-container { flex-direction: column; gap: 8px; }
+    .tab-btn { padding: 12px; font-size: 12px; }
   }
 </style>
 </head>
@@ -408,52 +756,481 @@
 
     <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
     <div class="wrap">
-      <div class="army-grand-arena">
+      <div class="army-card">
         
         <header class="army-header">
-          <p class="army-kicker">✦ Qızılbaş və Ləşkər ✦</p>
-          <h1 class="army-title">Имперская Армия</h1>
-          <div class="army-divider">✦ ✧ ✦ ✧ ✦</div>
-          <p class="army-subtitle">Непобедимая мощь кызылбашских воинов, элитных корпусов и славных воинских поединков великого Довлата</p>
+          <p class="army-kicker">✦ Qüvş-e Sipah ✦</p>
+          <h1 class="army-title">Вооруженные силы Сефевидов</h1>
+          <p class="army-subtitle">Имперский реестр войск, военных корпусов и поединков</p>
         </header>
 
-        <!-- 3 УНИКАЛЬНЫХ КАРТОЧКИ-ПОРТАЛА (КНОПКИ) -->
-        <div class="army-tabs-grid">
-          <div class="army-tab-card active" id="cardTroops" onclick="switchArmyTab('troops')">
-            <div class="army-tab-icon">🐎</div>
-            <div class="army-tab-name">Войска</div>
-            <div class="army-tab-desc">Кызылбашская конница, пехота и артиллерия</div>
-          </div>
+        <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
+        <div class="tabs-container">
+          <button type="button" class="tab-btn active" id="btnTroops" onclick="switchArmyTab('troops')">Войска</button>
+          <button type="button" class="tab-btn" id="btnCorps" onclick="switchArmyTab('corps')">Военные корпусы</button>
+          <button type="button" class="tab-btn" id="btnDuels" onclick="switchArmyTab('duels')">Поединки</button>
+        </div>
 
-          <div class="army-tab-card" id="cardCorps" onclick="switchArmyTab('corps')">
-            <div class="army-tab-icon">🛡️</div>
-            <div class="army-tab-name">Корпусы</div>
-            <div class="army-tab-desc">Элитные гвардейские соединения и гарнизоны</div>
-          </div>
+        <!-- ВКЛАДКА 1: ВОЙСКА -->
+        <div class="tab-content active" id="contentTroops">
+          <div class="troops-viewport">
 
-          <div class="army-tab-card" id="cardDuels" onclick="switchArmyTab('duels')">
-            <div class="army-tab-icon">⚔️</div>
-            <div class="army-tab-name">Поединки</div>
-            <div class="army-tab-desc">Летопись чести, доблести и дуэлей воинов</div>
+            <!-- 0. СЕФЕВИ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Сефевидов">
+                    <h2 class="emblem-title">SEFEVI</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Сефеви (7,66%, 249 903 из 3 158 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 39.5%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip tooltip-down">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса. Гулямы исключены из базы мобилизации.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b> ополчения: <b>312 903 чел.</b></li>
+                                <li>Если <b>+5%</b> ополчения: <b>407 403 чел.</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="regions-list">
+                        <div class="region-item"><span class="region-name">Исфахан</span><span class="region-total">— 500 000 человек</span><span class="region-warriors">(38 300 воинов [из них 5 000 гулямов и 3 000 топчиев])</span></div>
+                        <div class="region-item"><span class="region-name">Кум</span><span class="region-total">— 180 000 человек</span><span class="region-warriors">(13 788 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Азербайджан</span><span class="region-total">— 600 000 человек</span><span class="region-warriors">(45 960 воинов [из них 8 000 гулямов])</span></div>
+                        <div class="region-item"><span class="region-name">Керман</span><span class="region-total">— 170 000 человек</span><span class="region-warriors">(13 022 воина)</span></div>
+                        <div class="region-item"><span class="region-name">Хормозган</span><span class="region-total">— 103 000 человек</span><span class="region-warriors">(10 890 воинов [из них 3 000 гулямов])</span></div>
+                        <div class="region-item"><span class="region-name">Бушир</span><span class="region-total">— 75 000 человек</span><span class="region-warriors">(10 745 воинов [из них 5 000 гулямов])</span></div>
+                        <div class="region-item"><span class="region-name">Казвин</span><span class="region-total">— 250 000 человек</span><span class="region-warriors">(19 150 воинов [из них 4 000 гулямов])</span></div>
+                        <div class="region-item"><span class="region-name">Герат</span><span class="region-total">— 300 000 человек</span><span class="region-warriors">(22 980 воинов [из них 5 000 гулямов])</span></div>
+                        <div class="region-item"><span class="region-name">Кандагар</span><span class="region-total">— 190 000 человек</span><span class="region-warriors">(14 554 воина [из них 4 000 гулямов])</span></div>
+                        <div class="region-item"><span class="region-name">Аравийский полуостров</span><span class="region-total">— 790 000 человек</span><span class="region-warriors">(60 514 воинов)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. УСТАДЖЛЫ ИЗ МАЗЕНДЕРАНА -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Устаджлы">
+                    <h2 class="emblem-title">USTACLI</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Устаджлы из Мазендерана (7.5%, 60 000 из 800 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 37.5%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 9.5% <b>(76 000 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 12.5% <b>(100 000 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">1 500 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Устаджлы)</span></div>
+                </div>
+            </div>
+
+            <!-- 2. УСТАДЖЛЫ ИЗ ХУЗЕСТАНА -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Устаджлы">
+                    <h2 class="emblem-title">USTACLI</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Устаджлы из Хузестана (6.5%, 26 000 из 400 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 32.5%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 8.5% <b>(34 000 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 11.5% <b>(46 000 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">1 500 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Устаджлы)</span></div>
+                </div>
+            </div>
+
+            <!-- 3. БАЯТЫ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Баятов">
+                    <h2 class="emblem-title">BAYAT</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Баяты (10%, 50 000 из 500 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 50%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 12% <b>(60 000 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 15% <b>(75 000 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">1 500 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Баятов)</span></div>
+                </div>
+            </div>
+
+            <!-- 4. РУМЛУ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Румлу">
+                    <h2 class="emblem-title">RUMLU</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Румлу (8.2%, 45 000 из 550 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 41%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 10.2% <b>(56 100 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 13.2% <b>(72 600 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="regions-list">
+                        <div class="region-item"><span class="region-name">Керманшах:</span><span class="region-total">240 000 человек</span><span class="region-warriors">(28 000 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Багдад:</span><span class="region-total">310 000 человек</span><span class="region-warriors">(17 000 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Гулямы (Багдад):</span><span class="region-total">6 000 воинов</span><span class="region-warriors">(не входят в число воинов Румлу)</span></div>
+                        <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">3 000 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Румлу)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. КАДЖАРЫ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Каджаров">
+                    <h2 class="emblem-title">QACAR</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Каджары (7%, 21 000 из 300 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 35%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 9% <b>(27 000 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 12% <b>(36 000 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">1 500 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Каджаров)</span></div>
+                </div>
+            </div>
+
+            <!-- 6. ШАМЛУ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Шамлу">
+                    <h2 class="emblem-title">SAMLU</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Шамлу (8%, 48 000 из 600 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 40%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 10% <b>(60 000 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 13% <b>(78 000 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="regions-list">
+                        <div class="region-item"><span class="region-name">Фарс:</span><span class="region-total">360 000 человек</span><span class="region-warriors">(20 000 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Курдистан:</span><span class="region-total">240 000 человек</span><span class="region-warriors">(28 000 воинов) [внутри этих расчетов Битлис: 90 000 человек (11 000 воинов)]</span></div>
+                        <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">3 000 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Шамлу)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. АФШАРЫ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Афшаров">
+                    <h2 class="emblem-title">AFSAR</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Афшары (7.5%, 16 500 из 220 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 37.5%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 9.5% <b>(20 900 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 12.5% <b>(27 500 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="regions-list">
+                        <div class="region-item"><span class="region-name">Голестан:</span><span class="region-total">120 000 человек</span><span class="region-warriors">(7 800 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Северный Хорасан:</span><span class="region-total">100 000 человек</span><span class="region-warriors">(8 700 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">3 000 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Афшаров)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. БАХТИАРЫ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Бахтиаров">
+                    <h2 class="emblem-title">BAHTIAR</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Бахтиары (7.5%, 24 750 из 330 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 37.5%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 9.5% <b>(31 350 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 12.5% <b>(41 250 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="regions-list">
+                        <h4 class="list-subtitle">Два основных клана:</h4>
+                        <div class="region-item"><span class="region-name">Чехарленги:</span><span class="region-total">150 000 человек</span><span class="region-warriors">(11 250 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Хафтленги:</span><span class="region-total">180 000 человек</span><span class="region-warriors">(13 500 воинов)</span></div>
+                        <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">1 500 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Бахтиаров)</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. ТЕКЕЛИ -->
+            <div class="clan-card">
+                <div class="card-emblem-wrap">
+                    <img class="emblem-img" src="" alt="Герб Текели">
+                    <h2 class="emblem-title">TEKELI</h2>
+                </div>
+                <div class="card-content">
+                    <h3 class="scale-title">Текели (8%, 13 600 из 170 000)</h3>
+                    <div class="scale-track" title="Нажмите для просмотра донабора">
+                        <div class="scale-base" style="width: 40%;"></div>
+                        <div class="scale-potential"></div>
+                        <div class="tooltip">
+                            <p><i>Доступен донабор от 2% до 5% ополченцев в армию посредством дайса.</i></p>
+                            <ul>
+                                <li>Если <b>+2%</b>: 10% <b>(17 000 чел.)</b></li>
+                                <li>Если <b>+5%</b>: 13% <b>(22 100 чел.)</b></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="region-item"><span class="region-name">Топчие:</span><span class="region-total">1 500 воинов</span><span class="region-warriors">(состоят из населения, но не входят в число воинов Текели)</span></div>
+                </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- КОНТЕЙНЕР ДЛЯ ОТОБРАЖЕНИЯ СОДЕРЖИМОГО -->
-        <div class="army-content-box">
-          <div class="tab-pane active" id="paneTroops">
-            <h3 class="pane-title">Имперские Войска</h3>
-            <p class="pane-text">Здесь будет располагаться подробный реестр родов войск, боевых отрядов, вооружения и численности армий кызылбашей, стоящих на страже границ государства Сефевидов.</p>
-          </div>
+        <!-- ВКЛАДКА 2: ВОЕННЫЕ КОРПУСЫ (В ИМПЕРСКОМ СТИЛЕ САЙТА) -->
+        <div class="tab-content" id="contentCorps">
+          <div class="corps-guide">
 
-          <div class="tab-pane" id="paneCorps">
-            <h3 class="pane-title">Воинские Корпусы</h3>
-            <p class="pane-text">Священные корпуса шахской гвардии, региональные армейские соединения и элитные формирования, подчиняющиеся непосредственно военачальникам и совету государя.</p>
-          </div>
+              <div class="corps-header-box">
+                  <h2>Четыре корпуса шахской армии</h2>
+                  <p>
+                      Курчи, топчи, гулямы и тофангчи — четыре опоры власти, армии и порядка.
+                      Они отличаются происхождением, вооружением, положением при дворе,
+                      обязанностями перед Шах-ан-шахом и порядком внутреннего подчинения.
+                  </p>
+              </div>
 
-          <div class="tab-pane" id="paneDuels">
-            <h3 class="pane-title">Летопись Поединков</h3>
-            <p class="pane-text">Хроники великих сражений один на один, вызовов на дуэль, проявленной храбрости и восстановления чести благородных мужей на полях доблести.</p>
+              <div class="corps-nav">
+                  <button class="corps-tab active" type="button" data-corps="qurchi">Корпус курчи</button>
+                  <button class="corps-tab" type="button" data-corps="topchi">Корпус топчи</button>
+                  <button class="corps-tab" type="button" data-corps="ghulam">Корпус гулямов</button>
+                  <button class="corps-tab" type="button" data-corps="tofangchi">Корпус тофангчи</button>
+              </div>
+
+              <div class="corps-scroll" id="corpsScroll">
+
+                  <!-- ================= КУРЧИ ================= -->
+                  <article class="corps-panel active" id="qurchi">
+                      <h3 class="corps-title">Корпус курчи</h3>
+                      <div class="corps-subtitle">Личная военная опора Шаха и старая сила кызылбашской знати.</div>
+                      <p>
+                          <strong>Курчи</strong> — отборные воины шахской службы, главным образом
+                          происходящие из кызылбашских тюркских племён. В основе корпуса лежит
+                          традиция личной верности правителю: курчи считаются не просто солдатами,
+                          а людьми, которым доверено оружие рядом с троном и безопасность
+                          самого Шах-ан-шаха.
+                      </p>
+                      <p>
+                          Исторически курчи составляют элитную конницу и шахскую охрану.
+                          Они сопровождают правителя в поездках и походах, участвуют в сражениях,
+                          несут караульную службу при дворе и исполняют важные военные поручения.
+                      </p>
+                      <div class="corps-info">
+                          <div class="corps-info-card">
+                              <h4>Кто может войти</h4>
+                              <div>Прежде всего мужчины из кызылбашских и иных военных тюркских родов, имеющие хорошую репутацию, воинскую подготовку и покровительство своего племени либо старшего командира.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Возраст</h4>
+                              <div>Начало службы возможно после достижения взрослого возраста — ориентировочно с <strong>16–18 лет</strong>. Для самостоятельной службы требуется владение оружием, верховой ездой и воинская выправка.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Основные обязанности</h4>
+                              <div>Охрана Шаха и его двора, сопровождение в поездках и походах, участие в боях, выполнение приказов военного характера, несение почётной и караульной службы.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Вооружение</h4>
+                              <div>Конь, сабля, копьё, лук или огнестрельное оружие — в зависимости от статуса, достатка и периода службы. Знатные курчи могут носить дорогой доспех, украшенное оружие и родовые знаки.</div>
+                          </div>
+                          <div class="corps-info-card full">
+                              <h4>Звания и командование</h4>
+                              <div>
+                                  <strong>Курчибаши</strong> — глава всего корпуса курчи. Отвечает перед Шах-ан-шахом за верность, боеспособность и порядок среди шахских воинов.<br><br>
+                                  <strong>Минбаши</strong> — командир крупного отряда («тысячник»).<br><br>
+                                  <strong>Юзбаши</strong> — командир сотни.<br><br>
+                                  <strong>Онбаши</strong> — младший командир десятка воинов.<br><br>
+                                  <strong>Курчи</strong> — рядовой воин корпуса: конный страж, телохранитель, участник походов.
+                              </div>
+                          </div>
+                      </div>
+                  </article>
+
+                  <!-- ================= ТОПЧИ ================= -->
+                  <article class="corps-panel" id="topchi">
+                      <h3 class="corps-title">Корпус топчи</h3>
+                      <div class="corps-subtitle">Артиллеристы, оружейники и люди грома.</div>
+                      <p>
+                          <strong>Топчи</strong> — служащие артиллерийского корпуса. Их имя происходит
+                          от слова «топ» — пушка. Это люди, отвечающие за тяжёлое огнестрельное
+                          вооружение: пушки, порох, ядра, перевозку орудий и подготовку огневых позиций.
+                      </p>
+                      <div class="corps-info">
+                          <div class="corps-info-card">
+                              <h4>Кто может войти</h4>
+                              <div>Преимущественно коренные персы: горожане, ремесленники, сыновья военных, оружейники, кузнецы, литейщики и люди, знакомые с пороховым делом.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Возраст</h4>
+                              <div>Учеником или помощником можно стать примерно с <strong>15–16 лет</strong>. Полноценная служба при орудиях — с <strong>17–18 лет</strong>.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Военное время</h4>
+                              <div>Обслуживание пушек, хранение и перевозка пороха, защита крепостей, участие в осадах и артиллерийская поддержка армии.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Мирное время</h4>
+                              <div>Патрулирование караванных путей и улиц крупных городов, охрана арсеналов, сопровождение знати, поддержание порядка.</div>
+                          </div>
+                          <div class="corps-info-card full">
+                              <h4>Звания и командование</h4>
+                              <div>
+                                  <strong>Топчибаши</strong> — глава корпуса топчи и главный начальник артиллерии.<br><br>
+                                  <strong>Баш-топчи</strong> — старший артиллерист или начальник батареи.<br><br>
+                                  <strong>Юзбаши</strong> — командир подразделения топчи.<br><br>
+                                  <strong>Онбаши</strong> — командир десятка.<br><br>
+                                  <strong>Уста-топчи</strong> — опытный мастер-артиллерист.<br><br>
+                                  <strong>Топчи</strong> — рядовой служащий корпуса.
+                              </div>
+                          </div>
+                      </div>
+                  </article>
+
+                  <!-- ================= ГУЛЯМЫ ================= -->
+                  <article class="corps-panel" id="ghulam">
+                      <h3 class="corps-title">Корпус гулямов</h3>
+                      <div class="corps-subtitle">Шахские слуги, воины и противовес племенной знати.</div>
+                      <p>
+                          <strong>Гулямы</strong> — люди, находящиеся в прямой службе у Шаха.
+                          В Сефевидской державе этот корпус пополнялся главным образом обращёнными
+                          в ислам выходцами с Кавказа: грузинами, армянами и черкесами.
+                      </p>
+                      <div class="corps-info">
+                          <div class="corps-info-card">
+                              <h4>Кто может войти</h4>
+                              <div>Юноши кавказского происхождения, оказавшиеся под покровительством шахского дома и принявшие ислам.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Возраст</h4>
+                              <div>Обучение начинается в детстве или юности. К военной службе допускаются с <strong>16–18 лет</strong>.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Основные обязанности</h4>
+                              <div>Служба в шахской гвардии и кавалерии, охрана дворца, сопровождение правителя, участие в походах, управление землями и городами.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Вооружение и обучение</h4>
+                              <div>Верховая езда, сабля, лук, огнестрельное оружие, дисциплина дворцовой службы, языки и придворный этикет.</div>
+                          </div>
+                          <div class="corps-info-card full">
+                              <h4>Звания и командование</h4>
+                              <div>
+                                  <strong>Куллар-агаси</strong> — глава корпуса шахских гулямов.<br><br>
+                                  <strong>Кулли-баши</strong> — старший начальник или помощник куллар-агаси.<br><br>
+                                  <strong>Минбаши</strong> — командир крупного подразделения гулямов.<br><br>
+                                  <strong>Юзбаши</strong> — командир сотни.<br><br>
+                                  <strong>Онбаши</strong> — командир десятка.<br><br>
+                                  <strong>Гулям</strong> — рядовой шахский служащий и воин.
+                              </div>
+                          </div>
+                      </div>
+                  </article>
+
+                  <!-- ================= ТОФАНГЧИ ================= -->
+                  <article class="corps-panel" id="tofangchi">
+                      <h3 class="corps-title">Корпус тофангчи</h3>
+                      <div class="corps-subtitle">Регулярные мушкетёры, стрелковая пехота и опора новой армии.</div>
+                      <p>
+                          <strong>Тофангчи</strong> — регулярный корпус стрелков-мушкетёров.
+                          Создается на основе широкого добровольного набора: с каждого остана
+                          набирается по <strong>1 000 мужчин-добровольцев</strong> в возрасте от 15 до 35 лет.
+                      </p>
+                      <div class="corps-info">
+                          <div class="corps-info-card">
+                              <h4>Кто может войти</h4>
+                              <div>Добровольцы из числа крестьян, арабов и туркменов с крепким здоровьем и выносливостью.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Возраст</h4>
+                              <div>Мужчины строго в возрасте от <strong>15 до 35 лет</strong>.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Устройство и набор</h4>
+                              <div>По <strong>1 000 добровольцев с каждого остана</strong>. Полки формируются по территориальному признаку.</div>
+                          </div>
+                          <div class="corps-info-card">
+                              <h4>Вооружение и бой</h4>
+                              <div>Фитильное или кремнёвое ружьё, пороховница, сошка для упора, сабля или кинжал. Сражаются преимущественно в пешем строю.</div>
+                          </div>
+                          <div class="corps-info-card full">
+                              <h4>Звания и командование</h4>
+                              <div>
+                                  <strong>Тофангчи-баши</strong> — верховный главнокомандующий корпусом мушкетёров.<br><br>
+                                  <strong>Минбаши</strong> — командир областной тысячи.<br><br>
+                                  <strong>Юзбаши</strong> — сотник стрелковой роты.<br><br>
+                                  <strong>Онбаши</strong> — десятник.<br><br>
+                                  <strong>Тофангчи</strong> — обученный мушкетёр корпуса.
+                              </div>
+                          </div>
+                      </div>
+                  </article>
+
+              </div>
           </div>
+        </div>
+
+        <!-- ВКЛАДКА 3: ПОЕДИНКИ -->
+        <div class="tab-content" id="contentDuels">
+
         </div>
 
       </div>
@@ -461,14 +1238,70 @@
 
 <script>
   function switchArmyTab(tabName) {
-    document.getElementById('cardTroops').classList.toggle('active', tabName === 'troops');
-    document.getElementById('cardCorps').classList.toggle('active', tabName === 'corps');
-    document.getElementById('cardDuels').classList.toggle('active', tabName === 'duels');
+    document.getElementById('btnTroops').classList.remove('active');
+    document.getElementById('btnCorps').classList.remove('active');
+    document.getElementById('btnDuels').classList.remove('active');
 
-    document.getElementById('paneTroops').classList.toggle('active', tabName === 'troops');
-    document.getElementById('paneCorps').classList.toggle('active', tabName === 'corps');
-    document.getElementById('paneDuels').classList.toggle('active', tabName === 'duels');
+    document.getElementById('contentTroops').classList.remove('active');
+    document.getElementById('contentCorps').classList.remove('active');
+    document.getElementById('contentDuels').classList.remove('active');
+
+    if (tabName === 'troops') {
+      document.getElementById('btnTroops').classList.add('active');
+      document.getElementById('contentTroops').classList.add('active');
+    } else if (tabName === 'corps') {
+      document.getElementById('btnCorps').classList.add('active');
+      document.getElementById('contentCorps').classList.add('active');
+    } else if (tabName === 'duels') {
+      document.getElementById('btnDuels').classList.add('active');
+      document.getElementById('contentDuels').classList.add('active');
+    }
   }
+
+  // Скрипт для табов корпусов внутри вкладки «Военные корпусы»
+  (function () {
+      var tabs = document.querySelectorAll(".corps-tab");
+      var panels = document.querySelectorAll(".corps-panel");
+      var scrollBox = document.getElementById("corpsScroll");
+
+      for (var i = 0; i < tabs.length; i++) {
+          tabs[i].onclick = function () {
+              var selectedId = this.getAttribute("data-corps");
+
+              for (var t = 0; t < tabs.length; t++) {
+                  tabs[t].classList.remove("active");
+              }
+
+              for (var p = 0; p < panels.length; p++) {
+                  panels[p].classList.remove("active");
+              }
+
+              this.classList.add("active");
+              document.getElementById(selectedId).classList.add("active");
+
+              if (scrollBox) {
+                  scrollBox.scrollTop = 0;
+              }
+          };
+      }
+  })();
+
+  // Поддержка кликов по шкалам мобилизации
+  const tracks = document.querySelectorAll('.scale-track');
+  tracks.docx || tracks.forEach(track => {
+      track.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const isActive = this.classList.contains('active');
+          tracks.forEach(t => t.classList.remove('active'));
+          if (!isActive) {
+              this.classList.add('active');
+          }
+      });
+  });
+
+  document.addEventListener('click', function() {
+      tracks.forEach(t => t.classList.remove('active'));
+  });
 </script>
 
 </body>
