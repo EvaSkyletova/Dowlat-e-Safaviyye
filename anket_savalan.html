@@ -56,7 +56,8 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            overflow-y: scroll;
+            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы не было второго колесика */
+            overflow-y: auto;
         }
 
         /* Эффект «пуньк» при клике */
@@ -542,7 +543,7 @@
 
             <div class="sheet-sidebar">
                 <div class="avatar-frame">
-                    <img src="savalan.jpg" alt="Савалан">
+                    <img src="images/savalan.jpg" alt="Савалан">
                 </div>
 
                 <div class="char-title">
