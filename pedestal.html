@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Доска почета</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .honor-card {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .honor-card::before,
+  .honor-card::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .honor-card::before { top: 10px; left: 14px; }
+  .honor-card::after { top: 10px; right: 14px; }
+
+  /* ПАРАДНЫЙ ЗАГОЛОВОК */
+  .honor-header {
+    text-align: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
+  }
+
+  .honor-kicker {
+    margin: 0 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: Georgia, serif !important;
+  }
+
+  .honor-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: normal;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .honor-subtitle {
+    margin: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-style: italic;
+  }
+
+  /* СВАЙПЕР / КАРУСЕЛЬ МЕСЯЦЕВ */
+  .slider-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .slider-track {
+    display: flex;
+    transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  .month-slide {
+    min-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 0;
+  }
+
+  .month-info-bar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--gold-soft);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+    padding: 0 10px;
+  }
+
+  /* ПОДИУМ ПОБЕДИТЕЛЕЙ */
+  .podium-gold-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 35px;
+    position: relative;
+    width: 100%;
+  }
+
+  .place-roman-1 {
+    font-family: 'Yipes', Georgia, serif !important;
+    font-size: 28px;
+    color: var(--gold-light);
+    letter-spacing: 3px;
+    margin-bottom: 12px;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+  }
+
+  .gold-ornate-frame {
+    position: relative;
+    padding: 18px 24px;
+    background: 
+        radial-gradient(circle at center, rgba(212, 175, 55, 0.15), transparent 70%),
+        #111215;
+    border: 2px solid var(--gold);
+    border-radius: 20px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.8), inset 0 0 25px rgba(212, 175, 55, 0.15);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 440px;
+    width: 100%;
+  }
+
+  .gold-ornate-frame::before,
+  .gold-ornate-frame::after {
+    content: "☪";
+    position: absolute;
+    color: var(--gold);
+    font-size: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .gold-ornate-frame::before { left: -14px; }
+  .gold-ornate-frame::after { right: -14px; }
+
+  .winner-avatar-1 {
+    width: 280px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px solid var(--gold);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+    margin-bottom: 14px;
+  }
+
+  .winner-name-1 {
+    font-family: 'Yipes', Georgia, serif !important;
+    font-size: 22px;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  }
+
+  .winner-posts-1 {
+    color: var(--muted);
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  /* 2 И 3 МЕСТА */
+  .podium-lower-row {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+
+  .podium-silver-bronze {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    max-width: 380px;
+    min-width: 280px;
+  }
+
+  .place-roman-sub {
+    font-family: 'Yipes', Georgia, serif !important;
+    font-size: 22px;
+    color: var(--gold-soft);
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  }
+
+  .silver-bronze-frame {
+    position: relative;
+    padding: 14px 18px;
+    background: rgba(18, 19, 23, 0.9);
+    border: 1.5px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .winner-avatar-sub {
+    width: 100%;
+    height: 140px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    margin-bottom: 12px;
+  }
+
+  .winner-avatar-dual {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    height: 140px;
+    margin-bottom: 12px;
+  }
+
+  .winner-avatar-dual img {
+    flex: 1;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+  }
+
+  .winner-name-sub {
+    font-family: 'Yipes', Georgia, serif !important;
+    font-size: 16px;
+    color: var(--text);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin: 0 0 4px 0;
+    text-align: center;
+  }
+
+  .winner-posts-sub {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+  }
+
+  /* КНОПКИ И ТОЧКИ ПЕРЕКЛЮЧЕНИЯ */
+  .slider-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    flex-wrap: wrap;
+  }
+
+  .slider-btn {
+    padding: 10px 20px;
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .slider-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+  }
+
+  .slider-dots {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 300px;
+  }
+
+  .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .dot.active {
+    background: var(--gold-light);
+    box-shadow: 0 0 10px var(--gold);
+    transform: scale(1.2);
+  }
+
+  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .honor-card { padding: 25px 15px; }
+    .gold-ornate-frame { max-width: 100%; padding: 14px; }
+    .winner-avatar-1 { width: 100%; height: 160px; }
+    .podium-lower-row { gap: 15px; }
+    .podium-silver-bronze { min-width: 100%; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html" class="active">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="letopis.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="honor-card">
+        
+        <header class="honor-header">
+          <p class="honor-kicker">✦ Dowlаt-e Safaviyye ✦</p>
+          <h1 class="honor-title">Доска почета</h1>
+          <p class="honor-subtitle">Галерея триумфаторов и лучших авторов</p>
+        </header>
+
+        <!-- СВАЙПЕР МЕСЯЦЕВ (ОТ СЕНТЯБРЯ К МАЮ) -->
+        <div class="slider-container" id="sliderContainer">
+          <div class="slider-track" id="sliderTrack">
+
+            <!-- СЕНТЯБРЬ 2026 -->
+            <div class="month-slide">
+              <div class="month-info-bar">
+                <span>Сентябрь 2026</span>
+                <span>111 постов</span>
+              </div>
+              <div class="podium-gold-wrap">
+                <div class="place-roman-1">I</div>
+                <div class="gold-ornate-frame">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Sultana Herondale" class="winner-avatar-1">
+                  <h3 class="winner-name-1">Sultana Herondale</h3>
+                  <span class="winner-posts-1">18 постов</span>
+                </div>
+              </div>
+              <div class="podium-lower-row">
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">II</div>
+                  <div class="silver-bronze-frame">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80" alt="Love and Attraction" class="winner-avatar-sub">
+                    <h4 class="winner-name-sub">Love and Attraction</h4>
+                    <span class="winner-posts-sub">15 постов</span>
+                  </div>
+                </div>
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">III</div>
+                  <div class="silver-bronze-frame">
+                    <div class="winner-avatar-dual">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=400&q=80" alt="Poison Attraction">
+                      <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=400&q=80" alt="Felicity Epicura">
+                    </div>
+                    <h4 class="winner-name-sub">Poison Attraction & Felicity Epicura</h4>
+                    <span class="winner-posts-sub">12 постов</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- АВГУСТ 2026 -->
+            <div class="month-slide">
+              <div class="month-info-bar">
+                <span>Август 2026</span>
+                <span>113 постов</span>
+              </div>
+              <div class="podium-gold-wrap">
+                <div class="place-roman-1">I</div>
+                <div class="gold-ornate-frame">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80" alt="Love and Attraction" class="winner-avatar-1">
+                  <h3 class="winner-name-1">Love and Attraction</h3>
+                  <span class="winner-posts-1">17 постов</span>
+                </div>
+              </div>
+              <div class="podium-lower-row">
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">II</div>
+                  <div class="silver-bronze-frame">
+                    <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=500&q=80" alt="Helen of Troy" class="winner-avatar-sub">
+                    <h4 class="winner-name-sub">Helen of Troy</h4>
+                    <span class="winner-posts-sub">13 постов</span>
+                  </div>
+                </div>
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">III</div>
+                  <div class="silver-bronze-frame">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=500&q=80" alt="Eva Skyletova" class="winner-avatar-sub">
+                    <h4 class="winner-name-sub">Eva Skyletova</h4>
+                    <span class="winner-posts-sub">12 постов</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ИЮЛЬ 2026 -->
+            <div class="month-slide">
+              <div class="month-info-bar">
+                <span>Июль 2026</span>
+                <span>83 поста</span>
+              </div>
+              <div class="podium-gold-wrap">
+                <div class="place-roman-1">I</div>
+                <div class="gold-ornate-frame">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80" alt="Sultana Herondale" class="winner-avatar-1">
+                  <h3 class="winner-name-1">Sultana Herondale</h3>
+                  <span class="winner-posts-1">12 постов</span>
+                </div>
+              </div>
+              <div class="podium-lower-row">
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">II</div>
+                  <div class="silver-bronze-frame">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=500&q=80" alt="Caroline Fortin" class="winner-avatar-sub">
+                    <h4 class="winner-name-sub">Caroline Fortin</h4>
+                    <span class="winner-posts-sub">8 постов</span>
+                  </div>
+                </div>
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">III</div>
+                  <div class="silver-bronze-frame">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=500&q=80" alt="Love and Attraction" class="winner-avatar-sub">
+                    <h4 class="winner-name-sub">Love and Attraction</h4>
+                    <span class="winner-posts-sub">7 постов</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ИЮНЬ 2026 -->
+            <div class="month-slide">
+              <div class="month-info-bar">
+                <span>Июнь 2026</span>
+                <span>96 постов</span>
+              </div>
+              <div class="podium-gold-wrap">
+                <div class="place-roman-1">I</div>
+                <div class="gold-ornate-frame">
+                  <div class="winner-avatar-dual" style="height: 180px; width: 280px; margin-bottom: 14px;">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" alt="Love and Attraction">
+                    <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80" alt="Helen of Troy">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80" alt="Anna De-Bourgogne">
+                  </div>
+                  <h3 class="winner-name-1" style="font-size: 16px;">Love & Attraction & Helen of Troy & Anna De-Bourgogne</h3>
+                  <span class="winner-posts-1">9 постов</span>
+                </div>
+              </div>
+              <div class="podium-lower-row">
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">II</div>
+                  <div class="silver-bronze-frame">
+                    <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=500&q=80" alt="Polina Kouna" class="winner-avatar-sub">
+                    <h4 class="winner-name-sub">Polina Kouna</h4>
+                    <span class="winner-posts-sub">8 постов</span>
+                  </div>
+                </div>
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">III</div>
+                  <div class="silver-bronze-frame">
+                    <div class="winner-avatar-dual">
+                      <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=300&q=80" alt="Lilia Vasikovskaya">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" alt="Sultana Herondale">
+                      <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80" alt="Veleno D’amore">
+                    </div>
+                    <h4 class="winner-name-sub" style="font-size: 13px;">Lilia Vasikovskaya & Sultana Herondale & Veleno D’amore</h4>
+                    <span class="winner-posts-sub">6 постов</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- МАЙ 2026 -->
+            <div class="month-slide">
+              <div class="month-info-bar">
+                <span>Май 2026</span>
+                <span>83 поста</span>
+              </div>
+              <div class="podium-gold-wrap">
+                <div class="place-roman-1">I</div>
+                <div class="gold-ornate-frame">
+                  <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=600&q=80" alt="Polina Kouna" class="winner-avatar-1">
+                  <h3 class="winner-name-1">Polina Kouna</h3>
+                  <span class="winner-posts-1">10 постов</span>
+                </div>
+              </div>
+              <div class="podium-lower-row">
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">II</div>
+                  <div class="silver-bronze-frame">
+                    <div class="winner-avatar-dual">
+                      <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=300&q=80" alt="Helen of Troy">
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80" alt="Poison Attraction">
+                    </div>
+                    <h4 class="winner-name-sub" style="font-size: 13px;">Helen of Troy & Poison Attraction</h4>
+                    <span class="winner-posts-sub">8 постов</span>
+                  </div>
+                </div>
+                <div class="podium-silver-bronze">
+                  <div class="place-roman-sub">III</div>
+                  <div class="silver-bronze-frame">
+                    <div class="winner-avatar-dual">
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80" alt="Tanya Levitskaya">
+                      <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=300&q=80" alt="Caroline Fortin">
+                    </div>
+                    <h4 class="winner-name-sub" style="font-size: 13px;">Tanya Levitskaya & Caroline Fortin</h4>
+                    <span class="winner-posts-sub">7 постов</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- КНОПКИ И ТОЧКИ ПЕРЕКЛЮЧЕНИЯ -->
+        <div class="slider-controls">
+          <button class="slider-btn" id="prevBtn" onclick="prevSlide()">← Прошлый месяц</button>
+          <div class="slider-dots" id="sliderDots">
+            <span class="dot active" onclick="goToSlide(0)"></span>
+            <span class="dot" onclick="goToSlide(1)"></span>
+            <span class="dot" onclick="goToSlide(2)"></span>
+            <span class="dot" onclick="goToSlide(3)"></span>
+            <span class="dot" onclick="goToSlide(4)"></span>
+          </div>
+          <button class="slider-btn" id="nextBtn" onclick="nextSlide()">Следующий месяц →</button>
+        </div>
+
+      </div>
+    </div>
+
+<script>
+  let currentSlide = 0;
+  const totalSlides = 5;
+  const track = document.getElementById('sliderTrack');
+  const dots = document.querySelectorAll('.dot');
+
+  function updateSlider() {
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    dots.forEach((dot, index) => {
+      dot.classList.toggle('active', index === currentSlide);
+    });
+  }
+
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    updateSlider();
+  }
+
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    updateSlider();
+  }
+
+  function goToSlide(index) {
+    currentSlide = index;
+    updateSlider();
+  }
+
+  // Поддержка свайпов на тач-устройствах и мыши
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  const container = document.getElementById('sliderContainer');
+
+  container.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  container.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  });
+
+  function handleSwipe() {
+    if (touchEndX < touchStartX - 50) {
+      nextSlide();
+    }
+    if (touchEndX > touchStartX + 50) {
+      prevSlide();
+    }
+  }
+</script>
+
+</body>
+</html>
