@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Дворец Али-Капу — этажи и устройство • Dowlаt-e Safaviyye</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--bg);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--gold-dark);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--gold);
+  }
+
+  body {
+    margin: 0;
+    min-width: 0;
+    overflow-x: hidden;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .palace-wrapper {
+    width: 100%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: transparent;
+  }
+
+  .palace-container {
+    width: 100%;
+    max-width: 1150px;
+    min-width: 0;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .palace-container::before,
+  .palace-container::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .palace-container::before { top: 10px; left: 14px; }
+  .palace-container::after { top: 10px; right: 14px; }
+
+  .palace-header {
+    position: relative;
+    padding: 30px;
+    margin: 30px 30px 0 30px;
+    text-align: center;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+  }
+
+  .palace-header::before,
+  .palace-header::after {
+    display: none;
+  }
+
+  .palace-header::after {
+    content: "✦  ✦  ✦";
+    position: absolute;
+    right: 24px;
+    bottom: 12px;
+    color: rgba(212, 175, 55, 0.3);
+    font-size: 14px;
+    letter-spacing: 8px;
+    display: block;
+  }
+
+  .palace-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  }
+
+  .palace-subtitle {
+    margin-top: 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-style: italic;
+  }
+
+  .palace-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.08fr) minmax(320px, 0.92fr);
+    gap: 28px;
+    padding: 30px;
+  }
+
+  .top-view-section {
+    min-width: 0;
+  }
+
+  .section-title {
+    margin: 0 0 16px;
+    color: var(--gold-light);
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .top-view-map {
+    position: relative;
+    width: 100%;
+    min-height: 620px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 24px;
+    background: var(--panel-dark);
+    background-size: 28px 28px, 28px 28px, auto, auto;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+
+  .map-label {
+    position: absolute;
+    z-index: 4;
+    padding: 6px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel-soft);
+    color: var(--gold-light);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35);
+  }
+
+  .label-square {
+    left: 28px;
+    top: 24px;
+  }
+
+  .label-gardens {
+    right: 28px;
+    bottom: 24px;
+  }
+
+  .square-area {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 58px;
+    height: 135px;
+    border: 1px dashed rgba(212, 175, 55, 0.35);
+    border-radius: 8px;
+    background: rgba(212, 175, 55, 0.03);
+  }
+
+  .square-area::after {
+    content: "Площадь Накш-э Джахан";
+    position: absolute;
+    left: 50%;
+    top: 38px;
+    transform: translateX(-50%);
+    color: var(--muted);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    font-style: italic;
+  }
+
+  .garden-area {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 58px;
+    height: 150px;
+    border: 1px dashed rgba(111, 143, 81, 0.5);
+    border-radius: 8px;
+    background: rgba(111, 143, 81, 0.08);
+  }
+
+  .garden-area::after {
+    content: "Сады и скрытый дворцовый комплекс";
+    position: absolute;
+    left: 50%;
+    bottom: 38px;
+    transform: translateX(-50%);
+    color: #c7e1b8;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    text-align: center;
+    font-style: italic;
+    white-space: nowrap;
+  }
+
+  .palace-plan {
+    position: absolute;
+    z-index: 3;
+    left: 50%;
+    top: 48%;
+    width: min(76%, 455px);
+    min-height: 290px;
+    transform: translate(-50%, -50%);
+    border: 2px solid var(--gold);
+    border-radius: 10px;
+    background: var(--panel-soft);
+    box-shadow:
+        0 14px 30px rgba(0,0,0,0.62),
+        inset 0 0 35px rgba(212, 175, 55, 0.08);
+    display: grid;
+    grid-template-rows: 70px 1fr 78px;
+    overflow: hidden;
+  }
+
+  .front-portico {
+    border-bottom: 1px solid var(--line);
+    background: rgba(212, 175, 55, 0.08);
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 8px;
+    padding: 14px 18px;
+    align-items: center;
+  }
+
+  .column {
+    height: 38px;
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    background: radial-gradient(circle, var(--gold-light) 0 18%, var(--gold) 20% 38%, var(--gold-dark) 40% 100%);
+    box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
+
+  .inner-palace {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr 1fr;
+    gap: 10px;
+    padding: 18px;
+  }
+
+  .chamber {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel-dark);
+    min-height: 128px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    padding: 8px;
+  }
+
+  .central-hall {
+    position: relative;
+    border-color: var(--gold);
+    background:
+        radial-gradient(circle at center, rgba(117,192,224,0.18) 0 20%, transparent 22%),
+        var(--panel-dark);
+    color: var(--gold-light);
+  }
+
+  .central-hall::before {
+    content: "";
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    border: 1px solid rgba(117,192,224,0.7);
+    background: radial-gradient(circle, rgba(117,192,224,0.4), rgba(27,74,94,0.2));
+    box-shadow: 0 0 18px rgba(117,192,224,0.22);
+  }
+
+  .central-hall span {
+    position: relative;
+    z-index: 2;
+    margin-top: 96px;
+  }
+
+  .rear-complex {
+    border-top: 1px solid var(--line);
+    background: rgba(14, 14, 17, 0.8);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    padding: 14px 16px;
+  }
+
+  .rear-room {
+    border: 1px solid rgba(111, 143, 81, 0.5);
+    border-radius: 6px;
+    background: rgba(111, 143, 81, 0.15);
+  }
+
+  .andharuni-line {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 202px;
+    width: 2px;
+    height: 82px;
+    transform: translateX(-50%);
+    background: linear-gradient(var(--gold), rgba(111, 143, 81, 0.75));
+    opacity: 0.45;
+  }
+
+  .andharuni-marker {
+    position: absolute;
+    z-index: 4;
+    left: 50%;
+    bottom: 138px;
+    transform: translateX(-50%);
+    max-width: 340px;
+    width: calc(100% - 70px);
+    border: 1px solid rgba(111, 143, 81, 0.6);
+    border-radius: 8px;
+    background: var(--panel-dark);
+    color: #d8ead1;
+    padding: 12px 14px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.42);
+  }
+
+  .legend {
+    margin-top: 16px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .legend-item {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 10px;
+    background: var(--panel-dark);
+    font-size: 12.5px;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+
+  .legend-key {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-right: 6px;
+    border-radius: 3px;
+    vertical-align: -1px;
+  }
+
+  .key-gold {
+    background: rgba(212, 175, 55, 0.5);
+    border: 1px solid var(--gold);
+  }
+
+  .key-blue {
+    background: rgba(117,192,224,0.4);
+    border: 1px solid rgba(117,192,224,0.8);
+  }
+
+  .key-green {
+    background: rgba(111, 143, 81, 0.4);
+    border: 1px solid rgba(111, 143, 81, 0.8);
+  }
+
+  .floors-section {
+    min-width: 0;
+  }
+
+  .floors-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .floor-card {
+    position: relative;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    background: var(--panel-dark);
+    padding: 16px 16px 16px 85px;
+    min-height: 92px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    transition: transform .25s ease, border-color .25s ease, background .25s ease;
+  }
+
+  .floor-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--gold-light);
+    background: var(--panel-soft);
+  }
+
+  .floor-number {
+    position: absolute;
+    left: 18px;
+    top: 16px;
+    width: 46px;
+    height: 46px;
+    border: 1px solid var(--gold-light);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #121008;
+    background: linear-gradient(135deg, #b89947, #d4af37, #b89947);
+    font-weight: bold;
+    font-size: 18px;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .floor-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 16px;
+    line-height: 1.3;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .floor-text {
+    margin: 0;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.65;
+    text-align: justify;
+  }
+
+  .andaruni-card {
+    border-left-color: #6f8f51;
+  }
+
+  .andaruni-card:hover {
+    border-color: #a3cc85;
+    background: var(--panel-soft);
+  }
+
+  .andaruni-card .floor-number {
+    border-color: #a3cc85;
+    background: #6f8f51;
+    color: #fff;
+  }
+
+  .andaruni-card .floor-title {
+    color: #c7e1b8;
+  }
+
+  .note-box {
+    margin-top: 18px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-dark);
+    padding: 14px 16px;
+    color: var(--muted);
+    font-size: 12.5px;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  strong {
+    color: var(--gold-light);
+  }
+
+  @media (max-width: 980px) {
+    .palace-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .top-view-map {
+      min-height: 560px;
+    }
+
+    .palace-header::after {
+      display: none;
+    }
+  }
+
+  @media (max-width: 620px) {
+    .palace-wrapper {
+      padding: 0;
+    }
+
+    .palace-container {
+      border-radius: 0;
+      border-width: 0 0 1px 0;
+    }
+
+    .palace-header {
+      margin: 15px 10px 0 10px;
+      padding: 24px 14px 20px;
+    }
+
+    .palace-title {
+      font-size: 22px;
+    }
+
+    .palace-subtitle {
+      font-size: 11px;
+      letter-spacing: 1.2px;
+    }
+
+    .palace-body {
+      padding: 14px;
+      gap: 20px;
+    }
+
+    .top-view-map {
+      min-height: 500px;
+      padding: 12px;
+    }
+
+    .square-area {
+      left: 12px;
+      right: 12px;
+      top: 54px;
+      height: 110px;
+    }
+
+    .square-area::after {
+      font-size: 12px;
+      letter-spacing: 1.4px;
+      white-space: normal;
+      text-align: center;
+    }
+
+    .garden-area {
+      left: 12px;
+      right: 12px;
+      bottom: 50px;
+      height: 126px;
+    }
+
+    .garden-area::after {
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .palace-plan {
+      width: calc(100% - 44px);
+      min-height: 250px;
+    }
+
+    .front-portico {
+      gap: 5px;
+      padding: 12px;
+    }
+
+    .column {
+      height: 30px;
+    }
+
+    .inner-palace {
+      gap: 6px;
+      padding: 12px;
+    }
+
+    .chamber {
+      min-height: 112px;
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .central-hall::before {
+      width: 52px;
+      height: 52px;
+    }
+
+    .central-hall span {
+      margin-top: 82px;
+    }
+
+    .rear-complex {
+      padding: 12px;
+      gap: 5px;
+    }
+
+    .andharuni-marker {
+      width: calc(100% - 40px);
+      bottom: 105px;
+      font-size: 11px;
+      padding: 10px;
+    }
+
+    .andharuni-line {
+      bottom: 174px;
+      height: 56px;
+    }
+
+    .legend {
+      grid-template-columns: 1fr;
+    }
+
+    .floor-card {
+      padding: 14px 12px 14px 66px;
+    }
+
+    .floor-number {
+      left: 12px;
+      top: 14px;
+      width: 40px;
+      height: 40px;
+      font-size: 17px;
+    }
+
+    .floor-title {
+      font-size: 14px;
+    }
+
+    .floor-text {
+      font-size: 13px;
+      text-align: left;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html" class="active">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="map.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="palace-wrapper">
+          <main class="palace-container">
+
+              <header class="palace-header">
+                  <h1 class="palace-title">Дворец Али-Капу</h1>
+                  <div class="palace-subtitle">Схема этажей и дворцовых пространств</div>
+              </header>
+
+              <section class="palace-body">
+
+                  <div class="top-view-section">
+                      <h2 class="section-title">Вид сверху</h2>
+
+                      <div class="top-view-map">
+                          <div class="map-label label-square">Публичная сторона</div>
+                          <div class="map-label label-gardens">Скрытая сторона</div>
+
+                          <div class="square-area"></div>
+
+                          <div class="palace-plan">
+                              <div class="front-portico">
+                                  <div class="column"></div>
+                                  <div class="column"></div>
+                                  <div class="column"></div>
+                                  <div class="column"></div>
+                                  <div class="column"></div>
+                                  <div class="column"></div>
+                              </div>
+
+                              <div class="inner-palace">
+                                  <div class="chamber">Канцелярии<br>и суды</div>
+                                  <div class="chamber central-hall">
+                                      <span>Талар<br>и бассейн</span>
+                                  </div>
+                                  <div class="chamber">Покои<br>и залы</div>
+                              </div>
+
+                              <div class="rear-complex">
+                                  <div class="rear-room"></div>
+                                  <div class="rear-room"></div>
+                                  <div class="rear-room"></div>
+                                  <div class="rear-room"></div>
+                              </div>
+                          </div>
+
+                          <div class="andharuni-line"></div>
+
+                          <div class="garden-area"></div>
+
+                          <div class="andharuni-marker">
+                              <strong>Андаруни:</strong> женская часть семьи в отдельном охраняемом дворцовом комплексе за Али-Капу.
+                          </div>
+                      </div>
+
+                      <div class="legend">
+                          <div class="legend-item">
+                              <span class="legend-key key-gold"></span>
+                              Основной корпус Али-Капу, административные, жилые и церемониальные уровни.
+                          </div>
+                          <div class="legend-item">
+                              <span class="legend-key key-blue"></span>
+                              Центральная терраса-талар с бассейном на главном уровне.
+                          </div>
+                          <div class="legend-item">
+                              <span class="legend-key key-green"></span>
+                              Сады и скрытый комплекс Андаруни за дворцом.
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="floors-section">
+                      <h2 class="section-title">Этажи дворца</h2>
+
+                      <div class="floors-list">
+
+                          <article class="floor-card">
+                              <div class="floor-number">1–2</div>
+                              <h3 class="floor-title">Канцелярия и Диван-хане</h3>
+                              <p class="floor-text">Служили канцелярией, административной зоной и местом работы судов (Диван-хане).</p>
+                          </article>
+
+                          <article class="floor-card">
+                              <div class="floor-number">3</div>
+                              <h3 class="floor-title">Главный жилой и церемониальный уровень</h3>
+                              <p class="floor-text">Самый главный «жилой» и церемониальный уровень. Здесь находится знаменитая открытая колонная терраса (талар) с бассейном в центре. В глубине за террасой располагался тронный зал шаха Наримана I и комнаты его личных покоев, где он проводил время с сыновьями и семьей.</p>
+                          </article>
+
+                          <article class="floor-card">
+                              <div class="floor-number">4</div>
+                              <h3 class="floor-title">Комнаты мирз и шах-заде</h3>
+                              <p class="floor-text">Жилые комнаты, использовавшиеся мирзами и шах-заде.</p>
+                          </article>
+
+                          <article class="floor-card">
+                              <div class="floor-number">5</div>
+                              <h3 class="floor-title">Шахская семья и придворные</h3>
+                              <p class="floor-text">Жилые и полуприватные комнаты, использовавшиеся шахской семьей и придворными.</p>
+                          </article>
+
+                          <article class="floor-card">
+                              <div class="floor-number">6</div>
+                              <h3 class="floor-title">Музыкальный зал</h3>
+                              <p class="floor-text">Знаменитый Музыкальный зал с нишами в виде сосудов. Он использовался исключительно для банкетов, праздников, концертов и приема иностранных послов.</p>
+                          </article>
+
+                          <article class="floor-card andaruni-card">
+                              <div class="floor-number">1</div>
+                              <h3 class="floor-title">Павильоны с задней стороны Али-капу — Андаруни</h3>
+                              <p class="floor-text">Женская часть семьи в отдельном охраняемом дворцовом комплексе, который находился в глубине садов за Али-Капу. Этот комплекс был скрыт от публичного пространства площади Накш-э Джахан высокими стенами.</p>
+                          </article>
+
+                      </div>
+
+                      <div class="note-box">
+                          Схема выполнена как условный вид сверху: верхняя часть показывает публичное пространство площади, центр — корпус Али-Капу, нижняя часть — скрытые сады и Андаруни.
+                      </div>
+                  </div>
+
+              </section>
+          </main>
+      </div>
+    </div>
+
+</body>
+</html>

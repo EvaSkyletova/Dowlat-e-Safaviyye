@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Искусство и Наука Персии • Dowlаt-e Safaviyye</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .archive-card {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .archive-card::before,
+  .archive-card::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .archive-card::before { top: 10px; left: 14px; }
+  .archive-card::after { top: 10px; right: 14px; }
+
+  /* ==================== ПАРАДНЫЙ ЗАГОЛОВОК ==================== */
+  .archive-hero {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    padding: 30px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+    text-align: center;
+  }
+
+  .archive-hero:after {
+    content: "✦  ✦  ✦";
+    position: absolute;
+    right: 24px;
+    bottom: 12px;
+    color: rgba(212, 175, 55, 0.3);
+    font-size: 14px;
+    letter-spacing: 8px;
+  }
+
+  .archive-kicker {
+    margin: 0 0 6px;
+    color: var(--gold-light);
+    font-size: 11px !important;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold !important;
+    font-family: Georgia, serif !important;
+  }
+
+  .archive-hero h1 {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .archive-hero p {
+    max-width: 750px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  /* ==================== ВКЛАДКИ РАЗДЕЛОВ ==================== */
+  .archive-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+  }
+
+  .archive-tab {
+    flex: 1;
+    background: var(--panel-dark);
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  .archive-tab:hover {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .archive-tab.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+
+  /* ==================== ДВУХКОЛОНОЧНЫЙ БЛОК ==================== */
+  .archive-panel {
+    display: grid;
+    grid-template-columns: 310px minmax(0, 1fr);
+    gap: 20px;
+    align-items: stretch;
+  }
+
+  /* ЛЕВАЯ КОЛОНКА */
+  .timeline-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    max-height: 560px;
+    overflow-y: auto;
+  }
+
+  .timeline-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 14px;
+    border: 1px solid transparent;
+    border-left: 3px solid rgba(212, 175, 55, 0.3);
+    border-radius: 0 6px 6px 0;
+    background: rgba(255, 255, 255, 0.02);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-family: inherit;
+  }
+
+  .timeline-btn:hover {
+    background: rgba(212, 175, 55, 0.08);
+    border-left-color: var(--gold);
+    transform: translateX(2px);
+  }
+
+  .timeline-btn.active {
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.16), transparent);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--gold-light);
+    box-shadow: inset 0 0 14px rgba(212, 175, 55, 0.08);
+  }
+
+  .tb-category {
+    font-size: 10.5px;
+    color: var(--gold-soft);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .tb-title {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .timeline-btn.active .tb-title {
+    color: var(--gold-light);
+    font-weight: bold;
+  }
+
+  /* ПРАВАЯ КОЛОНКА */
+  .reader-frame {
+    position: relative;
+    padding: 30px 35px;
+    background: linear-gradient(135deg, rgba(22, 22, 26, 0.95), rgba(12, 12, 15, 0.98));
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
+    max-height: 560px;
+    overflow-y: auto;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reader-header {
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .reader-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid var(--line-soft);
+    border-radius: 4px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: bold;
+  }
+
+  .reader-title {
+    margin: 0;
+    color: var(--gold-light);
+    font-size: 24px;
+    font-weight: normal;
+    line-height: 1.25;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .reader-subtitle {
+    margin: 6px 0 0 0;
+    color: var(--muted);
+    font-size: 13.5px;
+    font-style: italic;
+  }
+
+  .reader-stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 22px;
+  }
+
+  .reader-stat-box {
+    background: var(--panel-dark);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--gold);
+    padding: 14px 16px;
+    border-radius: 0 6px 6px 0;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .reader-stat-label {
+    color: var(--gold-soft);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+
+  .reader-stat-val {
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+
+  .reader-content {
+    font-size: 14.5px;
+    line-height: 1.75;
+    color: var(--text);
+  }
+
+  .reader-content p {
+    margin: 0 0 14px 0;
+  }
+
+  .reader-content p:last-child {
+    margin-bottom: 0;
+  }
+
+  .reader-content b {
+    color: var(--gold-light);
+  }
+
+  /* ==================== АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ ==================== */
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .archive-card { padding: 25px 15px; }
+    .archive-panel {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 15px;
+    }
+    .timeline-nav {
+      height: auto;
+      max-height: none;
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 6px;
+      gap: 8px;
+      scroll-snap-type: x mandatory;
+    }
+    .timeline-btn {
+      flex: 0 0 190px;
+      scroll-snap-align: start;
+      border-radius: 6px;
+      border: 1px solid var(--line-soft);
+      border-left: 3px solid rgba(212, 175, 55, 0.3);
+      padding: 8px 10px;
+    }
+    .reader-frame {
+      padding: 18px 16px;
+      max-height: none;
+    }
+    .reader-title { font-size: 20px; }
+    .reader-stats-grid { grid-template-columns: 1fr; gap: 10px; }
+    .reader-content { font-size: 13.5px; line-height: 1.65; }
+    .archive-tabs { flex-direction: column; gap: 10px; }
+    .archive-tab { width: 100%; padding: 12px; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html" class="active">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="letopis.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="archive-card">
+        
+        <!-- ПАРАДНАЯ ШАПКА -->
+        <header class="archive-hero">
+            <p class="archive-kicker">Хонар ва Хекмат-е Падишахи</p>
+            <h1>Искусство и Наука Персии</h1>
+            <p>Высокое поэтическое слово, лазурные купола, тайны алхимических горнов и чтение судеб по звездам</p>
+        </header>
+
+        <!-- ВКЛАДКИ -->
+        <div class="archive-tabs">
+            <button class="archive-tab active" type="button" id="tabArts" onclick="switchCategory('arts')">Изящные Искусства</button>
+            <button class="archive-tab" type="button" id="tabSciences" onclick="switchCategory('sciences')">Знания и Науки</button>
+        </div>
+
+        <!-- ОСНОВНАЯ ПАНЕЛЬ -->
+        <div class="archive-panel">
+            <!-- Левая лента выбора -->
+            <nav class="timeline-nav" id="timelineNav">
+                <!-- Кнопки генерируются динамически -->
+            </nav>
+
+            <!-- Правый экран чтения -->
+            <main class="reader-frame" id="readerFrame">
+                <!-- Контент генерируется динамически -->
+            </main>
+        </div>
+
+      </div>
+    </div>
+
+<script>
+    const database = {
+        arts: [
+            { 
+                id: "poetry", 
+                category: "Изящные Искусства",
+                name: "Поэзия", 
+                subtitle: "Струны души, сплетенные из слов", 
+                masters: "Саиб Тебризи, Мохташам Кашани, Саади Ширази, Хафиз, Фирдоуси", 
+                elements: "«Индийский стиль» (сабк-э хенди), меджлисы, мушаэра, метафоры", 
+                text: `
+                    <p>В Государстве Сефевидов поэзия — это не просто вид искусства, это воздух, которым дышит каждый: от могущественного Шах-ан-шаха до ремесленника на базарах Исфахана. Владение поэтическим слогом является обязательным атрибутом любого образованного человека, признаком его благородства и остроты ума.</p>
+                    <p>В эпоху Сефевидов расцветает так называемый <b>«индийский стиль» (сабк-э хенди)</b>. Он отличается невероятной сложностью, изощренными философскими метафорами и поиском скрытых смыслов в самых обыденных вещах. Поэты соревнуются в утонченности, порой делая строки похожими на сложные шифры, понятные лишь избранным.</p>
+                    <p>Особую роль в жизни двора играют <b>мушаэра</b> — поэтические дуэли. На пышных меджлисах (собраниях) вельможи и поэты бросают друг другу стихотворные вызовы, отвечая строкой на строку. Метким бейтом здесь можно как возвысить свой статус и завоевать благосклонность правителя, так и нанести врагу оскорбление более глубокое, чем удар кинжалом.</p>
+                ` 
+            },
+            { 
+                id: "calligraphy", 
+                category: "Изящные Искусства",
+                name: "Каллиграфия", 
+                subtitle: "Священная геометрия духа", 
+                masters: "Мир Эмад Хассани, Али-Реза Аббаси", 
+                elements: "Стили Насталик и Шекасте, тростниковый калам, золотая пыль", 
+                text: `
+                    <p>В исламском мире, где Слово Божье священно, искусство его начертания ценится превыше живописи. Каллиграфия в Персии достигла уровня подлинной мистики. Мастера-хаттаты верят, что красота написанного слова отражает чистоту души писца.</p>
+                    <p>Господствующим стилем эпохи Сефевидов является <b>Насталик</b> — «невеста исламских почерков», отличающийся плавными, летящими линиями, идеальными для записи персидской поэзии. Позже из него рождается <b>Шекасте-насталик</b> (сломанный насталик) — стремительная и изящная скоропись, похожая на россыпь жемчуга.</p>
+                    <p>Один лист <i>(кита)</i>, вышедший из-под калама великого Мир Эмада Хассани, мог стоить дороже породистого арабского скакуна. Каллиграфией украшают всё: от миниатюрных кулонов и клинков из дамасской стали до гигантских куполов мечетей. Это медитативный, сложнейший труд, требующий идеального глазомера, твердой руки и долгих лет аскезы.</p>
+                ` 
+            },
+            { 
+                id: "architecture", 
+                category: "Изящные Искусства",
+                name: "Архитектура", 
+                subtitle: "Половина мира, облачённая в лазурь", 
+                masters: "Шейх Бахаи, Али-Акбар Исфахани", 
+                elements: "Плитка «хафт-ранг», своды-мукарнасы, айваны, сады-чарбаг", 
+                text: `
+                    <p>Сефевидская архитектура, и в особенности знаменитый <b>«исфаханский стиль»</b>, призвана ошеломлять, демонстрируя божественную гармонию и безграничную мощь Шах-ан-шаха. Сердцем этого стиля стала новая столица — Исфахан, прозванная «Половиной мира» (Несф-э Джехан).</p>
+                    <p>Здания этой эпохи легко узнать по грандиозным луковичным куполам, покрытым бирюзовой и синей глазурью. Мастера используют технику <b>хафт-ранг</b> (семицветная плитка), создавая сложные цветочные и геометрические орнаменты, переливающиеся на солнце. Входы во дворцы и мечети венчают огромные арки-айваны, своды которых украшены <b>мукарнасами</b> — «сотовыми» или «сталактитовыми» конструкциями, напоминающими звездное небо.</p>
+                    <p>Архитектура неразрывно связана с природой. Концепция <b>чарбаг</b> (четырехчастного райского сада), разделенного водными каналами, пронизывает всё градостроительство. Дворцы, такие как Али-Капу или Чехель Сотун, строятся так, чтобы интерьер плавно перетекал в цветущие сады, стирая грань между рукотворным и природным великолепием.</p>
+                ` 
+            },
+            { 
+                id: "miniature", 
+                category: "Изящные Искусства",
+                name: "Книжная миниатюра", 
+                subtitle: "Драгоценное окно в мир легенд и грёз", 
+                masters: "Реза Аббаси, Султан Мухаммед", 
+                elements: "Ляпис-лазурь, золото, кисти из беличьей шерсти, муракка", 
+                text: `
+                    <p>Персидская миниатюра — это искусство, не терпящее суеты. На создание одной царской рукописи, такой как знаменитое «Шахнаме Тахмаспа», уходили десятки лет труда сотен мастеров: художников, позолотчиков, переплетчиков и каллиграфов.</p>
+                    <p>К поздней Сефевидской эпохе, под влиянием великого <b>Резы Аббаси</b>, миниатюра выходит за пределы книг. Появляются станковые рисунки на отдельных листах, которые знатные вельможи собирают в роскошные альбомы — <b>муракка</b>. В моду входят изображения томных юношей-виночерпиев, влюбленных пар, дервишей и придворных интриганов, выполненные плавными, каллиграфическими линиями.</p>
+                    <p>Цвета миниатюр поражают чистотой: художники перетирают в пыль драгоценные и полудрагоценные камни. Небеса сияют подлинным афганским ляпис-лазурью, листья — малахитом, а детали одежд щедро покрываются листовым золотом и серебром, заставляя страницы светиться в полумраке дворцовых покоев.</p>
+                ` 
+            }
+        ],
+        sciences: [
+            { 
+                id: "languages", 
+                category: "Знания и Науки",
+                name: "Языки (Алсине)", 
+                subtitle: "Трёхречие власти, пера и молитвы", 
+                masters: "Шахский диван, кызылбашские ханы, секретари, улемы", 
+                elements: "Тюркский (кызылбашский), Фарси (персидский), Арабский", 
+                text: `
+                    <p>В Сефевидском государстве гармонично сосуществуют три великих языка, каждый из которых наделен исключительной государственной и сакральной ролью. Эта система разделения речи известна как «три столпа державы».</p>
+                    <p><b>Кызылбашский или сефевидский (азербайджанский) язык</b> — это живой язык власти, оружия и правящей династии. На нем говорит сам Шах-ан-шах со своими близкими, на нем отдаются боевые приказы в войсках и звучит речь во внутренних покоях дворца Али-Капу и гареме. Сефевидский язык является знаком принадлежности к военной элите и кызылбашским кланам, возведшим Сефевидов на престол.</p>
+                    <p><b>Фарси (персидский)</b> — это язык высокой литературы, поэзии, историографии и государственной канцелярии (дивана). На фарси составляются указы (фирманы), ведутся дипломатические книги, пишутся хроники побед и бессмертные поэтические поэмы. Образованный кызылбаш обязан владеть фарси в совершенстве, дабы проявлять утонченность ума.</p>
+                    <p><b>Арабский язык</b> — это священный язык веры, исламского богословия и шариатского правосудия. На нем пишутся фундаментальные теологические трактаты улемов, выносятся судебные фетвы и ведутся ученые диспуты в медресе. В то же время на шумных базарах и в караван-сараях Исфахана можно услышать речь армянских купцов Новой Джульфы, грузинских воинов, арабских мореходов и индийских торговцев шелком.</p>
+                ` 
+            },
+            { 
+                id: "medicine", 
+                category: "Знания и Науки",
+                name: "Медицина (Тибб)", 
+                subtitle: "Искусство баланса четырёх стихий", 
+                masters: "Ибн Сина, Баха ад-Давла Рази, Хаким-баши", 
+                elements: "Гуморальная теория, пульсовая диагностика, бадьян, безоар", 
+                text: `
+                    <p>Медицина Сефевидов опирается на монументальные труды Галена и Авиценны. В её основе лежит <b>гуморальная теория</b> — учение о четырёх соках организма: крови, флегме, жёлтой и чёрной желчи. Считается, что любая болезнь проистекает из дисбаланса этих жидкостей, а также нарушения равновесия тепла, холода, влажности и сухости.</p>
+                    <p>Опытный врач <b>(хаким)</b> ставит диагноз, детально изучая пульс, цвет лица пациента и его сны. Лечение включает строгие диеты (назначение «горячей» или «холодной» пищи), фитотерапию, применение сложных мазей, а в крайних случаях — кровопускание (хиджаму) или использование пиявок.</p>
+                    <p>В каждом крупном городе империи действуют <b>бимаристаны</b> — больницы, где лечат не только тело, но и душу, применяя водотерапию и исцеление музыкой. При дворе же главным авторитетом является <i>хаким-баши</i> (главный лекарь шаха), от чьих знаний, использования редчайших ядов и противоядий (безоаровых камней) нередко зависят судьбы целых династий.</p>
+                ` 
+            },
+            { 
+                id: "alchemy", 
+                category: "Знания и Науки",
+                name: "Алхимия (Аль-Кимия)", 
+                subtitle: "Путь к философскому золоту", 
+                masters: "Последователи Джабира ибн Хайяна, тайные суфийские ордена", 
+                elements: "Ртуть, сера, трансмутация, Великий Иксир, атаноры", 
+                text: `
+                    <p>В тени дворцовых интриг и богословских споров скрывается тайная наука — алхимия. Это занятие находится на грани дозволенного, балансируя между передовым естествознанием и ересью, за которую могут отрубить голову. </p>
+                    <p>Сефевидские алхимики не просто ищут способ превратить дешевый свинец в чистое золото с помощью мифического <b>Иксира (Философского камня)</b>. В их понимании трансмутация металлов — это лишь отражение духовной трансмутации самого человека, очищения души от «примесей» пороков до «золотого» состояния слияния с Божественным. Эта наука тесно переплетена с суфийским мистицизмом (ирфаном).</p>
+                    <p>В скрытых лабораториях, среди перегонных кубов (атаноров), едких паров серы и кипящей ртути, адепты алхимии совершают открытия, которые позже ложатся в основу создания новых красителей, пороха, сплавов дамасской стали и редчайших лечебных эликсиров. Знания алхимиков — источник колоссальной силы, который стремятся подчинить себе многие правители и военачальники.</p>
+                ` 
+            },
+            { 
+                id: "astronomy", 
+                category: "Знания и Науки",
+                name: "Астрономия и Астрология", 
+                subtitle: "Чтение шахских судеб по звёздам", 
+                masters: "Традиции Марагинской обсерватории, Мунаджим-баши", 
+                elements: "Астролябии, таблицы (зиджи), гороскопы, са’д и нахс", 
+                text: `
+                    <p>В Персии наука о звёздах и искусство предсказания слиты воедино. Ни одно значимое государственное или семейное дело не начинается без консультации со звездами. <b>Мунаджим-баши</b> (главный придворный астролог) — один из самых влиятельных людей при дворе, чье слово способно отменить военный поход или отложить коронацию.</p>
+                    <p>Задачей астрологов является вычисление <i>са’д</i> (благоприятных) и <i>нахс</i> (зловещих) часов. С помощью сложнейших математических таблиц <b>(зиджей)</b> и великолепных медных <b>астролябий</b>, которые сами по себе являются шедеврами ювелирного искусства, они высчитывают положения планет.</p>
+                    <p>Вера во влияние звезд непоколебима. Считается, что кометы предвещают падение империй, а неблагоприятный парад планет может стоить жизни Шах-ан-шаху. Астрономы также следят за лунным календарем, определяя точные даты священного месяца Рамадан и праздника Навруз.</p>
+                ` 
+            },
+            { 
+                id: "carpets", 
+                category: "Знания и Науки",
+                name: "Ковроткачество", 
+                subtitle: "Сады Эдема, сотканные из шелка", 
+                masters: "Мастера шахских кархане Исфахана, Тебриза, Кашана", 
+                elements: "Шёлк, серебряные нити, натуральные красители, узел «сенне»", 
+                text: `
+                    <p>Ковроткачество в Сефевидском государстве — это не просто ремесло, а главная гордость нации, важнейшая статья экспорта и высшая форма декоративного искусства. Именно в эту эпоху ткачество переживает свой «Золотой век». Шахи лично учреждают <b>кархане</b> — царские мануфактуры, куда свозят лучших рисовальщиков и ткачей со всей империи.</p>
+                    <p>Персидский ковер — это символическое изображение Райского сада. Его узоры, строгая геометрия медальонов, переплетения виноградных лоз и изображения диковинных птиц несут глубокий философский подтекст.</p>
+                    <p>Особую ценность представляют так называемые <b>«полонезские ковры»</b> и роскошные шелковые изделия, в которые вплетаются золотые и серебряные нити. Процесс создания одного большого дворцового ковра (как, например, легендарный Ардебильский ковер) занимал несколько лет тяжелейшего труда. Сегодня эти шедевры украшают тронные залы восточных владык и дворцы европейских монархов, демонстрируя всему миру непревзойденный вкус персидских мастеров.</p>
+                ` 
+            }
+        ]
+    };
+
+    let currentCategory = 'arts';
+
+    function renderNav(categoryKey) {
+        const nav = document.getElementById('timelineNav');
+        const items = database[categoryKey];
+        nav.innerHTML = '';
+
+        items.forEach((item, index) => {
+            const btn = document.createElement('button');
+            btn.className = `timeline-btn ${index === 0 ? 'active' : ''}`;
+            btn.type = 'button';
+            btn.onclick = () => selectItem(index, btn);
+
+            btn.innerHTML = `
+                <span class="tb-category">✦ ${item.category}</span>
+                <span class="tb-title">${item.name}</span>
+            `;
+            nav.appendChild(btn);
+        });
+
+        renderReader(items[0]);
+    }
+
+    function selectItem(index, btnElement) {
+        document.querySelectorAll('.timeline-btn').forEach(b => b.classList.remove('active'));
+        btnElement.classList.add('active');
+
+        const item = database[currentCategory][index];
+        renderReader(item);
+    }
+
+    function renderReader(item) {
+        const reader = document.getElementById('readerFrame');
+        reader.innerHTML = `
+            <header class="reader-header">
+                <span class="reader-badge">Раздел: ${item.category}</span>
+                <h2 class="reader-title">${item.name}</h2>
+                <div class="reader-subtitle">${item.subtitle}</div>
+            </header>
+
+            <div class="reader-stats-grid">
+                <div class="reader-stat-box">
+                    <div class="reader-stat-label">Ключевые фигуры / Традиции</div>
+                    <div class="reader-stat-val">${item.masters}</div>
+                </div>
+                <div class="reader-stat-box">
+                    <div class="reader-stat-label">Основы и Элементы</div>
+                    <div class="reader-stat-val">${item.elements}</div>
+                </div>
+            </div>
+
+            <div class="reader-content">
+                ${item.text}
+            </div>
+        `;
+        reader.scrollTop = 0;
+    }
+
+    function switchCategory(key) {
+        currentCategory = key;
+
+        const tabArts = document.getElementById('tabArts');
+        const tabSciences = document.getElementById('tabSciences');
+
+        if (key === 'arts') {
+            tabArts.classList.add('active');
+            tabSciences.classList.remove('active');
+        } else {
+            tabSciences.classList.add('active');
+            tabArts.classList.remove('active');
+        }
+
+        renderNav(key);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        renderNav('arts');
+    });
+</script>
+
+</body>
+</html>

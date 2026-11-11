@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Летоисчисление и Календарь</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .calendar-wrapper {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .calendar-wrapper::before,
+  .calendar-wrapper::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .calendar-wrapper::before { top: 10px; left: 14px; }
+  .calendar-wrapper::after { top: 10px; right: 14px; }
+
+  /* Главная шапка */
+  .page-header {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+    text-align: center;
+  }
+
+  .page-header:after {
+    content: "✦  ✦  ✦";
+    position: absolute;
+    right: 24px;
+    bottom: 12px;
+    color: rgba(212, 175, 55, 0.3);
+    font-size: 14px;
+    letter-spacing: 8px;
+  }
+
+  .page-kicker {
+    margin: 0 0 6px;
+    color: var(--gold-light);
+    font-size: 11px !important;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold !important;
+    font-family: Georgia, serif !important;
+  }
+
+  .page-title {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .page-desc {
+    max-width: 800px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  /* ========================================================
+     ДВУСТОРОННИЙ КОНВЕРТЕР ДАТ
+     ======================================================== */
+  .converter-section {
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 25px 30px;
+    margin-bottom: 35px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .converter-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .converter-kicker {
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 0 0 4px;
+  }
+
+  .converter-title {
+    color: var(--gold-light);
+    font-size: 20px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 0;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  /* Табы переключения направления */
+  .converter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin: 0 auto 20px;
+    max-width: 500px;
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 10px 14px;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    color: var(--muted);
+    border-radius: 6px;
+    font-size: 12.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+  }
+
+  .tab-btn:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .tab-btn.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    border-color: var(--gold-light);
+    color: #121008;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.35);
+  }
+
+  .converter-form {
+    max-width: 560px;
+    margin: 0 auto;
+  }
+
+  .input-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .converter-input, .converter-select {
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+  }
+
+  .converter-input:focus, .converter-select:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .converter-select option {
+    background: #161618;
+    color: var(--text);
+  }
+
+  .col-day { width: 28%; text-align: center; }
+  .col-month { width: 44%; }
+  .col-year { width: 28%; text-align: center; }
+
+  .converter-btn {
+    width: 100%;
+    padding: 13px 20px;
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+
+  .converter-btn:hover {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .result-box {
+    margin-top: 18px;
+    padding: 14px 18px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    display: none;
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .result-box.success {
+    display: block;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px dashed var(--gold);
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+  }
+
+  .result-box.error {
+    display: block;
+    background: rgba(217, 107, 107, 0.15);
+    border: 1px solid #d96b6b;
+    color: #ff9b9b;
+    font-size: 13.5px;
+    font-weight: normal;
+  }
+
+  /* ========================================================
+     СЕТКА СЕЗОНОВ
+     ======================================================== */
+  .seasons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .season-card {
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-top: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    padding: 22px 18px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    transition: all 0.25s ease;
+  }
+
+  .season-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--gold-light);
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15);
+  }
+
+  .season-name {
+    color: var(--gold-light);
+    font-size: 18px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 0 0 18px 0;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 12px;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .month-item {
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .month-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .month-title {
+    color: var(--text);
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    font-family: 'Yipes', Georgia, serif !important;
+    transition: color 0.2s ease;
+  }
+
+  .month-item:hover .month-title {
+    color: var(--gold-light);
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+  }
+
+  .month-dates {
+    font-size: 12.5px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  /* ========================================================
+     РАЗДЕЛ ПРАЗДНИКОВ (АККОРДЕОНЫ)
+     ======================================================== */
+  .holidays-wrapper {
+    margin-top: 25px;
+    padding-top: 30px;
+    border-top: 1px solid var(--line);
+  }
+
+  .section-header {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .section-kicker {
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 4px;
+    font-weight: bold;
+  }
+
+  .section-title {
+    color: var(--gold-light);
+    font-size: 24px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .section-note {
+    color: var(--muted);
+    font-size: 13px;
+    font-style: italic;
+    margin: 0;
+  }
+
+  .holiday-accordion {
+    margin-bottom: 15px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+    transition: border-color 0.25s ease;
+  }
+
+  .holiday-accordion:hover {
+    border-color: var(--gold-light);
+  }
+
+  .accordion-header {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.2s ease;
+  }
+
+  .accordion-header:hover {
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .accordion-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .accordion-title {
+    color: var(--gold-light);
+    font-size: 17px;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .accordion-badge {
+    color: var(--muted);
+    font-size: 11.5px;
+    background: rgba(212, 175, 55, 0.12);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.5px;
+  }
+
+  .accordion-icon {
+    color: var(--gold);
+    font-size: 18px;
+    transition: transform 0.3s ease;
+    display: inline-block;
+  }
+
+  .accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease-out, padding 0.3s ease;
+    padding: 0 20px;
+  }
+
+  .holiday-accordion.open .accordion-header {
+    background: rgba(212, 175, 55, 0.1);
+    border-bottom: 1px dashed var(--line);
+  }
+
+  .holiday-accordion.open .accordion-icon {
+    transform: rotate(180deg);
+    color: var(--gold-light);
+  }
+
+  .holiday-accordion.open .accordion-content {
+    max-height: 2500px;
+    padding: 16px 20px 20px 20px;
+  }
+
+  .holiday-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .holiday-card {
+    background: rgba(14, 14, 17, 0.7);
+    border: 1px solid var(--line-soft);
+    border-radius: 6px;
+    padding: 14px 18px;
+    transition: all 0.2s ease;
+  }
+
+  .holiday-card:hover {
+    border-color: var(--gold);
+    background: rgba(22, 22, 26, 0.9);
+  }
+
+  .holiday-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 12px;
+    margin-bottom: 6px;
+  }
+
+  .holiday-date {
+    color: var(--gold-soft);
+    font-size: 12px;
+    font-weight: bold;
+    background: rgba(212, 175, 55, 0.12);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(212, 175, 55, 0.25);
+    letter-spacing: 0.5px;
+  }
+
+  .holiday-name {
+    color: var(--gold-light);
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0.5px;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .holiday-desc {
+    margin: 0;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.7;
+    text-align: justify;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+  @media (max-width: 940px) {
+    .seasons-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .calendar-wrapper { padding: 25px 15px; }
+    .page-header { padding: 20px 15px; }
+    .page-title { font-size: 22px; }
+    .converter-section { padding: 18px 14px; }
+    .seasons-grid { grid-template-columns: 1fr; gap: 15px; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html" class="active">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="guide.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <main class="calendar-wrapper">
+        
+        <!-- ШАПКА КАЛЕНДАРЯ -->
+        <header class="page-header">
+            <p class="page-kicker">✦ Таърих-е Давлат ✦</p>
+            <h1 class="page-title">Годовой цикл и календарь Державы</h1>
+            <p class="page-desc">Солнечный иранский календарь, перевод дат в европейский счет и свод великих празднеств Сефевидской империи.</p>
+        </header>
+
+        <!-- ДВУСТОРОННИЙ КОНВЕРТЕР ДАТ -->
+        <section class="converter-section">
+            <div class="converter-header">
+                <p class="converter-kicker">Имперский астрономический диван</p>
+                <h2 class="converter-title" id="convTitle">Иранский календарь ➔ Григорианский</h2>
+            </div>
+
+            <!-- Переключатели направления -->
+            <div class="converter-tabs">
+                <button type="button" class="tab-btn active" id="tabToGreg" onclick="switchMode('toGreg')">Иранский ➔ Григорианский</button>
+                <button type="button" class="tab-btn" id="tabToPersian" onclick="switchMode('toPersian')">Григорианский ➔ Иранский</button>
+            </div>
+
+            <div class="converter-form">
+                <!-- ФОРМА 1: ИРАНСКИЙ -> ГРИГОРИАНСКИЙ -->
+                <div id="formToGreg">
+                    <div class="input-group">
+                        <input type="number" id="dayJ" class="converter-input col-day" placeholder="День" min="1" max="31" value="1">
+                        <select id="monthJ" class="converter-select col-month">
+                            <option value="1" selected>Фарвардин</option>
+                            <option value="2">Ордибехешт</option>
+                            <option value="3">Хордад</option>
+                            <option value="4">Тир</option>
+                            <option value="5">Мордад</option>
+                            <option value="6">Шахривар</option>
+                            <option value="7">Мехр</option>
+                            <option value="8">Абан</option>
+                            <option value="9">Азар</option>
+                            <option value="10">Дей</option>
+                            <option value="11">Бахман</option>
+                            <option value="12">Эсфанд</option>
+                        </select>
+                        <input type="number" id="yearJ" class="converter-input col-year" placeholder="Год" value="1024">
+                    </div>
+                    <button type="button" class="converter-btn" onclick="convertJalaliToGregorian()">Перевести в григорианский счет</button>
+                </div>
+
+                <!-- ФОРМА 2: ГРИГОРИАНСКИЙ -> ИРАНСКИЙ -->
+                <div id="formToPersian" style="display: none;">
+                    <div class="input-group">
+                        <input type="number" id="dayG" class="converter-input col-day" placeholder="День" min="1" max="31" value="21">
+                        <select id="monthG" class="converter-select col-month">
+                            <option value="0">Января</option>
+                            <option value="1">Февраля</option>
+                            <option value="2" selected>Марта</option>
+                            <option value="3">Апреля</option>
+                            <option value="4">Мая</option>
+                            <option value="5">Июня</option>
+                            <option value="6">Июля</option>
+                            <option value="7">Августа</option>
+                            <option value="8">Сентября</option>
+                            <option value="9">Октября</option>
+                            <option value="10">Ноября</option>
+                            <option value="11">Декабря</option>
+                        </select>
+                        <input type="number" id="yearG" class="converter-input col-year" placeholder="Год" value="1645">
+                    </div>
+                    <button type="button" class="converter-btn" onclick="convertGregorianToJalali()">Перевести в иранский счет</button>
+                </div>
+                
+                <div class="result-box" id="resultText"></div>
+            </div>
+        </section>
+
+        <!-- СЕТКА СЕЗОНОВ И МЕСЯЦЕВ -->
+        <div class="seasons-grid">
+            
+            <!-- ВЕСНА -->
+            <div class="season-card">
+                <h2 class="season-name">🌸 Весна</h2>
+                
+                <div class="month-item">
+                    <div class="month-title">Фарвардин</div>
+                    <div class="month-dates">21 марта – 20 апреля</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Ордибехешт</div>
+                    <div class="month-dates">21 апреля – 21 мая</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Хордад</div>
+                    <div class="month-dates">22 мая – 21 июня</div>
+                </div>
+            </div>
+
+            <!-- ЛЕТО -->
+            <div class="season-card">
+                <h2 class="season-name">☀️ Лето</h2>
+                
+                <div class="month-item">
+                    <div class="month-title">Тир</div>
+                    <div class="month-dates">22 июня – 22 июля</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Мордад</div>
+                    <div class="month-dates">23 июля – 22 августа</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Шахривар</div>
+                    <div class="month-dates">23 августа – 22 сентября</div>
+                </div>
+            </div>
+
+            <!-- ОСЕНЬ -->
+            <div class="season-card">
+                <h2 class="season-name">🍂 Осень</h2>
+                
+                <div class="month-item">
+                    <div class="month-title">Мехр</div>
+                    <div class="month-dates">23 сентября – 22 октября</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Абан</div>
+                    <div class="month-dates">23 октября – 21 ноября</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Азар</div>
+                    <div class="month-dates">22 ноября – 21 декабря</div>
+                </div>
+            </div>
+
+            <!-- ЗИМА -->
+            <div class="season-card">
+                <h2 class="season-name">❄️ Зима</h2>
+                
+                <div class="month-item">
+                    <div class="month-title">Дей</div>
+                    <div class="month-dates">22 декабря – 20 января</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Бахман</div>
+                    <div class="month-dates">21 января – 19 февраля</div>
+                </div>
+                
+                <div class="month-item">
+                    <div class="month-title">Эсфанд</div>
+                    <div class="month-dates">20 февраля – 20 марта</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ПРЕДСТОЯЩИЕ ПРАЗДНИКИ (АККОРДЕОНЫ) -->
+        <div class="holidays-wrapper">
+            <div class="section-header">
+                <p class="section-kicker">Календарь торжеств и бдений</p>
+                <h2 class="section-title">Предстоящие праздники</h2>
+                <p class="section-note">Нажмите на интересующее время года, чтобы развернуть список праздников</p>
+            </div>
+
+            <!-- ЗИМА 1645 / 1646 -->
+            <div class="holiday-accordion">
+                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title-wrap">
+                        <span class="accordion-title">Зима 1645 / 1646 года</span>
+                        <span class="accordion-badge">6 праздников</span>
+                    </div>
+                    <span class="accordion-icon">▾</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="holiday-list">
+                        
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">30 Азар / 1 Дей · 21–22 дек. 1645</span>
+                                <span class="holiday-name">Шаб-е Ялда (Ночь Чилла)</span>
+                            </div>
+                            <p class="holiday-desc">Общенародное празднование зимнего солнцестояния. Персы бодрствовали всю ночь, жгли огни, читали поэзию Фирдоуси и Хафиза, ели арбузы и гранаты, празднуя грядущее рождение солнца.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">7 Дей · 27 янв. 1646</span>
+                                <span class="holiday-name">Эйд аль-Адха</span>
+                            </div>
+                            <p class="holiday-desc">Главный исламский праздник жертвоприношения. Шах Аббас II со своим двором участвовал в масштабных церемониях заклания верблюдов на площади Накш-э Джахан в Исфахане, мясо которых раздавали горожанам.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">10 Бахман · 30 янв. 1646</span>
+                                <span class="holiday-name">Джашн-е Саде</span>
+                            </div>
+                            <p class="holiday-desc">Традиционный древний праздник огня, отмечаемый ровно за 50 дней до Навруза. Повсюду разжигались грандиозные костры, чтобы символически прогнать зимнюю стужу.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">15 Бахман · 4 фев. 1646</span>
+                                <span class="holiday-name">Эйд аль-Гадир</span>
+                            </div>
+                            <p class="holiday-desc">Священный для шиитской Персии праздник провозглашения имама Али преемником пророка Мухаммеда. Во дворце Али-Капу устраивался торжественный прием для элиты кызылбашей.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">6 Эсфанд · 16 фев. 1646</span>
+                                <span class="holiday-name">Мусульманский Новый год</span>
+                            </div>
+                            <p class="holiday-desc">Начало шиитского траурного месяца. По всей стране прекращались увеселительные мероприятия, вывешивались черные флаги.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">15 Эсфанд · 25 фев. 1646</span>
+                                <span class="holiday-name">Ашура</span>
+                            </div>
+                            <p class="holiday-desc">Кульминация траура по имаму Хусейну. Этот день сопровождался грандиозными уличными процессиями в Исфахане, мистериями «тазия» (религиозный театр), коллективным плачем и раздачей бесплатной поминальной еды.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ВЕСНА 1646 -->
+            <div class="holiday-accordion">
+                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title-wrap">
+                        <span class="accordion-title">Весна 1646 года</span>
+                        <span class="accordion-badge">2 праздника</span>
+                    </div>
+                    <span class="accordion-icon">▾</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="holiday-list">
+                        
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">1 Фарвардин · 21 мар. 1646</span>
+                                <span class="holiday-name">Навруз</span>
+                            </div>
+                            <p class="holiday-desc">Праздник, который символизирует приход весны и начало нового года по солнечному календарю у иранских и тюркских народов.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">27 Фарвардин · 16 апр. 1646</span>
+                                <span class="holiday-name">Мавлид ан-Наби</span>
+                            </div>
+                            <p class="holiday-desc">День рождения пророка Мухаммеда. Праздновался религиозными чтениями в главных мечетях и иллюминацией на столичных площадях.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЛЕТО 1646 -->
+            <div class="holiday-accordion">
+                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title-wrap">
+                        <span class="accordion-title">Лето 1646 года</span>
+                        <span class="accordion-badge">2 праздника</span>
+                    </div>
+                    <span class="accordion-icon">▾</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="holiday-list">
+                        
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">1 Тир · 22 июн. 1646</span>
+                                <span class="holiday-name">Джашн-е Тирган</span>
+                            </div>
+                            <p class="holiday-desc">Древний праздник воды. Люди массово обливали друг друга водой на улицах и у каналов Исфахана, спасаясь от летнего зноя, и повязывали разноцветные шелковые шнурки на запястья.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">6 Шахривар · 28 авг. 1646</span>
+                                <span class="holiday-name">День падения Иерусалима / Ночь Мирадж</span>
+                            </div>
+                            <p class="holiday-desc">Ночь вознесения пророка Мухаммеда к престолу Аллаха, сопровождавшаяся ночными бдениями и молитвами.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ОСЕНЬ 1646 -->
+            <div class="holiday-accordion">
+                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title-wrap">
+                        <span class="accordion-title">Осень 1646 года</span>
+                        <span class="accordion-badge">4 праздника</span>
+                    </div>
+                    <span class="accordion-icon">▾</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="holiday-list">
+                        
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">16 Мехр · 8 окт. 1646</span>
+                                <span class="holiday-name">Джашн-е Мехреган</span>
+                            </div>
+                            <p class="holiday-desc">Большой древнеперсидский праздник осени, урожая и справедливости. День, когда наместники слали шаху ежегодную дань, а во дворцах гремели пиры.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">19 Мехр · 11 окт. 1646</span>
+                                <span class="holiday-name">Начало месяца Рамадан</span>
+                            </div>
+                            <p class="holiday-desc">Начало обязательного священного поста. Жизнь в городах полностью переходила на ночной режим.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">18 Абан · Ночь 21–22 Рамадана (9 нояб.)</span>
+                                <span class="holiday-name">Лайлат аль-Кадр (Ночь Предопределения)</span>
+                            </div>
+                            <p class="holiday-desc">Самая святая ночь в году. Персы проводили ее в мечетях в беспрерывных молитвах до самого рассвета.</p>
+                        </div>
+
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">19 Абан · 10 нояб. 1646</span>
+                                <span class="holiday-name">Эйд аль-Фитр (Ураза-байрам)</span>
+                            </div>
+                            <p class="holiday-desc">Праздник разговения, завершение поста. Пышные народные гуляния, ярмарки и шахские пиры после месяца ограничений.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- ЗИМА 1646 (КОНЕЦ) -->
+            <div class="holiday-accordion">
+                <button type="button" class="accordion-header" onclick="toggleAccordion(this)">
+                    <div class="accordion-title-wrap">
+                        <span class="accordion-title">Зима 1646 года</span>
+                        <span class="accordion-badge">1 праздник</span>
+                    </div>
+                    <span class="accordion-icon">▾</span>
+                </button>
+                <div class="accordion-content">
+                    <div class="holiday-list">
+                        
+                        <div class="holiday-card">
+                            <div class="holiday-top">
+                                <span class="holiday-date">30 Азар / 1 Дей · 21–22 дек. 1646</span>
+                                <span class="holiday-name">Шаб-е Ялда</span>
+                            </div>
+                            <p class="holiday-desc">Вновь наступила самая длинная ночь года, завершая этот 1646 календарный год масштабными семейными застольями.</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+      </main>
+    </div>
+
+<script>
+    // Аккордеоны
+    function toggleAccordion(button) {
+        const accordion = button.closest('.holiday-accordion');
+        accordion.classList.toggle('open');
+    }
+
+    // Названия месяцев
+    const gregorianMonths = [
+        "января", "февраля", "марта", "апреля", 
+        "мая", "июня", "июля", "августа", 
+        "сентября", "октября", "ноября", "декабря"
+    ];
+
+    const jalaliMonthNames = [
+        "Фарвардина", "Ордибехешта", "Хордада",
+        "Тира", "Мордада", "Шахривара",
+        "Мехра", "Абана", "Азара",
+        "Дея", "Бахмана", "Эсфанда"
+    ];
+
+    // Переключение режимов конвертера
+    function switchMode(mode) {
+        const tabToGreg = document.getElementById('tabToGreg');
+        const tabToPersian = document.getElementById('tabToPersian');
+        const formToGreg = document.getElementById('formToGreg');
+        const formToPersian = document.getElementById('formToPersian');
+        const title = document.getElementById('convTitle');
+        const result = document.getElementById('resultText');
+
+        result.className = 'result-box';
+        result.style.display = '';
+
+        if (mode === 'toGreg') {
+            tabToGreg.classList.add('active');
+            tabToPersian.classList.remove('active');
+            formToGreg.style.display = 'block';
+            formToPersian.style.display = 'none';
+            title.textContent = 'Иранский календарь ➔ Григорианский';
+        } else {
+            tabToPersian.classList.add('active');
+            tabToGreg.classList.remove('active');
+            formToPersian.style.display = 'block';
+            formToGreg.style.display = 'none';
+            title.textContent = 'Григорианский календарь ➔ Иранский';
+        }
+    }
+
+    // Точный математический алгоритм перевода Григорианский <-> Иранский (Джалали)
+    function gregorianToJalaliMath(gy, gm, gd) {
+        var g_d_m = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        var gy2 = (gm > 2) ? (gy + 1) : gy;
+        var days = 355666 + (365 * gy) + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) + gd + g_d_m[gm - 1];
+        var jy = -1595 + (33 * Math.floor(days / 12053));
+        days %= 12053;
+        jy += 4 * Math.floor(days / 1461);
+        days %= 1461;
+        if (days > 365) {
+            jy += Math.floor((days - 1) / 365);
+            days = (days - 1) % 365;
+        }
+        var jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+        var jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+        return { y: jy, m: jm, d: jd };
+    }
+
+    function jalaliToGregorianMath(jy, jm, jd) {
+        jy += 1595;
+        var days = -355668 + (365 * jy) + (Math.floor(jy / 33) * 8) + Math.floor(((jy % 33) + 3) / 4) + jd + ((jm < 7) ? (jm - 1) * 31 : ((jm - 7) * 30) + 186);
+        var gy = 400 * Math.floor(days / 146097);
+        days %= 146097;
+        if (days > 36524) {
+            gy += 100 * Math.floor(--days / 36524);
+            days %= 36524;
+            if (days >= 365) days++;
+        }
+        gy += 4 * Math.floor(days / 1461);
+        days %= 1461;
+        if (days > 365) {
+            gy += Math.floor((days - 1) / 365);
+            days = (days - 1) % 365;
+        }
+        var gd = days + 1;
+        var sal_a = [0, 31, ((gy % 4 === 0 && gy % 100 !== 0) || (gy % 400 === 0)) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+        var gm;
+        for (gm = 0; gm < 13 && gd > sal_a[gm]; gm++) gd -= sal_a[gm];
+        return { y: gy, m: gm, d: gd };
+    }
+
+    // 1. ИРАНСКИЙ -> ГРИГОРИАНСКИЙ
+    function convertJalaliToGregorian() {
+        const targetJd = parseInt(document.getElementById('dayJ').value, 10);
+        const targetJm = parseInt(document.getElementById('monthJ').value, 10);
+        const targetJy = parseInt(document.getElementById('yearJ').value, 10);
+        const resultElement = document.getElementById('resultText');
+        resultElement.style.display = 'block';
+
+        if (!targetJd || !targetJy || targetJd < 1 || targetJd > 31) {
+            resultElement.className = "result-box error";
+            resultElement.innerText = "Пожалуйста, укажите корректный день и год.";
+            return;
+        }
+
+        if (targetJm > 6 && targetJd === 31) {
+            resultElement.className = "result-box error";
+            resultElement.innerText = "Ошибка: во второй половине иранского года (с Мехра по Эсфанд) в месяцах не более 30 дней.";
+            return;
+        }
+
+        const g = jalaliToGregorianMath(targetJy, targetJm, targetJd);
+        const gMonthName = gregorianMonths[g.m - 1];
+
+        resultElement.className = "result-box success";
+        resultElement.innerText = `Григорианская дата: ${g.d} ${gMonthName} ${g.y} года`;
+    }
+
+    // 2. ГРИГОРИАНСКИЙ -> ИРАНСКИЙ
+    function convertGregorianToJalali() {
+        const dayG = parseInt(document.getElementById('dayG').value, 10);
+        const monthG = parseInt(document.getElementById('monthG').value, 10); // 0..11
+        const yearG = parseInt(document.getElementById('yearG').value, 10);
+        const resultElement = document.getElementById('resultText');
+        resultElement.style.display = 'block';
+
+        if (!dayG || !yearG || dayG < 1 || dayG > 31) {
+            resultElement.className = "result-box error";
+            resultElement.innerText = "Пожалуйста, укажите корректный день и год.";
+            return;
+        }
+
+        const testDate = new Date(Date.UTC(yearG, monthG, dayG));
+        testDate.setUTCFullYear(yearG);
+        if (testDate.getUTCMonth() !== monthG || testDate.getUTCDate() !== dayG) {
+            resultElement.className = "result-box error";
+            resultElement.innerText = "Ошибка: некорректная григорианская дата (например, 31 февраля).";
+            return;
+        }
+
+        const j = gregorianToJalaliMath(yearG, monthG + 1, dayG);
+        const jMonthName = jalaliMonthNames[j.m - 1];
+
+        resultElement.className = "result-box success";
+        resultElement.innerText = `Иранская дата: ${j.d} ${jMonthName} ${j.y} года`;
+    }
+</script>
+
+</body>
+</html>

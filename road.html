@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <!-- Иконка вкладки -->
+  <link rel="icon" type="image/png" href="leo.png">
+
+  <title>Калькулятор Пути</title>
+  
+  <style>
+    /* ========================================= */
+    /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+    /* ========================================= */
+    @font-face {
+      font-family: 'Yipes';
+      src: url('yipes-regular.otf') format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    :root {
+      --gold-dark: #8c6a08;
+      --gold: #d4af37;
+      --gold-light: #fbe8a6;
+      --gold-soft: #c5a059;
+      --text: #f0ebd8;
+      --muted: #a69e88;
+      --line: rgba(212, 175, 55, 0.3);
+      --line-strong: rgba(212, 175, 55, 0.65);
+      --line-soft: rgba(212, 175, 55, 0.14);
+      --bg: #161618;
+      --panel: rgba(22, 22, 26, 0.96);
+      --panel-soft: rgba(26, 26, 32, 0.92);
+      --panel-dark: rgba(14, 14, 17, 0.97);
+      --danger: #d96b6b;
+    }
+
+    /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ (ВКЛЮЧАЯ КАСТОМНЫЙ СЕЛЕКТ) */
+    body, *, a, button, input, select, textarea, option, optgroup, details, summary,
+    .custom-select-dropdown, .custom-select-option, .custom-select-trigger {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      font-family: Georgia, "Times New Roman", serif !important;
+      font-style: normal !important;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg) !important;
+      color: var(--text);
+      background-image: 
+          radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+          linear-gradient(to bottom, #161618, #0b0b0d);
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+    .click-echo {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border: 2px solid var(--gold-light);
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+      z-index: 999999;
+    }
+    @keyframes echoPulse {
+      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+    }
+
+    /* Фирменный золотой скроллбар */
+    * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+    /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+    .site-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px 20px;
+      border-bottom: 2px solid var(--line);
+      background: rgba(18, 18, 20, 0.96);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+    }
+
+    .site-nav {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .nav-logo {
+      height: 50px;
+      width: auto;
+      margin-right: 15px;
+      transition: transform 0.3s ease;
+    }
+    .nav-logo:hover { transform: scale(1.1); }
+
+    .site-nav a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      padding: 4px 0;
+      position: relative;
+      font-weight: 500;
+    }
+
+    .site-nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 1px;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--gold);
+      transition: width 0.3s ease;
+    }
+    .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+    .site-nav a:hover, .site-nav a.active {
+      color: var(--gold-light);
+      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+    }
+
+    /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+    .back-nav-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 25px auto 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: flex-start;
+      box-sizing: border-box;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-light);
+      text-decoration: none;
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 8px 14px;
+      background: var(--panel-dark);
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      font-weight: bold;
+    }
+
+    .back-btn:hover {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.15);
+      color: #fff;
+      transform: translateX(-3px);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+    }
+
+    /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+    .wrap {
+      width: 100%;
+      max-width: 1400px;
+      margin: 25px auto 60px;
+      padding: 0 20px;
+      display: flex;
+      justify-content: center;
+      box-sizing: border-box;
+    }
+
+    /* Главный контейнер калькулятора */
+    .travel-wrap {
+      width: 100%;
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+      border: 1px solid var(--line);
+      border-top: 2px solid var(--gold);
+      border-bottom: 2px solid var(--gold);
+      border-radius: 12px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+      padding: 40px 45px;
+      position: relative;
+    }
+
+    .travel-wrap::before,
+    .travel-wrap::after {
+      content: '✦';
+      position: absolute;
+      color: var(--gold);
+      font-size: 12px;
+    }
+    .travel-wrap::before { top: 10px; left: 14px; }
+    .travel-wrap::after { top: 10px; right: 14px; }
+
+    /* ==================== ПАРАДНАЯ ШАПКА ==================== */
+    .travel-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 25px;
+      margin-bottom: 25px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+      text-align: center;
+    }
+
+    .travel-hero:after {
+      content: "✦  ✦  ✦";
+      position: absolute;
+      right: 20px;
+      bottom: 10px;
+      color: rgba(212, 175, 55, 0.3);
+      font-size: 13px;
+      letter-spacing: 6px;
+    }
+
+    .travel-kicker {
+      margin: 0 0 5px;
+      color: var(--gold-soft);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .travel-hero h1 {
+      margin: 0 0 6px;
+      color: var(--gold-light);
+      font-size: 24px;
+      font-weight: normal;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Yipes', Georgia, serif !important;
+      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    }
+
+    .travel-hero p {
+      max-width: 680px;
+      margin: 0 auto;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .card-panel {
+      background: var(--panel-dark);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 30px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .field.full { grid-column: 1 / -1; }
+
+    label {
+      font-size: 11.5px;
+      color: var(--gold-soft);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: bold;
+    }
+
+    /* ==================== КАСТОМНЫЙ СЕЛЕКТ ==================== */
+    .custom-select {
+      position: relative;
+      user-select: none;
+      text-align: left;
+      background: var(--panel-dark);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      transition: all 0.2s ease;
+      width: 100%;
+    }
+
+    .custom-select:hover {
+      border-color: var(--gold);
+    }
+
+    .custom-select.open {
+      border-color: var(--gold-light);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .custom-select-trigger {
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .custom-select.selected-active .custom-select-trigger {
+      color: var(--text);
+    }
+
+    .custom-select-trigger::after {
+      content: "▾";
+      color: var(--gold);
+      font-size: 14px;
+      transition: transform 0.2s;
+    }
+
+    .custom-select.open .custom-select-trigger::after {
+      transform: rotate(180deg);
+    }
+
+    .custom-select-dropdown {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      background: #141417;
+      border: 1px solid var(--line-strong);
+      border-radius: 6px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.85);
+      z-index: 999;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .custom-select.open .custom-select-dropdown {
+      display: block;
+    }
+
+    .custom-select-option {
+      padding: 11px 14px;
+      font-size: 14px;
+      color: var(--text);
+      transition: background 0.2s, color 0.2s;
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    .custom-select-option:last-child {
+      border-bottom: none;
+    }
+
+    .custom-select-option:hover {
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold-light);
+    }
+
+    .custom-select-option.selected {
+      background: rgba(212, 175, 55, 0.25);
+      color: var(--gold-light);
+      font-weight: bold;
+    }
+
+    /* ==================== РЕЖИМЫ ПУТИ ==================== */
+    .mode-box {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 4px;
+    }
+
+    .mode-option {
+      position: relative;
+      border: 1px solid var(--line);
+      background: var(--panel-dark);
+      border-radius: 6px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .mode-option:hover {
+      border-color: var(--gold);
+      background: rgba(212, 175, 55, 0.08);
+      transform: translateY(-2px);
+    }
+
+    .mode-option input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .mode-title {
+      font-size: 13.5px;
+      color: var(--gold-light);
+      font-weight: bold;
+      letter-spacing: 0.3px;
+      line-height: 1.35;
+      font-family: 'Yipes', Georgia, serif !important;
+    }
+
+    .mode-desc {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .mode-speed {
+      font-size: 11px;
+      color: var(--gold-soft);
+      margin-top: auto;
+      padding-top: 8px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    .mode-option.active {
+      border-color: var(--gold-light);
+      background: rgba(212, 175, 55, 0.15);
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    /* Кнопки */
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    button {
+      border: none;
+      border-radius: 6px;
+      padding: 12px 24px;
+      cursor: pointer;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.2s ease;
+      font-family: Georgia, "Times New Roman", serif !important;
+    }
+
+    .primary {
+      background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+      color: #121008;
+      font-weight: bold;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .primary:hover {
+      background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .ghost {
+      background: var(--panel-dark);
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .ghost:hover {
+      border-color: var(--gold);
+      color: var(--gold-light);
+    }
+
+    /* Результаты */
+    .result {
+      margin-top: 20px;
+      padding: 18px 22px;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--gold);
+      background: var(--panel-dark);
+      line-height: 1.7;
+      font-size: 14px;
+      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .result strong {
+      color: var(--gold-light);
+    }
+
+    .result .time-highlight {
+      font-size: 18px;
+      color: var(--gold-light);
+      font-weight: normal;
+      font-family: 'Yipes', Georgia, serif !important;
+      margin: 8px 0;
+      letter-spacing: 1px;
+    }
+
+    .result-rp-tip {
+      margin-top: 12px;
+      padding: 12px 16px;
+      background: rgba(212, 175, 55, 0.08);
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--gold-soft);
+      font-size: 13px;
+      color: var(--gold-light);
+      font-style: italic;
+    }
+
+    .hint {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.5;
+      font-style: italic;
+      text-align: center;
+    }
+
+    .error {
+      color: var(--danger);
+      font-size: 12.5px;
+      margin-top: 8px;
+      min-height: 16px;
+      font-style: italic;
+    }
+
+    @media (max-width: 820px) {
+      .site-header { padding: 12px 15px; }
+      .site-nav { gap: 12px 16px; }
+      .site-nav a { font-size: 11px; }
+      .wrap { padding: 0 10px 40px; margin: 15px auto; }
+      .travel-wrap { padding: 25px 15px; }
+      .travel-hero { padding: 20px 15px; }
+      .travel-hero h1 { font-size: 21px; }
+      .grid { grid-template-columns: 1fr; }
+      .mode-box { grid-template-columns: 1fr; }
+      .back-nav-container { padding: 0 10px; margin-top: 15px; }
+    }
+
+    @media (max-width: 480px) {
+      .site-header { padding: 12px 10px; }
+      .site-nav { gap: 10px 15px; }
+      .nav-logo { height: 40px; margin-right: 8px; }
+      .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+    }
+  </style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.custom-select')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+
+        // Закрытие кастомных селектов при клике вне их
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-select')) {
+                document.querySelectorAll('.custom-select').forEach(el => el.classList.remove('open'));
+            }
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html" class="active">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="map.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="travel-wrap">
+
+        <!-- ПАРАДНАЯ ШАПКА -->
+        <header class="travel-hero">
+          <h1>Калькулятор Пути</h1>
+          <p>Расчет времени конных переходов, движения шахских кортежей и тяжелых обозов между останами Сефевидской державы</p>
+        </header>
+
+        <main class="scroll-stage">
+          <div class="card-panel">
+
+            <div class="grid">
+              <!-- Откуда -->
+              <div class="field">
+                <label>Точка отправления (Откуда)</label>
+                <div class="custom-select" id="fromSelectContainer">
+                  <div class="custom-select-trigger" id="fromTrigger">Выберите остан...</div>
+                  <div class="custom-select-dropdown" id="fromDropdown"></div>
+                  <input type="hidden" id="fromOstan" value="">
+                </div>
+              </div>
+
+              <!-- Куда -->
+              <div class="field">
+                <label>Точка назначения (Куда)</label>
+                <div class="custom-select" id="toSelectContainer">
+                  <div class="custom-select-trigger" id="toTrigger">Выберите остан...</div>
+                  <div class="custom-select-dropdown" id="toDropdown"></div>
+                  <input type="hidden" id="toOstan" value="">
+                </div>
+              </div>
+
+              <div class="field full">
+                <label>Способ передвижения и обоз</label>
+                <div class="mode-box" id="modeBox">
+                  <label class="mode-option active">
+                    <input type="radio" name="mode" value="horse" checked />
+                    <span class="mode-title">Верховой / Шахский гонец</span>
+                    <span class="mode-desc">Легкий отряд или одиночный всадник со сменой лошадей на почтовых станциях (чапарах).</span>
+                    <span class="mode-speed">~200 км / день</span>
+                  </label>
+
+                  <label class="mode-option">
+                    <input type="radio" name="mode" value="procession" />
+                    <span class="mode-title">Знатный кортеж / Процессия</span>
+                    <span class="mode-desc">Конный эскорт, свита, знатные дамы в повозках и паланкинах с ночлегом в караван-сараях.</span>
+                    <span class="mode-speed">~120 км / день</span>
+                  </label>
+
+                  <label class="mode-option">
+                    <input type="radio" name="mode" value="carriages" />
+                    <span class="mode-title">Караван / Войско / Тяжелый обоз</span>
+                    <span class="mode-desc">Вьючные верблюды, пушки (топчи), пешие ополченцы и громоздкие повозки.</span>
+                    <span class="mode-speed">~80 км / день</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="actions">
+              <button class="primary" id="calcBtn">Рассчитать путь</button>
+              <button class="ghost" id="resetBtn" type="button">Сбросить</button>
+            </div>
+
+            <div class="error" id="errorBox"></div>
+
+            <div class="result" id="resultBox">
+              Укажите останы отправления и прибытия, чтобы узнать время в дороге.
+            </div>
+
+            <p class="hint">
+              ✦ Масштаб времени адаптирован для комфортного ролевого темпа: соседние останы преодолеваются за 1–2 дня, а переезд через всю империю занимает не более 1-2 недель.
+            </p>
+
+          </div>
+        </main>
+
+      </div>
+    </div>
+
+  <script>
+    const CITIES = {
+      "Азербайджан": [38.08, 46.29],
+      "Ардебиль": [38.25, 48.30],
+      "Багдад": [33.31, 44.36],
+      "Битлис": [38.40, 42.11],
+      "Бушир": [28.92, 50.83],
+      "Герат": [34.35, 62.20],
+      "Гилян": [37.28, 49.58],
+      "Голестан": [36.84, 54.43],
+      "Зенджан": [36.68, 48.48],
+      "Илам": [33.63, 46.42],
+      "Исфахан": [32.65, 51.66],
+      "Йезд": [31.89, 54.35],
+      "Казвин": [36.27, 50.00],
+      "Кандагар": [31.62, 65.71],
+      "Керман": [30.28, 57.08],
+      "Керманшах": [34.31, 47.06],
+      "Кум": [34.64, 50.87],
+      "Курдистан": [35.31, 46.99],
+      "Лурестан": [33.48, 48.35],
+      "Мазендеран": [36.56, 53.06],
+      "Северный Хорасан": [37.47, 57.33],
+      "Семнан": [35.57, 53.39],
+      "Систан и Белуджистан": [29.49, 60.86],
+      "Фарс": [29.59, 52.58],
+      "Хамадан": [34.80, 48.51],
+      "Хормозган": [27.18, 56.26],
+      "Хузестан": [31.32, 48.67],
+      "Южный Хорасан": [32.86, 59.21]
+    };
+
+    const SPEEDS = {
+      horse: 200,
+      procession: 120,
+      carriages: 80
+    };
+
+    const resultBox = document.getElementById("resultBox");
+    const errorBox = document.getElementById("errorBox");
+    const modeBox = document.getElementById("modeBox");
+
+    // Логика кастомного селекта
+    function setupCustomSelect(containerId) {
+        const container = document.getElementById(containerId);
+        const trigger = container.querySelector('.custom-select-trigger');
+        const dropdown = container.querySelector('.custom-select-dropdown');
+        const hiddenInput = container.querySelector('input[type="hidden"]');
+        
+        const cityNames = Object.keys(CITIES).sort((a,b) => a.localeCompare(b, 'ru'));
+        cityNames.forEach(city => {
+            const opt = document.createElement('div');
+            opt.className = 'custom-select-option';
+            opt.setAttribute('data-value', city);
+            opt.textContent = city;
+            dropdown.appendChild(opt);
+        });
+
+        const options = dropdown.querySelectorAll('.custom-select-option');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select').forEach(el => {
+                if (el !== container) el.classList.remove('open');
+            });
+            container.classList.toggle('open');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                options.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                trigger.textContent = opt.textContent;
+                hiddenInput.value = opt.getAttribute('data-value');
+                container.classList.add('selected-active');
+                container.classList.remove('open');
+            });
+        });
+    }
+
+    setupCustomSelect('fromSelectContainer');
+    setupCustomSelect('toSelectContainer');
+
+    function getDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371; 
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLon = (lon2 - lon1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const straightDistance = R * c;
+      
+      return Math.round(straightDistance * 1.2); 
+    }
+
+    function getMode() {
+      return document.querySelector('input[name="mode"]:checked').value;
+    }
+
+    function updateModeUI() {
+      const options = modeBox.querySelectorAll(".mode-option");
+      options.forEach(option => {
+        option.classList.toggle(
+          "active",
+          option.querySelector('input[name="mode"]').checked
+        );
+      });
+    }
+
+    function calc() {
+      errorBox.textContent = "";
+
+      const from = document.getElementById("fromOstan").value;
+      const to = document.getElementById("toOstan").value;
+      const mode = getMode();
+
+      if (!from || !to) {
+        errorBox.textContent = "Пожалуйста, выберите оба остана (откуда и куда).";
+        return;
+      }
+
+      if (from === to) {
+        resultBox.innerHTML = `<div>Вы уже находитесь в остане <strong>${from}</strong>. Путешествие не требуется.</div>`;
+        return;
+      }
+
+      const coord1 = CITIES[from];
+      const coord2 = CITIES[to];
+      const distance = getDistance(coord1[0], coord1[1], coord2[0], coord2[1]);
+
+      const speed = SPEEDS[mode];
+      const rawDays = distance / speed;
+
+      let rpDays = Math.ceil(rawDays);
+      if (rpDays < 1) rpDays = 1;
+
+      const modeLabel = {
+        horse: "Верхом / Шахский гонец",
+        procession: "Знатный кортеж / Процессия",
+        carriages: "Караван / Войско / Обоз"
+      }[mode];
+
+      let postRecommendation = "";
+      if (rpDays <= 2) {
+        postRecommendation = "Короткий переход.";
+      } else if (rpDays <= 5) {
+        postRecommendation = "Умеренный путь.";
+      } else {
+        postRecommendation = "Длительное путешествие через несколько останов или шахрестанов.";
+      }
+
+      resultBox.innerHTML = `
+        <div><strong>Маршрут:</strong> остан <strong>${from}</strong> ➔ остан <strong>${to}</strong></div>
+        <div><strong>Расстояние по караванным трактам:</strong> ~${distance} км</div>
+        <div><strong>Обоз:</strong> ${modeLabel}</div>
+        <hr style="border: none; border-top: 1px solid var(--line); margin: 12px 0;">
+        <div class="time-highlight">Время в пути: ~${rpDays} ${rpDays === 1 ? 'день' : (rpDays < 5 ? 'дня' : 'дней')}</div>
+        <div class="result-rp-tip">
+          ◈ <strong>Памятка для отыгрыша:</strong> ${postRecommendation}
+        </div>
+      `;
+    }
+
+    function resetForm() {
+      document.getElementById("fromOstan").value = "";
+      document.getElementById("toOstan").value = "";
+      document.getElementById("fromTrigger").textContent = "Выберите остан...";
+      document.getElementById("toTrigger").textContent = "Выберите остан...";
+      document.getElementById("fromSelectContainer").classList.remove('selected-active');
+      document.getElementById("toSelectContainer").classList.remove('selected-active');
+      document.querySelectorAll('.custom-select-option').forEach(o => o.classList.remove('selected'));
+      
+      document.querySelector('input[name="mode"][value="horse"]').checked = true;
+      updateModeUI();
+      errorBox.textContent = "";
+      resultBox.textContent = "Укажите останы отправления и прибытия, чтобы узнать время в дороге.";
+    }
+
+    modeBox.addEventListener("change", updateModeUI);
+    document.getElementById("calcBtn").addEventListener("click", calc);
+    document.getElementById("resetBtn").addEventListener("click", resetForm);
+
+    updateModeUI();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1121 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Особенности останов</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .atlas-card-wrap {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .atlas-card-wrap::before,
+  .atlas-card-wrap::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .atlas-card-wrap::before { top: 10px; left: 14px; }
+  .atlas-card-wrap::after { top: 10px; right: 14px; }
+
+  button, input { font: inherit; }
+
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--gold-light);
+    outline-offset: 4px;
+  }
+
+  [hidden] { display: none !important; }
+
+  .atlas {
+    width: 100%;
+    margin: 0 auto;
+    background: transparent;
+  }
+
+  /* Шапка */
+  .atlas-header {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+    text-align: center;
+  }
+
+  .atlas-header:after {
+    content: "✦  ✦  ✦";
+    position: absolute;
+    right: 24px;
+    bottom: 12px;
+    color: rgba(212, 175, 55, 0.3);
+    font-size: 14px;
+    letter-spacing: 8px;
+  }
+
+  .atlas-kicker {
+    display: block;
+    margin-bottom: 6px;
+    color: var(--gold-light);
+    font-size: 11px !important;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold !important;
+    font-family: Georgia, serif !important;
+  }
+
+  .atlas-header h1 {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    font-weight: normal;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .atlas-header p {
+    max-width: 750px;
+    margin: 0 auto;
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  /* Поиск и переключатели */
+  .controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .search-box {
+    position: relative;
+    width: 100%;
+    max-width: 570px;
+    margin: 0 auto;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    color: var(--gold);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    height: 46px;
+    padding: 0 46px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 23px;
+    color: var(--text);
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  }
+
+  .search-input::placeholder {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .search-input:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.3);
+  }
+
+  .search-input::-webkit-search-cancel-button,
+  .search-input::-webkit-search-decoration {
+    -webkit-appearance: none;
+  }
+
+  .search-clear {
+    position: absolute;
+    right: 11px;
+    top: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    transform: translateY(-50%);
+  }
+
+  .search-clear:hover {
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .main-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+
+  .tab-button {
+    flex: 1;
+    max-width: 280px;
+    padding: 14px 20px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: 0.2s;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  .tab-button:hover {
+    color: var(--gold-light);
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .tab-button.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border-color: var(--gold-light);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+  }
+
+  .search-status {
+    min-height: 18px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-style: italic;
+    text-align: center;
+  }
+
+  /* Карточки */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 20px;
+  }
+
+  .card {
+    position: relative;
+    min-width: 0;
+    overflow: hidden;
+    padding: 25px;
+    background: var(--panel-soft);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  }
+
+  .card:hover {
+    border-color: var(--gold-light);
+    background: rgba(26, 26, 32, 0.98);
+    transform: translateY(-3px);
+  }
+
+  .card-category {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--gold-soft);
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .card-title {
+    margin: 0 0 14px;
+    padding-bottom: 12px;
+    color: var(--gold-light);
+    border-bottom: 1px solid var(--line-soft);
+    font-size: 20px;
+    font-weight: normal;
+    line-height: 1.3;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .card-row {
+    margin: 0 0 10px;
+    font-size: 13.5px;
+    line-height: 1.65;
+  }
+
+  .card-label {
+    color: var(--gold-soft);
+    font-weight: bold;
+  }
+
+  .card-section-title {
+    margin: 16px 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .card-description {
+    margin: 0;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  .no-results {
+    padding: 40px 20px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-dark);
+    color: var(--muted);
+    text-align: center;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 1050px) {
+    .cards-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .atlas-card-wrap { padding: 25px 15px; }
+    .atlas-header { padding: 20px 15px; }
+    .atlas-header h1 { font-size: 22px; }
+    .cards-grid { grid-template-columns: minmax(0, 1fr); gap: 15px; }
+    .main-tabs { flex-direction: column; gap: 10px; }
+    .tab-button { max-width: 100%; width: 100%; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html" class="active">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="map.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="atlas-card-wrap">
+        <main class="atlas">
+
+          <header class="atlas-header">
+            <span class="atlas-kicker">✦ Земли и народы Персии ✦</span>
+            <h1>Особенности останов</h1>
+            <p>
+              Города, население, хозяйство и богатства областей.
+              Отдельный раздел посвящён социальным и религиозным
+              группам Сефевидской Персии.
+            </p>
+          </header>
+
+          <div class="controls">
+
+            <div class="search-box">
+              <svg
+                class="search-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.8"
+                aria-hidden="true"
+              >
+                <circle cx="10.5" cy="10.5" r="6.5"></circle>
+                <path d="M16 16L21 21"></path>
+              </svg>
+
+              <input
+                class="search-input"
+                id="atlasSearch"
+                type="search"
+                aria-label="Поиск по текущему разделу"
+                placeholder="Остан, город, население или товар..."
+                autocomplete="off"
+              >
+
+              <button
+                class="search-clear"
+                id="atlasSearchClear"
+                type="button"
+                aria-label="Очистить поиск"
+                hidden
+              >×</button>
+            </div>
+
+            <nav class="main-tabs" aria-label="Разделы атласа">
+              <button
+                class="tab-button active"
+                type="button"
+                data-section="ostans"
+                aria-pressed="true"
+              >
+                Останы и регионы
+              </button>
+
+              <button
+                class="tab-button"
+                type="button"
+                data-section="population"
+                aria-pressed="false"
+              >
+                Население и группы
+              </button>
+            </nav>
+
+            <p
+              class="search-status"
+              id="atlasSearchStatus"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+          </div>
+
+          <section id="ostansSection" aria-label="Останы и регионы">
+            <div class="cards-grid" id="ostansGrid"></div>
+            <div class="no-results" hidden>
+              Ничего не найдено. Попробуйте другое слово или очистите поиск.
+            </div>
+          </section>
+
+          <section
+            id="populationSection"
+            aria-label="Население и группы"
+            hidden
+          >
+            <div class="cards-grid" id="populationGrid"></div>
+            <div class="no-results" hidden>
+              Ничего не найдено. Попробуйте другое слово или очистите поиск.
+            </div>
+          </section>
+
+          <noscript>
+            <p class="no-results">
+              Для отображения карточек и работы поиска необходимо включить JavaScript.
+            </p>
+          </noscript>
+
+        </main>
+      </div>
+    </div>
+
+<script>
+const ostans = [
+  {
+    name: "Остан Азербайджан",
+    capital: "Тебриз",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Тюркоязычное оседлое население, кызылбашские племена, персоязычные жители, армянские общины.",
+    economy: "Караванная торговля, обработка шёлка, ткачество, ковроделие, садоводство, зерновое хозяйство и скотоводство. Важны соль и изделия городских мастерских.",
+    features: "Тебриз — один из главных торговых центров северо-запада. Область связана с османским пограничьем и кавказскими дорогами; здесь сохраняется влияние военно-племенной знати."
+  },
+  {
+    name: "Остан Ардебиль",
+    capital: "Ардебиль",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Тюркоязычные горожане и сельские жители, племенные скотоводы, служители святыни, торговцы и паломники.",
+    economy: "Шерсть, скотоводство, зерно, ремесленное производство и торговля, связанная с паломничеством. Большую роль играют земельные владения религиозных учреждений.",
+    features: "Родовая святыня Сефевидов с усыпальницей шейха Сефи ад-Дина. Ардебиль обладает особым династическим и религиозным значением."
+  },
+  {
+    name: "Остан Зенджан",
+    capital: "Зенджан",
+    owner: "Карадаглы",
+    beglerbeg: "Максуд-хан Карадаглы",
+    people: "Преимущественно тюркоязычные земледельцы, ремесленники, торговцы и скотоводческие группы.",
+    economy: "Зерновое хозяйство, виноградники, животноводство, кузнечное ремесло и торговля. Окрестные горные районы располагают минеральными ресурсами.",
+    features: "Узел дорог между Казвином и Азербайджаном. Благополучие города зависит от движения караванов и безопасности сельской округи."
+  },
+  {
+    name: "Остан Гилян",
+    capital: "Решт; значимы также Лахиджан",
+    owner: "Баяты",
+    beglerbeg: "Аббас-хан Баят",
+    people: "Гиляки, талыши на западных окраинах, персоязычные торговцы и другие местные общины.",
+    economy: "Один из важнейших районов производства шёлка-сырца. Развиты рисоводство, рыболовство, садоводство и торговля через Каспий.",
+    features: "Влажные низменности и лесистые предгорья резко отличаются от засушливого внутреннего Ирана. Шёлк связывает Гилян с международными торговыми маршрутами."
+  },
+  {
+    name: "Остан Мазендеран",
+    capital: "Сари; важные резиденции — Фарахабад и Ашраф",
+    owner: "Устаджлы",
+    beglerbeg: "Бахадур-хан Устаджлы",
+    people: "Мазендеранцы, земледельцы и горожане, переселённые кавказские общины, служащие шахских владений.",
+    economy: "Рис, шёлк, сахарный тростник, садовые культуры, древесина и рыболовство.",
+    features: "Каспийская область с лесами, садами и шахскими резиденциями. Переселения населения и развитие придворных хозяйств влияют на местную жизнь."
+  },
+  {
+    name: "Остан Голестан",
+    capital: "Астрабад",
+    owner: "Афшары",
+    beglerbeg: "Боран-хан Афшар",
+    people: "Оседлые иранские жители, туркменские племена и другие группы каспийского пограничья.",
+    economy: "Зерно, хлопок, скотоводство, коневодство, ткачество и обмен между земледельческими районами и степью.",
+    features: "Пограничная область между каспийскими землями и туркменскими степями. Важны соглашения с племенными вождями и охрана торговых путей."
+  },
+  {
+    name: "Остан Казвин",
+    capital: "Казвин",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Персоязычные и татоязычные жители, тюркоязычные группы, торговцы, ремесленники и представители старой придворной среды.",
+    economy: "Сады, виноград, изюм, зерно, ткачество и торговля на пересечении дорог.",
+    features: "Бывшая столица Сефевидов сохраняет дворцовые сооружения, религиозные учреждения и связи с влиятельными семьями."
+  },
+  {
+    name: "Остан Семнан",
+    capital: "Семнан",
+    owner: "Туркоманы",
+    beglerbeg: "Амир-хан Туркоман",
+    people: "Персоязычные жители, носители местных иранских языков, земледельцы оазисов и скотоводческие группы.",
+    economy: "Оазисное земледелие, хлопок, зерно, животноводство, соляные промыслы и обслуживание караванов.",
+    features: "Цепь поселений между Эльбурсом и пустыней. Вода, кяризы и караван-сараи имеют первостепенное значение для жизни региона."
+  },
+  {
+    name: "Остан Кум",
+    capital: "Кум",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Персоязычные горожане и земледельцы, духовенство, ремесленники, торговцы и паломники.",
+    economy: "Земледелие на орошаемых землях, ремесло, торговля и обслуживание паломников.",
+    features: "Город известен святыней Фатимы Масуме. Религиозные владения и паломнические связи придают ему особое значение."
+  },
+  {
+    name: "Остан Исфахан",
+    capital: "Исфахан",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Персоязычные горожане, чиновники и ремесленники, военная знать, армяне Новой Джульфы, еврейские и другие общины.",
+    economy: "Шёлковые ткани, ковры, обработка металла, ювелирное дело, керамика, оптовая торговля и земледелие в долине Заянде-Руда.",
+    features: "Политический и придворный центр. Площадь Накш-э Джахан, базары, дворцы и Новая Джульфа связывают управление государством с международной торговлей."
+  },
+  {
+    name: "Остан Хамадан",
+    capital: "Хамадан",
+    owner: "Каджары",
+    beglerbeg: "Рузи-хан Каджар",
+    people: "Персоязычные жители, курдские и тюркоязычные группы окрестностей, еврейская община.",
+    economy: "Земледелие, скотоводство, кожевенное ремесло, ткачество и торговля.",
+    features: "Древний город у горных дорог западного Ирана. Важный торговый центр на Великом шёлковом пути."
+  },
+  {
+    name: "Остан Керманшах",
+    capital: "Керманшах",
+    owner: "Румлу",
+    beglerbeg: "Дашдемир-хан Румлу",
+    people: "Курдские, персоязычные и лурские группы; оседлые жители долин и племенные скотоводы.",
+    economy: "Животноводство, шерсть, зерно, ремесло и обслуживание караванных и паломнических дорог.",
+    features: "Западный пограничный район. Дороги через Загрос ведут к Багдаду и шиитским святыням Месопотамии."
+  },
+  {
+    name: "Остан Курдистан",
+    capital: "Сенендедж",
+    owner: "Шамлу",
+    beglerbeg: "Хусейн-хан Шамлу",
+    people: "Курдские городские и сельские общины, племенные группы, местные религиозные меньшинства.",
+    economy: "Овцеводство, земледелие долин, шерсть, ткачество, садовые культуры и местная торговля.",
+    features: "Власть местных правящих домов сочетается с зависимостью от более крупных держав. Горный рельеф поддерживает значительную роль местной знати."
+  },
+  {
+    name: "Битлис",
+    capital: "Битлис",
+    owner: "Бидлиси",
+    beglerbeg: "эмир Аль-Камиль Бидлиси",
+    people: "Курдское и армянское население, городские торговцы, ремесленники и жители горных селений.",
+    economy: "Скотоводство, земледелие, ткачество и торговля через горные проходы.",
+    features: "Курдская полунезависимая от Курдистана область, а не обычная сефевидская провинция. Местная династия Бидлиси сохраняет особое положение и правит Битлисом."
+  },
+  {
+    name: "Остан Лурестан",
+    capital: "Хорремабад",
+    owner: "Бахтиары",
+    beglerbeg: "Саади-ильхан Чехарленг",
+    people: "Лурские племена, оседлые жители долин и полукочевые скотоводы.",
+    economy: "Овцы и козы, шерсть, молочные продукты, зерно, ткачество и обмен с равнинными областями.",
+    features: "Горный регион с сильной властью местных вали и племенных вождей. Отношения с шахским двором строятся на службе, налогах и переговорах."
+  },
+  {
+    name: "Остан Илам",
+    capital: "Илам",
+    owner: "Асирлу",
+    beglerbeg: "Орхан-хан Асирлу",
+    people: "Курдские и лурские группы, оседлые земледельцы и сезонно кочующие скотоводы.",
+    economy: "Животноводство, зерно, шерсть, лесные и горные продукты.",
+    features: "Область западного Загроса, исторически связанная с Пушткухом. Современное название административного центра не следует переносить на сефевидское устройство буквально."
+  },
+  {
+    name: "Остан Багдад",
+    capital: "Багдад",
+    owner: "Румлу",
+    beglerbeg: "Дашдемир-хан Румлу",
+    people: "Арабские суннитские и шиитские общины, евреи, христиане и приезжие торговцы.",
+    economy: "Речная и караванная торговля, финики, зерно, ремесло и обслуживание паломников.",
+    features: "Находится под османской властью. Связи Персии с Неджефом и Кербелой имеют религиозное и торговое значение, но не означают персидского управления этими землями."
+  },
+  {
+    name: "Остан Хузестан",
+    capital: "Ахваз",
+    owner: "Устаджлы",
+    beglerbeg: "Бахадур-хан Устаджлы",
+    people: "Арабские, персоязычные и лурские общины; земледельцы, горожане и племенные скотоводы.",
+    economy: "Финики, зерно, соль, орошаемое земледелие, скотоводство, речная торговля и местные ремёсла. Известны природные выходы битума.",
+    features: "Жаркая низменность с важными речными долинами. Значительную роль играют местные правящие дома и связи с горными районами и Месопотамией."
+  },
+  {
+    name: "Остан Фарс",
+    capital: "Шираз",
+    owner: "Шамлу",
+    beglerbeg: "Хусейн-хан Шамлу",
+    people: "Персоязычные жители, различные тюркоязычные и лурские племенные группы, еврейские и армянские общины.",
+    economy: "Зерно, виноград, сады, розовая вода, ткани, ковры и торговля с южными портами.",
+    features: "Один из главных культурных регионов Персии. Шираз известен поэтическим наследием, садами, учёностью и связями с морской торговлей."
+  },
+  {
+    name: "Остан Керман",
+    capital: "Керман",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Персоязычные жители, зороастрийские общины, племенные группы и белуджи на восточных и южных окраинах.",
+    economy: "Шерсть и козий пух, ткачество, ковры, садоводство, зерно и караванная торговля.",
+    features: "Регион соединяет внутренний Иран с южными портами и восточными дорогами. Водоснабжение и безопасность караванов определяют хозяйственную жизнь."
+  },
+  {
+    name: "Остан Йезд",
+    capital: "Йезд",
+    owner: "Бахарлу",
+    beglerbeg: "Адиль Хасан-хан Бахарлу",
+    people: "Персоязычные мусульманские жители и зороастрийские общины города и окрестных селений.",
+    economy: "Шёлковые и хлопчатобумажные ткани, торговля, садоводство и земледелие с использованием кяризов.",
+    features: "Крупный оазисный ремесленный центр. Зороастрийские общины сохраняют религиозную жизнь, сталкиваясь с налоговыми и социальными ограничениями."
+  },
+  {
+    name: "Остан Хормозган",
+    capital: "Бендер-Аббас",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Персоязычные и арабоязычные жители побережья, торговцы, моряки и выходцы из различных областей Индийского океана.",
+    economy: "Морская торговля, таможенные сборы, рыболовство, финики и снабжение судов.",
+    features: "Бендер-Аббас — важнейший порт внешней торговли после утраты Ормузом прежнего положения. Здесь действуют европейские торговые компании и азиатские купцы."
+  },
+  {
+    name: "Остан Бушир",
+    capital: "Бушир",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Персоязычные и арабоязычные прибрежные общины, рыбаки, моряки и земледельцы.",
+    economy: "Рыболовство, финики, прибрежный обмен, судоходство и торговые связи с Фарсом.",
+    features: "Часть южного побережья с небольшими портами и поселениями. Позднейшее значение Бушира как крупного порта не следует полностью переносить на сефевидскую эпоху. Отобран у Шерхан-хан Варсака шахом Мохаммедом II во владения сефевидов."
+  },
+  {
+    name: "Остан Северный Хорасан",
+    capital: "Боджнурд",
+    owner: "Афшары",
+    beglerbeg: "Боран-хан Афшар",
+    people: "Курдские переселенческие общины, хорасанские тюрки, персоязычные жители и туркменские группы северных окраин.",
+    economy: "Пастбищное скотоводство, зерно в долинах, шерсть, коневодство и местная караванная торговля.",
+    features: "Северное пограничье исторического Хорасана. Переселённые племенные группы участвуют в его защите."
+  },
+  {
+    name: "Остан Южный Хорасан",
+    capital: "Бирдженд; важен также Каин",
+    owner: "Караманлу",
+    beglerbeg: "Заман-хан Караманлу",
+    people: "Преимущественно персоязычные жители оазисов, местные племенные и скотоводческие группы.",
+    economy: "Оазисное земледелие, шафран, зерно, шерсть, ткачество, разведение верблюдов и обслуживание караванных дорог.",
+    features: "Засушливые земли исторического Кухистана. Вода и кяризы имеют решающее значение. Область связана дорогами с Гератом, Систаном, Керманом и центральной Персией."
+  },
+  {
+    name: "Остан Герат",
+    capital: "Герат",
+    owner: "",
+    beglerbeg: "",
+    people: "Персоязычное городское и сельское население, тюркские, аймакские и афганские группы окрестностей.",
+    economy: "Орошаемое земледелие долины Герируда, зерно, виноград, сады, ткани и караванная торговля.",
+    features: "Важный восточный центр с тимуридским культурным наследием. Контроль над дорогами и оборона от внешнего давления определяют его стратегическую роль. Согласно Сабзаварскому мирному договору от 1639 года Кандагар и Герат принадлежат Сефевидам."
+  },
+  {
+    name: "Регион Кандагар",
+    capital: "Кандагар",
+    owner: "",
+    beglerbeg: "",
+    people: "Пуштунские племена, персоязычные горожане, торговцы, ремесленники и гарнизонные служащие.",
+    economy: "Сады, гранаты, виноград, земледелие оазисов, скотоводство и сухопутная торговля с Индией.",
+    features: "Крепость и торговый узел, за который соперничали Сефевиды и Великие Моголы. Согласно Сабзаварскому мирному договору от 1639 года Кандагар и Герат принадлежат Сефевидам. "
+  },
+  {
+    name: "Остан Систан и Белуджистан",
+    capital: "Зарандж",
+    owner: "Текели",
+    beglerbeg: "Джафар-хан Текели",
+    people: "Систанские персоязычные общины, белуджские племена, земледельцы и скотоводы.",
+    economy: "Земледелие в бассейне Гильменда, рыболовство и камышовые промыслы Хамуна, верблюдоводство, финики в южных оазисах.",
+    features: "Систан и Белуджистан различаются по природным условиям и местной политике. Власть зависит от речного стока, состояния оазисов и соглашений с местными правителями."
+  },
+  {
+    name: "Эль-Хаса и Эль-Катиф",
+    capital: "Эль-Хуфуф и Эль-Катиф",
+    owner: "Сефеви",
+    beglerbeg: "Нариман-шах Сефеви",
+    people: "Арабские жители оазисов и побережья, суннитские и шиитские общины, бедуинские группы.",
+    economy: "Финиковые сады, земледелие оазисов, жемчужный промысел, рыболовство и торговля в Заливе.",
+    features: "Не следует считать эти земли обычными персидскими провинциями. Их история связана с местными арабскими правителями и османским влиянием; морская торговля связывает их с Персией. Ныне эти земли живут под властью сефевидского Шаха."
+  }
+];
+
+const population = [
+  {
+    name: "Кызылбаши",
+    status: "Военно-племенная элита",
+    role: "Племенные объединения, прежде всего тюркоязычные, сыгравшие ключевую роль в становлении Сефевидской державы. Среди них Устаджлы, Румлу, Шамлу, Текелю, Афшар, Каджар и другие группы.",
+    features: "Кызылбашские эмиры занимают военные и провинциальные должности. Шахская власть ограничивает их самостоятельность, опираясь также на гулямов и придворную администрацию. Племенная принадлежность не определяет личный характер каждого человека."
+  },
+  {
+    name: "Персы-бюрократы",
+    status: "Гражданская администрация и образованная служилая среда",
+    role: "Везиры, писцы, финансовые служащие и дипломаты ведут переписку, управляют доходами и оформляют решения двора. Персидский язык служит основным языком делопроизводства.",
+    features: "В источниках обозначение «таджик» может относиться к оседлой иранской гражданской среде и не совпадает полностью с современным национальным названием. Отношения с военной элитой включают и соперничество, и сотрудничество."
+  },
+  {
+    name: "Оседлые персы",
+    status: "Городское и сельское население",
+    role: "Земледельцы, садоводы, ремесленники, торговцы и другие жители городов и селений. Производят зерно, хлопок, ткани, керамику и множество товаров внутреннего рынка.",
+    features: "Жизнь зависит от доступа к воде, земельных отношений, налогов и безопасности. Оседлое население страны не ограничивается персами: в него входят и многие другие языковые и этнические общины."
+  },
+  {
+    name: "Кочевые племена",
+    status: "Кочевые и полукочевые общины",
+    role: "Тюркские, курдские, лурские, арабские, белуджские и другие группы разводят скот, поставляют шерсть, мясо и животных, участвуют в военной службе и торговом обмене.",
+    features: "Сезонные перекочёвки связывают зимние и летние пастбища. Степень самостоятельности различается: отношения с властью определяются договорами, налогами, службой и местным соотношением сил."
+  },
+  {
+    name: "Армяне и грузины",
+    status: "Разнообразные кавказские общины и служилые группы",
+    role: "Армянские торговые сети Новой Джульфы играют важную роль в международной торговле шёлком. Выходцы с Кавказа, в том числе грузины, служат в войске и администрации; многие служилые люди принимают ислам.",
+    features: "Переселения бывают принудительными и сопровождаются тяжёлыми потерями. Не все армяне — купцы и не все грузины — военные: среди них также земледельцы, ремесленники и другие жители. Торговля шёлком не является исключительной монополией одной общины."
+  },
+  {
+    name: "Зороастрийцы",
+    status: "Религиозное меньшинство",
+    role: "Общины особенно заметны в Йезде, Кермане и окружающих селениях. Их представители занимаются земледелием, ремеслом, торговлей и другими видами труда.",
+    features: "Сохраняют собственную религиозную традицию и общинные учреждения. Сталкиваются с джизьей и различными ограничениями. Название «гебры» встречается в старых источниках, но является внешним и нередко пренебрежительным."
+  },
+  {
+    name: "Иудеи",
+    status: "Еврейские религиозные и городские общины",
+    role: "Живут в Исфахане, Хамадане, Ширазе и других городах. Среди занятий — торговля, текстильное и другие ремёсла, медицина и различные городские профессии.",
+    features: "Сохраняют синагоги, общинное образование и еврейско-персидскую письменную культуру. Положение зависит от местных властей и политики двора; налоговые ограничения и периоды преследований не позволяют говорить о постоянной гарантированной защите."
+  }
+];
+
+function createElement(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+
+function addRow(card, label, text) {
+  const row = createElement("p", "card-row");
+  const labelElement = createElement("span", "card-label", label + " ");
+  row.append(labelElement, document.createTextNode(text));
+  card.appendChild(row);
+}
+
+function addDescription(card, heading, text) {
+  card.appendChild(createElement("h3", "card-section-title", heading));
+  card.appendChild(createElement("p", "card-description", text));
+}
+
+function createOstanCard(item) {
+  const card = createElement("article", "card");
+  card.appendChild(createElement("span", "card-category", "Земли и города"));
+  card.appendChild(createElement("h2", "card-title", item.name));
+
+  addRow(card, "Центр:", item.capital);
+  addRow(card, "Принадлежность:", item.owner);
+  addRow(card, "Беглербег:", item.beglerbeg);
+  addRow(card, "Население:", item.people);
+
+  addDescription(card, "Богатства и хозяйство", item.economy);
+  addDescription(card, "Особенности", item.features);
+
+  return card;
+}
+
+function createPopulationCard(item) {
+  const card = createElement("article", "card");
+  card.appendChild(createElement("span", "card-category", "Общество и культура"));
+  card.appendChild(createElement("h2", "card-title", item.name));
+
+  addRow(card, "Положение:", item.status);
+  addDescription(card, "Состав и занятия", item.role);
+  addDescription(card, "Особенности", item.features);
+
+  return card;
+}
+
+const ostansGrid = document.getElementById("ostansGrid");
+const populationGrid = document.getElementById("populationGrid");
+
+ostans.forEach(function(item) {
+  ostansGrid.appendChild(createOstanCard(item));
+});
+
+population.forEach(function(item) {
+  populationGrid.appendChild(createPopulationCard(item));
+});
+
+const searchInput = document.getElementById("atlasSearch");
+const searchClear = document.getElementById("atlasSearchClear");
+const searchStatus = document.getElementById("atlasSearchStatus");
+const tabButtons = document.querySelectorAll(".tab-button");
+
+let activeSection = "ostans";
+
+function normalizeText(text) {
+  return text
+    .toLocaleLowerCase("ru")
+    .replace(/ё/g, "е")
+    .replace(/[‐‑–—-]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function filterCards() {
+  const query = normalizeText(searchInput.value);
+  const words = query ? query.split(" ") : [];
+
+  const section = document.getElementById(activeSection + "Section");
+  const cards = section.querySelectorAll(".card");
+  const noResults = section.querySelector(".no-results");
+
+  let count = 0;
+
+  searchClear.hidden = searchInput.value.length === 0;
+
+  cards.forEach(function(card) {
+    const text = normalizeText(card.textContent);
+    const matches = words.every(word => text.includes(word));
+    card.hidden = !matches;
+    if (matches) count++;
+  });
+
+  noResults.hidden = count !== 0;
+
+  searchStatus.textContent = query
+    ? "Найдено карточек: " + count
+    : "Карточек в разделе: " + cards.length;
+}
+
+function clearSearch(focusInput = true) {
+  searchInput.value = "";
+  searchClear.hidden = true;
+
+  document.querySelectorAll(".card").forEach(card => card.hidden = false);
+  document.querySelectorAll(".no-results").forEach(msg => msg.hidden = true);
+
+  filterCards();
+  if (focusInput) searchInput.focus();
+}
+
+function switchSection(sectionName) {
+  activeSection = sectionName;
+
+  document.getElementById("ostansSection").hidden = (sectionName !== "ostans");
+  document.getElementById("populationSection").hidden = (sectionName !== "population");
+
+  tabButtons.forEach(button => {
+    const isActive = button.dataset.section === sectionName;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
+  });
+
+  clearSearch(false);
+}
+
+searchInput.addEventListener("input", filterCards);
+searchInput.addEventListener("keydown", event => {
+  if (event.key === "Escape") clearSearch();
+});
+searchClear.addEventListener("click", () => clearSearch());
+
+tabButtons.forEach(button => {
+  button.addEventListener("click", () => switchSection(button.dataset.section));
+});
+
+filterCards();
+</script>
+
+</body>
+</html>

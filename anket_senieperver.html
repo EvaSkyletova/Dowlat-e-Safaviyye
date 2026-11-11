@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Анкета: Сениепервер</title>
+    
+    <!-- Иконка вкладки -->
+    <link rel="icon" type="image/png" href="leo.png">
+    
+    <style>
+        /* ========================================= */
+        /* ПОДКЛЮЧЕНИЕ ШРИФТА YIPES                  */
+        /* ========================================= */
+        @font-face {
+            font-family: 'Yipes';
+            src: url('yipes-regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        :root {
+            --gold-dark: #8c6a08;
+            --gold: #d4af37;
+            --gold-light: #fbe8a6;
+            --gold-soft: #c5a059;
+            --text: #f0ebd8;
+            --muted: #a69e88;
+            --line: rgba(212, 175, 55, 0.3);
+            --line-strong: rgba(212, 175, 55, 0.65);
+            --bg: #161618;
+            --panel: rgba(22, 22, 25, 0.95);
+            --panel-soft: rgba(26, 26, 30, 0.9);
+            --panel-dark: rgba(14, 14, 16, 0.95);
+        }
+
+        /* Золотая стрелочка для всего сайта */
+        body, *, a, button, .tab-btn, input, select, textarea, option, optgroup {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: Georgia, "Times New Roman", serif !important;
+            font-style: normal !important;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg) !important;
+            color: var(--text);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+                linear-gradient(to bottom, #161618, #0b0b0d);
+            overflow-x: hidden;
+            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы не было второго колесика */
+            overflow-y: auto;
+        }
+
+        /* Эффект «пуньк» при клике */
+        .click-echo {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--gold-light);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+            z-index: 999999;
+        }
+
+        @keyframes echoPulse {
+            0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+            100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+        }
+
+        /* Тонкий золотой скроллбар */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-dark) transparent;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+        /* ЕДИНАЯ ШАПКА САЙТА */
+        .site-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 2px solid var(--line);
+            background: rgba(18, 18, 20, 0.96);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .site-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
+
+        .nav-logo {
+            height: 50px;
+            width: auto;
+            margin-right: 15px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-logo:hover {
+            transform: scale(1.1);
+        }
+
+        .site-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            padding: 4px 0;
+            position: relative;
+            font-weight: 500;
+        }
+
+        .site-nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .site-nav a:hover::after, .site-nav a.active::after {
+            width: 100%;
+        }
+
+        .site-nav a:hover, .site-nav a.active {
+            color: var(--gold-light);
+            text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+        }
+
+        /* ОСНОВНОЙ КОНТЕЙНЕР АНКЕТЫ */
+        .sheet-wrapper { 
+            width: 100%; 
+            max-width: 1200px; 
+            margin: 20px auto 60px; 
+            padding: 0 20px; 
+            box-sizing: border-box; 
+        }
+        
+        .back-nav-container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto 15px auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gold-light);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 8px 14px;
+            background: rgba(14, 14, 16, 0.85);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            font-weight: bold;
+            position: relative;
+            z-index: 10;
+        }
+
+        .back-btn:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.15);
+            color: #fff;
+            transform: translateX(-3px);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+        }
+
+        .sheet-container { 
+            width: 100%; 
+            background: linear-gradient(145deg, rgba(22, 22, 25, 0.96), rgba(14, 14, 16, 0.99)); 
+            border: 1px solid var(--line); 
+            border-top: 2px solid var(--gold); 
+            border-bottom: 2px solid var(--gold); 
+            border-radius: 6px; 
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9); 
+            overflow: hidden; 
+            box-sizing: border-box; 
+        }
+        
+        .sheet-grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); width: 100%; }
+
+        .sheet-sidebar { 
+            background: rgba(14, 14, 16, 0.6); 
+            border-right: 1px solid var(--line); 
+            padding: 30px 24px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            box-sizing: border-box; 
+        }
+        
+        .avatar-frame { 
+            position: relative; 
+            width: 100%; 
+            max-width: 240px; 
+            aspect-ratio: 3 / 4; 
+            padding: 4px; 
+            border: 1px solid var(--line); 
+            border-top: 2px solid var(--gold); 
+            border-bottom: 2px solid var(--gold); 
+            border-radius: 4px; 
+            background: var(--panel-dark); 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.7); 
+            margin: 0 auto; 
+        }
+        
+        .avatar-frame img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            border-radius: 2px; 
+            filter: grayscale(100%) contrast(1.1); 
+            object-position: center top; 
+            display: block; 
+        }
+        
+        .char-title { text-align: center; margin: 18px 0; width: 100%; }
+        .char-name { margin: 0 0 4px 0; font-size: 26px; color: var(--gold-light); letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9); font-weight: normal; }
+        .char-status { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        .quick-info { width: 100%; border-top: 1px solid var(--line); padding-top: 16px; margin-bottom: 22px; }
+        .info-row { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; font-size: 13.5px; margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px dashed var(--line); }
+        .info-label { color: var(--gold-soft); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; }
+        .info-value { color: var(--text); font-weight: bold; text-align: right; word-break: break-word; }
+
+        .add-info-btn { 
+            width: 100%; 
+            padding: 13px 14px; 
+            background: var(--panel-dark); 
+            color: var(--gold-light); 
+            border: 1px solid var(--line); 
+            border-radius: 4px; 
+            font-size: 12px; 
+            font-weight: bold; 
+            letter-spacing: 1.2px; 
+            text-transform: uppercase; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); 
+            text-align: center; 
+        }
+        
+        .add-info-btn:hover { 
+            border-color: var(--gold); 
+            background: rgba(212, 175, 55, 0.15); 
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3); 
+            transform: translateY(-2px); 
+        }
+
+        .sheet-content { padding: 30px 40px; display: flex; flex-direction: column; min-width: 0; box-sizing: border-box; }
+        
+        .tabs-header { display: flex; gap: 10px; padding-bottom: 15px; margin-bottom: 22px; border-bottom: 1px solid var(--line); width: 100%; flex-wrap: wrap; }
+        .tab-btn { flex: 1; min-width: 110px; background: var(--panel-dark); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 11px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; text-align: center; transition: all 0.3s ease; white-space: nowrap; font-weight: bold; }
+        .tab-btn:hover { border-color: var(--gold); color: var(--gold-light); background: rgba(212, 175, 55, 0.1); }
+        .tab-btn.active { background: linear-gradient(90deg, #b89947, #d4af37, #b89947); color: #121008; border-color: var(--gold-light); box-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
+
+        .tab-content { display: none; line-height: 1.85; font-size: 14.5px; color: var(--text); animation: fadeIn 0.4s ease-out forwards; background: var(--panel-soft); padding: 24px 28px; border-radius: 4px; border: 1px solid var(--line); word-break: break-word; overflow-wrap: break-word; }
+        .tab-content.active { display: block; }
+
+        p { margin: 0 0 16px 0; text-align: justify; white-space: pre-line; }
+        p:last-child { margin-bottom: 0; }
+
+        .family-key { color: var(--gold-soft); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; }
+
+        /* ========================================= */
+        /* ШКАЛЫ РЕПУТАЦИИ (КАК У НАРИМАНА)          */
+        /* ========================================= */
+        .reputation-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+        }
+
+        .rep-card {
+            background: rgba(14, 14, 16, 0.7);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 14px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Главная плашка общей репутации выделена золотой рамкой */
+        .rep-card.main-banner {
+            background: rgba(22, 22, 25, 0.95);
+            border: 1px solid var(--gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 15px rgba(212, 175, 55, 0.05);
+        }
+
+        .rep-card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .rep-card-title {
+            color: var(--gold-soft);
+            text-transform: uppercase;
+            font-size: 12.5px;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .rep-card.main-banner .rep-card-title {
+            color: var(--gold-light);
+            font-size: 13.5px;
+        }
+
+        .rep-card-value {
+            font-size: 14px;
+            color: var(--text);
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .rep-card-value span {
+            font-size: 11px;
+            font-style: italic;
+            color: var(--muted);
+            margin-left: 6px;
+            font-weight: normal;
+        }
+
+        .rep-bar-wrap {
+            width: 100%;
+            height: 7px;
+            background: #222;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .rep-bar-fill {
+            height: 100%;
+            width: 0%;
+            border-radius: 3px;
+            transition: width 0.6s ease;
+        }
+
+        /* Цвета шкал по уровням */
+        .fill-red { background: linear-gradient(90deg, #b33939, #eb4d4b); box-shadow: 0 0 10px rgba(235, 77, 75, 0.4); }
+        .fill-yellow { background: linear-gradient(90deg, #d4af37, #fbe8a6); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
+        .fill-green { background: linear-gradient(90deg, #27ae60, #2ecc71); box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
+
+        /* ========================================= */
+        /* МОДАЛЬНОЕ ОКНО                            */
+        /* ========================================= */
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0, 0, 0, 0.8); 
+            backdrop-filter: blur(6px); 
+            display: none; 
+            align-items: center; 
+            justify-content: center; 
+            z-index: 9999; 
+            padding: 15px; 
+        }
+        
+        .modal-card { 
+            background: linear-gradient(145deg, rgba(22, 22, 25, 0.98), rgba(14, 14, 16, 0.99)); 
+            border: 1px solid var(--line); 
+            border-top: 2px solid var(--gold); 
+            border-bottom: 2px solid var(--gold); 
+            border-radius: 6px; 
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9); 
+            max-width: 480px; 
+            width: 100%; 
+            padding: 28px 24px; 
+            position: relative; 
+        }
+        
+        .modal-header { margin-bottom: 18px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
+        .modal-title { color: var(--gold-light); font-size: 18px; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 1.5px; font-weight: normal; }
+        .modal-desc { color: var(--muted); font-size: 12.5px; margin: 0; font-style: italic; }
+        
+        .modal-form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
+        .modal-label { color: var(--gold-soft); font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
+        
+        .modal-input, .modal-textarea, .modal-select { 
+            width: 100%; 
+            padding: 11px 14px; 
+            background: var(--panel-dark); 
+            border: 1px solid var(--line); 
+            border-radius: 4px; 
+            color: var(--text); 
+            font-size: 13.5px; 
+            outline: none; 
+            transition: all 0.3s; 
+        }
+        
+        .modal-textarea { resize: vertical; min-height: 90px; }
+        
+        .modal-input:focus, .modal-textarea:focus, .modal-select:focus { 
+            border-color: var(--gold-light); 
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3); 
+        }
+        
+        .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
+        
+        .modal-submit-btn { 
+            flex: 2; 
+            padding: 12px; 
+            background: linear-gradient(90deg, #b89947, #d4af37, #b89947); 
+            color: #121008; 
+            border: none; 
+            border-radius: 4px; 
+            font-size: 13px; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            letter-spacing: 1.2px; 
+        }
+        
+        .modal-close-btn { 
+            flex: 1; 
+            padding: 12px; 
+            background: var(--panel-dark); 
+            color: var(--muted); 
+            border: 1px solid var(--line); 
+            border-radius: 4px; 
+            font-size: 13px; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+        }
+        
+        .modal-status { margin-top: 10px; font-size: 12.5px; text-align: center; display: none; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* АДАПТАЦИЯ */
+        @media (max-width: 920px) {
+            .site-nav { gap: 12px 16px; }
+            .site-nav a { font-size: 11px; }
+        }
+
+        @media (max-width: 900px) {
+            .sheet-grid { grid-template-columns: 100%; }
+            .sheet-sidebar { border-right: none; border-bottom: 1px solid var(--line); padding: 20px 15px; }
+            .avatar-frame { max-width: 180px; }
+            .sheet-content { padding: 20px 15px; }
+            .tabs-header { gap: 6px; }
+            .tab-btn { font-size: 11px; padding: 9px 6px; min-width: 45%; flex-grow: 1; }
+            .tab-content { padding: 16px 14px; font-size: 13.5px; }
+            p { text-align: left; }
+        }
+
+        @media (max-width: 480px) {
+            .site-header { padding: 12px 10px; }
+            .site-nav { gap: 10px 15px; }
+            .nav-logo { height: 40px; margin-right: 8px; }
+            .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+            .sheet-content { padding: 15px 10px; }
+            .tab-content { padding: 12px 10px; }
+
+            /* Идеальная компоновка репутации на узких экранах */
+            .rep-card-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2px;
+            }
+            .rep-card-value {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                text-align: left;
+            }
+            .rep-card-value span {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html" class="active">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<div class="sheet-wrapper">
+    <div class="back-nav-container">
+        <a href="ankets.html" class="back-btn">← К списку анкет</a>
+    </div>
+
+    <div class="sheet-container">
+        <div class="sheet-grid">
+
+            <div class="sheet-sidebar">
+                <div class="avatar-frame">
+                    <img src="images/senieperver.jpg" alt="Сениепервер Ханум">
+                </div>
+
+                <div class="char-title">
+                    <h1 class="char-name">Сениепервер</h1>
+                    <div class="char-status">Ханум • Румлу</div>
+                </div>
+
+                <div class="quick-info">
+                    <div class="info-row">
+                        <span class="info-label">Возраст:</span>
+                        <span class="info-value">17 лет</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">Род (по рождению):</span>
+                        <span class="info-value">Сувайди</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">Племя (по браку):</span>
+                        <span class="info-value">Румлу</span>
+                    </div>
+
+                    <div class="info-row">
+                        <span class="info-label">Внешность:</span>
+                        <span class="info-value">Джессика Александер</span>
+                    </div>
+                </div>
+
+                <button type="button" class="add-info-btn" onclick="openModal()">+ Добавить информацию</button>
+            </div>
+
+            <div class="sheet-content">
+
+                <div class="tabs-header">
+                    <button class="tab-btn active" onclick="openTab(event, 'biography')">Биография</button>
+                    <button class="tab-btn" onclick="openTab(event, 'personality')">Характер</button>
+                    <button class="tab-btn" onclick="openTab(event, 'additional')">Дополнительно</button>
+                    <button class="tab-btn" onclick="openTab(event, 'reputation')">Репутация</button>
+                </div>
+
+                <div id="biography" class="tab-content active">
+                    <p>родилась в июне 1628 багдаде. родом из знатного рода сувайди, что известен своими религиозными лидерами и учеными. осенью в 1644 года стала супругой джаваншира румлу.</p>
+                </div>
+
+                <div id="personality" class="tab-content">
+                    <p>сениепервер привыкла замечать чужие желания раньше собственных. в родительском доме от неё требовалось многое, но почти никогда — ничего для неё самой: принять гостей, подать чай, прибрать после застолья, присмотреть за младшими. она рано научилась быть услужливой и предусмотрительной, не доставлять лишних хлопот и находить себе занятие прежде, чем кто-нибудь успеет его поручить. единственным человеком, рядом с которым ей не приходилось заслуживать ласку, была кормилица, заменившая ей мать. от неё сениепервер узнала, что забота может быть нежной, а привязанность — искренней, и с тех пор хранит это представление о семье как нечто особенно дорогое.
+
+в доме румлу она впервые почувствовала себя не просто частью чужого хозяйства, а дочерью. умай окружила её теплом, дашдемир зовёт доченькой, и сениепервер отвечает им искренней привязанностью, порой почти детской в своей непривычной открытости. она благодарна им, любит их и старается радовать, хотя рядом с ними постепенно учится тому, чего прежде почти не знала: заботиться о ком-то можно не только потому, что так велено, а ласку можно принимать, не пытаясь немедленно отплатить за неё.
+
+с людьми сениепервер мягка и внимательна. она умеет слушать, замечает перемены в настроении, старается никого не обидеть и редко отказывает в помощи. чужие заботы действительно трогают её, а благотворительность и чтение дают возможность отвлечься от домашних хлопот и узнать что-то за пределами привычного круга. она любопытна, охотно учится новому и любит чувствовать, что может принести пользу.
+
+веру она знает с детства: в её родительском доме религия пронизывала повседневную жизнь, и молитвы были такой же привычной частью дня, как обязанности перед семьёй. сениепервер молится, соблюдает предписания и старается поступать так, как считает правильным. в её отношении к вере есть и искренняя надежда, и привычка, настолько тесно переплетённые, что отделить одно от другого, пожалуй, не смогла бы и она сама. ей хочется верить, что у каждого события есть свой смысл, а терпение и добрые поступки не бывают напрасны. порой это делает её несколько наивной: сениепервер склонна искать в чужих поступках добрые намерения даже тогда, когда стоило бы просто признать, что человек повёл себя дурно.
+
+больше всего сениепервер хочет быть хорошей женой. ей важно не только соответствовать положению супруги наследника румлу, но и стать для джаваншира близким человеком, с которым приятно проводить время, говорить о повседневных мелочах и делиться тем, что не расскажешь другим. она мечтает о нежности, взаимной привязанности, детях и большом доме, где всегда найдётся место для родных и где никто не будет чувствовать себя одиноким. ради этого она старается учитывать желания мужа, заботится о нём и искренне надеется, что со временем между ними станет больше тепла. вместе с тем ей нелегко смириться с тем, что близость нельзя устроить одним старанием: если джаваншир отстранён или занят своими делами, сениепервер начинает перебирать в памяти собственные слова и поступки, пытаясь понять, чем могла вызвать его холодность. она не любит ссор и редко высказывает недовольство прямо. вместо этого может замолчать, сделаться непривычно тихой и уверять окружающих, что всё в порядке, даже когда обида уже не даёт ей сосредоточиться ни на чём другом. ей хочется, чтобы близкие сами заметили перемену в её настроении и догадались, чем её огорчили; необходимость объяснять собственные чувства кажется ей почти унизительной. при этом забыть обиду сениепервер удаётся не всегда, даже если она давно простила обидчика вслух. она чувствительна к неодобрению, болезненно воспринимает отказ и иногда принимает чужую невнимательность за недостаток любви. ей самой не нравится эта черта, и после особенно досадных случаев она может долго убеждать себя, что впредь будет проще относиться к мелочам.</p>
+                </div>
+
+                <div id="additional" class="tab-content">
+                    <p><span class="family-key">Слуги:</span></p>
+                    <p>диларам-хатун. 25 лет. персиянка. родилась в багдаде и поступила на службу к семье сувайди ещё до замужества сениепервер. вместе с госпожой отправилась в исфахан после её свадьбы. отвечает за личный уход за сениепервер, гардероб, украшения и порядок в её покоях.</p>
+                    <p>ходжам-ага. 38 лет. грузин. родился в грузии и в юности попал на службу к сефевидскому двору в исфахане. после многих лет службы был передан в распоряжение семьи румлу и приставлен к покоям сениепервер после её переезда в дом мужа. отвечает за надзор за внутренними покоями, передачу распоряжений, связь с внешними слугами и организацию доставки писем и вещей.</p>
+                </div>
+
+                <!-- Репутация -->
+                <div id="reputation" class="tab-content">
+                    <div class="reputation-stack" id="reputationStackContainer">
+                        <div style="text-align: center; color: var(--muted); padding: 20px;">Загрузка данных...</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО -->
+<div class="modal-overlay" id="infoModal">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3 class="modal-title">Внести в летопись</h3>
+            <p class="modal-desc">Данные будут направлены в государственную таблицу на проверку визирям</p>
+        </div>
+
+        <form id="infoForm" onsubmit="submitToSheet(event)">
+            <div class="modal-form-group">
+                <label class="modal-label">Имя персонажа:</label>
+                <input type="text" id="senderName" class="modal-input" placeholder="Ваше имя..." required autocomplete="off">
+            </div>
+
+            <div class="modal-form-group">
+                <label class="modal-label">Раздел дополнения:</label>
+                <select id="infoCategory" class="modal-select">
+                    <option value="Биография">Дополнение к биографии</option>
+                    <option value="Характер / Черта">Черта характера / привычка</option>
+                    <option value="Событие / Слух">Слух или важное событие игры</option>
+                    <option value="Титул / Должность">Новый титул / пожалование</option>
+                    <option value="Слуги">Слуги</option>
+                </select>
+            </div>
+
+            <div class="modal-form-group">
+                <label class="modal-label">Текст информации:</label>
+                <textarea id="infoText" class="modal-textarea" placeholder="Опишите факт, сцену или новое сведение о Сениепервер..." required></textarea>
+            </div>
+
+            <div class="modal-status" id="modalStatus"></div>
+
+            <div class="modal-actions">
+                <button type="submit" class="modal-submit-btn" id="submitBtn">Отправить</button>
+                <button type="button" class="modal-close-btn" onclick="closeModal()">Отмена</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Эффект «пуньк» при клике (исправлен, чтобы не блокировать ссылки)
+    window.addEventListener('click', (e) => {
+        if (e.target.closest('a') || e.target.closest('.tab-btn') || e.target.closest('button')) return;
+
+        const echo = document.createElement('div');
+        echo.className = 'click-echo';
+        echo.style.left = `${e.clientX}px`;
+        echo.style.top = `${e.clientY}px`;
+        document.body.appendChild(echo);
+        setTimeout(() => { echo.remove(); }, 550);
+    });
+
+    function openTab(evt, tabId) {
+        const tabs = document.getElementsByClassName('tab-content');
+        for (let i = 0; i < tabs.length; i++) { tabs[i].classList.remove('active'); }
+        const btns = document.getElementsByClassName('tab-btn');
+        for (let i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
+        document.getElementById(tabId).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    function openModal() { document.getElementById('infoModal').style.display = 'flex'; document.getElementById('modalStatus').style.display = 'none'; }
+    function closeModal() { document.getElementById('infoModal').style.display = 'none'; }
+    document.getElementById('infoModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+
+    // --- ОТПРАВКА В ТАБЛИЦУ ---
+    const SUBMIT_WEBHOOK_URL = "https://script.google.com/macros/s/AKfycbw1XRoA9bE8w8RBi9thUmm1JOZ3PQbpNhlKFJNtnjohcjqhwLGNl8KE9m-tyNlaDZBs/exec";
+
+    function submitToSheet(e) {
+        e.preventDefault();
+        const sender = document.getElementById('senderName').value;
+        const category = document.getElementById('infoCategory').value;
+        const text = document.getElementById('infoText').value;
+        const statusBox = document.getElementById('modalStatus');
+        const submitBtn = document.getElementById('submitBtn');
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = "Отправка...";
+        statusBox.style.display = "block";
+        statusBox.style.color = "var(--gold-light)";
+        statusBox.innerText = "Свиток запечатывается и отправляется...";
+
+        fetch(SUBMIT_WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                character: "Сениепервер",
+                sender: sender,
+                category: category,
+                text: text,
+                date: new Date().toLocaleString("ru-RU", { timeZone: "Europe/Moscow" })
+            })
+        })
+        .then(() => {
+            statusBox.style.color = "#88cb8b";
+            statusBox.innerText = "✓ Успешно отправлено в государственную таблицу!";
+            setTimeout(() => {
+                closeModal();
+                document.getElementById('infoForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.innerText = "Отправить";
+            }, 1500);
+        })
+        .catch(err => {
+            statusBox.style.color = "#d98888";
+            statusBox.innerText = "Ошибка при отправке. Попробуйте позже.";
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Отправить";
+        });
+    }
+
+    // --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ (СО ШКАЛАМИ) ---
+    const REP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDpw/exec"; 
+    const CURRENT_CHARACTER_NAME = "Сениепервер"; 
+
+    function getReputationLevel(points) {
+        if (points <= 19) return { name: "Презрение", fillClass: "fill-red" };
+        if (points <= 39) return { name: "Равнодушие", fillClass: "fill-red" };
+        if (points <= 59) return { name: "Скептицизм", fillClass: "fill-yellow" };
+        if (points <= 79) return { name: "Лояльность", fillClass: "fill-yellow" };
+        if (points <= 90) return { name: "Признание", fillClass: "fill-green" };
+        return { name: "Авторитет", fillClass: "fill-green" };
+    }
+
+    async function loadReputation() {
+        const stackContainer = document.getElementById('reputationStackContainer');
+
+        try {
+            const res = await fetch(`${REP_SCRIPT_URL}?name=${encodeURIComponent(CURRENT_CHARACTER_NAME)}`);
+            const data = await res.json();
+            const repData = data.reputation || {};
+
+            let totalPoints = 0;
+            let count = 0;
+            let categoriesHtml = "";
+
+            for (const [category, pointsRaw] of Object.entries(repData)) {
+                const points = Number(pointsRaw) || 0;
+                totalPoints += points;
+                count++;
+
+                const lvlInfo = getReputationLevel(points);
+                categoriesHtml += `
+                    <div class="rep-card">
+                        <div class="rep-card-top">
+                            <span class="rep-card-title">${category}</span>
+                            <span class="rep-card-value">${points} / 100 <span>(Уровень: ${lvlInfo.name})</span></span>
+                        </div>
+                        <div class="rep-bar-wrap">
+                            <div class="rep-bar-fill ${lvlInfo.fillClass}" style="width: ${Math.min(Math.max(points, 0), 100)}%;"></div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (count === 0) {
+                stackContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--muted);">Репутация пока не накоплена.</div>`;
+                return;
+            }
+
+            const avg = Math.round(totalPoints / count);
+            const avgLvlInfo = getReputationLevel(avg);
+
+            // Собираем общую репутацию со шкалой + все остальные категории
+            stackContainer.innerHTML = `
+                <div class="rep-card main-banner">
+                    <div class="rep-card-top">
+                        <span class="rep-card-title">Общая репутация</span>
+                        <span class="rep-card-value">${avg} / 100 <span>(Уровень: ${avgLvlInfo.name})</span></span>
+                    </div>
+                    <div class="rep-bar-wrap">
+                        <div class="rep-bar-fill ${avgLvlInfo.fillClass}" style="width: ${Math.min(Math.max(avg, 0), 100)}%;"></div>
+                    </div>
+                </div>
+            ` + categoriesHtml;
+
+        } catch (err) {
+            console.error("Ошибка загрузки репутации:", err);
+            stackContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: #ff6b6b;">Не удалось загрузить данные репутации.</div>`;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadReputation);
+</script>
+
+</body>
+</html>
