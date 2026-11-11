@@ -290,7 +290,7 @@
     font-style: italic;
   }
 
-  /* МОДАЛЬНОЕ ОКНО ДЛЯ УВЕЛИЧЕНИЯ ФОТО */
+  /* МОДАЛЬНОЕ ОКНО С ИНТЕРАКТИВНОЙ ЛУПОЙ */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -298,8 +298,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(10, 10, 12, 0.92);
-    backdrop-filter: blur(8px);
+    background: rgba(10, 10, 12, 0.95);
+    backdrop-filter: blur(10px);
     z-index: 99999;
     justify-content: center;
     align-items: center;
@@ -317,11 +317,19 @@
     position: relative;
     max-width: 95vw;
     max-height: 92vh;
-    overflow: auto;
     border: 2px solid var(--gold);
     border-radius: 10px;
     background: var(--panel-dark);
     box-shadow: 0 0 50px rgba(0,0,0,0.9);
+    overflow: hidden;
+    display: inline-block;
+  }
+
+  /* КОНТЕЙНЕР ДЛЯ ЛУПЫ */
+  .img-zoom-container {
+    position: relative;
+    display: block;
+    max-height: 85vh;
   }
 
   .modal-img {
@@ -331,7 +339,21 @@
     max-width: 100%;
     max-height: 85vh;
     margin: 0 auto;
-    cursor: zoom-out !important;
+    cursor: crosshair !important;
+  }
+
+  /* СТИЛЬ ЛУПЫ */
+  .img-zoom-lens {
+    position: absolute;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    width: 140px;
+    height: 140px;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    box-shadow: 0 0 20px rgba(0,0,0,0.7), inset 0 0 15px rgba(212, 175, 55, 0.4);
+    display: none;
+    z-index: 10000;
   }
 
   .modal-close-btn {
@@ -423,39 +445,118 @@
       <div class="map-card-wrap">
         <header class="map-header">
             <h1 class="map-title">Карта главной площади</h1>
-            <p class="map-desc">Нажмите на изображение карты, чтобы открыть и увеличить её во весь экран.</p>
+            <p class="map-desc">Нажмите на изображение карты, чтобы открыть и детально рассмотреть её с помощью лупы.</p>
         </header>
 
         <div class="image-container">
-            <!-- Замените 'map_image.png' на имя вашей картинки -->
             <img src="images/Naqsh-e Jahan.jpg" alt="Площадь Накш-э Джахан" class="interactive-map-img" id="mapImage" onclick="openModal()">
         </div>
         <div class="image-hint">✦ Кликните по карте для увеличения ✦</div>
       </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО (ЗУМ ФОТО) -->
+    <!-- МОДАЛЬНОЕ ОКНО С ЛУПОЙ -->
     <div class="modal-overlay" id="imageModal" onclick="closeModal(event)">
         <div class="modal-content-wrapper" onclick="event.stopPropagation()">
             <button class="modal-close-btn" onclick="closeModal()">×</button>
-            <img src="images/Naqsh-e Jahan.jpg" alt="Увеличенная карта" class="modal-img" onclick="closeModal()">
+            <div class="img-zoom-container" id="zoomContainer">
+                <img src="images/Naqsh-e Jahan.jpg" alt="Увеличенная карта" class="modal-img" id="modalImg">
+                <div class="img-zoom-lens" id="zoomLens"></div>
+            </div>
         </div>
     </div>
 
     <script>
         const modal = document.getElementById('imageModal');
+        const img = document.getElementById('modalImg');
+        const container = document.getElementById('zoomContainer');
+        const lens = document.getElementById('zoomLens');
+
+        let zoomFactor = 2.5; // Коэффициент приближения в лупе
 
         function openModal() {
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            
+            // Ждем загрузки картинки, чтобы инициализировать лупу
+            if (img.complete) {
+                setupMagnifier();
+            } else {
+                img.onload = setupMagnifier;
+            }
         }
 
         function closeModal() {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
+            lens.style.display = 'none';
         }
 
-        // Закрытие по нажатию клавиши ESC
+        function setupMagnifier() {
+            // Устанавливаем фон для лупы равным исходной картинке
+            lens.style.backgroundImage = `url('${img.src}')`;
+            
+            // Настройка размеров фонового изображения в лупе пропорционально зуму
+            const updateLensBackgroundSize = () => {
+                const w = img.width;
+                const h = img.height;
+                lens.style.backgroundSize = `${w * zoomFactor}px ${h * zoomFactor}px`;
+            };
+
+            updateLensBackgroundSize();
+
+            // Обработчики движения мыши / касаний для лупы
+            container.onmousemove = moveLens;
+            container.ontouchmove = moveLens;
+
+            container.onmouseenter = () => { lens.style.display = 'block'; };
+            container.onmouseleave = () => { lens.style.display = 'none'; };
+        }
+
+        function moveLens(e) {
+            e.preventDefault();
+            const pos = getCursorPos(e);
+            let x = pos.x;
+            let y = pos.y;
+
+            const lensWidth = lens.offsetWidth;
+            const lensHeight = lens.offsetHeight;
+
+            // Ограничение движения лупы в пределах картинки
+            if (x > img.width - lensWidth / 2) x = img.width - lensWidth / 2;
+            if (x < lensWidth / 2) x = lensWidth / 2;
+            if (y > img.height - lensHeight / 2) y = img.height - lensHeight / 2;
+            if (y < lensHeight / 2) y = lensHeight / 2;
+
+            // Позиция лупы за курсором
+            lens.style.left = `${x - lensWidth / 2}px`;
+            lens.style.top = `${y - lensHeight / 2}px`;
+
+            // Смещение фонового изображения внутри лупы для приближения
+            const bgX = (x * zoomFactor) - (lensWidth / 2);
+            const bgY = (y * zoomFactor) - (lensHeight / 2);
+            lens.style.backgroundPosition = `-${bgX}px -${bgY}px`;
+        }
+
+        function getCursorPos(e) {
+            const rect = img.getBoundingClientRect();
+            let x = 0, y = 0;
+            
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+
+            if (e.touches && e.touches[0]) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            }
+
+            x = clientX - rect.left;
+            y = clientY - rect.top;
+            
+            return { x: x, y: y };
+        }
+
+        // Закрытие по клавише ESC
         window.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeModal();
