@@ -56,7 +56,8 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            overflow-y: scroll;
+            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы не было второго колесика */
+            overflow-y: auto;
         }
 
         /* Эффект «пуньк» при клике */
@@ -542,7 +543,7 @@
 
             <div class="sheet-sidebar">
                 <div class="avatar-frame">
-                    <img src="https://sun9-52.vkuserphoto.ru/s/v1/ig2/D_gXaeShOBQXtzKZZTXhMy__8hlkvI4k8ZO3QlCWZWXseA97jD3E2KH5OI8xoNsy156EFR5Dg7KuRVP4Vg_zVjA8kWMPkA.jpg?quality=95&as=32x41,48x61,72x92,108x138,160x204,240x306,360x459,480x613,540x689,640x817,720x919,1080x1378,1280x1633,1440x1838,1684x2149&from=bu&u=lots6HJZjXtlXcJ96wsYlr4oPHZAYupF-SCBr64rFUk&cs=1684x0" alt="Акбану Мэхтэб">
+                    <img src="images/akbanu.jpg" alt="Акбану Мэхтэб">
                 </div>
 
                 <div class="char-title">
