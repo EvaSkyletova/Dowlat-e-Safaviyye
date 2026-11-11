@@ -7,7 +7,7 @@
 <!-- Иконка вкладки -->
 <link rel="icon" type="image/png" href="leo.png">
 
-<title>Летопись</title>
+<title>Вести и Слухи</title>
 
 <style>
   /* ========================================= */
@@ -86,7 +86,7 @@
   ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
   ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (КАК В АКТИВНОСТИ И КАРТЕ) */
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
   .site-header {
     display: flex;
     justify-content: center;
@@ -146,12 +146,49 @@
     text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
-  /* ОСНОВНОЙ КОНТЕЙНЕР РАСШИРЕН ДО 1400PX (КАК НА ВСЁМ САЙТЕ) */
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
   .wrap {
     width: 100%;
     max-width: 1400px;
-    margin: 30px auto;
-    padding: 0 20px 60px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
     display: flex;
     justify-content: center;
     box-sizing: border-box;
@@ -180,30 +217,12 @@
   .chronicles-card::before { top: 10px; left: 14px; }
   .chronicles-card::after { top: 10px; right: 14px; }
 
-  /* ПАРАДНЫЙ ЗАГОЛОВОК */
+  /* ПАРАДНЫЙ ЗАГОЛОВОК (ТОЧНО КАК В АРМИИ: ЦВЕТ --gold-soft, РАЗМЕР 11px) */
   .chronicles-hero {
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 25px;
-    padding: 24px 30px 22px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    background: 
-        radial-gradient(circle at 85% 0%, rgba(212, 175, 55, 0.14), transparent 35%),
-        radial-gradient(circle at 0% 100%, rgba(212, 175, 55, 0.07), transparent 40%),
-        linear-gradient(115deg, rgba(14, 14, 17, 0.96), rgba(26, 26, 32, 0.88));
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 40px rgba(212, 175, 55, 0.04);
     text-align: center;
-  }
-
-  .chronicles-hero::after {
-    content: "✦  ✦  ✦";
-    position: absolute;
-    right: 22px;
-    bottom: 12px;
-    color: rgba(212, 175, 55, 0.35);
-    font-size: 11px;
-    letter-spacing: 6px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 20px;
   }
 
   .chronicles-kicker {
@@ -218,71 +237,68 @@
   .chronicles-hero h1 {
     margin: 0 0 8px;
     color: var(--gold-light);
-    font-size: 28px;
-    font-weight: normal;
-    letter-spacing: 2px;
+    font-size: 26px;
     text-transform: uppercase;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+    letter-spacing: 2px;
+    font-weight: normal;
     font-family: 'Yipes', Georgia, serif !important;
   }
 
   .chronicles-hero p {
-    max-width: 680px;
-    margin: 0 auto;
+    margin: 0;
     color: var(--muted);
     font-size: 13.5px;
-    line-height: 1.6;
     font-style: italic;
   }
 
   /* ВКЛАДКИ РЕЖИМА (ВЕСТИ / СЛУХИ) */
   .chronicles-tabs {
     display: flex;
-    justify-content: center;
     gap: 15px;
     margin-bottom: 30px;
   }
 
   .chronicles-tab {
-    padding: 12px 32px;
-    border: 1px solid var(--line);
-    border-radius: 6px;
+    flex: 1;
     background: var(--panel-dark);
     color: var(--muted);
-    font-family: inherit;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px 16px;
     font-size: 13px;
     font-weight: bold;
-    letter-spacing: 1.2px;
     text-transform: uppercase;
+    letter-spacing: 1.2px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s;
+    text-align: center;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   }
 
-  .chronicles-tab:hover {
-    color: var(--gold-light);
-    border-color: var(--gold);
-    background: rgba(212, 175, 55, 0.1);
-  }
-
   .chronicles-tab.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
     color: #121008;
     border-color: var(--gold-light);
-    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
     box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
   }
 
-  /* ДВУХКОЛОНОЧНЫЙ БЛОК */
+  .chronicles-tab:hover:not(.active) {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  /* ОРИГИНАЛЬНЫЙ ДИЗАЙН СО СКРОЛЛОМ И СЕТКОЙ */
   .chronicles-panel {
     display: none;
-    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-columns: 310px minmax(0, 1fr);
     gap: 20px;
     align-items: stretch;
   }
 
   .chronicles-panel.active {
     display: grid;
-    animation: fadeIn 0.4s ease forwards;
+    animation: fadeIn 0.3s ease forwards;
   }
 
   @keyframes fadeIn {
@@ -290,61 +306,61 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* ЛЕВАЯ КОЛОНКА (НАВИГАЦИЯ ПО ВЕСТЯМ) */
+  /* Левая колонка — навигация */
   .timeline-nav {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 12px;
-    background: var(--panel-soft);
+    gap: 8px;
+    padding: 10px;
+    background: var(--panel-dark);
     border: 1px solid var(--line);
     border-radius: 8px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    max-height: 600px;
+    max-height: 560px;
     overflow-y: auto;
   }
 
   .timeline-btn {
     width: 100%;
     text-align: left;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border: 1px solid transparent;
     border-left: 3px solid rgba(212, 175, 55, 0.3);
     border-radius: 0 6px 6px 0;
     background: rgba(255, 255, 255, 0.02);
     cursor: pointer;
-    transition: all 0.25s ease;
+    transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
     font-family: inherit;
   }
 
   .timeline-btn:hover {
     background: rgba(212, 175, 55, 0.08);
     border-left-color: var(--gold);
-    transform: translateX(3px);
+    transform: translateX(2px);
   }
 
   .timeline-btn.active {
-    background: linear-gradient(90deg, rgba(212, 175, 55, 0.18), transparent);
-    border: 1px solid var(--line);
+    background: linear-gradient(90deg, rgba(212, 175, 55, 0.16), transparent);
+    border: 1px solid var(--line-soft);
     border-left: 3px solid var(--gold-light);
-    box-shadow: inset 0 0 15px rgba(212, 175, 55, 0.1);
+    box-shadow: inset 0 0 14px rgba(212, 175, 55, 0.08);
   }
 
   .tb-date {
-    font-size: 11px;
+    font-size: 10.5px;
     color: var(--gold-soft);
-    letter-spacing: 1px;
+    letter-spacing: 0.8px;
     text-transform: uppercase;
     font-weight: bold;
   }
 
   .tb-title {
-    font-size: 14.5px;
+    font-size: 14px;
     color: var(--text);
-    line-height: 1.35;
+    line-height: 1.3;
   }
 
   .timeline-btn.active .tb-title {
@@ -352,56 +368,56 @@
     font-weight: bold;
   }
 
-  /* ПРАВАЯ КОЛОНКА (ЭКРАН ЧТЕНИЯ) */
+  /* Правая колонка — экран чтения */
   .reader-frame {
     position: relative;
-    padding: 35px 40px;
+    padding: 30px 35px;
     background: linear-gradient(135deg, rgba(22, 22, 26, 0.95), rgba(12, 12, 15, 0.98));
     border: 1px solid var(--line);
     border-left: 4px solid var(--gold);
     border-radius: 0 8px 8px 0;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
-    max-height: 600px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.7);
+    max-height: 560px;
     overflow-y: auto;
   }
 
   .reader-header {
-    margin-bottom: 22px;
-    padding-bottom: 16px;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
     border-bottom: 1px solid var(--line-soft);
   }
 
   .reader-badge-date {
     display: inline-block;
-    padding: 4px 12px;
+    padding: 3px 9px;
     background: rgba(212, 175, 55, 0.12);
-    border: 1px solid var(--line);
+    border: 1px solid var(--line-soft);
     border-radius: 4px;
-    color: var(--gold-light);
-    font-size: 11.5px;
-    letter-spacing: 1.2px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-weight: bold;
   }
 
   .reader-title {
     margin: 0;
     color: var(--gold-light);
-    font-size: 26px;
+    font-size: 24px;
     font-weight: normal;
-    line-height: 1.3;
+    line-height: 1.25;
     font-family: 'Yipes', Georgia, serif !important;
   }
 
   .reader-content {
     font-size: 14.5px;
-    line-height: 1.8;
+    line-height: 1.75;
     color: var(--text);
   }
 
   .reader-content p {
-    margin: 0 0 16px 0;
+    margin: 0 0 14px 0;
   }
 
   .reader-content p:last-child {
@@ -410,13 +426,13 @@
 
   /* Игровые последствия */
   .mechanics-box {
-    margin-top: 25px;
-    padding: 20px 22px;
+    margin-top: 22px;
+    padding: 16px 18px;
     background: var(--panel-dark);
-    border: 1px solid var(--line);
+    border: 1px solid var(--line-soft);
     border-left: 3px solid var(--gold);
     border-radius: 0 6px 6px 0;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
   }
 
   .mechanics-title {
@@ -424,23 +440,23 @@
     align-items: center;
     gap: 8px;
     color: var(--gold-light);
-    font-size: 11.5px;
+    font-size: 11px;
     font-weight: bold;
     letter-spacing: 1.5px;
     text-transform: uppercase;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
   }
 
   .mechanics-title::before {
     content: "◈";
-    font-size: 14px;
+    font-size: 13px;
     color: var(--gold);
   }
 
   .mechanics-box p {
     margin: 0 0 10px 0;
-    font-size: 14px;
-    line-height: 1.7;
+    font-size: 13.5px;
+    line-height: 1.65;
     color: #ede5d0;
   }
 
@@ -450,29 +466,29 @@
 
   /* Печать внизу */
   .seal-highlight {
-    margin-top: 24px;
-    padding: 14px 18px;
+    margin-top: 20px;
+    padding: 12px 16px;
     text-align: center;
     border: 1px dashed var(--line);
     border-radius: 6px;
-    background: rgba(212, 175, 55, 0.08);
+    background: rgba(212, 175, 55, 0.06);
     color: var(--gold-light);
-    font-size: 14.5px;
+    font-size: 14px;
     font-style: italic;
     font-weight: bold;
   }
 
   .reader-footer-note {
-    margin-top: 22px;
-    padding-top: 14px;
+    margin-top: 18px;
+    padding-top: 12px;
     border-top: 1px dashed var(--line-soft);
     color: var(--muted);
-    font-size: 12.5px;
+    font-size: 12px;
     font-style: italic;
     text-align: center;
   }
 
-  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ (КАК НА ВСЁМ САЙТЕ) */
+  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
   @media (max-width: 820px) {
     .site-header { padding: 12px 15px; }
     .site-nav { gap: 12px 16px; }
@@ -490,26 +506,27 @@
       flex-direction: row;
       overflow-x: auto;
       overflow-y: hidden;
-      padding: 8px;
-      gap: 10px;
+      padding: 6px;
+      gap: 8px;
       scroll-snap-type: x mandatory;
     }
     .timeline-btn {
-      flex: 0 0 210px;
+      flex: 0 0 190px;
       scroll-snap-align: start;
       border-radius: 6px;
-      border: 1px solid var(--line);
-      border-left: 3px solid var(--gold);
-      padding: 10px 12px;
+      border: 1px solid var(--line-soft);
+      border-left: 3px solid rgba(212, 175, 55, 0.3);
+      padding: 8px 10px;
     }
     .reader-frame {
-      padding: 22px 18px;
+      padding: 18px 16px;
       max-height: none;
     }
-    .reader-title { font-size: 22px; }
-    .reader-content { font-size: 14px; line-height: 1.7; }
+    .reader-title { font-size: 20px; }
+    .reader-content { font-size: 13.5px; line-height: 1.65; }
     .chronicles-tabs { flex-direction: column; gap: 10px; }
     .chronicles-tab { width: 100%; padding: 12px; }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
   }
 
   @media (max-width: 480px) {
@@ -553,7 +570,12 @@
         </nav>
     </header>
 
-    <!-- ОСНОВНОЙ КОНТЕЙНЕР РАСШИРЕН ДО 1400PX -->
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="letopis.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
     <div class="wrap">
       <div class="chronicles-card">
         
@@ -659,7 +681,7 @@ const newsDatabase = [
         date: "01.04.2026 | Эсфанд 1023",
         title: "Великое Посвящение и тайны столицы",
         paragraphs: [
-            "В первый день месяца Эсфанд Исфахан замирает в предвкушении исторического события. По указу Шах-ан-Шаха Мохаммеда II состоится торжественная церемония посвящения сыновей благородных кызылбашских родов.",
+            "In первый день месяца Эсфанд Исфахан замирает в предвкушении исторического события. По указу Шах-ан-Шаха Мохаммеда II состоится торжественная церемония посвящения сыновей благородных кызылбашских родов.",
             "Размах торжества поистине грандиозен. На великой площади Накш-э Джахан раскинулись шелковые шатры, а под изумрудным навесом, осененным сефевидскими стягами, уже установлен золотой трон Шах-ан-Шаха.",
             "Созваны Шейхи Ордена Сефевийе, высшие государственные чиновники, иностранные послы и простой люд столицы.",
             "Сразу после завершения церемонии клятвы площадь превратится в арену: для развлечения правителя и гостей организованы демонстрационные состязания на саблях."
@@ -740,7 +762,7 @@ const gossipDatabase = [
         date: "12.04.2026 | Эсфанд 1023",
         title: "Прелюбодеяние",
         paragraphs: [
-            "Доброе имя некогда уважаемой Ханум растоптано. В Хамадане и в Али-Капу со скоростью лесного пожара распространяется вопиющее утверждение: «Инайят Каджар состояла в плотской связи со стражником рабского происхождения, служащим в их поместье, ещё до своего брака, безвозвратно лишившись девичьей чести!»",
+            "Доброе имя некогда уважаемой Ханум растоптано. В Хамадане и в Али-Капу со скоростью лесного пожара распространяется вопиющее утверждение: «Инайят Каджар состояла в плотской связи со стражником рабского происхождения, служащим в их поместье, ещё до того брака, безвозвратно лишившись девичьей чести!»",
             "Подобный позор смывается тяжело. Тот, кто разделил ложе с презренным рабом, бросает тень на каждого, кто встанет с ним рядом."
         ],
         consequences: [
@@ -836,7 +858,6 @@ function switchSection(type) {
     }
 }
 
-// Инициализация при загрузке
 document.addEventListener("DOMContentLoaded", () => {
     showNews(0);
     showGossip(0);
