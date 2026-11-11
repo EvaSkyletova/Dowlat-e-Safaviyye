@@ -56,7 +56,8 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            overflow-y: scroll;
+            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы не было второго колесика */
+            overflow-y: auto;
         }
 
         /* Эффект «пуньк» при клике */
@@ -251,7 +252,7 @@
         }
         
         .char-title { text-align: center; margin: 18px 0; width: 100%; }
-        .char-name { margin: 0 0 4px 0; font-size: 26px; color: var(--gold-light); letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9); font-weight: normal; }
+        .char-name { margin: 0 0 4px 0; font-size: 24px; color: var(--gold-light); letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.9); font-weight: normal; }
         .char-status { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
 
         .quick-info { width: 100%; border-top: 1px solid var(--line); padding-top: 16px; margin-bottom: 22px; }
@@ -542,7 +543,7 @@
 
             <div class="sheet-sidebar">
                 <div class="avatar-frame">
-                    <img src="salamat.jpg" alt="Зулейка аль-Саламат">
+                    <img src="images/salamat.jpg" alt="Зулейка аль-Саламат">
                 </div>
 
                 <div class="char-title">
