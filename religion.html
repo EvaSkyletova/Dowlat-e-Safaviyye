@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Религия</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --line-soft: rgba(212, 175, 55, 0.14);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+
+    --islam: #7fa895;
+    --sufi: #b29de2;
+    --christian: #7aa5d8;
+    --other: #d4af37;
+    --borderland: #d49a6a;
+  }
+
+  /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+  body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover { transform: scale(1.1); }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* КОНТЕЙНЕР КНОПКИ НАЗАД (ШИРИНА 1400PX) */
+  .back-nav-container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+  }
+
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+  }
+
+  /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+  .wrap {
+    width: 100%;
+    max-width: 1400px;
+    margin: 25px auto 60px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .faith-atlas-card {
+    width: 100%;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    padding: 40px 50px;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  .faith-atlas-card::before,
+  .faith-atlas-card::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .faith-atlas-card::before { top: 10px; left: 14px; }
+  .faith-atlas-card::after { top: 10px; right: 14px; }
+
+  /* Шапка */
+  .atlas-header {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 22px;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 30px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(212, 175, 55, 0.04);
+  }
+
+  .header-seal {
+    display: grid;
+    width: 76px;
+    height: 76px;
+    place-items: center;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    box-shadow: 0 0 20px rgba(212, 175, 55, 0.2), inset 0 0 0 6px rgba(212, 175, 55, 0.08);
+    font-size: 32px;
+  }
+
+  .eyebrow {
+    margin: 0 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: Georgia, serif !important;
+  }
+
+  .atlas-header h1 {
+    margin: 0 0 8px;
+    color: var(--gold-light);
+    font-size: 26px;
+    font-weight: normal;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .header-description {
+    max-width: 780px;
+    margin: 0;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.65;
+    font-style: italic;
+  }
+
+  /* Поиск */
+  .search-panel {
+    padding: 20px;
+    margin-bottom: 25px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-dark);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+
+  .search-field {
+    position: relative;
+  }
+
+  .search-field svg {
+    position: absolute;
+    top: 50%;
+    left: 15px;
+    width: 19px;
+    height: 19px;
+    color: var(--gold-soft);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    height: 46px;
+    padding: 0 48px 0 46px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    outline: none;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--text);
+    font-size: 14px;
+    transition: border-color .2s, box-shadow .2s;
+  }
+
+  .search-input::placeholder {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .search-input:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.3);
+  }
+
+  .clear-button {
+    position: absolute;
+    top: 50%;
+    right: 9px;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--gold-light);
+    font-size: 24px;
+    transform: translateY(-50%);
+    line-height: 1;
+  }
+
+  .clear-button:hover {
+    background: rgba(212, 175, 55, 0.15);
+  }
+
+  .search-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-top: 12px;
+  }
+
+  .search-status {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .collapse-button {
+    padding: 6px 14px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: rgba(212, 175, 55, 0.08);
+    color: var(--gold-soft);
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all .2s;
+  }
+
+  .collapse-button:hover {
+    background: rgba(212, 175, 55, 0.2);
+    color: var(--gold-light);
+    border-color: var(--gold);
+  }
+
+  /* Компоновка */
+  .atlas-layout {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 25px;
+    align-items: start;
+  }
+
+  .atlas-sidebar {
+    position: sticky;
+    top: 80px;
+  }
+
+  .sidebar-title {
+    margin: 0 0 12px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .category-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel-dark);
+    color: var(--muted);
+    text-align: left;
+    font-size: 12.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    transition: .2s;
+  }
+
+  .category-button:hover {
+    border-color: var(--gold);
+    color: var(--gold-light);
+    background: rgba(212, 175, 55, 0.1);
+  }
+
+  .category-button.active {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    border-color: var(--gold-light);
+    color: #121008;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.4);
+  }
+
+  .category-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+    border-radius: 50%;
+    background: var(--category-color, var(--gold));
+    box-shadow: 0 0 6px var(--category-color, var(--gold));
+  }
+
+  .category-button.active .category-dot {
+    background: #121008;
+    box-shadow: none;
+  }
+
+  .sidebar-note {
+    margin-top: 20px;
+    padding: 16px;
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    background: rgba(212, 175, 55, 0.06);
+    color: var(--text);
+    font-size: 12.5px;
+    line-height: 1.65;
+  }
+
+  .sidebar-note strong {
+    color: var(--gold-light);
+  }
+
+  .editor-note {
+    margin-bottom: 20px;
+    padding: 18px 20px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 8px 8px 0;
+    background: var(--panel-soft);
+    color: var(--muted);
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+
+  .editor-note strong {
+    color: var(--gold-light);
+  }
+
+  /* Досье */
+  .dossier {
+    margin-bottom: 15px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent, var(--gold));
+    border-radius: 0 8px 8px 0;
+    background: var(--panel-soft);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    transition: transform .2s, border-color .2s, box-shadow .2s;
+    --accent: var(--gold);
+  }
+
+  .dossier[data-category="islam"] { --accent: var(--islam); }
+  .dossier[data-category="sufi"] { --accent: var(--sufi); }
+  .dossier[data-category="christian"] { --accent: var(--christian); }
+  .dossier[data-category="other"] { --accent: var(--other); }
+  .dossier[data-category="borderland"] { --accent: var(--borderland); }
+
+  .dossier:hover {
+    transform: translateY(-2px);
+    border-color: var(--gold-light);
+    box-shadow: 0 15px 35px rgba(212, 175, 55, 0.15);
+  }
+
+  .dossier[open] {
+    border-color: var(--gold-light);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+  }
+
+  .dossier summary {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 18px 20px;
+    cursor: pointer;
+    list-style: none;
+    background: rgba(0, 0, 0, 0.2);
+    transition: background .2s;
+  }
+
+  .dossier summary:hover {
+    background: rgba(212, 175, 55, 0.08);
+  }
+
+  .dossier summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .dossier-number {
+    min-width: 32px;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: .5px;
+  }
+
+  .summary-text {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .dossier-title {
+    display: block;
+    color: var(--gold-light);
+    font-size: 19px;
+    line-height: 1.3;
+    font-family: 'Yipes', Georgia, serif !important;
+  }
+
+  .dossier-subtitle {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.4;
+    font-style: italic;
+  }
+
+  .dossier-toggle {
+    display: grid;
+    width: 28px;
+    height: 28px;
+    place-items: center;
+    flex: 0 0 28px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    color: var(--gold-light);
+    transition: all .2s ease;
+  }
+
+  .dossier-toggle::before {
+    content: "+";
+    font-size: 20px;
+    line-height: 1;
+  }
+
+  .dossier[open] .dossier-toggle {
+    background: var(--gold);
+    color: #121008;
+    border-color: var(--gold-light);
+  }
+
+  .dossier[open] .dossier-toggle::before {
+    content: "−";
+  }
+
+  .dossier-body {
+    padding: 0 25px 25px 67px;
+    background: rgba(14, 14, 17, 0.6);
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .dossier-intro {
+    margin: 0 0 16px;
+    padding-top: 18px;
+    color: var(--text);
+    font-size: 14.5px;
+    line-height: 1.8;
+  }
+
+  .dossier-section {
+    margin-top: 16px;
+  }
+
+  .dossier-section h3 {
+    margin: 0 0 6px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+
+  .dossier-section p {
+    margin: 0;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .dossier-caution {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    background: rgba(0, 0, 0, 0.35);
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .empty-state {
+    padding: 35px 20px;
+    border: 1px dashed var(--line);
+    border-radius: 8px;
+    background: var(--panel-dark);
+    color: var(--muted);
+    text-align: center;
+    font-style: italic;
+    line-height: 1.7;
+  }
+
+  /* Адаптация для телефонов */
+  @media (max-width: 820px) {
+    .site-header { padding: 12px 15px; }
+    .site-nav { gap: 12px 16px; }
+    .site-nav a { font-size: 11px; }
+    .wrap { padding: 0 10px 40px; margin: 15px auto; }
+    .faith-atlas-card { padding: 25px 15px; }
+    .atlas-header {
+      grid-template-columns: 1fr;
+      gap: 14px;
+      padding: 20px 16px;
+      text-align: center;
+    }
+    .header-seal {
+      width: 56px;
+      height: 56px;
+      font-size: 26px;
+      margin: 0 auto;
+    }
+    .atlas-layout {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 20px;
+    }
+    .atlas-sidebar {
+      position: static;
+    }
+    .category-list {
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .category-button {
+      width: auto;
+      padding: 8px 12px;
+      font-size: 11.5px;
+    }
+    .sidebar-note {
+      display: none;
+    }
+    .dossier summary {
+      gap: 12px;
+      padding: 15px 14px;
+    }
+    .dossier-body {
+      padding: 0 16px 20px;
+    }
+    .dossier-title {
+      font-size: 17px;
+    }
+    .back-nav-container { padding: 0 10px; margin-top: 15px; }
+  }
+
+  @media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+  }
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html" class="active">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА -->
+    <div class="back-nav-container">
+        <a href="letopis.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР -->
+    <div class="wrap">
+      <div class="faith-atlas-card">
+
+        <header class="atlas-header">
+          <div class="header-seal" aria-hidden="true">✦</div>
+          <div>
+            <p class="eyebrow">Верования · общины · духовные традиции</p>
+            <h1>Религиозный атлас Персии</h1>
+            <p class="header-description">
+              Государственная вера, религиозные меньшинства, богословские школы, суфийские братства и традиции пограничных земель.
+            </p>
+          </div>
+        </header>
+
+        <div class="search-panel">
+          <div class="search-field">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+              <circle cx="10.5" cy="10.5" r="6.5"></circle>
+              <path d="M16 16L21 21"></path>
+            </svg>
+            <input id="faithSearch" class="search-input" type="search" placeholder="Название, город, учение или обряд..." aria-label="Поиск по религиозному атласу" autocomplete="off">
+            <button id="clearSearch" class="clear-button" type="button" aria-label="Очистить поиск" hidden>×</button>
+          </div>
+
+          <div class="search-bottom">
+            <p id="searchStatus" class="search-status" role="status" aria-live="polite"></p>
+            <button id="collapseAll" class="collapse-button" type="button">Свернуть все досье</button>
+          </div>
+        </div>
+
+        <div class="atlas-layout">
+          <aside class="atlas-sidebar">
+            <h2 class="sidebar-title">Указатель направлений</h2>
+            <nav id="categoryList" class="category-list" aria-label="Категории религиозного атласа"></nav>
+
+            <div class="sidebar-note">
+              <strong>Как читать атлас</strong><br>
+              Религия, церковь, правовая школа, братство и местная традиция — разные виды объединений. Один человек мог одновременно принадлежать к нескольким из перечисленных направлений.
+            </div>
+          </aside>
+
+          <div class="atlas-content">
+            <div class="editor-note">
+              <strong>Исторические границы.</strong> Основной раздел посвящён Сефевидской Персии. Соседние и пограничные традиции отмечены отдельно.
+            </div>
+
+            <div id="dossierList"></div>
+
+            <div id="emptyState" class="empty-state" hidden>
+              Совпадений нет. Попробуйте другое слово или выберите категорию «Все направления».
+            </div>
+          </div>
+        </div>
+
+        <noscript>
+          <div class="empty-state">
+            Для отображения досье и работы поиска включите JavaScript.
+          </div>
+        </noscript>
+
+      </div>
+    </div>
+
+<script>
+const categories = [
+  { id: "all", label: "Все направления", color: "var(--gold)" },
+  { id: "islam", label: "Ислам и богословие", color: "var(--islam)" },
+  { id: "sufi", label: "Суфизм и братства", color: "var(--sufi)" },
+  { id: "christian", label: "Христианские церкви", color: "var(--christian)" },
+  { id: "other", label: "Другие религии", color: "var(--other)" },
+  { id: "borderland", label: "Особые и пограничные", color: "var(--borderland)" }
+];
+
+const faiths = [
+  {
+    name: "Шиизм двунадесятников",
+    category: "islam",
+    type: "Имамизм · государственная конфессиональная традиция",
+    intro: "Официальное направление ислама в Сефевидской державе. Его распространение поддерживается двором, религиозными учреждениями, образованием и публичной обрядностью, но страна не становится конфессионально однородной.",
+    geography: "Исфахан, Кум, Кашан, Казвин, Мешхед, многие города и сельские районы центрального и западного Ирана. Степень распространения различается по областям.",
+    practice: "Признание двенадцати имамов, особое почитание Али и семьи пророка, вера в сокрытие последнего имама. Важны память о гибели Хусейна, траурные собрания мухаррама, паломничество и правовая традиция имамитов.",
+    position: "Связан с легитимностью шахской власти. Улемы, сейиды, судьи и служители святынь обладают влиянием, однако духовенство не составляет единого бесконфликтного учреждения.",
+    caution: "Не всякий шиит принадлежит к одному богословскому лагерю. Религиозность горожан, племенной знати и сельских жителей может существенно различаться."
+  },
+  {
+    name: "Усулитская правовая традиция",
+    category: "islam",
+    type: "Направление внутри имамитского права",
+    intro: "Учёная традиция, признающая необходимость правовых принципов и работы квалифицированного законоведа при выведении религиозных норм.",
+    geography: "Медресе и учёные круги Ирана, связанные также с арабскими шиитскими центрами.",
+    practice: "Изучение Корана и преданий, правовая аргументация, иджтихад. Авторитет муджтахида связан с признанием его знаний.",
+    position: "Влияет на судопроизводство, образование и споры о полномочиях законоведов.",
+    caution: "Позднейшее устройство шиитского религиозного руководства нельзя целиком переносить на эту эпоху. Это не отдельная религия и не замкнутая секта."
+  },
+  {
+    name: "Ахбаризм",
+    category: "islam",
+    type: "Традиционалистское направление имамитского богословия",
+    intro: "Направление, связанное с усиленным вниманием к преданиям пророка и имамов и критикой ряда методов усулитского правового рассуждения.",
+    geography: "Учёные сети Ирана и сопредельных шиитских областей. Важны связи с Хиджазом, Ираком и Бахрейном.",
+    practice: "Опора на ахбар — переданные сообщения. Особое значение имеют сборники преданий; независимая рациональная аргументация в праве подвергается ограничениям и критике.",
+    position: "Вызывает острые споры внутри шиитской учёной среды. С его оформлением связан Мухаммад Амин Астарабади.",
+    caution: "Ахбариты остаются двунадесятниками. Название не означает отказа от всякого рассуждения или отдельного набора основных религиозных догматов."
+  },
+  {
+    name: "Философия и мистическое богословие",
+    category: "islam",
+    type: "Интеллектуальная среда · не самостоятельная конфессия",
+    intro: "Учёные круги соединяют шиитское богословие с философией, учением о бытии и мистической интерпретацией религиозных текстов.",
+    geography: "Прежде всего Исфахан, Шираз и связанные с ними центры учёности.",
+    practice: "Обсуждение души, познания, пророчества и бытия. Используются наследие Ибн Сины, ишракизм Сухраварди и различные мистические подходы.",
+    position: "Одни учёные получают покровительство, другие сталкиваются с возражениями законоведов. Среда связана с именами Мир Дамада и Муллы Садры.",
+    caution: "«Исфаханская школа» — исследовательское обозначение. Философ, мистик и законовед не обязательно принадлежат к трём разным религиозным общинам."
+  },
+  {
+    name: "Суннизм",
+    category: "islam",
+    type: "Крупнейшая альтернативная исламская традиция внутри державы",
+    intro: "Несмотря на государственную поддержку шиизма, суннитские общины сохраняются в ряде областей, особенно на окраинах.",
+    geography: "Курдские земли, части Талыша, туркменское пограничье, восточные области, Белуджистан и отдельные районы южного побережья.",
+    practice: "Общие исламские обязанности, почитание Корана и Сунны, правовая жизнь по различным мазхабам. Возможна принадлежность к суфийскому братству.",
+    position: "Официальная конфессиональная политика неблагоприятна для суннитских институтов. Практическое положение зависит от региона, местных правителей и военных обстоятельств.",
+    caution: "Суннитское население неоднородно. Нельзя приписывать ему единую политическую лояльность или одинаковое отношение к шаху."
+  },
+  {
+    name: "Ханафитский мазхаб",
+    category: "islam",
+    type: "Суннитская правовая школа",
+    intro: "Одна из основных школ суннитского права, особенно значимая в тюркских и восточноиранских религиозных сетях.",
+    geography: "Части Хорасана и восточного пограничья, тюркские и афганские группы; тесные связи с Центральной Азией и Индией.",
+    practice: "Регулирует богослужение, семейные отношения, торговые сделки и другие вопросы права в рамках суннитской традиции.",
+    position: "Действует преимущественно в суннитских общинах, а не как общеимперская государственная школа.",
+    caution: "Принадлежность к ханафитскому праву не определяет автоматически суфийскую принадлежность или богословскую позицию человека."
+  },
+  {
+    name: "Шафиитский мазхаб",
+    category: "islam",
+    type: "Суннитская правовая школа",
+    intro: "Важная школа суннитского права для ряда курдских и прикаспийских общин, а также некоторых прибрежных связей.",
+    geography: "Прежде всего части Курдистана и Талыша; распределение по отдельным селениям и областям требует местных источников.",
+    practice: "Собственная система правовых норм и методов их выведения при сохранении общих основ суннитского ислама.",
+    position: "Поддерживается местными законоведами и религиозными учреждениями там, где сохраняется суннитская среда.",
+    caution: "Не все курды или талыши исповедуют одну веру и следуют одному мазхабу."
+  },
+  {
+    name: "Исмаилизм: низариты",
+    category: "islam",
+    type: "Шиитская традиция, отличная от двунадесятничества",
+    intro: "Низаритские общины продолжают существовать после гибели средневекового государства Аламута. Важную роль играет восстановление религиозных связей вокруг имамов.",
+    geography: "Анджудан и другие места центрального Ирана, отдельные общины Хорасана и Кухистана; внешние связи простираются дальше границ державы.",
+    practice: "Признание живого имама своей линии, внутреннее толкование откровения и деятельность наставников. В условиях опасности применяется сокрытие принадлежности.",
+    position: "Общины могут внешне приспосабливаться к преобладающей религиозной среде и использовать суфийский язык.",
+    caution: "У низаритов существуют разные линии преемства. Их нельзя представлять единой открыто действующей организацией с одинаковыми обрядами повсюду."
+  },
+  {
+    name: "Кызылбашская религиозность",
+    category: "sufi",
+    type: "Военно-племенная и мистическая среда",
+    intro: "Религиозные представления племенных сторонников Сефевидов складываются вокруг верности духовному наставнику, почитания Али и династической преданности.",
+    geography: "Азербайджан, племенные районы и военная среда державы; важны исторические связи с Анатолией.",
+    practice: "Особое почитание шаха как наставника, символика двенадцати имамов, поэтические и обрядовые традиции. В раннем наследии встречаются представления, которые законоведы осуждают как чрезмерное возвеличивание.",
+    position: "Государство постепенно подчиняет эту среду более нормативному имамитскому порядку.",
+    caution: "Не все кызылбаши сохраняют одинаковые верования. Их нельзя без оговорок отождествлять с современными алевитами или считать отдельной единой церковью."
+  },
+  {
+    name: "Сефевийе",
+    category: "sufi",
+    type: "Династическое суфийское наследие",
+    intro: "Братство, из которого выросла правящая династия. Его история начинается с духовного центра в Ардебиле и проходит через глубокое политическое и религиозное преобразование.",
+    geography: "Ардебиль и сети династической преданности, связанные с шахским двором.",
+    practice: "Почитание шейха Сефи ад-Дина, святыни и духовной преемственности. Старые формы ученичества взаимодействуют с государственным культом династии.",
+    position: "Святыня пользуется особым покровительством, но происхождение государства из суфизма не означает свободы для всех независимых братств.",
+    caution: "Сефевийе эпохи первых шейхов и религиозный аппарат позднейшей державы — не одно и то же."
+  },
+  {
+    name: "Суфизм: общая среда",
+    category: "sufi",
+    type: "Мистические практики внутри ислама",
+    intro: "Суфизм не является отдельной религией. Он включает разные формы духовного наставничества, дисциплины, почитания святых и мистического истолкования веры.",
+    geography: "Города, сельские святыни, дороги паломничества и пограничные области.",
+    practice: "Зикр, духовное ученичество, аскеза, чтение поэзии, посещение гробниц наставников. Пение, музыка и другие обряды допускаются не всеми.",
+    position: "Отношения с двором и улемами колеблются между покровительством, соперничеством и преследованием.",
+    caution: "Не всякий дервиш принадлежит к формальному тарикату, а мистическая философия не равнозначна членству в братстве."
+  },
+  {
+    name: "Захабийя",
+    category: "sufi",
+    type: "Суфийская линия кубравийского происхождения",
+    intro: "Одна из мистических традиций, укоренённых в Иране и связавших своё развитие с шиитской средой.",
+    geography: "Хорасан, Фарс и другие центры, связанные с линиями духовных наставников.",
+    practice: "Наставничество, зикр, духовная дисциплина и передача цепи преемства. Значимы мистическая литература и интерпретация исламского учения.",
+    position: "Существование зависит от местных условий и взаимоотношений с учёными и покровителями.",
+    caution: "Позднейшие организационные формы Захабийи не следует переносить назад без проверки. Границы и названия линий менялись."
+  },
+  {
+    name: "Нурбахшийя",
+    category: "sufi",
+    type: "Суфийское и мессианское наследие",
+    intro: "Традиция, связанная с Мухаммадом Нурбахшем и кубравийской средой. Сочетает мистическую практику с особой историей религиозных притязаний.",
+    geography: "Исторические связи с Ираном и Хорасаном; устойчивые общины также развиваются за пределами державы, в Кашмире и соседних горных землях.",
+    practice: "Духовное наставничество, почитание основателя и собственное обрядово-правовое наследие.",
+    position: "Иранские линии и внешние общины проходят разные пути приспособления к шиитским и суннитским властям.",
+    caution: "Современные нурбахшийские общины нельзя механически считать точной копией всех ранних последователей движения."
+  },
+  {
+    name: "Ниматуллахийя",
+    category: "sufi",
+    type: "Суфийское братство",
+    intro: "Традиция, связанная с шахом Ниматуллахом Вали и его наследием. Иранские корни сочетаются с важнейшим развитием преемственных линий в Индии.",
+    geography: "Память о наставнике и святыня в Махане близ Кермана; существенные центры преемства находятся в Декане.",
+    practice: "Ученичество у наставника, зикр, мистическая поэзия и почитание духовной линии.",
+    position: "Присутствие и влияние в Иране не следует оценивать по гораздо более позднему расцвету братства.",
+    caution: "Позднейшие ветви Ниматуллахийи не перечислены как уже существующая единая сеть."
+  },
+  {
+    name: "Накшбандийя",
+    category: "sufi",
+    type: "Преимущественно суннитское братство",
+    intro: "Суфийская традиция, особенно влиятельная в Центральной Азии и связанных с ней религиозных сетях.",
+    geography: "Хорасанское и восточное пограничье, связи с Центральной Азией и Индией. Внутри шиитского ядра державы возможности ограничены.",
+    practice: "Духовное наставничество, дисциплина и во многих линиях тихий зикр; подчёркивается соблюдение исламских норм.",
+    position: "Суннитский характер и внешние связи могут вызывать подозрение властей.",
+    caution: "Не следует переносить на эту эпоху позднейшее господство отдельных накшбандийских ветвей в Курдистане."
+  },
+  {
+    name: "Кадирийя",
+    category: "sufi",
+    type: "Суфийское братство и сети почитания наставников",
+    intro: "Традиция, восходящая к Абд аль-Кадиру Гилани и особенно связанная с Багдадом и соседними областями.",
+    geography: "Курдско-иракское пограничье и связанные религиозные сети; не все их центры находятся под властью шаха.",
+    practice: "Зикр, наставничество, религиозная благотворительность и почитание основателя.",
+    position: "Местные шейхи могут иметь духовное и общественное влияние независимо от государственных границ.",
+    caution: "Позднейшие влиятельные курдские шейхские дома и их масштаб нельзя автоматически переносить на более раннюю картину."
+  },
+  {
+    name: "Армянская апостольская церковь",
+    category: "christian",
+    type: "Древневосточная христианская церковь",
+    intro: "Одна из главных христианских традиций в державе. Армянские общины включают не только купцов, но также земледельцев, ремесленников и другие слои.",
+    geography: "Новая Джульфа у Исфахана, армянские земли Кавказа, Азербайджан, переселенческие районы центрального Ирана.",
+    practice: "Армянская литургия, таинства, почитание святых, монастырская и приходская жизнь. Церковная традиция относится к нехалкидонским.",
+    position: "Отдельные общины получают привилегии, но это сосуществует с переселениями, налоговыми ограничениями и зависимостью от воли властей.",
+    caution: "Положение влиятельных купцов Новой Джульфы не описывает жизнь всех армян. Упрощённое название «монофизиты» неточно передаёт самоописание церкви."
+  },
+  {
+    name: "Грузинское православие",
+    category: "christian",
+    type: "Халкидонская православная традиция",
+    intro: "Христианская церковная жизнь грузинских земель сохраняется при сложных отношениях местных царей с Сефевидами.",
+    geography: "Картли и Кахети в сфере сефевидского влияния, а также отдельные переселенческие общины внутри Ирана.",
+    practice: "Грузинская литургия, монастыри, церковный календарь, почитание святых и местных святынь.",
+    position: "Правители и военные служащие могут принимать ислам, тогда как значительная часть населения продолжает христианскую жизнь.",
+    caution: "Не все грузины в державе православные: обращённые в ислам и их потомки не составляют часть этой конфессиональной общины."
+  },
+  {
+    name: "Церковь Востока",
+    category: "christian",
+    type: "Восточносирийская христианская традиция",
+    intro: "Древняя церковь сирийского богослужебного наследия с общинами на северо-западных и месопотамских рубежах.",
+    geography: "Урмийская область, Салмас и соседние горные территории. Часть связанных общин находится за пределами шахских владений.",
+    practice: "Восточносирийская литургия, епископские и монастырские традиции, местные церковные школы и общины.",
+    position: "Жизнь зависит от местных властей, племенных отношений и пограничной политики.",
+    caution: "Название «несториане» часто употребляется внешними авторами, но не является нейтральным исчерпывающим описанием. Современные национальные названия тоже требуют осторожности."
+  },
+  {
+    name: "Католические миссии и общины",
+    category: "christian",
+    type: "Католицизм · миссионерское и общинное присутствие",
+    intro: "Католическое присутствие включает европейских духовных лиц, дипломатов, торговцев и местных христиан, связанных с Римом.",
+    geography: "Исфахан, Новая Джульфа, отдельные торговые центры и северо-западные церковные сети.",
+    practice: "Латинское богослужение у европейцев; местные восточные традиции у отдельных общин. Действуют, в частности, августинцы, кармелиты и капуцины.",
+    position: "Разрешение на деятельность связано с дипломатией и шахским покровительством. Миссии не означают массового обращения населения.",
+    caution: "Будущие униатские структуры нельзя считать уже полностью оформленными. Связи восточносирийских и армянских христиан с Римом сложны и неодинаковы."
+  },
+  {
+    name: "Протестантское присутствие",
+    category: "christian",
+    type: "Небольшие иностранные торговые общины",
+    intro: "Протестанты присутствуют главным образом среди сотрудников английских и голландских торговых предприятий, моряков и приезжих.",
+    geography: "Исфахан, Бендер-Аббас и другие места европейской торговой деятельности.",
+    practice: "Реформатская традиция у многих голландцев и английские протестантские формы богослужения у англичан; возможности общинной жизни ограничены.",
+    position: "Прежде всего иностранное, а не массовое местное религиозное явление.",
+    caution: "Нет оснований изображать Персию покрытой сетью местных протестантских церквей или позднейших миссионерских школ."
+  },
+  {
+    name: "Зороастризм",
+    category: "other",
+    type: "Самостоятельная иранская религия",
+    intro: "Древняя иранская традиция продолжает существовать в мусульманской державе в составе меньшинственных общин.",
+    geography: "Особенно Йезд, Керман, Лурестан и окружающие селения; присутствуют и другие небольшие группы.",
+    practice: "Почитание Ахура Мазды, религиозная роль огня как священного символа, представления о чистоте, молитвенные и календарные обряды, служение священнослужителей.",
+    position: "Джизья, социальные ограничения и периоды давления сочетаются с сохранением местных общинных институтов.",
+    caution: "Название «огнепоклонники» искажает вероучение. «Гебры» — внешнее историческое обозначение, нередко пренебрежительное. Позднейшее деление на некоторые календарные группы не следует переносить назад."
+  },
+  {
+    name: "Иудаизм",
+    category: "other",
+    type: "Еврейская религиозная традиция",
+    intro: "Иранские еврейские общины сохраняют многовековую религиозную и культурную жизнь. Основная известная среда принадлежит раввинистической традиции.",
+    geography: "Исфахан, Хамадан, Кашан, Шираз, Йезд и другие города; размеры и устойчивость общин различаются.",
+    practice: "Тора, синагогальная молитва, суббота, пищевые нормы, праздники и общинное образование. Развита еврейско-персидская письменность.",
+    position: "Налоговые и социальные ограничения, зависимость от местных правителей; защита и преследования могут сменять друг друга.",
+    caution: "Нельзя сводить общину к одной профессии. Позднейшие кампании насильственного обращения не описываются как уже произошедшие."
+  },
+  {
+    name: "Мандаизм",
+    category: "other",
+    type: "Самостоятельная религия месопотамского происхождения",
+    intro: "Мандейская традиция обладает собственными священными текстами, духовенством и космологией, связанной с Миром Света.",
+    geography: "Нижняя Месопотамия и водные районы юго-западного Ирана, включая Хузестан. Точные границы местного расселения восстанавливаются неравномерно.",
+    practice: "Повторяемые крещения в проточной воде, ритуалы очищения и поминовения, особая роль священнослужителей. Иоанн Креститель занимает важное место в традиции.",
+    position: "Небольшие общины зависят от доступа к воде и отношения местных властей. Внешние авторы часто ошибочно классифицируют их.",
+    caution: "Мандеи не являются христианской сектой. Историческое европейское название «христиане святого Иоанна» неверно. Термин «сабии» в источниках не всегда однозначен."
+  },
+  {
+    name: "Индийские религиозные практики",
+    category: "other",
+    type: "Вера отдельных приезжих и торговых общин",
+    intro: "Индийские торговые сети приводят в Персию людей разных вероисповеданий, в том числе индуистов. Это не единая местная религия.",
+    geography: "Исфахан, торговые центры востока и южные порты; состав общин меняется.",
+    practice: "Домашние обряды, пищевые ограничения, почитание божеств и общинные традиции, зависящие от происхождения конкретной группы.",
+    position: "Небольшое диаспоральное присутствие, связанное с торговлей и передвижением людей.",
+    caution: "Название «баньяны» в европейских источниках не всегда позволяет точно определить веру. Надёжных оснований перечислять все индуистские школы или отдельную крупную джайнскую общину нет."
+  },
+  {
+    name: "Ахл-е хакк",
+    category: "borderland",
+    type: "Эзотерическая религиозная традиция западного пограничья",
+    intro: "Общины с собственными священными повествованиями, линиями духовного руководства и обрядами. Для связанных традиций употребляются также названия «ярсан» и «какаи».",
+    geography: "Западный Иран, особенно горные районы, связанные с Керманшахом и Гураном; родственные общины по другую сторону границы.",
+    practice: "Сакральные собрания, обрядовая трапеза, духовная музыка и учения о проявлениях священного и переходах души — в различных местных изложениях.",
+    position: "Часть традиции сохраняется внутри общины; внешнее обозначение как «крайних шиитов» не исчерпывает её содержания.",
+    caution: "Учения разных линий не полностью совпадают. Современные общинные границы и самоописания нельзя безоговорочно переносить на прошлое."
+  },
+  {
+    name: "Муша‘ша‘ийя",
+    category: "borderland",
+    type: "Мессианское движение и наследие правящего дома",
+    intro: "Движение юго-западных земель, из которого выросла местная династическая власть. Его раннее религиозное прошлое связано с мессианскими притязаниями.",
+    geography: "Хувейза и соседние районы Хузестана и нижнемесопотамского пограничья.",
+    practice: "В раннем наследии — особое понимание духовной власти и священной личности вождя. Позднее правящий дом сближается с нормативным двунадесятничеством.",
+    position: "Местные правители встроены в отношения зависимости и переговоров с Сефевидами.",
+    caution: "Нельзя автоматически приписывать всем позднейшим жителям Хувейзы ранние радикальные учения движения."
+  },
+  {
+    name: "Нуктавийя",
+    category: "borderland",
+    type: "Преследовавшееся эзотерическое движение",
+    intro: "Течение, связанное с Махмудом Пасихани. Развивает особую символику точки, представления о циклах истории и преобразовании религиозного знания.",
+    geography: "Исторически — отдельные городские и интеллектуальные круги Ирана; часть последователей ищет убежище в Индии.",
+    practice: "Эзотерическое толкование мира и человека, особая космология и исторические ожидания. Известно главным образом по неполным и нередко враждебным свидетельствам.",
+    position: "После тяжёлых преследований открытое существование организованных общин в Иране нельзя предполагать без доказательств.",
+    caution: "Это раздел о наследии и возможных остаточных сетях, а не утверждение о свободно действующей многочисленной конфессии."
+  },
+  {
+    name: "Хуруфизм",
+    category: "borderland",
+    type: "Эзотерическое учение и его наследие",
+    intro: "Учение, связанное с Фазлаллахом Астарабади, придаёт буквам, числам и человеческому облику особое значение в раскрытии божественного смысла.",
+    geography: "Иранские истоки; значительная часть дальнейшего распространения связана с Анатолией и другими внешними областями.",
+    practice: "Символические соответствия букв и устройства мира, эзотерическое толкование откровения и человеческой природы.",
+    position: "Наследие сохраняется в текстах и отдельных мистических кругах, несмотря на осуждение и преследования.",
+    caution: "Не следует изображать наследие хуруфизма как повсеместную открытую церковь. Нуктавийя связана с этой средой, но не тождественна ей."
+  },
+  {
+    name: "Езидизм",
+    category: "borderland",
+    type: "Самостоятельная религия соседних курдских земель",
+    intro: "Традиция с собственным религиозным руководством, священными повествованиями и обрядами; не является разновидностью ислама в обычном конфессиональном смысле.",
+    geography: "Прежде всего Лалеш, Шейхан, Синджар и соседние районы, преимущественно вне сефевидского ядра. Пограничные связи не равны принадлежности территории Персии.",
+    practice: "Вера в Бога и священные ангельские силы, особое место Тавуси Мелека, почитание шейха Ади и паломничество к Лалешу.",
+    position: "Общины сталкиваются с давлением соседних властей и враждебными внешними описаниями.",
+    caution: "Обвинение в «поклонении дьяволу» — враждебное и ошибочное представление. Нельзя без местных источников объявлять езидов многочисленным населением внутреннего Ирана."
+  },
+  {
+    name: "Местные обряды и народная религиозность",
+    category: "borderland",
+    type: "Практики, пересекающие конфессиональные границы",
+    intro: "Повседневная религиозная жизнь не исчерпывается официальными учениями. Люди обращаются к местным святыням, дают обеты, используют защитные тексты и соблюдают сезонные обычаи.",
+    geography: "Города, сёла, горные и племенные районы по всей стране, с большими местными различиями.",
+    practice: "Посещение имамзаде и гробниц святых, обетные трапезы, амулеты, молитвенное лечение, календарные праздники и почитание особых мест.",
+    position: "Одни практики поддерживаются религиозными авторитетами, другие осуждаются как недопустимые или суеверные.",
+    caution: "Новруз, обеты и почитание источника не доказывают существование отдельной «языческой секты». Сходные обряды могут иметь разный смысл в разных общинах."
+  }
+];
+
+function makeElement(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+
+function addSection(parent, title, text) {
+  const section = makeElement("div", "dossier-section");
+  section.appendChild(makeElement("h3", "", title));
+  section.appendChild(makeElement("p", "", text));
+  parent.appendChild(section);
+}
+
+function createDossier(item, index) {
+  const dossier = makeElement("details", "dossier");
+  dossier.dataset.category = item.category;
+
+  const summary = document.createElement("summary");
+  const number = makeElement("span", "dossier-number", String(index + 1).padStart(2, "0"));
+  number.setAttribute("aria-hidden", "true");
+
+  const summaryText = makeElement("span", "summary-text");
+  summaryText.appendChild(makeElement("span", "dossier-title", item.name));
+  summaryText.appendChild(makeElement("span", "dossier-subtitle", item.type));
+
+  const toggle = makeElement("span", "dossier-toggle");
+  toggle.setAttribute("aria-hidden", "true");
+
+  summary.append(number, summaryText, toggle);
+
+  const body = makeElement("div", "dossier-body");
+  body.appendChild(makeElement("p", "dossier-intro", item.intro));
+
+  addSection(body, "Где встречается", item.geography);
+  addSection(body, "Верования и практики", item.practice);
+  addSection(body, "Положение и отношения с властью", item.position);
+  body.appendChild(makeElement("div", "dossier-caution", item.caution));
+
+  dossier.append(summary, body);
+  return dossier;
+}
+
+const list = document.getElementById("dossierList");
+faiths.forEach(function(item, index) {
+  list.appendChild(createDossier(item, index));
+});
+
+const categoryList = document.getElementById("categoryList");
+let activeCategory = "all";
+
+categories.forEach(function(category) {
+  const button = makeElement("button", "category-button", "");
+  button.type = "button";
+  button.dataset.category = category.id;
+  button.style.setProperty("--category-color", category.color);
+  button.classList.toggle("active", category.id === activeCategory);
+  button.setAttribute("aria-pressed", String(category.id === activeCategory));
+
+  const dot = makeElement("span", "category-dot");
+  dot.setAttribute("aria-hidden", "true");
+
+  button.append(dot, document.createTextNode(category.label));
+
+  button.addEventListener("click", function() {
+    activeCategory = category.id;
+    document.querySelectorAll(".category-button").forEach(function(item) {
+      const active = item.dataset.category === activeCategory;
+      item.classList.toggle("active", active);
+      item.setAttribute("aria-pressed", String(active));
+    });
+    clearSearch(false);
+  });
+
+  categoryList.appendChild(button);
+});
+
+const searchInput = document.getElementById("faithSearch");
+const clearButton = document.getElementById("clearSearch");
+const status = document.getElementById("searchStatus");
+const emptyState = document.getElementById("emptyState");
+const dossiers = Array.from(document.querySelectorAll(".dossier"));
+
+function normalize(text) {
+  return text.toLocaleLowerCase("ru").replace(/ё/g, "е").replace(/[‐‑–—-]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+const searchIndex = new Map();
+dossiers.forEach(function(dossier) {
+  searchIndex.set(dossier, normalize(dossier.textContent));
+});
+
+function collapseAll() {
+  dossiers.forEach(function(dossier) { dossier.open = false; });
+}
+
+function applyFilters() {
+  const query = normalize(searchInput.value);
+  const words = query ? query.split(" ") : [];
+  let count = 0;
+
+  clearButton.hidden = searchInput.value.length === 0;
+
+  dossiers.forEach(function(dossier) {
+    const categoryMatches = activeCategory === "all" || dossier.dataset.category === activeCategory;
+    const text = searchIndex.get(dossier);
+    const textMatches = words.every(function(word) { return text.includes(word); });
+    const visible = categoryMatches && textMatches;
+
+    dossier.hidden = !visible;
+    dossier.open = Boolean(query && visible);
+
+    if (visible) count++;
+  });
+
+  emptyState.hidden = count !== 0;
+  status.textContent = query ? "Найдено досье: " + count : "Досье в разделе: " + count;
+}
+
+function clearSearch(focusInput = true) {
+  searchInput.value = "";
+  clearButton.hidden = true;
+  collapseAll();
+  applyFilters();
+  if (focusInput) searchInput.focus();
+}
+
+searchInput.addEventListener("input", applyFilters);
+searchInput.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") clearSearch();
+});
+clearButton.addEventListener("click", function() { clearSearch(); });
+document.getElementById("collapseAll").addEventListener("click", collapseAll);
+
+applyFilters();
+</script>
+
+</body>
+</html>
