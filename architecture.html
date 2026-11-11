@@ -591,14 +591,12 @@
 
   function getRowCharacterName(row, tab) {
     if (!row || row.length === 0) return "Без имени";
+    
+    // Для архивных построек (лист 3): имя персонажа в колонке A (индекс 0) согласно вашей таблице
     if (tab === 'archive') {
-      const col0 = (row[0] || '').trim();
-      const col1 = (row[1] || '').trim();
-      if (col0.match(/\d{2}\.\d{2}\.\d{4}/) && col1) {
-        return col1;
-      }
-      return col0 || "Без имени";
+      return (row[0] || "Без имени").trim();
     }
+    
     return (row[0] || "Без имени").trim();
   }
 
@@ -674,7 +672,13 @@
       } else if (currentTab === 'active') {
         html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Пожертвования</th><th>Взнос</th>`;
       } else {
-        html += `<th>Дата</th><th>Название</th><th>Место</th><th>Статус</th>`;
+        // Заголовки для архивных построек согласно вашей таблице:
+        // Колонка A: Имя персонажа (уже в шапке карточки)
+        // Колонка B: Название постройки
+        // Колонка C: Год открытия
+        // Колонка D: Местонахождение
+        // Колонка E: Состояние / Статус
+        html += `<th>Название</th><th>Год открытия</th><th>Место</th><th>Состояние</th>`;
       }
 
       html += `</tr></thead><tbody>`;
@@ -690,7 +694,17 @@
         } else if (currentTab === 'active') {
           html += `<td>${escapeHtml(r[1] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td><td>${escapeHtml(r[5] || '—')}</td><td>${escapeHtml(r[6] || '—')}</td><td>${escapeHtml(r[7] || '—')}</td>`;
         } else {
-          html += `<td>${escapeHtml(r[0] || '—')}</td><td>${escapeHtml(r[2] || '—')}</td><td>${escapeHtml(r[3] || '—')}</td><td>${escapeHtml(r[4] || '—')}</td>`;
+          // Архивные постройки:
+          // r[0] = Имя персонажа (в шапке)
+          // r[1] = Название постройки (Колонка B)
+          // r[2] = Год открытия (Колонка C)
+          // r[3] = Местонахождение (Колонка D)
+          // r[4] = Состояние (Колонка E)
+          const name = r[1] || '—';
+          const year = r[2] || '—';
+          const loc = r[3] || '—';
+          const status = r[4] || '—';
+          html += `<td>${escapeHtml(name)}</td><td>${escapeHtml(year)}</td><td>${escapeHtml(loc)}</td><td>${escapeHtml(status)}</td>`;
         }
         html += `</tr>`;
       });
@@ -698,6 +712,7 @@
       html += `</tbody></table></div></div></div>`;
     }
 
+    container.htmlContent = html; // just innerHTML
     container.innerHTML = html;
   }
 
