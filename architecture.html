@@ -250,9 +250,17 @@
     font-style: italic;
   }
 
-  /* ПОИСКОВАЯ СТРОКА */
-  .search-box {
+  /* ПАНЕЛЬ УПРАВЛЕНИЯ (ПОИСК + КНОПКА ОБНОВИТЬ) */
+  .controls-bar {
+    display: flex;
+    gap: 15px;
     margin-bottom: 22px;
+    align-items: center;
+  }
+
+  .search-box {
+    flex: 1;
+    margin-bottom: 0;
   }
   .search-input {
     width: 100%;
@@ -269,6 +277,32 @@
   .search-input:focus {
     border-color: var(--gold-light);
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  .refresh-btn {
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 22px;
+    font-size: 12.5px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    white-space: nowrap;
+  }
+
+  .refresh-btn:hover {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    transform: translateY(-1px);
+  }
+
+  .refresh-btn:active {
+    transform: translateY(1px);
   }
 
   /* ВКЛАДКИ ПЕРЕКЛЮЧЕНИЯ (3 КНОПКИ) */
@@ -442,6 +476,12 @@
     .builds-card {
       padding: 20px 14px;
     }
+    .controls-bar {
+      flex-direction: column;
+    }
+    .refresh-btn {
+      width: 100%;
+    }
   }
 
   @media (max-width: 768px) {
@@ -521,9 +561,12 @@
           <p class="builds-subtitle">Имперский учет возводимых зданий, помещений и сооружений</p>
         </header>
 
-        <!-- ПОИСКОВАЯ СТРОКА -->
-        <div class="search-box">
-          <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
+        <!-- ПАНЕЛЬ УПРАВЛЕНИЯ (ПОИСК + КНОПКА ОБНОВИТЬ) -->
+        <div class="controls-bar">
+          <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
+          </div>
+          <button type="button" class="refresh-btn" onclick="fetchBuildsData()">🔄 Обновить</button>
         </div>
 
         <!-- 3 КНОПКИ ПЕРЕКЛЮЧЕНИЯ ВКЛАДОК -->
@@ -591,12 +634,6 @@
 
   function getRowCharacterName(row, tab) {
     if (!row || row.length === 0) return "Без имени";
-    
-    // Для архивных построек (лист 3): имя персонажа в колонке A (индекс 0) согласно вашей таблице
-    if (tab === 'archive') {
-      return (row[0] || "Без имени").trim();
-    }
-    
     return (row[0] || "Без имени").trim();
   }
 
@@ -672,13 +709,8 @@
       } else if (currentTab === 'active') {
         html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Пожертвования</th><th>Взнос</th>`;
       } else {
-        // Заголовки для архивных построек согласно вашей таблице:
-        // Колонка A: Имя персонажа (уже в шапке карточки)
-        // Колонка B: Название постройки
-        // Колонка C: Год открытия
-        // Колонка D: Местонахождение
-        // Колонка E: Состояние / Статус
-        html += `<th>Название</th><th>Год открытия</th><th>Место</th><th>Состояние</th>`;
+        // Архивные постройки: Колонка A (имя), Колонка B (название), Колонка C (год откр.), Колонка D (место), Колонка E (пожертвования)
+        html += `<th>Название</th><th>Год открытия</th><th>Место</th><th>Пожертвования</th>`;
       }
 
       html += `</tr></thead><tbody>`;
@@ -699,12 +731,12 @@
           // r[1] = Название постройки (Колонка B)
           // r[2] = Год открытия (Колонка C)
           // r[3] = Местонахождение (Колонка D)
-          // r[4] = Состояние (Колонка E)
+          // r[4] = Пожертвования (Колонка E)
           const name = r[1] || '—';
           const year = r[2] || '—';
           const loc = r[3] || '—';
-          const status = r[4] || '—';
-          html += `<td>${escapeHtml(name)}</td><td>${escapeHtml(year)}</td><td>${escapeHtml(loc)}</td><td>${escapeHtml(status)}</td>`;
+          const donations = r[4] || '—';
+          html += `<td>${escapeHtml(name)}</td><td>${escapeHtml(year)}</td><td>${escapeHtml(loc)}</td><td>${escapeHtml(donations)}</td>`;
         }
         html += `</tr>`;
       });
@@ -712,7 +744,6 @@
       html += `</tbody></table></div></div></div>`;
     }
 
-    container.htmlContent = html; // just innerHTML
     container.innerHTML = html;
   }
 
