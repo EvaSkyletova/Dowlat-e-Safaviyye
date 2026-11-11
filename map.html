@@ -1,443 +1,493 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Карта Сефевидского Ирана • Dowlat-e Safaviyye</title>
-<style>
-  :root {
-    --gold-dark: #8c6a08;
-    --gold: #d4af37;
-    --gold-light: #fbe8a6;
-    --gold-soft: #c5a059;
-    --text: #f0ebd8;
-    --muted: #a69e88;
-    --line: rgba(212, 175, 55, 0.3);
-    --line-strong: rgba(212, 175, 55, 0.65);
-    --bg: #161618;
-    --panel: rgba(22, 22, 25, 0.96);
-    --panel-soft: rgba(26, 26, 30, 0.9);
-    --panel-dark: rgba(14, 14, 16, 0.95);
-    --success: #88cb8b;
-    --danger: #d98888;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Иконка вкладки -->
+    <link rel="icon" type="image/png" href="leo.png">
 
-  /* Золотая стрелочка для всего сайта */
-  body, *, a, button, input, select, textarea, option, optgroup {
-      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
-  }
+    <title>Карта Сефевидской Империи</title>
+    
+    <style>
+        /* ========================================= */
+        /* ПОДКЛЮЧЕНИЕ ШРИФТА И ПЕРЕМЕННЫХ           */
+        /* ========================================= */
+        @font-face {
+            font-family: 'Yipes';
+            src: url('yipes-regular.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
 
-  *, *::before, *::after {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    font-family: Georgia, "Times New Roman", serif !important;
-    font-style: normal !important;
-  }
+        :root {
+            --gold-dark: #8c6a08;
+            --gold: #d4af37;
+            --gold-light: #fbe8a6;
+            --gold-soft: #c5a059;
+            --text: #f0ebd8;
+            --muted: #a69e88;
+            --line: rgba(212, 175, 55, 0.3);
+            --line-strong: rgba(212, 175, 55, 0.65);
+            --line-soft: rgba(212, 175, 55, 0.14);
+            --bg: #161618;
+            --panel: rgba(22, 22, 26, 0.96);
+            --panel-soft: rgba(26, 26, 32, 0.92);
+            --panel-dark: rgba(14, 14, 17, 0.97);
+        }
 
-  html, body {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    min-height: 100vh;
-    background: var(--bg) !important;
-    color: var(--text);
-    background-image: 
-        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
-        linear-gradient(to bottom, #161618, #0b0b0d);
-    overflow-x: hidden;
-  }
+        /* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ, ВКЛЮЧАЯ КАСТОМНЫЙ СЕin/МЕНЮ */
+        body, *, a, button, input, select, textarea, option, optgroup, details, summary, 
+        .custom-select-box, .custom-select-dropdown, .custom-select-option {
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+        }
 
-  /* Эффект «пуньк» при клике */
-  .click-echo {
-      position: fixed;
-      width: 12px;
-      height: 12px;
-      border: 2px solid var(--gold-light);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: translate(-50%, -50%);
-      animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
-      z-index: 999999;
-  }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: Georgia, "Times New Roman", serif !important;
+            font-style: normal !important;
+        }
 
-  @keyframes echoPulse {
-      0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
-      100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
-  }
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100vh;
+            background: var(--bg) !important;
+            color: var(--text);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+                linear-gradient(to bottom, #161618, #0b0b0d);
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
 
-  /* Фирменный золотой скроллбар */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: var(--gold-dark) transparent;
-  }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+        /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+        .click-echo {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--gold-light);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+            z-index: 999999;
+        }
+        @keyframes echoPulse {
+            0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+            100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+        }
 
-  /* ШАПКА САЙТА (ЕДИНАЯ) */
-  .site-header {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 18px 20px;
-      border-bottom: 2px solid var(--line);
-      background: rgba(18, 18, 20, 0.96);
-      backdrop-filter: blur(12px);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
-  }
+        /* Фирменный золотой скроллбар */
+        * { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-  .site-logo {
-      font-size: 20px;
-      color: var(--gold-light);
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      text-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
-      margin-bottom: 12px;
-      font-weight: bold;
-  }
+        /* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+        .site-header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 20px;
+            border-bottom: 2px solid var(--line);
+            background: rgba(18, 18, 20, 0.96);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+        }
 
-  .site-nav {
-      display: flex;
-      justify-content: center;
-      gap: 22px;
-      flex-wrap: wrap;
-      align-items: center;
-  }
+        .site-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 22px;
+            flex-wrap: wrap;
+        }
 
-  .site-nav a {
-      color: var(--text);
-      text-decoration: none;
-      font-size: 12px;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      transition: all 0.3s ease;
-      padding: 4px 0;
-      position: relative;
-      font-weight: 500;
-  }
+        .nav-logo {
+            height: 50px;
+            width: auto;
+            margin-right: 15px;
+            transition: transform 0.3s ease;
+        }
+        .nav-logo:hover { transform: scale(1.1); }
 
-  .site-nav a::after {
-      content: '';
-      position: absolute;
-      width: 0;
-      height: 1px;
-      bottom: -2px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--gold);
-      transition: width 0.3s ease;
-  }
+        .site-nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            padding: 4px 0;
+            position: relative;
+            font-weight: 500;
+        }
 
-  .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
-  .site-nav a:hover, .site-nav a.active {
-      color: var(--gold-light);
-      text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
-  }
+        .site-nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--gold);
+            transition: width 0.3s ease;
+        }
+        .site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+        .site-nav a:hover, .site-nav a.active {
+            color: var(--gold-light);
+            text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+        }
 
-  /* ВЕРХНЯЯ ПАНЕЛЬ С КНОПКАМИ И СВЕТОВЫМ БЛИКОМ КАК В АНКЕТАХ (БЕЗ ЗАЛИВКИ ЦВЕТОМ) */
-  .bank-subnav-bar {
-      background: linear-gradient(180deg, rgba(20, 20, 24, 0.98) 0%, rgba(14, 14, 16, 0.95) 100%);
-      border-bottom: 1px solid var(--line);
-      padding: 16px 20px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 14px;
-      flex-wrap: wrap;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-      position: relative;
-      z-index: 90;
-  }
+        /* ОСНОВНОЙ КОНТЕЙНЕР (ШИРИНА 1400PX) */
+        .map-container {
+            position: relative;
+            max-width: 1400px;
+            width: 100%;
+            margin: 30px auto;
+            padding: 0 20px;
+            box-sizing: border-box;
+        }
 
-  .bank-top-btn {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 11px 20px;
-      background: var(--panel-dark);
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      color: var(--text);
-      font-size: 11.5px;
-      font-weight: bold;
-      letter-spacing: 1.2px;
-      text-transform: uppercase;
-      text-decoration: none;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-      transition: all 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-  }
+        /* --- НАВИГАЦИОННЫЕ КНОПКИ ПО СТРАНИЦАМ --- */
+        .pages-nav-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
 
-  .bank-top-btn span::before,
-  .bank-top-btn span::after {
-      content: '✦';
-      color: var(--gold);
-      font-size: 9.5px;
-      margin: 0 5px;
-      transition: transform 0.3s ease;
-  }
+        .page-link-btn {
+            background: var(--panel-dark);
+            color: var(--gold-light);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            padding: 9px 16px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
 
-  /* БЕГУЩИЙ СВЕТОВОЙ БЛИК БЕЗ ИЗМЕНЕНИЯ ТЁМНОГО ФОНА */
-  .bank-top-btn::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -150%;
-      width: 150%; height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(251, 232, 166, 0.2), transparent);
-      transition: none;
-  }
+        .page-link-btn:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.15);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transform: translateY(-2px);
+        }
 
-  .bank-top-btn:hover::before {
-      animation: lightSweep 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-  }
+        /* --- ПАНЕЛЬ ФИЛЬТРОВ И ПОИСК --- */
+        .controls-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+        }
 
-  @keyframes lightSweep {
-      0% { left: -150%; }
-      100% { left: 150%; }
-  }
+        .filter-groups {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            flex: 1;
+        }
 
-  .bank-top-btn:hover {
-      border-color: var(--gold);
-      color: var(--gold-light);
-      box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
-      transform: translateY(-2px);
-  }
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
 
-  .bank-top-btn:hover span::before,
-  .bank-top-btn:hover span::after {
-      color: var(--gold-light);
-      transform: scale(1.2);
-  }
+        .filter-label {
+            color: var(--gold-soft);
+            font-size: 11.5px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 85px;
+        }
 
-  /* КОНТЕЙНЕР КАРТЫ */
-  .map-container {
-      position: relative;
-      max-width: 1380px; 
-      width: 100%;
-      margin: 30px auto;
-      padding: 0 15px;
-  }
+        .filter-btn {
+            background: var(--panel-dark);
+            color: var(--muted);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+        }
 
-  /* ПАНЕЛЬ ФИЛЬТРОВ И ПОИСКА */
-  .controls-panel {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-top: 2px solid var(--gold);
-      border-bottom: 2px solid var(--gold);
-      padding: 16px 22px;
-      border-radius: 6px;
-      margin-bottom: 20px;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.7);
-  }
+        .filter-btn:hover, .filter-btn.active {
+            color: #121008;
+            background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+            border-color: var(--gold-light);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+        }
 
-  .filter-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-  }
+        /* КАСТОМНЫЙ ВЫПАДАЮЩИЙ СПИСОК (КАК НА СТРАНИЦЕ АКТИВНОСТИ) */
+        .custom-select-wrap {
+            position: relative;
+            min-width: 240px;
+        }
 
-  .filter-btn {
-      background: var(--panel-dark);
-      color: var(--muted);
-      border: 1px solid var(--line);
-      border-radius: 4px;
-      padding: 8px 14px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-  }
+        .custom-select-box {
+            width: 100%;
+            padding: 7px 12px;
+            background: var(--panel-dark);
+            color: var(--text);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+            transition: all 0.3s;
+        }
 
-  .filter-btn:hover, .filter-btn.active {
-      color: #121008;
-      background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
-      border-color: var(--gold-light);
-      box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-  }
+        .custom-select-box:hover {
+            border-color: var(--gold-light);
+        }
 
-  .search-box {
-      display: flex;
-      align-items: center;
-      flex: 1;
-      min-width: 240px;
-      max-width: 340px;
-  }
+        .custom-select-dropdown {
+            display: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 4px);
+            background: #121215;
+            border: 1px solid var(--gold);
+            border-radius: 4px;
+            z-index: 999;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.95);
+            max-height: 220px;
+            overflow-y: auto;
+        }
 
-  .search-input {
-      width: 100%;
-      background: var(--panel-dark);
-      border: 1px solid var(--line);
-      color: var(--text);
-      padding: 10px 16px;
-      border-radius: 4px;
-      font-size: 13.5px;
-      outline: none;
-      transition: border-color 0.2s;
-  }
+        .custom-select-wrap.open .custom-select-dropdown {
+            display: block;
+        }
 
-  .search-input:focus {
-      border-color: var(--gold-light);
-      box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-  }
+        .custom-select-option {
+            padding: 9px 12px;
+            font-size: 13px;
+            color: var(--text);
+            transition: background 0.2s;
+        }
 
-  /* ОБЁРТКА КАРТЫ И МЕТКИ */
-  .map-wrapper {
-      position: relative;
-      width: 100%;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 6px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.9);
-      overflow: hidden;
-      padding: 10px;
-  }
+        .custom-select-option:hover {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--gold-light);
+        }
 
-  .map-image {
-      width: 100%;
-      height: auto;
-      display: block;
-      border-radius: 4px;
-  }
+        .search-box {
+            display: flex;
+            align-items: center;
+            min-width: 260px;
+        }
 
-  .pin-wrapper {
-      position: absolute;
-      transform: translate(-50%, -50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      z-index: 10;
-      transition: transform 0.2s, opacity 0.3s ease;
-  }
+        .search-input {
+            width: 100%;
+            background: var(--panel-dark);
+            border: 1px solid var(--line);
+            color: var(--text);
+            padding: 10px 14px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            outline: none;
+            transition: all 0.2s;
+        }
 
-  .pin-wrapper:hover {
-      transform: translate(-50%, -50%) scale(1.2);
-      z-index: 20;
-  }
+        .search-input::placeholder { color: var(--muted); font-style: italic; }
 
-  .pin {
-      width: clamp(6px, 1.1vw, 13px);
-      height: clamp(6px, 1.1vw, 13px);
-      background-color: var(--gold);
-      border: 1px solid #121008;
-      border-radius: 50%;
-      box-shadow: 0 0 0 rgba(212, 175, 55, 0.6);
-      animation: pulse 2s infinite;
-  }
+        .search-input:focus {
+            border-color: var(--gold-light);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+        }
 
-  .pin-wrapper:hover .pin {
-      background-color: var(--gold-light);
-  }
+        /* --- КАРТА И МЕТКИ --- */
+        .map-wrapper {
+            position: relative;
+            width: 100%;
+            background: var(--panel-dark);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+        }
 
-  .pin-label {
-      margin-top: 4px;
-      font-size: clamp(8px, 0.85vw, 12px);
-      font-weight: bold;
-      color: var(--text);
-      white-space: nowrap;
-      text-shadow: 
-          -1px -1px 0 #000,  
-           1px -1px 0 #000,
-          -1px  1px 0 #000,
-           1px  1px 0 #000,
-           0px  2px 6px rgba(0,0,0,0.9);
-      transition: color 0.2s;
-  }
+        .map-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+        }
 
-  .pin-wrapper:hover .pin-label {
-      color: var(--gold-light);
-  }
+        .pin-wrapper {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10;
+            transition: transform 0.2s, opacity 0.3s ease;
+        }
 
-  @keyframes pulse {
-      0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
-      70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
-  }
+        .pin-wrapper:hover {
+            transform: translate(-50%, -50%) scale(1.15);
+            z-index: 20;
+        }
 
-  /* МОДАЛЬНОЕ ОКНО */
-  .modal-overlay {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
-      z-index: 1000;
-      backdrop-filter: blur(6px);
-  }
+        .pin {
+            width: clamp(6px, 1.1vw, 13px);
+            height: clamp(6px, 1.1vw, 13px);
+            background-color: var(--gold);
+            border: 1px solid var(--gold-dark);
+            border-radius: 50%;
+            box-shadow: 0 0 0 rgba(212, 175, 55, 0.4);
+            animation: pulse 2s infinite;
+        }
 
-  .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-  }
+        .pin-wrapper:hover .pin {
+            background-color: var(--gold-light);
+            border-color: var(--gold);
+        }
 
-  .modal-content {
-      background: linear-gradient(145deg, rgba(24, 24, 28, 0.98), rgba(14, 14, 16, 0.99));
-      padding: 35px;
-      border-radius: 6px;
-      max-width: 520px;
-      width: 90%;
-      position: relative;
-      transform: translateY(20px);
-      transition: all 0.3s ease;
-      border: 1px solid var(--line);
-      border-top: 3px solid var(--gold);
-      box-shadow: 0 25px 60px rgba(0,0,0,0.95);
-  }
+        .pin-label {
+            margin-top: 4px;
+            font-size: clamp(8px, 0.85vw, 12px);
+            font-weight: bold;
+            color: var(--text);
+            white-space: nowrap;
+            text-shadow: 
+                -1px -1px 0 #000,  
+                 1px -1px 0 #000,
+                -1px  1px 0 #000,
+                 1px  1px 0 #000,
+                 0px  2px 4px rgba(0,0,0,0.9);
+            transition: color 0.2s;
+        }
 
-  .modal-overlay.active .modal-content {
-      transform: translateY(0);
-  }
+        .pin-wrapper:hover .pin-label {
+            color: var(--gold-light);
+        }
 
-  .close-btn {
-      position: absolute;
-      top: 15px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: var(--gold-soft);
-      font-size: 26px;
-      cursor: pointer;
-      transition: color 0.2s;
-  }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(212, 175, 55, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 175, 55, 0); }
+        }
 
-  .close-btn:hover { color: var(--gold-light); }
-  .modal-title { color: var(--gold-light); margin: 0 0 6px 0; font-size: 22px; text-transform: uppercase; letter-spacing: 1px; font-weight: normal; }
-  .modal-subtitle { color: var(--gold-soft); font-size: 13px; margin-bottom: 18px; font-style: italic; border-bottom: 1px solid var(--line); padding-bottom: 10px; }
-  .modal-text { line-height: 1.7; color: var(--text); font-size: 14px; text-align: justify; }
+        @media (max-width: 768px) {
+            .controls-panel { flex-direction: column; align-items: stretch; }
+            .search-box { width: 100%; max-width: 100%; }
+            .filter-row { flex-direction: column; align-items: flex-start; }
+            .filter-label { min-width: auto; margin-bottom: 4px; }
+            .custom-select-wrap { width: 100%; }
+        }
 
-  @media (max-width: 768px) {
-      .pin-wrapper:hover { transform: translate(-50%, -50%) scale(1.05); }
-      .controls-panel { flex-direction: column; align-items: stretch; }
-      .search-box { max-width: 100%; }
-      .bank-subnav-bar { gap: 8px; padding: 12px 10px; }
-      .bank-top-btn { font-size: 11px; padding: 8px 12px; }
-  }
-</style>
+        /* --- МОДАЛЬНОЕ ОКНО --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            backdrop-filter: blur(6px);
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(145deg, rgba(22, 22, 25, 0.98), rgba(14, 14, 16, 0.99));
+            padding: 35px 30px;
+            border-radius: 12px;
+            max-width: 520px;
+            width: 90%;
+            position: relative;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            border: 1px solid var(--line);
+            border-top: 3px solid var(--gold);
+            border-bottom: 3px solid var(--gold);
+            box-shadow: 0 25px 60px rgba(0,0,0,0.9);
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close-btn:hover { color: var(--gold-light); }
+        .modal-title { color: var(--gold-light); margin: 0 0 6px 0; font-size: 24px; text-transform: uppercase; font-family: 'Yipes', Georgia, serif !important; }
+        .modal-subtitle { color: var(--gold-soft); font-size: 13.5px; margin-bottom: 20px; font-style: italic; border-bottom: 1px solid var(--line); padding-bottom: 10px; letter-spacing: 0.5px; }
+        .modal-text { line-height: 1.6; color: var(--text); font-size: 14.5px; }
+    </style>
 </head>
 
 <body>
 
-    <!-- ШАПКА САЙТА (ЕДИНАЯ) -->
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ ШАПКА САЙТА -->
     <header class="site-header">
-        <div class="site-logo">Dowlаt-e Safaviyye</div>
         <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
             <a href="index.html">Главная</a>
             <a href="activity.html">Активность</a>
             <a href="ankets.html">Анкеты</a>
@@ -452,171 +502,204 @@
         </nav>
     </header>
 
-    <!-- ВЕРХНЯЯ ПАНЕЛЬ С КНОПКАМИ И СВЕТОВЫМ БЛИКОМ -->
-    <div class="bank-subnav-bar">
-        <a href="ostany.html" class="bank-top-btn"><span>Особенности останов</span></a>
-        <a href="ali-kapu.html" class="bank-top-btn"><span>Устройство Али-Капу</span></a>
-        <a href="isfahan.html" class="bank-top-btn"><span>Улицы Исфахана</span></a>
-        <a href="calculator-puti.html" class="bank-top-btn"><span>Калькулятор пути</span></a>
-        <a href="naksh-e-jahan.html" class="bank-top-btn"><span>Площадь Накш-э Джахан</span></a>
-    </div>
-
     <div class="map-container">
 
-        <!-- ПАНЕЛЬ КНОПОК ФИЛЬТРОВ И ПОИСК -->
+        <!-- КНОПКИ ПЕРЕХОДА НА СТРАНИЦЫ (БЕЗ ЗВЕЗДОЧЕК) -->
+        <div class="pages-nav-panel">
+            <a href="ostans.html" class="page-link-btn">Особенности останов</a>
+            <a href="alikapu.html" class="page-link-btn">Али-капу</a>
+            <a href="isfahan.html" class="page-link-btn">Исфахан</a>
+            <a href="square.html" class="page-link-btn">Накш-э Джахан</a>
+            <a href="road.html" class="page-link-btn">Калькулятор пути</a>
+        </div>
+
+        <!-- ПАНЕЛЬ ФИЛЬТРОВ И ПОИСК -->
         <div class="controls-panel">
-            <div class="filter-buttons">
-                <button class="filter-btn active" onclick="filterCategory('all', this)">Все</button>
-                <button class="filter-btn" onclick="filterCategory('Север', this)">Север</button>
-                <button class="filter-btn" onclick="filterCategory('Запад', this)">Запад</button>
-                <button class="filter-btn" onclick="filterCategory('Центр', this)">Центр</button>
-                <button class="filter-btn" onclick="filterCategory('Восток', this)">Восток</button>
-                <button class="filter-btn" onclick="filterCategory('Юг', this)">Юг</button>
-                <button class="filter-btn" onclick="filterCategory('Аравия', this)">Аравия</button>
-                <button class="filter-btn" onclick="filterCategory('Водоемы', this)">Водоемы</button>
+            <div class="filter-groups">
+                <!-- Фильтр по регионам -->
+                <div class="filter-row">
+                    <span class="filter-label">Регионы:</span>
+                    <button class="filter-btn active" onclick="filterByRegion('all', this)">Все</button>
+                    <button class="filter-btn" onclick="filterByRegion('Север', this)">Север</button>
+                    <button class="filter-btn" onclick="filterByRegion('Запад', this)">Запад</button>
+                    <button class="filter-btn" onclick="filterByRegion('Центр', this)">Центр</button>
+                    <button class="filter-btn" onclick="filterByRegion('Восток', this)">Восток</button>
+                    <button class="filter-btn" onclick="filterByRegion('Юг', this)">Юг</button>
+                    <button class="filter-btn" onclick="filterByRegion('Аравия', this)">Аравия</button>
+                    <button class="filter-btn" onclick="filterByRegion('Водоемы', this)">Водоемы</button>
+                </div>
+
+                <!-- КАСТОМНЫЙ ВЫПАДАЮЩИЙ СПИСОК ПЛЕМЕН -->
+                <div class="filter-row">
+                    <span class="filter-label">Племя:</span>
+                    <div class="custom-select-wrap" id="tribeSelectWrap">
+                        <div class="custom-select-box" onclick="toggleCustomSelect('tribeSelectWrap')">
+                            <span id="tribeSelectVal" data-value="all">Все племена (и регионы)</span>
+                            <span style="font-size:10px; color:var(--gold);">▼</span>
+                        </div>
+                        <div class="custom-select-dropdown">
+                            <div class="custom-select-option" onclick="selectTribeOption('all', 'Все племена (и регионы)')">Все племена (и регионы)</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Сефеви', 'Сефеви')">Сефеви</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Устаджлы', 'Устаджлы')">Устаджлы</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Шамлу', 'Шамлу')">Шамлу</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Афшар', 'Афшар')">Афшар</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Румлу', 'Румлу')">Румлу</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Баят', 'Баят')">Баят</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Каджар', 'Каджар')">Каджар</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Карадаглы', 'Карадаглы')">Карадаглы</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Асирлу', 'Асирлу')">Асирлу</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Бахтиар', 'Бахтиар')">Бахтиар</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Туркоман', 'Туркоман')">Туркоман</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Бахарлу', 'Бахарлу')">Бахарлу</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Караманлу', 'Караманлу')">Караманлу</div>
+                            <div class="custom-select-option" onclick="selectTribeOption('Текели', 'Текели')">Текели</div>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <div class="search-box">
-                <input type="text" id="searchInput" class="search-input" placeholder="Поиск (например: Багдад, Исфахан)..." oninput="applyFilters()">
+                <input type="text" id="searchInput" class="search-input" placeholder="Поиск по карте..." oninput="applyFilters()">
             </div>
         </div>
 
         <div class="map-wrapper">
-            <img src="https://i.ibb.co/YFYP4ZWq/ostany-1.png" alt="Карта Сефевидского Ирана" class="map-image">
+            <img src="ostany.png" alt="Карта Ирана" class="map-image">
 
             <!-- МОРЯ И ЗАЛИВЫ -->
-            <div class="pin-wrapper" data-category="Водоемы" style="top: 14%; left: 42%;" onclick="openModal('mazenderanskoe')">
+            <div class="pin-wrapper" data-region="Водоемы" data-tribe="Водоемы" style="top: 14%; left: 42%;" onclick="openModal('mazenderanskoe')">
                 <div class="pin"></div><div class="pin-label">Мазендеранское море</div>
             </div>
-            <div class="pin-wrapper" data-category="Водоемы" style="top: 57%; left: 34%;" onclick="openModal('persidskiy')">
+            <div class="pin-wrapper" data-region="Водоемы" data-tribe="Водоемы" style="top: 57%; left: 34%;" onclick="openModal('persidskiy')">
                 <div class="pin"></div><div class="pin-label">Персидский залив</div>
             </div>
-            <div class="pin-wrapper" data-category="Водоемы" style="top: 85%; left: 65%;" onclick="openModal('arabskoe')">
+            <div class="pin-wrapper" data-region="Водоемы" data-tribe="Водоемы" style="top: 85%; left: 65%;" onclick="openModal('arabskoe')">
                 <div class="pin"></div><div class="pin-label">Аравийское море</div>
             </div>
-            <div class="pin-wrapper" data-category="Водоемы" style="top: 71%; left: 53%;" onclick="openModal('ormuzskiy')">
+            <div class="pin-wrapper" data-region="Водоемы" data-tribe="Водоемы" style="top: 71%; left: 53%;" onclick="openModal('ormuzskiy')">
                 <div class="pin"></div><div class="pin-label">Ормузский пролив</div>
             </div>
 
             <!-- СЕВЕР И СЕВЕРО-ЗАПАД -->
-            <div class="pin-wrapper" data-category="Север" style="top: 11%; left: 29%;" onclick="openModal('ardebil')">
+            <div class="pin-wrapper" data-region="Север" data-tribe="Сефеви" style="top: 11%; left: 29%;" onclick="openModal('ardebil')">
                 <div class="pin"></div><div class="pin-label">Ардебиль</div>
             </div>
-            <div class="pin-wrapper" data-category="Север" style="top: 15%; left: 24.5%;" onclick="openModal('azerbaijan')">
+            <div class="pin-wrapper" data-region="Север" data-tribe="Сефеви" style="top: 15%; left: 24.5%;" onclick="openModal('azerbaijan')">
                 <div class="pin"></div><div class="pin-label">Азербайджан</div>
             </div>
-            <div class="pin-wrapper" data-category="Север" style="top: 20%; left: 32%;" onclick="openModal('zanjan')">
+            <div class="pin-wrapper" data-region="Север" data-tribe="Карадаглы" style="top: 20%; left: 32%;" onclick="openModal('zanjan')">
                 <div class="pin"></div><div class="pin-label">Зенджан</div>
             </div>
-            <div class="pin-wrapper" data-category="Центр" style="top: 23.5%; left: 36%;" onclick="openModal('qazvin')">
+            <div class="pin-wrapper" data-region="Центр" data-tribe="Сефеви" style="top: 23.5%; left: 36%;" onclick="openModal('qazvin')">
                 <div class="pin"></div><div class="pin-label">Казвин</div>
             </div>
-            <div class="pin-wrapper" data-category="Север" style="top: 18%; left: 35.5%;" onclick="openModal('gilan')">
+            <div class="pin-wrapper" data-region="Север" data-tribe="Баят" style="top: 18%; left: 35.5%;" onclick="openModal('gilan')">
                 <div class="pin"></div><div class="pin-label">Гилян</div>
             </div>
-            <div class="pin-wrapper" data-category="Север" style="top: 24%; left: 42%;" onclick="openModal('mazandaran')">
+            <div class="pin-wrapper" data-region="Север" data-tribe="Устаджлы" style="top: 24%; left: 42%;" onclick="openModal('mazandaran')">
                 <div class="pin"></div><div class="pin-label">Мазендеран</div>
             </div>
-            <div class="pin-wrapper" data-category="Север" style="top: 18%; left: 49.5%;" onclick="openModal('golestan')">
+            <div class="pin-wrapper" data-region="Север" data-tribe="Афшар" style="top: 18%; left: 49.5%;" onclick="openModal('golestan')">
                 <div class="pin"></div><div class="pin-label">Голестан</div>
             </div>
 
             <!-- ЗАПАД -->
-            <div class="pin-wrapper" data-category="Запад" style="top: 19.5%; left: 17.5%;" onclick="openModal('kurdistan')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Шамлу" style="top: 19.5%; left: 17.5%;" onclick="openModal('kurdistan')">
                 <div class="pin"></div><div class="pin-label">Курдистан</div>
             </div>
-            <div class="pin-wrapper" data-category="Запад" style="top: 24%; left: 18%;" onclick="openModal('bitlis')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Шамлу" style="top: 24%; left: 18%;" onclick="openModal('bitlis')">
                 <div class="pin"></div><div class="pin-label">Битлис</div>
             </div>
-            <div class="pin-wrapper" data-category="Запад" style="top: 28%; left: 26%;" onclick="openModal('kermanshah')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Румлу" style="top: 28%; left: 26%;" onclick="openModal('kermanshah')">
                 <div class="pin"></div><div class="pin-label">Керманшах</div>
             </div>
-            <div class="pin-wrapper" data-category="Запад" style="top: 28%; left: 31%;" onclick="openModal('hamadan')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Каджар" style="top: 28%; left: 31%;" onclick="openModal('hamadan')">
                 <div class="pin"></div><div class="pin-label">Хамадан</div>
             </div>
-            <div class="pin-wrapper" data-category="Запад" style="top: 38%; left: 27%;" onclick="openModal('ilam')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Асирлу" style="top: 38%; left: 27%;" onclick="openModal('ilam')">
                 <div class="pin"></div><div class="pin-label">Илам</div>
             </div>
-            <div class="pin-wrapper" data-category="Запад" style="top: 36%; left: 32%;" onclick="openModal('lorestan')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Бахтиар" style="top: 36%; left: 32%;" onclick="openModal('lorestan')">
                 <div class="pin"></div><div class="pin-label">Лурестан</div>
             </div>
-            <div class="pin-wrapper" data-category="Запад" style="top: 42%; left: 22.5%;" onclick="openModal('baghdad')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Румлу" style="top: 42%; left: 22.5%;" onclick="openModal('baghdad')">
                 <div class="pin"></div><div class="pin-label">Багдад</div>
             </div>
-            <div class="pin-wrapper" data-category="Запад" style="top: 47%; left: 35%;" onclick="openModal('khuzestan')">
+            <div class="pin-wrapper" data-region="Запад" data-tribe="Устаджлы" style="top: 47%; left: 35%;" onclick="openModal('khuzestan')">
                 <div class="pin"></div><div class="pin-label">Хузестан</div>
             </div>
 
             <!-- ЦЕНТР -->
-            <div class="pin-wrapper" data-category="Центр" style="top: 30%; left: 40%;" onclick="openModal('qom')">
+            <div class="pin-wrapper" data-region="Центр" data-tribe="Сефеви" style="top: 30%; left: 40%;" onclick="openModal('qom')">
                 <div class="pin"></div><div class="pin-label">Кум</div>
             </div>
-            <div class="pin-wrapper" data-category="Центр" style="top: 26.5%; left: 49%;" onclick="openModal('semnan')">
+            <div class="pin-wrapper" data-region="Центр" data-tribe="Туркоман" style="top: 26.5%; left: 49%;" onclick="openModal('semnan')">
                 <div class="pin"></div><div class="pin-label">Семнан</div>
             </div>
-            <div class="pin-wrapper" data-category="Центр" style="top: 38.5%; left: 43%;" onclick="openModal('isfahan')">
+            <div class="pin-wrapper" data-region="Центр" data-tribe="Сефеви" style="top: 38.5%; left: 43%;" onclick="openModal('isfahan')">
                 <div class="pin"></div><div class="pin-label">Исфахан</div>
             </div>
-            <div class="pin-wrapper" data-category="Центр" style="top: 43.5%; left: 49%;" onclick="openModal('yazd')">
+            <div class="pin-wrapper" data-region="Центр" data-tribe="Бахарлу" style="top: 43.5%; left: 49%;" onclick="openModal('yazd')">
                 <div class="pin"></div><div class="pin-label">Йезд</div>
             </div>
 
             <!-- ЮГ -->
-            <div class="pin-wrapper" data-category="Юг" style="top: 57.5%; left: 45%;" onclick="openModal('fars')">
+            <div class="pin-wrapper" data-region="Юг" data-tribe="Шамлу" style="top: 57.5%; left: 45%;" onclick="openModal('fars')">
                 <div class="pin"></div><div class="pin-label">Фарс</div>
             </div>
-            <div class="pin-wrapper" data-category="Юг" style="top: 60.5%; left: 40%;" onclick="openModal('bushehr')">
+            <div class="pin-wrapper" data-region="Юг" data-tribe="Сефеви" style="top: 60.5%; left: 40%;" onclick="openModal('bushehr')">
                 <div class="pin"></div><div class="pin-label">Бушир</div>
             </div>
-            <div class="pin-wrapper" data-category="Юг" style="top: 54.5%; left: 56.5%;" onclick="openModal('kerman')">
+            <div class="pin-wrapper" data-region="Юг" data-tribe="Шамлу" style="top: 54.5%; left: 56.5%;" onclick="openModal('kerman')">
                 <div class="pin"></div><div class="pin-label">Керман</div>
             </div>
-            <div class="pin-wrapper" data-category="Юг" style="top: 66%; left: 53.5%;" onclick="openModal('hormozgan')">
+            <div class="pin-wrapper" data-region="Юг" data-tribe="Сефеви" style="top: 66%; left: 53.5%;" onclick="openModal('hormozgan')">
                 <div class="pin"></div><div class="pin-label">Хормозган</div>
             </div>
 
             <!-- ВОСТОК -->
-            <div class="pin-wrapper" data-category="Восток" style="top: 23.5%; left: 60%;" onclick="openModal('north_khorasan')">
+            <div class="pin-wrapper" data-region="Восток" data-tribe="Афшар" style="top: 23.5%; left: 60%;" onclick="openModal('north_khorasan')">
                 <div class="pin"></div><div class="pin-label">Северный Хорасан</div>
             </div>
-            <div class="pin-wrapper" data-category="Восток" style="top: 39.5%; left: 60%;" onclick="openModal('south_khorasan')">
+            <div class="pin-wrapper" data-region="Восток" data-tribe="Караманлу" style="top: 39.5%; left: 60%;" onclick="openModal('south_khorasan')">
                 <div class="pin"></div><div class="pin-label">Южный Хорасан</div>
             </div>
-            <div class="pin-wrapper" data-category="Восток" style="top: 67%; left: 66%;" onclick="openModal('sistan')">
+            <div class="pin-wrapper" data-region="Восток" data-tribe="Текели" style="top: 67%; left: 66%;" onclick="openModal('sistan')">
                 <div class="pin"></div><div class="pin-label">Систан и Белуджистан</div>
             </div>
-            <div class="pin-wrapper" data-category="Восток" style="top: 38%; left: 70%;" onclick="openModal('herat')">
+            <div class="pin-wrapper" data-region="Восток" data-tribe="Сефеви" style="top: 38%; left: 70%;" onclick="openModal('herat')">
                 <div class="pin"></div><div class="pin-label">Герат</div>
             </div>
-            <div class="pin-wrapper" data-category="Восток" style="top: 53%; left: 74%;" onclick="openModal('kandahar')">
+            <div class="pin-wrapper" data-region="Восток" data-tribe="Сефеви" style="top: 53%; left: 74%;" onclick="openModal('kandahar')">
                 <div class="pin"></div><div class="pin-label">Кандагар</div>
             </div>
 
             <!-- АРАВИЙСКИЙ ПОЛУОСТРОВ -->
-            <div class="pin-wrapper" data-category="Аравия" style="top: 65%; left: 32%;" onclick="openModal('al_hasa')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 65%; left: 32%;" onclick="openModal('al_hasa')">
                 <div class="pin"></div><div class="pin-label">Эль-Хаса</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 73%; left: 28%;" onclick="openModal('hail')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 73%; left: 28%;" onclick="openModal('hail')">
                 <div class="pin"></div><div class="pin-label">Хаиль</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 79%; left: 33%;" onclick="openModal('najd')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 79%; left: 33%;" onclick="openModal('najd')">
                 <div class="pin"></div><div class="pin-label">Неджд</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 89%; left: 34%;" onclick="openModal('yemen')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 89%; left: 34%;" onclick="openModal('yemen')">
                 <div class="pin"></div><div class="pin-label">Йемен</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 71%; left: 38%;" onclick="openModal('dilmun')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 71%; left: 38%;" onclick="openModal('dilmun')">
                 <div class="pin"></div><div class="pin-label">Дильмун</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 74%; left: 35.5%;" onclick="openModal('dammam')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 74%; left: 35.5%;" onclick="openModal('dammam')">
                 <div class="pin"></div><div class="pin-label">Дамман</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 75%; left: 39%;" onclick="openModal('qatar')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 75%; left: 39%;" onclick="openModal('qatar')">
                 <div class="pin"></div><div class="pin-label">Катар</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 80.5%; left: 39%;" onclick="openModal('qatif')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 80.5%; left: 39%;" onclick="openModal('qatif')">
                 <div class="pin"></div><div class="pin-label">Эль-Катиф</div>
             </div>
-            <div class="pin-wrapper" data-category="Аравия" style="top: 84%; left: 41%;" onclick="openModal('al_qobara')">
+            <div class="pin-wrapper" data-region="Аравия" data-tribe="Сефеви" style="top: 84%; left: 41%;" onclick="openModal('al_qobara')">
                 <div class="pin"></div><div class="pin-label">Эль-Кобара</div>
             </div>
         </div>
@@ -633,23 +716,13 @@
     </div>
 
     <script>
-        // Эффект «пуньк» при клике
-        window.addEventListener('click', (e) => {
-            const echo = document.createElement('div');
-            echo.className = 'click-echo';
-            echo.style.left = `${e.clientX}px`;
-            echo.style.top = `${e.clientY}px`;
-            document.body.appendChild(echo);
-            setTimeout(() => { echo.remove(); }, 550);
-        });
-
         const mapData = {
             "mazenderanskoe": { title: "Мазендеранское море", subtitle: "Самый большой закрытый водоём планеты", text: "Граница между Персией, Дагестаном и землями кочевников. Рыболовство, икра и стратегические торговые пути северной Персии." },
             "persidskiy": { title: "Персидский залив", subtitle: "Залив великих империй", text: "Казна Сефевидов пополнялась за счёт таможенных сборов с караванов и морских кораблей. Контроль за этим заливом был объектом войны с португальцами и арабскими племенами." },
             "arabskoe": { title: "Аравийское море", subtitle: "Морской маршрут Индии", text: "Морские пути связывали Персию, Индию и Африку. Караваны пряностей, шёлка и благовоний проходили этим морем." },
             "ormuzskiy": { title: "Ормузский пролив", subtitle: "Перекрёсток морских цивилизаций", text: "Пролив на северо-западе Индийского океана, который соединяет Персидский и Оманский заливы в Аравийское море." },
 
-            "ardebil": { title: "Ардебиль", subtitle: "Духовный центр империи", text: "Родина шейха Сефи ад-Дина. Именно отсюда началась история ордена Сефевийе и всей династии." },
+            "ardebil": { title: "Ардебиль", subtitle: "Духовный центр империи (Племя: Сефеви)", text: "Родина шейха Сефи ад-Дина. Именно отсюда началась история ордена Сефевийе и всей династии." },
             "azerbaijan": { title: "Азербайджан", subtitle: "Остан Сефевидов", text: "Важнейший регион, колыбель династии Сефевидов. Главный поставщик войск для шахской армии." },
             "zanjan": { title: "Зенджан", subtitle: "Остан племени Карадаглы", text: "Земли, контролируемые тюркским кызылбашским племенем Карадаглы." },
             "qazvin": { title: "Казвин", subtitle: "Остан Сефевидов", text: "Вторая столица Сефевидского государства (до переноса в Исфахан). Важный торговый узел." },
@@ -680,21 +753,21 @@
             "sistan": { title: "Систан и Белуджистан", subtitle: "Остан племени Текели", text: "Самый суровый юго-восточный край империи, охраняемый кызылбашским племенем Текели." },
 
             "bitlis": { title: "Битлис", subtitle: "Пограничный эмират", text: "Стратегически важный западный рубеж. Арена постоянных стычек и дипломатических интриг между Сефевидами и Османами." },
-            "herat": { title: "Герат", subtitle: "Жемчужина Хорасана", text: "Один из крупнейших культурных и экономических центров восточной части империи, славящийся своими миниатюрами и поэтами." },
-            "kandahar": { title: "Кандагар", subtitle: "Восточный форпост", text: "Ключевая крепость на пути в Индию. За этот город Сефевиды регулярно вели войны с империей Великих Моголов." },
-            "al_hasa": { title: "Эль-Хаса", subtitle: "Оазис Аравии", text: "Богатый сельскохозяйственный оазис и торговый узел на востоке Аравийского полуострова." },
-            "hail": { title: "Хаиль", subtitle: "Пустынный край", text: "Территория в сердце Аравийской пустыни, контролируемая местными бедуинскими племенами." },
-            "najd": { title: "Неджд", subtitle: "Центральная Аравия", text: "Суровые центральные плато Аравийского полуострова, родина многих кочевых племен." },
-            "yemen": { title: "Йемен", subtitle: "Южный рубеж", text: "Плодородные южные земли полуострова, контролирующие торговые пути через Красное море." },
-            "dilmun": { title: "Дильмун", subtitle: "Остров жемчуга", text: "Древний центр торговли и добычи жемчуга в Персидском заливе (современный Бахрейн)." },
-            "dammam": { title: "Дамман", subtitle: "Прибрежный порт", text: "Важный портовый порт, обеспечивающий контроль над морскими путями залива." },
-            "qatar": { title: "Катар", subtitle: "Жемчужный берег", text: "Полуостров, славящийся своими ловцами жемчуга и морской торговлей." },
-            "qatif": { title: "Эль-Катиф", subtitle: "Торговый оазис", text: "Древнейшее поселение и важнейший порт Восточной Аравии, окруженный пальмовыми рощами." },
-            "al_qobara": { title: "Эль-Кобара", subtitle: "Южные пески", text: "Торговое поселение на пересечении караванных путей у побережья залива." }
+            "herat": { title: "Герат", subtitle: "Остан Сефевидов", text: "Один из крупнейших культурных и экономических центров восточной части империи, находящийся под прямым управлением Сефевидов." },
+            "kandahar": { title: "Кандагар", subtitle: "Остан Сефевидов", text: "Ключевая крепость на пути в Индию под управлением династии Сефевидов." },
+            "al_hasa": { title: "Эль-Хаса", subtitle: "Остан Сефевидов", text: "Богатый сельскохозяйственный оазис и торговый узел под властью Сефевидов." },
+            "hail": { title: "Хаиль", subtitle: "Остан Сефевидов", text: "Территория в сердце Аравийской пустыни под контролем Сефевидов." },
+            "najd": { title: "Неджд", subtitle: "Остан Сефевидов", text: "Центральные плато Аравийского полуострова под управлением Сефевидов." },
+            "yemen": { title: "Йемен", subtitle: "Остан Сефевидов", text: "Плодородные южные земли под властью Сефевидов." },
+            "dilmun": { title: "Дильмун", subtitle: "Остан Сефевидов", text: "Древний центр торговли жемчугом под контролем Сефевидов." },
+            "dammam": { title: "Дамман", subtitle: "Остан Сефевидов", text: "Важный портовый город под управлением Сефевидов." },
+            "qatar": { title: "Катар", subtitle: "Остан Сефевидов", text: "Полуостров, подконтрольный Сефевидам." },
+            "qatif": { title: "Эль-Катиф", subtitle: "Остан Сефевидов", text: "Торговый оазис Восточной Аравии под властью Сефевидов." },
+            "al_qobara": { title: "Эль-Кобара", subtitle: "Остан Сефевидов", text: "Торговое поселение под управлением Сефевидов." }
         };
 
         const modal = document.getElementById('infoModal');
-        let currentCategory = 'all';
+        let currentRegion = 'all';
 
         function openModal(regionId) {
             const data = mapData[regionId];
@@ -711,25 +784,51 @@
             modal.classList.remove('active');
         }
 
-        function filterCategory(category, btnElement) {
-            currentCategory = category;
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            if (btnElement) btnElement.classList.add('active');
+        function filterByRegion(region, btnElement) {
+            currentRegion = region;
+            const row = btnElement.parentElement;
+            row.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
             applyFilters();
         }
 
+        // Логика кастомного выпадающего списка племен
+        function toggleCustomSelect(wrapId) {
+            const wrap = document.getElementById(wrapId);
+            const isOpen = wrap.classList.contains('open');
+            document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
+            if (!isOpen) wrap.classList.add('open');
+        }
+
+        function selectTribeOption(value, text) {
+            const valEl = document.getElementById('tribeSelectVal');
+            valEl.textContent = text;
+            valEl.setAttribute('data-value', value);
+            document.getElementById('tribeSelectWrap').classList.remove('open');
+            applyFilters();
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.custom-select-wrap')) {
+                document.querySelectorAll('.custom-select-wrap').forEach(w => w.classList.remove('open'));
+            }
+        });
+
         function applyFilters() {
+            const selectedTribe = document.getElementById('tribeSelectVal').getAttribute('data-value') || 'all';
             const searchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
             const pins = document.querySelectorAll('.pin-wrapper');
 
             pins.forEach(pin => {
-                const category = pin.getAttribute('data-category');
+                const region = pin.getAttribute('data-region');
+                const tribe = pin.getAttribute('data-tribe');
                 const label = pin.querySelector('.pin-label').textContent.toLowerCase();
 
-                const matchesCategory = (currentCategory === 'all' || category === currentCategory);
+                const matchesRegion = (currentRegion === 'all' || region === currentRegion);
+                const matchesTribe = (selectedTribe === 'all' || tribe === selectedTribe);
                 const matchesSearch = (searchQuery === '' || label.includes(searchQuery));
 
-                if (matchesCategory && matchesSearch) {
+                if (matchesRegion && matchesTribe && matchesSearch) {
                     pin.style.display = 'flex';
                 } else {
                     pin.style.display = 'none';
