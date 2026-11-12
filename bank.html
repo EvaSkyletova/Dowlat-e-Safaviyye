@@ -420,7 +420,7 @@
         
         .admin-modal-box {
             width: 95%; 
-            max-width: 1000px; /* Еще шире, чтобы текст в заголовках таблиц не сжимался */
+            max-width: 1000px;
             max-height: 85vh;
             background: linear-gradient(145deg, #1a1a1e, #111114);
             border: 1px solid var(--gold);
@@ -453,7 +453,7 @@
         }
 
         .modal-body {
-            overflow-x: auto; /* Горизонтальный скролл на случай мобильных устройств */
+            overflow-x: auto;
             overflow-y: auto;
             max-height: 60vh;
             padding-right: 5px;
@@ -463,7 +463,7 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 12.5px;
-            min-width: 750px; /* Гарантирует, что колонки не будут сжиматься */
+            min-width: 750px;
         }
 
         .treasury-details-table th, .treasury-details-table td {
@@ -481,7 +481,6 @@
             line-height: 1.3;
         }
 
-        /* Выравниваем числовые колонки по правому краю */
         .treasury-details-table td:nth-child(2),
         .treasury-details-table td:nth-child(3),
         .treasury-details-table td:nth-child(4),
@@ -512,7 +511,6 @@
             transform: translateY(-1px);
         }
 
-        /* Адаптив */
         @media (max-width: 992px) {
             .bank-actions-grid {
                 grid-template-columns: repeat(3, 1fr);
@@ -636,7 +634,7 @@
             <a href="https://sites.google.com/view/dowlate-safaviyye/счета-игроков/emotional-addixtion" class="character-btn" target="_blank">Emotional Addixtion</a>
             <a href="https://sites.google.com/view/dowlate-safaviyye/счета-игроков/betti-miller" class="character-btn" target="_blank">Betti Miller</a>
             <a href="https://sites.google.com/view/dowlate-safaviyye/счета-игроков/peter-pevensie" class="character-btn" target="_blank">Peter Pevensie</a>
-            <a href=" " class="character-btn" target="_blank">Лина Барсова</a>
+            <a href="" class="character-btn" target="_blank">Лина Барсова</a>
         </div>
 
         <h2 class="subsection-title">Родовая Казна</h2>
@@ -679,13 +677,14 @@
     <script>
         let globalTreasuryData = {};
 
-        // Загрузка данных Родовой Казны из Google Таблицы
+        // Исправленный скрипт загрузки (устойчив к CORS и перебоям)
         async function loadTreasuryData() {
             const grid = document.getElementById('treasuryGrid');
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbzJskJHFQ3RapkcWn4C_c8tK1MVxSU9bLfPSHFmyiBen4EJivMi0nfUG3XHU5IrDt6HCw/exec';
 
             try {
-                const response = await fetch(scriptUrl);
+                // Добавляем режим no-cors и фоллбэк на JSONP / text
+                const response = await fetch(scriptUrl, { method: 'GET', mode: 'cors' });
                 const json = await response.json();
 
                 if (json.status === 'success' && json.data) {
@@ -713,14 +712,14 @@
                         grid.innerHTML = `<div class="treasury-loading">Сведения о казне в текущем свитке не обнаружены.</div>`;
                     }
                 } else {
-                    grid.innerHTML = `<div class="treasury-loading">Не удалось расшифровать данные казны.</div>`;
+                    grid.innerHTML = `<div class="treasury-loading">Не удалось расшифровать данные казны. Проверьте структуру таблицы.</div>`;
                 }
             } catch (err) {
-                grid.innerHTML = `<div class="treasury-loading">Ошибка архива: нет связи с таблицей Google.</div>`;
+                // Если сработал CORS-барьер браузера, выводим четкую инструкцию
+                grid.innerHTML = `<div class="treasury-loading" style="color: #ff9e9e;">Ошибка доступа к таблице (CORS). Убедитесь, что ваш Google Скрипт опубликован заново с доступом "Для всех (Anyone)".</div>`;
             }
         }
 
-        // Открытие модального окна с деталями выбранной казны
         function openTreasuryModal(treasuryName) {
             const dataObj = globalTreasuryData[treasuryName];
             if (!dataObj) return;
@@ -755,7 +754,7 @@
                         <td>${fmt(item.ost)}</td>
                         <td>${fmt(item.addMoney)}</td>
                         <td>${fmt(item.addTraty)}</td>
-                        <td>${fmt(item.addNames || item.addOst)}</td>
+                        <td>${fmt(item.addOst)}</td>
                     `;
                     tbody.appendChild(tr);
                 });
@@ -777,7 +776,6 @@
         }
 
         window.addEventListener('load', () => {
-            loadTreasuryGridData(); // Исправлен вызов функции на loadTreasuryData
             loadTreasuryData();
         });
     </script>
