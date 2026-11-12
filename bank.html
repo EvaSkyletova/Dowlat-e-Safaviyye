@@ -406,7 +406,7 @@
             font-size: 14px;
         }
 
-        /* МОДАЛЬНОЕ ОКНО ДЛЯ ДЕТАЛЕЙ КАЗНЫ */
+        /* УВЕЛИЧЕННОЕ И РАСШИРЕННОЕ МОДАЛЬНОЕ ОКНО ДЛЯ ДЕТАЛЕЙ КАЗНЫ */
         .admin-modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -419,7 +419,9 @@
         .admin-modal-overlay.active { opacity: 1; pointer-events: auto; }
         
         .admin-modal-box {
-            width: 90%; max-width: 600px; max-height: 85vh;
+            width: 95%; 
+            max-width: 900px; /* Сделали шире для дополнительных колонок */
+            max-height: 85vh;
             background: linear-gradient(145deg, #1a1a1e, #111114);
             border: 1px solid var(--gold);
             border-top: 3px solid var(--gold-light); border-bottom: 3px solid var(--gold-light);
@@ -452,18 +454,18 @@
 
         .modal-body {
             overflow-y: auto;
-            max-height: 55vh;
+            max-height: 60vh;
             padding-right: 5px;
         }
 
         .treasury-details-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 13px;
+            font-size: 12.5px;
         }
 
         .treasury-details-table th, .treasury-details-table td {
-            padding: 8px 10px;
+            padding: 9px 8px;
             border-bottom: 1px solid var(--line-strong);
             text-align: left;
         }
@@ -471,13 +473,16 @@
         .treasury-details-table th {
             color: var(--gold-soft);
             text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 1px;
+            font-size: 10.5px;
+            letter-spacing: 0.8px;
         }
 
         .treasury-details-table td:nth-child(2),
         .treasury-details-table td:nth-child(3),
-        .treasury-details-table td:nth-child(4) {
+        .treasury-details-table td:nth-child(4),
+        .treasury-details-table td:nth-child(5),
+        .treasury-details-table td:nth-child(6),
+        .treasury-details-table td:nth-child(7) {
             text-align: right;
         }
 
@@ -645,6 +650,9 @@
                             <th>Размер казны</th>
                             <th>Траты</th>
                             <th>Ост.</th>
+                            <th>Доп. деньги (разовые)</th>
+                            <th>Траты раз. денег</th>
+                            <th>Ост. раз. денег</th>
                         </tr>
                     </thead>
                     <tbody id="modalTableBody">
@@ -723,17 +731,24 @@
                     let sizeStr = (item.size !== "" && !isNaN(item.size)) ? Number(item.size).toLocaleString('ru-RU') : item.size;
                     let tratyStr = (item.traty !== "" && !isNaN(item.traty)) ? Number(item.traty).toLocaleString('ru-RU') : item.traty;
                     let ostStr = (item.ost !== "" && !isNaN(item.ost)) ? Number(item.ost).toLocaleString('ru-RU') : item.ost;
+                    
+                    let addMoneyStr = (item.addMoney !== "" && !isNaN(item.addMoney)) ? Number(item.addMoney).toLocaleString('ru-RU') : item.addMoney;
+                    let addTratyStr = (item.addTraty !== "" && !isNaN(item.addTraty)) ? Number(item.addTraty).toLocaleString('ru-RU') : item.addTraty;
+                    let addOstStr = (item.addOst !== "" && !isNaN(item.addOst)) ? Number(item.addOst).toLocaleString('ru-RU') : item.addOst;
 
                     tr.innerHTML = `
                         <td>${item.name}</td>
                         <td>${sizeStr}</td>
                         <td>${tratyStr}</td>
                         <td>${ostStr}</td>
+                        <td>${addMoneyStr}</td>
+                        <td>${addTratyStr}</td>
+                        <td>${addOstStr}</td>
                     `;
-                    tbody.appendChild(tr);
+                    tbody.tbody ? tbody.appendChild(tr) : tbody.appendChild(tr);
                 });
             } else {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; color:var(--muted);">Детализированных записей не найдено.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:var(--muted);">Детализированных записей не найдено.</td></tr>`;
             }
 
             document.getElementById('treasuryModal').classList.add('active');
