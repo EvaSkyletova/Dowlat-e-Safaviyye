@@ -163,7 +163,7 @@
     padding: 35px 24px 80px;
   }
 
-  /* ВЕЛИЧЕСТВЕННЫЙ ТИТУЛЬНЫЙ БАННЕР С КНОПКАМИ (ТОЧНО КАК В РЕПУТАЦИИ) */
+  /* ВЕЛИЧЕСТВЕННЫЙ ТИТУЛЬНЫЙ БАННЕР С КНОПКАМИ */
   .imperial-crest-banner {
     position: relative;
     text-align: center;
@@ -183,15 +183,6 @@
     justify-content: center;
     gap: 20px;
   }
-
-  /* Лев сбоку в заголовке */
-  .banner-icon {
-    height: 90px;
-    width: auto;
-    filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.4));
-    transition: transform 0.3s ease;
-  }
-  .banner-icon:hover { transform: scale(1.05); }
 
   .banner-text-container {
     text-align: center;
@@ -216,7 +207,7 @@
     line-height: 1.7;
   }
 
-  /* КНОПКИ ДЕЙСТВИЙ (КАК В РЕПУТАЦИИ) */
+  /* КНОПКИ ДЕЙСТВИЙ */
   .bank-actions-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -269,7 +260,6 @@
       transform: translateY(-2px);
   }
 
-  /* Активное состояние для кнопок палат */
   .bank-action-btn.active {
       color: var(--gold-light);
       border-color: var(--gold-light);
@@ -332,7 +322,6 @@
     line-height: 1.55;
   }
 
-  /* Вкладки внутренние (как в репутации) */
   .tabs-header { 
       display: flex; 
       gap: 10px; 
@@ -463,7 +452,6 @@
     line-height: 1.3;
   }
 
-  /* Правый свиток чтения */
   .reader-frame {
     padding: 34px 40px;
     background: var(--panel);
@@ -836,7 +824,6 @@
         padding: 25px 15px; 
         gap: 15px;
     }
-    .banner-icon { height: 70px; }
     .imperial-title { font-size: 24px; letter-spacing: 2px; }
     
     .reader-frame { padding: 22px 16px; }
@@ -889,7 +876,7 @@
 
     <div class="imperial-container">
 
-        <!-- ВЕЛИЧЕСТВЕННЫЙ БАННЕР С ЛЬВОМ -->
+        <!-- ВЕЛИЧЕСТВЕННЫЙ БАННЕР -->
         <header class="imperial-crest-banner">
             <div class="banner-text-container">
                 <h1 class="imperial-title">Устройство Персии</h1>
@@ -899,7 +886,7 @@
             </div>
         </header>
 
-        <!-- КНОПКИ НАВИГАЦИИ ПО ПАЛАТАМ (КАК В РЕПУТАЦИИ) -->
+        <!-- КНОПКИ НАВИГАЦИИ ПО ПАЛАТАМ -->
         <div class="bank-actions-grid" style="margin-bottom: 40px;">
             <button type="button" class="bank-action-btn active" onclick="openChamber('power', this)">
                 Палата I · Основы Власти
@@ -925,7 +912,6 @@
             </div>
 
             <div class="power-controls-row">
-                <!-- Вкладки -->
                 <div class="tabs-header" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0; flex: 2;">
                     <button class="tab-btn active" type="button" id="tabCentral" onclick="switchStateCategory('central')">Верховная Власть</button>
                     <button class="tab-btn" type="button" id="tabElites" onclick="switchStateCategory('elites')">Элиты и Гарем</button>
@@ -953,7 +939,6 @@
                     <h2>Иерархия Титулов</h2>
                     <p class="chamber-desc">Священная лестница достоинств Сефевидской империи: от венценосного трона Шахиншаха и величия Валиде до почтенных господ и дев благородных домов</p>
                 </div>
-                <!-- Кнопки фильтрации УДАЛЕНЫ, чтобы сразу показывать обе ветви -->
             </div>
 
             <div class="hierarchy-columns-grid" id="hierarchyGrid">
@@ -1075,21 +1060,26 @@
                     <h2>Великий Меджлис</h2>
                     <p class="chamber-desc">Высший Государственный Совет и Столпы Державы Сефевидов: верховное военное командование, хранители монеты и казны, сакральное правосудие и вера</p>
                 </div>
-                <!-- Кнопки фильтрации УДАЛЕНЫ, чтобы сразу показывать все столпы -->
             </div>
 
             <!-- ВЕРХОВНЫЕ ГЛАВЫ СОВЕТА -->
             <div class="leaders-grid" aria-label="Главы Государственного Совета">
                 <article class="leader-card">
                     <span class="leader-badge">Самодержец и Повелитель</span>
-                    <h3 class="leader-name">Шах-ан-Шах</h3>
-                    <div class="leader-desc">Царь царей, абсолютный владыка</div>
+                    <h3 class="leader-name">Шах-ан-шах</h3>
+                    <div class="leader-desc">Царь царей, абсолютный владыка и самодержавец</div>
+                    <div style="margin-top: 12px; font-size: 16px; color: var(--gold-light); font-weight: bold; letter-spacing: 1px;">
+                        ✦ Нариман Сефеви ✦
+                    </div>
                 </article>
 
                 <article class="leader-card">
                     <span class="leader-badge">Второе лицо и Регент</span>
                     <h3 class="leader-name">Великий Векил</h3>
                     <div class="leader-desc">Второе лицо государства, регент. Обладает властью от имени Шах-ан-Шаха.</div>
+                    <div style="margin-top: 12px; font-size: 16px; color: var(--gold-light); font-weight: bold; letter-spacing: 1px;">
+                        ✦ Аббас Баят ✦
+                    </div>
                 </article>
             </div>
 
@@ -1097,19 +1087,7 @@
 
             <!-- ТРИ ВЕТВИ ВЛАСТИ -->
             <div class="wings-grid" id="wingsGrid">
-                <!-- 1. ВОЕННОЕ КОМАНДОВАНИЕ -->
-                <div class="wing-column wing-military">
-                <!-- 0. ВЕЛИКИЙ ВЕКИЛ -->
-                <div class="wing-column wing-grand-vizier" style="grid-column: 1 / -1; margin-bottom: 10px;">
-                    <article class="council-card" style="border-left: 4px solid var(--gold-light); background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(14, 14, 17, 0.97)); text-align: center;">
-                        <h4 class="role-name" style="font-size: 20px; color: var(--gold-light);">Великий Векил</h4>
-                        <div class="role-desc" style="font-size: 14px; margin-top: 4px;">Общий руководитель государственного аппарата и шахской политики.</div>
-                        <div style="margin-top: 10px; font-size: 15px; color: var(--gold-light); font-weight: bold; letter-spacing: 1px;">
-                            Аббас Баят 
-                        </div>
-                    </article>
-                </div>
-
+                
                 <!-- 1. ВОЕННОЕ КОМАНДОВАНИЕ -->
                 <div class="wing-column wing-military">
                     <div class="wing-header">Военное Командование</div>
@@ -1119,7 +1097,7 @@
                         <h4 class="role-name">Эмир аль-Умара</h4>
                         <div class="role-desc">«Эмир над эмирами». Верховный главнокомандующий войсками кызылбашей.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Дашдемир Румлу
+                            ✦ Дашдемир Румлу
                         </div>
                     </article>
 
@@ -1128,7 +1106,7 @@
                         <h4 class="role-name">Курчи-баши</h4>
                         <div class="role-desc">Командир элитной шахской гвардии и тяжелой кавалерии.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--muted); font-style: italic;">
-                            Вакантно (—)
+                            ✦ Вакантно (—)
                         </div>
                     </article>
 
@@ -1137,7 +1115,7 @@
                         <h4 class="role-name">Куллар-агаси</h4>
                         <div class="role-desc">Командующий корпусом гулямов (личной регулярной кавалерии Шаха).</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Сиявуш-ага
+                            ✦ Сиявуш-ага
                         </div>
                     </article>
 
@@ -1146,14 +1124,17 @@
                         <h4 class="role-name">Топчи-баши</h4>
                         <div class="role-desc">Главнокомандующий артиллерией и литейными дворами.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Саади Чехарленг
+                            ✦ Саади Чехарленг
                         </div>
                     </article>
                   
                     <article class="council-card">
                         <span class="card-dept">Стрелки-мушкетеры</span>
                         <h4 class="role-name">Тофангчи-баши</h4>
-                        <div class="role-desc">Главнокомандующий корпусом мушкетеров.</div>
+                        <div class="role-desc">Главнокомандующий корпусом мушкетеров.
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            ✦ Шамиля-ага
+                        </div>
                     </article>
                 </div>
 
@@ -1166,7 +1147,7 @@
                         <h4 class="role-name">Мустоуфи аль-Мамалик</h4>
                         <div class="role-desc">Главный казначей. Контролирует сбор налогов (малиата) со всех провинций.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Хакан Джабери
+                            ✦ Хакан Джабери
                         </div>
                     </article>
 
@@ -1175,7 +1156,7 @@
                         <h4 class="role-name">Муаййер аль-мамалик</h4>
                         <div class="role-desc">Глава монетного двора. Контролирует чеканку монет и пробу драгоценных металлов.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Бахадур Устаджлы
+                            ✦ Бахадур Устаджлы
                         </div>
                     </article>
 
@@ -1184,7 +1165,7 @@
                         <h4 class="role-name">Ишикагаси-баши</h4>
                         <div class="role-desc">Главный церемониймейстер и начальник дворцовой стражи. Владыка врат.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Хайдар Эв-оглы
+                            ✦ Хайдар Эв-оглы
                         </div>
                     </article>
 
@@ -1193,7 +1174,7 @@
                         <h4 class="role-name">Вакаенавис</h4>
                         <div class="role-desc">Главный летописец и официальный протоколист Совета.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Салман Джабери
+                            ✦ Салман Джабери
                         </div>
                     </article>
                 </div>
@@ -1207,7 +1188,7 @@
                         <h4 class="role-name">Садр аль-Мамалик</h4>
                         <div class="role-desc">Глава духовной власти Империи. Следит за идеологической чистотой государства.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Дауд Иса Радави
+                            ✦ Дауд Иса Радави
                         </div>
                     </article>
                   
@@ -1216,7 +1197,7 @@
                         <h4 class="role-name">Эмир и-Диванбеги</h4>
                         <div class="role-desc">Верховный судья Империи. Разбирает уголовные дела по всему государству и контролирует провинциальные суды. Только он судит высокопоставленных чиновников.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Ростам аль-Исфахани
+                            ✦ Ростам аль-Исфахани
                         </div>
                     </article>
 
@@ -1225,7 +1206,7 @@
                         <h4 class="role-name">Кади-аскар</h4>
                         <div class="role-desc">Верховный военный судья. Разбирает споры среди военных офицеров.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Кара Шемседдин Ширази
+                            ✦ Кара Шемседдин Ширази
                         </div>
                     </article>
 
@@ -1234,7 +1215,7 @@
                         <h4 class="role-name">Шейх-уль-Ислам</h4>
                         <div class="role-desc">Высший богослов. Выносит фетвы и толкует законы шариата.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Идрис Сефи Шейхаванд
+                            ✦ Идрис Сефи Шейхаванд
                         </div>
                     </article>
 
@@ -1243,7 +1224,7 @@
                         <h4 class="role-name">Кади аль-Кузат</h4>
                         <div class="role-desc">Верховный гражданский судья. Назначает судей в провинции и разбирает жалобы.</div>
                         <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
-                            Мухаммад Бакир Сабзевари
+                            ✦ Мухаммад Бакир Сабзевари
                         </div>
                     </article>
                 </div>
@@ -1253,7 +1234,6 @@
     </div>
 
 <script>
-  // Переключение между тремя главными Палатами
   function openChamber(chamberId, btnEl) {
     document.querySelectorAll('.bank-action-btn').forEach(b => b.classList.remove('active'));
     btnEl.classList.add('active');
@@ -1262,7 +1242,6 @@
     document.getElementById('chamber-' + chamberId).classList.add('active');
   }
 
-  // Полная база «Основ власти»
   const stateDatabase = {
     central: [
       {
@@ -1273,7 +1252,7 @@
         rank: "Абсолютный самодержец империи",
         origin: "Династия Сефевидов",
         text: `
-          <p>Власть Шах-ан-шах абсолютна, священна и непререкаема. В его фигуре неразрывно сплетены три великих начала:</p>
+          <p>Власть Шах-ан-шаха абсолютна, священна и непререкаема. В его фигуре неразрывно сплетены три великих начала:</p>
           <ul>
             <li><b>Шах-ан-шах</b> — традиционный венценосный монарх Ирана, «Тень Аллаха на Земле» (<i>Зелл-оллах</i>), обладатель божественной царской благодати (фарра).</li>
             <li><b>Муршид-и Камиль</b> — совершенный верховный наставник суфийского ордена Сефевийе. Для воинственных кызылбашских племён шах является сакральным предводителем, которому они обязаны безусловным духовным повиновением.</li>
@@ -1612,7 +1591,6 @@
     renderStateNav(matched);
   }
 
-  // Инициализация
   renderStateNav(stateDatabase.central);
 </script>
 
