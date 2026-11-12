@@ -155,7 +155,7 @@
       text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
   }
 
-  /* ОБЕРТКА СТРАНИЦЫ (КАК В ЗАЯВКЕ НА СТРОИТЕЛЬСТВО — 1250PX) */
+  /* ОБЕРТКА СТРАНИЦЫ */
   .page-wrapper {
     width: 100%;
     max-width: 1250px;
@@ -164,7 +164,7 @@
     box-sizing: border-box;
   }
 
-  /* КНОПКА НАЗАД (В СТИЛЕ ЗАЯВКИ НА СТРОИТЕЛЬСТВО) */
+  /* КНОПКА НАЗАД */
   .top-action-bar {
     margin-bottom: 20px;
   }
@@ -195,7 +195,7 @@
     transform: translateX(-3px);
   }
 
-  /* ОСНОВНОЙ КОНТЕЙНЕР ФОРМЫ (ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ) */
+  /* ОСНОВНОЙ КОНТЕЙНЕР ФОРМЫ */
   .form-card {
     width: 100%;
     background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
@@ -715,10 +715,10 @@
         </nav>
     </header>
 
-    <!-- ОБЕРТКА СТРАНИЦЫ (ШИРИНА 1250PX КАК В СТРОИТЕЛЬСТВЕ) -->
+    <!-- ОБЕРТКА СТРАНИЦЫ -->
     <div class="page-wrapper">
       
-      <!-- Кнопка возврата в стиле заявки на строительство -->
+      <!-- Кнопка возврата -->
       <div class="top-action-bar">
         <a href="reputation.html" class="back-btn">← Вернуться назад</a>
       </div>
@@ -976,7 +976,7 @@
         { name: "Сайе", url: "https://vk.ru/album-182656984_290815382" },
         { name: "Джавидан", url: "https://vk.ru/album-182656984_289428836" },
         { name: "Асиль-Муна", url: "https://vk.ru/album-182656984_304508015" },
-        { name: "Нуширеван", url: "https://vk.ru/album-182656984_309809967" },
+        { name: "Белгюзар", url: "https://vk.ru/album-182656984_309809967" },
         { name: "Эфсун", url: "https://vk.ru/album-182656984_305933755" }
       ]
     },
@@ -1007,7 +1007,13 @@
         { name: "Арья Боранай", url: "https://vk.ru/album-182656984_307486714" },
         { name: "Мадиян", url: "https://vk.ru/album-182656984_309091709" }
       ]
-    }
+    },
+    {
+      group: "Прочие поданные",
+      items: [
+        { name: "Нушине", url: "https://vk.ru/album-182656984_310816229" }
+      ]
+    },
   ];
 
   // 3. База подарков, товаров и лошадей с ценами
@@ -1827,10 +1833,14 @@ C('b37',"Военная крепость","V уровень, нужна земл
     let pointsByCharCatForSheet = [];
     let breakdownHtmlArr = [];
 
+    // ЦИКЛ 1: Генерируем баллы ОДИН раз и сохраняем их в объект charCategorySums
     Object.keys(charCategorySums).forEach(key => {
       const item = charCategorySums[key];
       const roundedShare = Math.round(item.sum);
       const pts = calculatePointsForSum(item.sum);
+      
+      item.points = pts; // <--- СОХРАНЯЕМ РЕЗУЛЬТАТ БРОСКА
+      
       const signedPts = pts > 0 ? `${sign}${pts}` : "0";
 
       pointsByCharCatForSheet.push(`${item.target} (${item.category}): ${signedPts} б. [доля: ${roundedShare.toLocaleString("ru-RU")} абб.]`);
@@ -1869,10 +1879,13 @@ C('b37',"Военная крепость","V уровень, нужна земл
 
     let rowsForSheet = [];
 
+    // ЦИКЛ 2: Берем уже сгенерированные баллы для таблицы
     Object.keys(charCategorySums).forEach(key => {
       const item = charCategorySums[key];
       const roundedShare = Math.round(item.sum);
-      const pts = calculatePointsForSum(item.sum);
+      
+      const pts = item.points; // <--- БЕРЕМ СОХРАНЕННЫЙ РЕЗУЛЬТАТ, А НЕ БРОСАЕМ КУБИК ЗАНОВО
+      
       const signedPts = pts > 0 ? `${sign}${pts}` : "0";
       const foundAlbum = findAlbumByName(item.target);
       const albumUrl = foundAlbum ? foundAlbum.url : "Не найден";
