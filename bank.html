@@ -109,7 +109,6 @@
             flex-wrap: wrap;
         }
 
-        /* ЛОГОТИП В МЕНЮ (БЕЗ СВЕЧЕНИЯ) */
         .nav-logo {
             height: 50px;
             width: auto;
@@ -214,10 +213,8 @@
             letter-spacing: 0.5px;
         }
 
-        /* КОМПАКТНЫЕ КНОПКИ С ЭФФЕКТОМ РАЗДВИГАЮЩЕЙСЯ ПОЛОСКИ ИЗ ЦЕНТРА */
         .bank-actions-grid {
             display: grid;
-            /* На компьютере все 6 кнопок в один ряд */
             grid-template-columns: repeat(6, 1fr); 
             gap: 12px;
             margin-bottom: 35px;
@@ -269,7 +266,7 @@
             transform: translateY(-2px);
         }
 
-        /* РАЗДЕЛИТЕЛЬ ДЛЯ СЧЕТОВ */
+        /* РАЗДЕЛИТЕЛИ */
         .subsection-title {
             text-align: center;
             color: var(--gold-light);
@@ -283,7 +280,7 @@
             font-weight: normal;
         }
 
-        /* СЕТКА СЧЕТОВ ИГРОКОВ (СТИЛЬ АНКЕТ) */
+        /* СЕТКА СЧЕТОВ ИГРОКОВ */
         .characters-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -334,6 +331,56 @@
             left: 130%;
         }
 
+        /* СЕТКА РОДОВОЙ КАЗНЫ */
+        .treasury-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .treasury-card {
+            background: var(--panel-soft);
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--gold);
+            border-radius: 6px;
+            padding: 16px 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .treasury-card:hover {
+            border-color: var(--gold-light);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .treasury-name {
+            font-size: 13.5px;
+            color: var(--gold-soft);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+        }
+
+        .treasury-amount {
+            font-size: 20px;
+            color: var(--gold-light);
+            font-family: 'Yipes', Georgia, serif !important;
+            letter-spacing: 1px;
+        }
+
+        .treasury-loading {
+            grid-column: 1 / -1;
+            text-align: center;
+            color: var(--muted);
+            font-style: italic;
+            padding: 20px;
+            font-size: 14px;
+        }
+
         /* МОДАЛЬНОЕ ОКНО */
         .admin-modal-overlay {
             position: fixed;
@@ -379,7 +426,6 @@
 
         /* Адаптив */
         @media (max-width: 992px) {
-            /* На планшетах по 3 в ряд */
             .bank-actions-grid {
                 grid-template-columns: repeat(3, 1fr);
             }
@@ -393,7 +439,7 @@
             .section-title {
                 font-size: 22px;
             }
-            .characters-grid {
+            .characters-grid, .treasury-grid {
                 grid-template-columns: repeat(2, 1fr);
                 gap: 10px;
             }
@@ -404,53 +450,27 @@
         }
 
         @media (max-width: 650px) {
-            /* На телефонах ровно по 2 в ряд */
             .bank-actions-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
 
         @media (max-width: 480px) {
-            .site-header {
-                padding: 12px 10px;
-            }
-            .site-nav {
-                gap: 10px 15px;
-            }
-            .nav-logo {
-                height: 40px;
-                margin-right: 8px;
-            }
-            .site-nav a {
-                font-size: 10px;
-                letter-spacing: 0.6px;
-            }
-            .section-wrap {
-                margin: 12px 8px;
-                padding: 20px 12px;
-            }
-            .section-title {
-                font-size: 18px;
-                letter-spacing: 2px;
-            }
-            .section-desc {
-                font-size: 12.5px;
-            }
-            .characters-grid {
-                grid-template-columns: 1fr;
-            }
-            .subsection-title {
-                font-size: 15px;
-                padding-top: 22px;
-                margin-top: 25px;
-            }
+            .site-header { padding: 12px 10px; }
+            .site-nav { gap: 10px 15px; }
+            .nav-logo { height: 40px; margin-right: 8px; }
+            .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+            .section-wrap { margin: 12px 8px; padding: 20px 12px; }
+            .section-title { font-size: 18px; letter-spacing: 2px; }
+            .section-desc { font-size: 12.5px; }
+            .characters-grid, .treasury-grid { grid-template-columns: 1fr; }
+            .subsection-title { font-size: 15px; padding-top: 22px; margin-top: 25px; }
         }
     </style>
 </head>
 <body>
 
     <script>
-        // Эффект «пуньк» при клике
         window.addEventListener('click', (e) => {
             const echo = document.createElement('div');
             echo.className = 'click-echo';
@@ -487,7 +507,7 @@
             <p class="section-desc">Личные свитки казны, владения, государственные услуги и финансовый учет подданных Довлата.</p>
         </header>
 
-        <!-- ПАНЕЛЬ КОМПАКТНЫХ КНОПОК -->
+        <!-- ПАНЕЛЬ КНОПОК -->
         <div class="bank-actions-grid">
             <a href="market.html" class="bank-action-btn">Калькулятор товаров</a>
             <a href="build.html" class="bank-action-btn">Заявка на строительство</a>
@@ -528,10 +548,18 @@
             <a href="https://sites.google.com/view/dowlate-safaviyye/счета-игроков/emotional-addixtion" class="character-btn" target="_blank">Emotional Addixtion</a>
             <a href="https://sites.google.com/view/dowlate-safaviyye/счета-игроков/betti-miller" class="character-btn" target="_blank">Betti Miller</a>
             <a href="https://sites.google.com/view/dowlate-safaviyye/счета-игроков/peter-pevensie" class="character-btn" target="_blank">Peter Pevensie</a>
+            <a href="" class="character-btn" target="_blank">Лина Барсова</a>
+        </div>
+
+        <h2 class="subsection-title">Родовая Казна</h2>
+
+        <!-- СЕТКА РОДОВОЙ КАЗНЫ (ДИНАМИЧЕСКАЯ ИЗ GOOGLE SHEETS) -->
+        <div class="treasury-grid" id="treasuryGrid">
+            <div class="treasury-loading">Свитки казны извлекаются из архива...</div>
         </div>
     </div>
 
-    <!-- МОДАЛЬНОЕ ОКНО (для единого стиля) -->
+    <!-- МОДАЛЬНОЕ ОКНО -->
     <div class="admin-modal-overlay" id="adminModal" onclick="closeAdminModal(event)">
         <div class="admin-modal-box">
             <div class="modal-kicker">✦ Шахский Двор ✦</div>
@@ -541,7 +569,50 @@
     </div>
 
     <script>
-        // Модальное окно (в едином стиле, на всякий случай)
+        // Загрузка данных Родовой Казны из Google Таблицы
+        async function loadTreasuryData() {
+            const grid = document.getElementById('treasuryGrid');
+            const scriptUrl = 'https://script.google.com/macros/s/AKfycbzJskJHFQ3RapkcWn4C_c8tK1MVxSU9bLfPSHFmyiBen4EJivMi0nfUG3XHU5IrDt6HCw/exec';
+
+            try {
+                const response = await fetch(scriptUrl);
+                const json = await response.json();
+
+                if (json.status === 'success' && json.data) {
+                    grid.innerHTML = '';
+                    const items = json.data;
+
+                    for (const [name, amount] of Object.entries(items)) {
+                        // Форматируем число с пробелами тысяч (если это число)
+                        let formattedAmount = amount;
+                        if (!isNaN(amount) && amount !== '') {
+                            formattedAmount = Number(amount).toLocaleString('ru-RU') + ' аббаси';
+                        }
+
+                        const card = document.createElement('div');
+                        card.className = 'treasury-card';
+                        card.innerHTML = `
+                            <div class="treasury-name">${name}</div>
+                            <div class="treasury-amount">${formattedAmount}</div>
+                        `;
+                        grid.appendChild(card);
+                    }
+
+                    if (grid.children.length === 0) {
+                        grid.innerHTML = `<div class="treasury-loading">Сведения о казне в текущем свитке не обнаружены.</div>`;
+                    }
+                } else {
+                    grid.innerHTML = `<div class="treasury-loading">Не удалось расшифровать данные казны.</div>`;
+                }
+            } catch (err) {
+                grid.innerHTML = `<div class="treasury-loading">Ошибка архива: нет связи с таблицей Google.</div>`;
+            }
+        }
+
+        window.addEventListener('load', () => {
+            loadTreasuryData();
+        });
+
         function closeAdminModal(event) {
             if (event.target.id === 'adminModal') {
                 document.getElementById('adminModal').classList.remove('active');
