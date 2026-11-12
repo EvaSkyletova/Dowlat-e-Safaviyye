@@ -959,7 +959,7 @@
             <div class="hierarchy-columns-grid" id="hierarchyGrid">
                 <!-- ЛЕВАЯ ВЕТВЬ: МУЖЧИНЫ -->
                 <section class="branch-column branch-male" aria-label="Мужские титулы">
-                    <div class="branch-badge">⚔️ Мужские титулы</div>
+                    <div class="branch-badge">Мужские титулы</div>
 
                     <article class="rank-card apex">
                         <span class="rank-tier">Верховный венец</span>
@@ -1012,7 +1012,7 @@
 
                 <!-- ПРАВАЯ ВЕТВЬ: ЖЕНЩИНЫ -->
                 <section class="branch-column branch-female" aria-label="Женские титулы">
-                    <div class="branch-badge">🌙 Женские титулы</div>
+                    <div class="branch-badge">Женские титулы</div>
 
                     <article class="rank-card apex">
                         <span class="rank-tier">Верховная госпожа</span>
@@ -1099,88 +1099,152 @@
             <div class="wings-grid" id="wingsGrid">
                 <!-- 1. ВОЕННОЕ КОМАНДОВАНИЕ -->
                 <div class="wing-column wing-military">
-                    <div class="wing-header">⚔️ Военное Командование</div>
+                <!-- 0. ВЕЛИКИЙ ВЕКИЛ -->
+                <div class="wing-column wing-grand-vizier" style="grid-column: 1 / -1; margin-bottom: 10px;">
+                    <article class="council-card" style="border-left: 4px solid var(--gold-light); background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(14, 14, 17, 0.97)); text-align: center;">
+                        <h4 class="role-name" style="font-size: 20px; color: var(--gold-light);">Великий Векил</h4>
+                        <div class="role-desc" style="font-size: 14px; margin-top: 4px;">Общий руководитель государственного аппарата и шахской политики.</div>
+                        <div style="margin-top: 10px; font-size: 15px; color: var(--gold-light); font-weight: bold; letter-spacing: 1px;">
+                            Аббас Баят 
+                        </div>
+                    </article>
+                </div>
+
+                <!-- 1. ВОЕННОЕ КОМАНДОВАНИЕ -->
+                <div class="wing-column wing-military">
+                    <div class="wing-header">Военное Командование</div>
 
                     <article class="council-card">
                         <span class="card-dept">Верховный меч</span>
                         <h4 class="role-name">Эмир аль-Умара</h4>
                         <div class="role-desc">«Эмир над эмирами». Верховный главнокомандующий войсками кызылбашей.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Дашдемир Румлу
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Шахская гвардия</span>
                         <h4 class="role-name">Курчи-баши</h4>
                         <div class="role-desc">Командир элитной шахской гвардии и тяжелой кавалерии.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--muted); font-style: italic;">
+                            Вакантно (—)
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Корпус гулямов</span>
                         <h4 class="role-name">Куллар-агаси</h4>
                         <div class="role-desc">Командующий корпусом гулямов (личной регулярной кавалерии Шаха).</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Сиявуш-ага
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Пушечный наряд</span>
                         <h4 class="role-name">Топчи-баши</h4>
                         <div class="role-desc">Главнокомандующий артиллерией и литейными дворами.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Саади Чехарленг
+                        </div>
+                    </article>
+                  
+                    <article class="council-card">
+                        <span class="card-dept">Стрелки-мушкетеры</span>
+                        <h4 class="role-name">Тофангчи-баши</h4>
+                        <div class="role-desc">Главнокомандующий корпусом мушкетеров.</div>
                     </article>
                 </div>
 
                 <!-- 2. КАЗНА И ДВОР -->
                 <div class="wing-column wing-finance">
-                    <div class="wing-header">🪙 Казна и Двор</div>
+                    <div class="wing-header">Казна и Двор</div>
 
                     <article class="council-card">
                         <span class="card-dept">Главная казна</span>
                         <h4 class="role-name">Мустоуфи аль-Мамалик</h4>
                         <div class="role-desc">Главный казначей. Контролирует сбор налогов (малиата) со всех провинций.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Хакан Джабери
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Монетный двор</span>
                         <h4 class="role-name">Муаййер аль-мамалик</h4>
                         <div class="role-desc">Глава монетного двора. Контролирует чеканку монет и пробу драгоценных металлов.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Бахадур Устаджлы
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Дворцовые врата</span>
                         <h4 class="role-name">Ишикагаси-баши</h4>
                         <div class="role-desc">Главный церемониймейстер и начальник дворцовой стражи. Владыка врат.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Хайдар Эв-оглы
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Летописание</span>
                         <h4 class="role-name">Вакаенавис</h4>
                         <div class="role-desc">Главный летописец и официальный протоколист Совета.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Салман Джабери
+                        </div>
                     </article>
                 </div>
 
                 <!-- 3. ДУХОВЕНСТВО И СУД -->
                 <div class="wing-column wing-clergy">
-                    <div class="wing-header">⚖️ Духовенство и Суд</div>
-
+                    <div class="wing-header">Духовенство и Суд</div>
+                  
                     <article class="council-card">
                         <span class="card-dept">Духовная чистота</span>
                         <h4 class="role-name">Садр аль-Мамалик</h4>
                         <div class="role-desc">Глава духовной власти Империи. Следит за идеологической чистотой государства.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Дауд Иса Радави
+                        </div>
+                    </article>
+                  
+                    <article class="council-card">
+                        <span class="card-dept">Верховный суд</span>
+                        <h4 class="role-name">Эмир и-Диванбеги</h4>
+                        <div class="role-desc">Верховный судья Империи. Разбирает уголовные дела по всему государству и контролирует провинциальные суды. Только он судит высокопоставленных чиновников.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Ростам аль-Исфахани
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Военный трибунал</span>
                         <h4 class="role-name">Кади-аскар</h4>
-                        <div class="role-desc">Верховный военный судья. Разбирает споры среди офицеров и эмиров.</div>
+                        <div class="role-desc">Верховный военный судья. Разбирает споры среди военных офицеров.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Кара Шемседдин Ширази
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Богословие и фетвы</span>
                         <h4 class="role-name">Шейх-уль-Ислам</h4>
                         <div class="role-desc">Высший богослов. Выносит фетвы и толкует законы шариата.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Идрис Сефи Шейхаванд
+                        </div>
                     </article>
 
                     <article class="council-card">
                         <span class="card-dept">Гражданский суд</span>
                         <h4 class="role-name">Кади аль-Кузат</h4>
                         <div class="role-desc">Верховный гражданский судья. Назначает судей в провинции и разбирает жалобы.</div>
+                        <div style="margin-top: 8px; font-size: 13.5px; color: var(--gold-light); font-weight: bold;">
+                            Мухаммад Бакир Сабзевари
+                        </div>
                     </article>
                 </div>
             </div>
