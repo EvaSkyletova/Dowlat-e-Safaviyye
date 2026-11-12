@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Склеп • Dowlаt-e Safaviyye</title>
+<style>
+@font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.45);
+    --line-soft: rgba(212, 175, 55, 0.18);
+    --bg: #161618;
+    --panel-dark: rgba(14, 14, 17, 0.97);
+}
+
+/* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР ДЛЯ ВСЕХ ЭЛЕМЕНТОВ */
+body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d) !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+.click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+}
+@keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+}
+
+/* Фирменный золотой скроллбар */
+* { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+.site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+}
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+}
+.nav-logo:hover { transform: scale(1.1); }
+
+.site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+}
+
+.site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+}
+.site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+.site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+}
+
+/* КОНТЕЙНЕР КНОПКИ НАЗАД */
+.back-nav-container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+}
+
+/* ОСНОВНОЙ КОНТЕЙНЕР СКЛЕПА (ШИРЕ ДЛЯ 5 В РЯД) */
+.crypt-container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 30px auto 60px auto;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.crypt-header {
+    position: relative;
+    overflow: hidden;
+    padding: 30px;
+    margin-bottom: 40px;
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(22, 22, 26, 0.96), rgba(14, 14, 17, 0.98));
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.85);
+    text-align: center;
+}
+
+.crypt-header:after {
+    content: "✦  ✦  ✦";
+    position: absolute;
+    right: 25px;
+    bottom: 15px;
+    color: rgba(212, 175, 55, 0.3);
+    font-size: 13px;
+    letter-spacing: 6px;
+}
+
+.crypt-kicker {
+    margin: 0 0 6px 0;
+    font-size: 11px;
+    color: var(--gold-soft);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.crypt-title {
+    margin: 0 0 10px 0;
+    font-size: 30px;
+    color: var(--gold-light);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+    font-weight: normal;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.9);
+}
+
+.crypt-desc {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.6;
+}
+
+/* СЕТКА 5 В РЯД */
+.crypt-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 22px;
+}
+
+.crypt-card {
+    background: var(--panel-dark);
+    border: 1.5px solid var(--line);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.crypt-card:hover {
+    border-color: var(--gold-light);
+    transform: translateY(-5px);
+    box-shadow: 0 0 25px rgba(212, 175, 55, 0.3);
+}
+
+.crypt-avatar-wrap {
+    position: relative;
+    width: 100%;
+    height: 310px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 2px solid var(--gold);
+    margin-bottom: 14px;
+    background: #101216;
+}
+
+.crypt-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(1.1);
+    transition: filter 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.crypt-card:hover .crypt-avatar {
+    filter: grayscale(40%) contrast(1.05);
+    transform: scale(1.03);
+}
+
+.crypt-name {
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--gold-light);
+    margin: 0 0 4px 0;
+    font-family: 'Yipes', Georgia, serif !important;
+}
+
+.crypt-dates {
+    font-size: 13px;
+    color: var(--gold-soft);
+    font-weight: bold;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+}
+
+.crypt-role {
+    font-size: 12px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.35;
+}
+
+/* МОДАЛЬНОЕ ОКНО С ФОТО И ТЕКСТОМ */
+.photo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 12, 0.92);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    padding: 20px;
+}
+.photo-modal.active { display: flex; }
+
+.photo-modal-content { 
+    position: relative; 
+    max-width: 520px; 
+    width: 100%;
+    text-align: center; 
+    background: var(--panel-dark); 
+    padding: 24px; 
+    border: 2px solid var(--gold); 
+    border-radius: 12px; 
+    box-shadow: 0 0 50px rgba(0,0,0,0.9); 
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.photo-modal img { 
+    max-width: 260px !important; 
+    max-height: 320px !important; 
+    width: auto; height: auto; 
+    border-radius: 8px; 
+    border: 2px solid var(--gold); 
+    filter: grayscale(100%) contrast(1.06);
+    display: block; margin: 0 auto; 
+}
+
+.photo-modal-name {
+    color: var(--gold-light);
+    font-size: 22px;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    font-family: 'Yipes', Georgia, serif !important;
+    margin: 0;
+}
+
+.photo-modal-dates {
+    color: var(--gold-soft);
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin: -6px 0 0 0;
+}
+
+.photo-modal-text {
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+    background: rgba(10, 10, 13, 0.7);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 14px;
+    text-align: justify;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.photo-modal-close {
+    position: absolute; top: 12px; right: 12px;
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 1px solid var(--gold); background: var(--panel-dark);
+    color: var(--gold-light); font-size: 22px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6); transition: all 0.2s;
+}
+.photo-modal-close:hover { background: rgba(212, 175, 55, 0.2); transform: scale(1.1); }
+
+@media (max-width: 1300px) {
+    .crypt-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 850px) {
+    .crypt-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 550px) {
+    .crypt-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+    <script>
+        // Эффект «пуньк» при клике
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.crypt-avatar')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html" class="active">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА НА ЛЕТОПИСЬ -->
+    <div class="back-nav-container">
+        <a href="letopis.html" class="back-btn">← Вернуться к летописи</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР СКЛЕПА -->
+    <div class="crypt-container">
+        <header class="crypt-header">
+            <p class="crypt-kicker">✦ Maqbara-ye Shahan ва Arvoh-e Dowlat ✦</p>
+            <h1 class="crypt-title">Склеп Империи</h1>
+            <p class="crypt-desc">Священное упокоение правителей, мирз и героев, чьи имена навсегда вписаны в мрамор вечной летописи Сефевидов.</p>
+        </header>
+
+        <div class="crypt-grid">
+            <!-- 1. Аббас I Сефеви -->
+            <div class="crypt-card">
+                <div class="crypt-avatar-wrap">
+                    <img src="images/abbas2.jpg" class="crypt-avatar" alt="Аббас I Сефеви" 
+                         onclick="openCryptModal('Аббас I Сефеви', '1571 – 1608', 'Шах-ан-шах Сефевидского государства', 'images/crypt_abbas.jpg', 'Великий шах, объединивший племена и заложивший несокрушимый фундамент Империи Сефевидов. Его правление ознаменовано эпохой расцвета дипломатии, искусства и воинской славы кызылбашей.')">
+                </div>
+                <h3 class="crypt-name">Аббас I Сефеви</h3>
+                <div class="crypt-dates">1571 – 1608</div>
+                <div class="crypt-role">Шах-ан-шах Сефевидского государства</div>
+            </div>
+
+            <!-- 2. Бахтияр Сефеви -->
+            <div class="crypt-card">
+                <div class="crypt-avatar-wrap">
+                    <img src="images/bakhtiyar2.jpg" class="crypt-avatar" alt="Бахтияр Сефеви" 
+                         onclick="openCryptModal('Бахтияр Сефеви', '1576 – 1607', 'Мирза Сефевидского государства', 'images/crypt_bakhtiyar.jpg', 'Свитки не сохранили память.')">
+                </div>
+                <h3 class="crypt-name">Бахтияр Сефеви</h3>
+                <div class="crypt-dates">1576 – 1607</div>
+                <div class="crypt-role">Мирза Сефевидского государства</div>
+            </div>
+
+            <!-- 3. Ильдар Баят -->
+            <div class="crypt-card">
+                <div class="crypt-avatar-wrap">
+                    <img src="images/ildar.jpg" class="crypt-avatar" alt="Ильдар Баят" 
+                         onclick="openCryptModal('Ильдар Баят', '1580 – 1608', 'Амир-эфенди', 'images/crypt_ildar.jpg', 'Свитки не сохранили память.')">
+                </div>
+                <h3 class="crypt-name">Ильдар Баят</h3>
+                <div class="crypt-dates">1580 – 1608</div>
+                <div class="crypt-role">Амир-эфенди</div>
+            </div>
+
+            <!-- 4. Шахсемин -->
+            <div class="crypt-card">
+                <div class="crypt-avatar-wrap">
+                    <img src="images/shahsemin.jpg" class="crypt-avatar" alt="Шахсемин" 
+                         onclick="openCryptModal('Шахсемин', '1579 – 1631', 'Кадынар-бану', 'images/crypt_shakhsemin.jpg', 'Свитки не сохранили память.')">
+                </div>
+                <h3 class="crypt-name">Шахсемин</h3>
+                <div class="crypt-dates">1579 – 1631</div>
+                <div class="crypt-role">Кадынар-бану</div>
+            </div>
+
+            <!-- 5. Рухангиз Баят -->
+            <div class="crypt-card">
+                <div class="crypt-avatar-wrap">
+                    <img src="images/ruhangiz2.jpg" class="crypt-avatar" alt="Рухангиз Баят" 
+                         onclick="openCryptModal('Рухангиз Баят', '1573 – 1608', 'Ханум-бегим', 'images/crypt_ruhangiz.jpg', 'Свитки не сохранили память.')">
+                </div>
+                <h3 class="crypt-name">Рухангиз Баят</h3>
+                <div class="crypt-dates">1573 – 1608</div>
+                <div class="crypt-role">Ханум-бегим</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно портрета и текста -->
+    <div class="photo-modal" id="photoModal" onclick="closeCryptModal(event)">
+        <div class="photo-modal-content">
+            <button class="photo-modal-close" onclick="closeCryptModalBtn()">×</button>
+            <img id="modalPhoto" src="" alt="">
+            <h3 class="photo-modal-name" id="modalName"></h3>
+            <p class="photo-modal-dates" id="modalDates"></p>
+            <div class="photo-modal-text" id="modalText"></div>
+        </div>
+    </div>
+
+<script>
+function openCryptModal(name, dates, role, imgSrc, bioText) {
+    var modal = document.getElementById('photoModal');
+    var modalPhoto = document.getElementById('modalPhoto');
+    var modalName = document.getElementById('modalName');
+    var modalDates = document.getElementById('modalDates');
+    var modalText = document.getElementById('modalText');
+
+    modalPhoto.src = imgSrc;
+    modalPhoto.alt = name;
+    modalName.textContent = name;
+    modalDates.textContent = dates + ' · ' + role;
+    modalText.textContent = bioText;
+
+    modal.classList.add('active');
+}
+
+function closeCryptModal(event) {
+    if (event.target.id === 'photoModal') {
+        document.getElementById('photoModal').classList.remove('active');
+    }
+}
+
+function closeCryptModalBtn() {
+    document.getElementById('photoModal').classList.remove('active');
+}
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        document.getElementById('photoModal').classList.remove('active');
+    }
+});
+</script>
+
+</body>
+</html>
