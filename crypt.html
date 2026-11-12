@@ -7,7 +7,7 @@
 <!-- Иконка вкладки -->
 <link rel="icon" type="image/png" href="leo.png">
 
-<title>Склеп • Dowlаt-e Safaviyye</title>
+<title>Склеп</title>
 <style>
 @font-face {
     font-family: 'Yipes';
@@ -79,7 +79,7 @@ html, body {
 ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-/* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА */
+/* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (ИДЕНТИЧНАЯ BANK.HTML) */
 .site-header {
     display: flex;
     justify-content: center;
@@ -176,7 +176,7 @@ html, body {
     box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
 }
 
-/* ОСНОВНОЙ КОНТЕЙНЕР СКЛЕПА (ШИРЕ ДЛЯ 5 В РЯД) */
+/* ОСНОВНОЙ КОНТЕЙНЕР СКЛЕПА */
 .crypt-container {
     width: 100%;
     max-width: 1500px;
@@ -391,6 +391,7 @@ html, body {
 }
 .photo-modal-close:hover { background: rgba(212, 175, 55, 0.2); transform: scale(1.1); }
 
+/* МОБИЛЬНЫЙ АДАПТИВ ШАПКИ (КАК В BANK.HTML) */
 @media (max-width: 1300px) {
     .crypt-grid { grid-template-columns: repeat(3, 1fr); }
 }
@@ -400,14 +401,19 @@ html, body {
 @media (max-width: 550px) {
     .crypt-grid { grid-template-columns: 1fr; }
 }
+
+@media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+}
 </style>
 </head>
 <body>
 
     <script>
-        // Эффект «пуньк» при клике
         window.addEventListener('click', (e) => {
-            if (e.target.closest('a') || e.target.closest('button') || e.target.closest('.crypt-avatar')) return;
             const echo = document.createElement('div');
             echo.className = 'click-echo';
             echo.style.left = `${e.clientX}px`;
@@ -417,7 +423,7 @@ html, body {
         });
     </script>
 
-    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА -->
+    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (ТОЧНО КАК В BANK.HTML) -->
     <header class="site-header">
         <nav class="site-nav">
             <img src="logo.png" alt="Логотип" class="nav-logo">
