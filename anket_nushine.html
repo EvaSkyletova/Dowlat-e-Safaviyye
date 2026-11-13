@@ -745,18 +745,17 @@
         });
     }
 
-    // --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ (СО ШКАЛАМИ) ---
-    const REP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDgw/exec";
-    const CURRENT_CHARACTER_NAME = "Нушине";
+// --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ (СО ШКАЛАМИ) ---
+const REP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDpw/exec";
+const CURRENT_CHARACTER_NAME = "Нушине";
 
-    // Фиксированный порядок категорий репутации (без военной)
-    const CATEGORY_ORDER = [
-        "Общая репутация",
-        "Светский престиж",
-        "Положение при дворе шаха",
-        "Расположение народа",
-        "Религиозность и благотворительность"
-    ];
+const CATEGORY_ORDER = [
+    "Общая репутация",
+    "Светский престиж",
+    "Положение при дворе шаха",
+    "Расположение народа",
+    "Религиозность и благотворительность"
+];
 
     function getReputationLevel(points) {
         if (points <= 19) return { name: "Презрение", fillClass: "fill-red" };
