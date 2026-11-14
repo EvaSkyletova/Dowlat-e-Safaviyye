@@ -7,7 +7,7 @@
 <!-- Иконка вкладки -->
 <link rel="icon" type="image/png" href="leo.png">
 
-<title>Свиток Казны</title>
+<title>Казна: Таня Левицкая</title>
 <style>
 @font-face {
     font-family: 'Yipes';
@@ -415,54 +415,38 @@ html, body {
     </div>
 
     <script>
-        // Имя игрока, соответствующее названию страницы/вкладки в Google Документе
-        const CURRENT_PLAYER_NAME = "Таня Левицкая";
-        
-        // Ссылка на ваш Google Apps Script
-        const GOOGLE_DOCS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwpqHIqFLNEfY_OzWXzoaksYpk70BGIGT3Z-VH8QzjrVVXZ-LUjGPbO_SdFqdy9cu89/exec";
+    const CURRENT_PLAYER_NAME = "Таня Левицкая";
+    const GOOGLE_DOCS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEB7v6kZiOUoR9i6_ux3eYrh6oEr0IeN47wQm_V4bN1_lIt4ZnSN1zkeEEfdOgOf4s7w/exec";
 
-        async function loadPlayerRewardsFromDocs() {
-            const container = document.getElementById('rewardsContainer');
-            
-            if (!GOOGLE_DOCS_SCRIPT_URL) {
-                container.innerHTML = `<div class="rewards-loading" style="color: var(--danger);">Ссылка на скрипт не указана.</div>`;
-                return;
-            }
+    async function loadPlayerRewardsFromDocs() {
+        const container = document.getElementById('rewardsContainer');
+        console.log("Запрос к:", GOOGLE_DOCS_SCRIPT_URL);
 
-            try {
-                const response = await fetch(GOOGLE_DOCS_SCRIPT_URL);
-                const json = await response.json();
+        try {
+            const response = await fetch(GOOGLE_DOCS_SCRIPT_URL);
+            const json = await response.json();
+            console.log("Ответ от Google:", json);
 
-                if (json.status === 'success' && json.data) {
-                    const playerItems = json.data[CURRENT_PLAYER_NAME];
-
-                    if (playerItems && playerItems.length > 0) {
-                        let html = '<ul>';
-                        playerItems.forEach(item => {
-                            if (item.endsWith(':') || item === 'РЕЗЕРВ:' || item.toUpperCase().includes('СГОРЯТ')) {
-                                html += `<li class="category-heading">${item}</li>`;
-                            } else {
-                                html += `<li>${item}</li>`;
-                            }
-                        });
-                        html += '</ul>';
-                        container.html = html; // Исправлено на innerHTML
-                        container.innerHTML = html;
-                    } else {
-                        container.innerHTML = `<div class="rewards-loading">В личном свитке игрока "${CURRENT_PLAYER_NAME}" пока нет записей.</div>`;
-                    }
+            if (json.status === 'success') {
+                const playerItems = json.data[CURRENT_PLAYER_NAME];
+                if (playerItems) {
+                    let html = '<ul>';
+                    playerItems.forEach(item => {
+                        html += `<li>${item}</li>`;
+                    });
+                    html += '</ul>';
+                    container.innerHTML = html;
                 } else {
-                    container.innerHTML = `<div class="rewards-loading">Не удалось расшифровать данные из архива Google.</div>`;
+                    container.innerHTML = "Вкладка с именем '" + CURRENT_PLAYER_NAME + "' не найдена в документе.";
                 }
-            } catch (err) {
-                container.innerHTML = `<div class="rewards-loading" style="color: #d98888;">Ошибка архива: нет связи с Google Документом (проверьте CORS / развертывание).</div>`;
             }
+        } catch (err) {
+            console.error("Ошибка:", err);
+            container.innerHTML = "Ошибка сети. Проверьте консоль F12.";
         }
-
-        window.addEventListener('load', () => {
-            loadPlayerRewardsFromDocs();
-        });
-    </script>
+    }
+    loadPlayerRewardsFromDocs();
+</script>
 
 </body>
 </html>
