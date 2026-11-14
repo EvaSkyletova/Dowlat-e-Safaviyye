@@ -427,64 +427,115 @@ html, body {
     </div>
 
     <script>
-    // 1. ИМЯ ДЛЯ ПОИСКА В GOOGLE DOCS (оставляем русским, чтобы найти вкладку)
+    // Название вкладки Google Документа, из которой нужно загрузить данные.
     const SEARCH_NAME = "Елена Троянская";
-    
-    // 2. ИМЯ, КОТОРОЕ ВИДИТ СЕРВЕР (точная копия из ошибки на скриншоте)
-    const SERVER_TAB_NAME = "Елена Троянская";
 
+    // URL опубликованного Google Apps Script.
+    // После обновления Apps Script обязательно создайте новую версию развертывания.
     const GOOGLE_DOCS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEB7v6kZiOUoR9i6_ux3eYrh6oEr0IeN47wQm_V4bN1_lIt4ZnSN1zkeEEfdOgOf4s7w/exec";
 
+    function normalizeTabName(value) {
+        return String(value ?? "")
+            .normalize("NFKC")
+            .replace(/[\u00A0\u200B-\u200D\uFEFF]/g, "")
+            .replace(/\s+/g, "")
+            .toLocaleLowerCase("ru-RU");
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, function (char) {
+            return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[char];
+        });
+    }
+
+    function showMessage(message, isError = false) {
+        const container = document.getElementById("rewardsContainer");
+        container.innerHTML = `<div style="color:${isError ? '#ff8585' : 'var(--gold-soft)'}; line-height:1.6;">${message}</div>`;
+    }
+
+    function renderPlayerItems(items) {
+        const container = document.getElementById("rewardsContainer");
+        const list = Array.isArray(items)
+            ? items.map(item => String(item ?? "").trim()).filter(Boolean)
+            : (typeof items === "string" ? items.split(/\r?\n/).map(x => x.trim()).filter(Boolean) : []);
+
+        if (list.length === 0) {
+            showMessage("Счёт «" + escapeHtml(SEARCH_NAME) + "» найден, но Google Apps Script не получил из этой вкладки ни одной записи. Проверьте, что текст находится непосредственно внутри нужной вкладки Google Документа.");
+            return;
+        }
+
+        const html = list.map(item => {
+            const safeItem = escapeHtml(item);
+            const isHeading = /:$/.test(item) || item.toUpperCase().includes("СГОРЯТ");
+            if (isHeading) {
+                return `<li style="list-style:none;font-weight:bold;color:var(--gold-light);margin-top:12px;margin-bottom:6px;font-size:15px;">${safeItem}</li>`;
+            }
+            return `<li style="margin-bottom:6px;line-height:1.6;">${safeItem}</li>`;
+        }).join("");
+
+        container.innerHTML = `<ul style="padding-left:20px;margin:0;">${html}</ul>`;
+    }
+
     async function loadPlayerRewardsFromDocs() {
-        const container = document.getElementById('rewardsContainer');
+        showMessage("Свитки извлекаются из архива Google Документов...");
 
         try {
-            const response = await fetch(GOOGLE_DOCS_SCRIPT_URL);
-            const json = await response.json();
+            const response = await fetch(GOOGLE_DOCS_SCRIPT_URL, {
+                method: "GET",
+                cache: "no-store",
+                redirect: "follow"
+            });
 
-            if (json.status === 'success' && json.data) {
-                let playerItems = null;
-
-                // Пытаемся найти вкладку по точному имени, которое приходит с сервера
-                if (json.data[SERVER_TAB_NAME]) {
-                    playerItems = json.data[SERVER_TAB_NAME];
-                } else {
-                    // Если не нашли, делаем "ядерный" поиск (игнорируем все пробелы)
-                    const safeName = SEARCH_NAME.toLowerCase().replace(/\s+/g, '');
-                    
-                    for (let key in json.data) {
-                        const safeKey = key.toLowerCase().replace(/\s+/g, '');
-                        if (safeKey.includes(safeName) || safeName.includes(safeKey)) {
-                            playerItems = json.data[key];
-                            break;
-                        }
-                    }
-                }
-
-                if (playerItems && playerItems.length > 0) {
-                    let html = '<ul style="padding-left: 20px; margin: 0;">';
-                    playerItems.forEach(item => {
-                        if (item.endsWith(':') || item === 'РЕЗЕРВ:' || item.toUpperCase().includes('СГОРЯТ')) {
-                            html += `<li style="list-style: none; font-weight: bold; color: var(--gold-light); margin-top: 12px; margin-bottom: 6px; font-size: 15px;">${item}</li>`;
-                        } else {
-                            html += `<li style="margin-bottom: 6px; line-height: 1.6;">${item}</li>`;
-                        }
-                    });
-                    html += '</ul>';
-                    container.innerHTML = html;
-                } else {
-                    const availableTabs = Object.keys(json.data).join(", ");
-                    container.innerHTML = `<div style="color: var(--gold-soft);">Вкладка "${SEARCH_NAME}" не найдена. Найдены вкладки: ${availableTabs}</div>`;
-                }
-            } else {
-                container.innerHTML = `<div style="color: #ff6b6b;">Ошибка скрипта: ${json.message}</div>`;
+            const responseText = await response.text();
+            let json;
+            try {
+                json = JSON.parse(responseText);
+            } catch (parseError) {
+                throw new Error("Google Apps Script вернул не JSON. Проверьте доступ к веб-приложению: «Все» (Anyone), а также правильность URL развертывания.");
             }
-        } catch (err) {
-            container.innerHTML = `<div style="color: #ff6b6b;">Ошибка сети (CORS). Убедитесь, что в настройках развертывания доступ стоит «Все» (Anyone).</div>`;
+
+            if (!response.ok) {
+                throw new Error("Ошибка HTTP: " + response.status + " " + response.statusText);
+            }
+            if (json.status !== "success") {
+                throw new Error(json.message || "Google Apps Script сообщил неизвестную ошибку.");
+            }
+
+            const data = json.data || {};
+            const availableTabs = Object.keys(data);
+            const targetName = normalizeTabName(SEARCH_NAME);
+
+            // Сначала ищем полное совпадение после нормализации имени.
+            let matchedKey = availableTabs.find(key => normalizeTabName(key) === targetName);
+
+            // Частичное совпадение используем только если результат единственный.
+            if (!matchedKey) {
+                const partialMatches = availableTabs.filter(key => {
+                    const normalizedKey = normalizeTabName(key);
+                    return normalizedKey && targetName &&
+                        (normalizedKey.includes(targetName) || targetName.includes(normalizedKey));
+                });
+                if (partialMatches.length === 1) matchedKey = partialMatches[0];
+            }
+
+            if (!matchedKey) {
+                showMessage(
+                    "Вкладка «" + escapeHtml(SEARCH_NAME) + "» действительно не найдена. Найденные вкладки: " +
+                    (availableTabs.length ? availableTabs.map(escapeHtml).join(", ") : "Google Документ не вернул ни одной вкладки")
+                );
+                return;
+            }
+
+            // Вкладка найдена. Отдельно проверяем, есть ли внутри неё записи.
+            renderPlayerItems(data[matchedKey]);
+
+        } catch (error) {
+            console.error("Ошибка загрузки счёта:", error);
+            showMessage("Не удалось загрузить счёт: " + escapeHtml(error.message || error), true);
         }
     }
 
-    window.addEventListener('load', loadPlayerRewardsFromDocs);
+    window.addEventListener("DOMContentLoaded", loadPlayerRewardsFromDocs);
 </script>
 
 </body>
