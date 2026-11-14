@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Казна: Delicate Fuchsia</title>
+<style>
+@font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.45);
+    --line-soft: rgba(212, 175, 55, 0.18);
+    --bg: #161618;
+    --panel: rgba(22, 22, 26, 0.96);
+    --panel-soft: rgba(26, 26, 32, 0.92);
+    --panel-dark: rgba(14, 14, 17, 0.97);
+}
+
+/* КАСТОМНЫЙ ЗОЛОТОЙ КУРСОР */
+body, *, a, button, input, select, textarea, option, optgroup, details, summary {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' wth='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-wth='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    min-height: 100vh;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image: 
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+        linear-gradient(to bottom, #161618, #0b0b0d) !important;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») */
+.click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+}
+@keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+}
+
+/* Фирменный золотой скроллбар */
+* { scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА (ИДЕНТИЧНАЯ BANK.HTML) */
+.site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+}
+
+.site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+}
+.nav-logo:hover { transform: scale(1.1); }
+
+.site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+}
+
+.site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+}
+.site-nav a:hover::after, .site-nav a.active::after { width: 100%; }
+.site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+}
+
+/* КОНТЕЙНЕР КНОПКИ НАЗАД */
+.back-nav-container {
+    width: 100%;
+    max-width: 1120px;
+    margin: 25px auto 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: flex-start;
+    box-sizing: border-box;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-light);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    font-weight: bold;
+}
+
+.back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.15);
+    color: #fff;
+    transform: translateX(-3px);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+}
+
+/* ОСНОВНОЙ КОНТЕЙНЕР СЧЕТА ИГРОКА */
+.player-sheet-wrap {
+    max-width: 1120px;
+    margin: 25px auto 60px auto;
+    padding: 40px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.95), rgba(14, 14, 16, 0.98));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    position: relative;
+    box-sizing: border-box;
+}
+
+.player-sheet-wrap::before,
+.player-sheet-wrap::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+}
+.player-sheet-wrap::before { top: 10px; left: 14px; }
+.player-sheet-wrap::after { top: 10px; right: 14px; }
+
+/* ШАПКА ПРОФИЛЯ ИГРОКА */
+.player-profile-header {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--line);
+}
+
+/* НОВЫЙ КОНТЕЙНЕР ДЛЯ АВАТАРКИ (рамка и тень здесь, чтобы не обесцвечивались) */
+.avatar-frame {
+    width: 140px;
+    height: 140px;
+    border-radius: 12px;
+    border: 2px solid var(--gold);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.8);
+    background: #101216;
+    flex-shrink: 0;
+    overflow: hidden; /* Обрезает картинку по скругленным углам контейнера */
+}
+
+.player-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%); /* Картинка черно-белая */
+}
+
+.player-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.player-kicker {
+    margin: 0;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.player-name {
+    margin: 0;
+    color: var(--gold-light);
+    font-size: 28px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    font-weight: normal;
+}
+
+.player-title-sub {
+    color: var(--muted);
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* БЛОК ПРИЗОВ И РЕЗЕРВА */
+.rewards-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.rewards-card {
+    background: var(--panel-dark);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold);
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.rewards-card-title {
+    color: var(--gold-light);
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0 0 16px 0;
+    font-family: 'Yipes', Georgia, serif !important;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 10px;
+}
+
+.rewards-loading {
+    color: var(--muted);
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+}
+
+/* ОФОРМЛЕНИЕ СПИСКОВ ИЗ GOOGLE DOCS */
+.rewards-content ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.rewards-content li {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text);
+    text-align: justify;
+}
+
+.rewards-content li.category-heading {
+    list-style: none;
+    font-weight: bold;
+    color: var(--gold-light);
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 4px;
+    margin-left: -20px;
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 768px) {
+    .player-sheet-wrap {
+        margin: 15px 10px;
+        padding: 20px 15px;
+    }
+    .player-profile-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 16px;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+    .player-name {
+        font-size: 22px;
+    }
+    .rewards-card {
+        padding: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .site-header { padding: 12px 10px; }
+    .site-nav { gap: 10px 15px; }
+    .nav-logo { height: 40px; margin-right: 8px; }
+    .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
+}
+</style>
+</head>
+<body>
+
+    <script>
+        window.addEventListener('click', (e) => {
+            if (e.target.closest('a') || e.target.closest('button')) return;
+            const echo = document.createElement('div');
+            echo.className = 'click-echo';
+            echo.style.left = `${e.clientX}px`;
+            echo.style.top = `${e.clientY}px`;
+            document.body.appendChild(echo);
+            setTimeout(() => { echo.remove(); }, 550);
+        });
+    </script>
+
+    <!-- ЕДИНАЯ ШАПКА САЙТА (ИДЕНТИЧНАЯ BANK.HTML) -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html" class="active">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+    <!-- КНОПКА ВОЗВРАТА К БАНКУ -->
+    <div class="back-nav-container">
+        <a href="bank.html" class="back-btn">← Вернуться назад</a>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕЙНЕР СЧЕТА ИГРОКА -->
+    <div class="player-sheet-wrap">
+        
+        <!-- Шапка профиля -->
+        <div class="player-profile-header">
+            
+            <!-- Обертка для аватарки, чтобы рамка осталась золотой -->
+            <div class="avatar-frame">
+                <img src="images/salamat.jpg" alt="Delicate Fuchsia" class="player-avatar" onerror="this.src='images/default.jpg'">
+            </div>
+            
+            <div class="player-info">
+                <p class="player-kicker">✦ Dafter-e Khas va Mokhafezat ✦</p>
+                <h1 class="player-name" id="playerNameHeader">Delicate Fuchsia</h1>
+                <div class="player-title-sub">Личный свиток казны, владений и резерва</div>
+            </div>
+        </div>
+
+        <!-- Секция призов и резерва (подтягивается из Google Docs) -->
+        <div class="rewards-section">
+            <div class="rewards-card">
+                <h2 class="rewards-card-title">✦ Резерв и Призы ✦</h2>
+                <div class="rewards-content" id="rewardsContainer">
+                    <div class="rewards-loading">Свитки извлекаются из архива Google Документов...</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    const CURRENT_PLAYER_NAME = "Delicate Fuchsia";
+    const GOOGLE_DOCS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEB7v6kZiOUoR9i6_ux3eYrh6oEr0IeN47wQm_V4bN1_lIt4ZnSN1zkeEEfdOgOf4s7w/exec";
+
+    async function loadPlayerRewardsFromDocs() {
+        const container = document.getElementById('rewardsContainer');
+
+        try {
+            const response = await fetch(GOOGLE_DOCS_SCRIPT_URL);
+            const json = await response.json();
+
+            if (json.status === 'success' && json.data) {
+                const playerItems = json.data[CURRENT_PLAYER_NAME];
+
+                if (playerItems && playerItems.length > 0) {
+                    let html = '<ul style="padding-left: 20px; margin: 0;">';
+                    playerItems.forEach(item => {
+                        if (item.endsWith(':') || item === 'РЕЗЕРВ:' || item.toUpperCase().includes('СГОРЯТ')) {
+                            html += `<li style="list-style: none; font-weight: bold; color: var(--gold-light); margin-top: 12px; margin-bottom: 6px; font-size: 15px;">${item}</li>`;
+                        } else {
+                            html += `<li style="margin-bottom: 6px; line-height: 1.6;">${item}</li>`;
+                        }
+                    });
+                    html += '</ul>';
+                    container.innerHTML = html;
+                } else {
+                    const availableTabs = Object.keys(json.data).join(", ");
+                    container.innerHTML = `<div style="color: var(--gold-soft);">Вкладка "${CURRENT_PLAYER_NAME}" не найдена. Найдены вкладки: ${availableTabs}</div>`;
+                }
+            } else {
+                container.innerHTML = `<div style="color: #ff6b6b;">Ошибка скрипта: ${json.message}</div>`;
+            }
+        } catch (err) {
+            container.innerHTML = `<div style="color: #ff6b6b;">Ошибка сети (CORS). Убедитесь, что в настройках развертывания доступ стоит «Все» (Anyone).</div>`;
+        }
+    }
+
+    window.addEventListener('load', loadPlayerRewardsFromDocs);
+</script>
+
+</body>
+</html>
