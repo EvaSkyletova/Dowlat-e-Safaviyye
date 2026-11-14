@@ -427,7 +427,7 @@ html, body {
     </div>
 
     <script>
-    // ВАЖНО: здесь оставляем русское имя, как в Google Доксе
+    // ВАЖНО: оставляем русское имя, чтобы скрипт искал его в Google Docs
     const CURRENT_PLAYER_NAME = "Елена Троянская";
     const GOOGLE_DOCS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEB7v6kZiOUoR9i6_ux3eYrh6oEr0IeN47wQm_V4bN1_lIt4ZnSN1zkeEEfdOgOf4s7w/exec";
 
@@ -439,11 +439,15 @@ html, body {
             const json = await response.json();
 
             if (json.status === 'success' && json.data) {
-                // Мягкий поиск (игнорируем лишние пробелы по краям)
                 let playerItems = null;
                 
+                // "ЯДЕРНЫЙ" ПОИСК: игнорируем все пробелы, неразрывные пробелы и регистр
+                const safeName = CURRENT_PLAYER_NAME.toLowerCase().replace(/\s+/g, '');
+                
                 for (let key in json.data) {
-                    if (key.trim() === CURRENT_PLAYER_NAME.trim()) {
+                    const safeKey = key.toLowerCase().replace(/\s+/g, '');
+                    
+                    if (safeKey.includes(safeName) || safeName.includes(safeKey)) {
                         playerItems = json.data[key];
                         break;
                     }
