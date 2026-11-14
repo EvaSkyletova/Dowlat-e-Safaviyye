@@ -420,32 +420,38 @@ html, body {
 
     async function loadPlayerRewardsFromDocs() {
         const container = document.getElementById('rewardsContainer');
-        console.log("Запрос к:", GOOGLE_DOCS_SCRIPT_URL);
 
         try {
             const response = await fetch(GOOGLE_DOCS_SCRIPT_URL);
             const json = await response.json();
-            console.log("Ответ от Google:", json);
 
-            if (json.status === 'success') {
+            if (json.status === 'success' && json.data) {
                 const playerItems = json.data[CURRENT_PLAYER_NAME];
-                if (playerItems) {
-                    let html = '<ul>';
+
+                if (playerItems && playerItems.length > 0) {
+                    let html = '<ul style="padding-left: 20px; margin: 0;">';
                     playerItems.forEach(item => {
-                        html += `<li>${item}</li>`;
+                        if (item.endsWith(':') || item === 'РЕЗЕРВ:' || item.toUpperCase().includes('СГОРЯТ')) {
+                            html += `<li style="list-style: none; font-weight: bold; color: var(--gold-light); margin-top: 12px; margin-bottom: 6px; font-size: 15px;">${item}</li>`;
+                        } else {
+                            html += `<li style="margin-bottom: 6px; line-height: 1.6;">${item}</li>`;
+                        }
                     });
                     html += '</ul>';
                     container.innerHTML = html;
                 } else {
-                    container.innerHTML = "Вкладка с именем '" + CURRENT_PLAYER_NAME + "' не найдена в документе.";
+                    const availableTabs = Object.keys(json.data).join(", ");
+                    container.innerHTML = `<div style="color: var(--gold-soft);">Вкладка "${CURRENT_PLAYER_NAME}" не найдена. Надены вкладки: ${availableTabs}</div>`;
                 }
+            } else {
+                container.innerHTML = `<div style="color: #ff6b6b;">Ошибка скрипта: ${json.message}</div>`;
             }
         } catch (err) {
-            console.error("Ошибка:", err);
-            container.innerHTML = "Ошибка сети. Проверьте консоль F12.";
+            container.innerHTML = `<div style="color: #ff6b6b;">Ошибка сети (CORS). Убедитесь, что в настройках развертывания доступ стоит «Все» (Anyone).</div>`;
         }
     }
-    loadPlayerRewardsFromDocs();
+
+    window.addEventListener('load', loadPlayerRewardsFromDocs);
 </script>
 
 </body>
