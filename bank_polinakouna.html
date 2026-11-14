@@ -207,15 +207,14 @@ html, body {
 .player-profile-header {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Раскидываем элементы по краям */
+    justify-content: space-between;
     gap: 30px;
     padding-bottom: 30px;
     margin-bottom: 30px;
     border-bottom: 1px solid var(--line);
-    flex-wrap: wrap; /* Для адаптивности */
+    flex-wrap: wrap;
 }
 
-/* ЛЕВАЯ ЧАСТЬ ШАПКИ (Аватарка + Имя) */
 .profile-left {
     display: flex;
     align-items: center;
@@ -274,12 +273,12 @@ html, body {
 }
 
 /* ========================================= */
-/* НОВЫЙ БЛОК СЧЕТА (СПРАВА В ШАПКЕ) */
+/* БЛОК СЧЕТА (СПРАВА В ШАПКЕ) */
 /* ========================================= */
 .account-block {
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Выравниваем текст по правому краю */
+    align-items: flex-end;
     text-align: right;
     padding: 15px 25px;
     background: rgba(212, 175, 55, 0.05);
@@ -299,7 +298,7 @@ html, body {
 
 .account-value {
     color: var(--gold-light);
-    font-size: 36px; /* Крупный шрифт */
+    font-size: 36px;
     font-family: 'Yipes', Georgia, serif !important;
     text-shadow: 0 0 15px rgba(251, 232, 166, 0.4);
     line-height: 1;
@@ -522,38 +521,33 @@ html, body {
 
                 if (playerItems && playerItems.length > 0) {
                     let rewardsHtml = '<ul style="padding-left: 20px; margin: 0;">';
-                    let isAccountBlock = true;
-                    let accountValue = "";
-                    let accountCurr = "";
+                    let hasAccount = false;
 
                     playerItems.forEach(item => {
-                        // Ищем строку "СЧЕТ:" и пропускаем её
+                        // Ищем строку, которая начинается со "СЧЕТ:" или содержит "СЧЕТ:"
                         if (item.toUpperCase().includes("СЧЕТ:") || item.toUpperCase().includes("СЧЁТ:")) {
-                            return; 
-                        }
-
-                        // Ищем строку с суммой (обычно содержит цифры и слово аббаси)
-                        if (isAccountBlock && /[0-9]/.test(item)) {
-                            // Вытаскиваем цифры и запятые/точки
+                            // Разбиваем строку, например: "СЧЕТ: 625 356 аббаси"
+                            // Ищем все цифры и возможные разделители (пробелы, запятые)
                             const match = item.match(/([0-9.,\s]+)/);
                             if (match) {
-                                accountValue = match[1].trim();
-                                // Ищем слово "аббаси" или "аббас"
+                                accountAmount.textContent = match[1].trim();
+                                
+                                // Ищем валюту
                                 if (item.toLowerCase().includes("аббаси")) {
-                                    accountCurr = "аббаси";
+                                    accountCurrency.textContent = "аббаси";
                                 } else if (item.toLowerCase().includes("аббас")) {
-                                    accountCurr = "аббас";
+                                    accountCurrency.textContent = "аббас";
                                 } else {
-                                    accountCurr = "монет"; // Заглушка, если валюты нет
+                                    accountCurrency.textContent = "монет"; // если не нашли
                                 }
-                                isAccountBlock = false;
-                                return; // Не добавляем в общий список
+
+                                accountBlock.style.display = 'flex';
+                                hasAccount = true;
                             }
+                            return; // Пропускаем эту строку, чтобы не добавлять в общий список
                         }
 
-                        isAccountBlock = false; // Счет закончился
-
-                        // Остальное добавляем в список
+                        // Все остальное (Резерв, Призы) добавляем в список
                         if (item.endsWith(':') || item === 'РЕЗЕРВ:' || item.toUpperCase().includes('СГОРЯТ')) {
                             rewardsHtml += `<li style="list-style: none; font-weight: bold; color: var(--gold-light); margin-top: 12px; margin-bottom: 6px; font-size: 15px;">${item}</li>`;
                         } else {
@@ -563,11 +557,9 @@ html, body {
                     
                     rewardsHtml += '</ul>';
 
-                    // Показываем блок счета, если нашли сумму
-                    if (accountValue) {
-                        accountAmount.textContent = accountValue;
-                        accountCurrency.textContent = accountCurr;
-                        accountBlock.style.display = 'flex';
+                    // Если счет не нашли, скрываем блок
+                    if (!hasAccount) {
+                        accountBlock.style.display = 'none';
                     }
 
                     container.innerHTML = rewardsHtml;
