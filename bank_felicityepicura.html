@@ -207,13 +207,21 @@ html, body {
 .player-profile-header {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 30px;
     padding-bottom: 30px;
     margin-bottom: 30px;
     border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
 }
 
-/* НОВЫЙ КОНТЕЙНЕР ДЛЯ АВАТАРКИ (рамка и тень здесь, чтобы не обесцвечивались) */
+.profile-left {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+/* НОВЫЙ КОНТЕЙНЕР ДЛЯ АВАТАРКИ */
 .avatar-frame {
     width: 140px;
     height: 140px;
@@ -222,14 +230,14 @@ html, body {
     box-shadow: 0 8px 25px rgba(0,0,0,0.8);
     background: #101216;
     flex-shrink: 0;
-    overflow: hidden; /* Обрезает картинку по скругленным углам контейнера */
+    overflow: hidden;
 }
 
 .player-avatar {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    filter: grayscale(100%); /* Картинка черно-белая */
+    filter: grayscale(100%);
 }
 
 .player-info {
@@ -263,6 +271,47 @@ html, body {
     font-size: 14px;
     font-style: italic;
 }
+
+/* ========================================= */
+/* БЛОК СЧЕТА (СПРАВА В ШАПКЕ) */
+/* ========================================= */
+.account-block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    text-align: right;
+    padding: 15px 25px;
+    background: rgba(212, 175, 55, 0.05);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.account-label {
+    color: var(--muted);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+.account-value {
+    color: var(--gold-light);
+    font-size: 36px;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 0 15px rgba(251, 232, 166, 0.4);
+    line-height: 1;
+}
+
+.account-currency {
+    font-size: 16px;
+    color: var(--gold-soft);
+    font-family: Georgia, serif !important;
+    margin-left: 5px;
+    text-shadow: none;
+}
+/* ========================================= */
 
 /* БЛОК ПРИЗОВ И РЕЗЕРВА */
 .rewards-section {
@@ -329,24 +378,39 @@ html, body {
 }
 
 /* АДАПТИВНОСТЬ */
+@media (max-width: 900px) {
+    .player-profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    .account-block {
+        align-items: flex-start;
+        text-align: left;
+        width: 100%;
+    }
+}
+
 @media (max-width: 768px) {
     .player-sheet-wrap {
         margin: 15px 10px;
         padding: 20px 15px;
     }
-    .player-profile-header {
+    .profile-left {
         flex-direction: column;
         align-items: center;
         text-align: center;
         gap: 16px;
-        padding-bottom: 20px;
-        margin-bottom: 20px;
+        width: 100%;
     }
     .player-name {
         font-size: 22px;
     }
     .rewards-card {
         padding: 16px;
+    }
+    .account-value {
+        font-size: 28px;
     }
 }
 
@@ -402,16 +466,28 @@ html, body {
         <!-- Шапка профиля -->
         <div class="player-profile-header">
             
-            <!-- Обертка для аватарки, чтобы рамка осталась золотой -->
-            <div class="avatar-frame">
-                <img src="images/sayna.jpg" alt="Felicity Epicura" class="player-avatar" onerror="this.src='images/default.jpg'">
+            <div class="profile-left">
+                <!-- Обертка для аватарки -->
+                <div class="avatar-frame">
+                    <img src="images/sayna.jpg" alt="Felicity Epicura" class="player-avatar" onerror="this.src='images/default.jpg'">
+                </div>
+                
+                <div class="player-info">
+                    <p class="player-kicker">✦ Dafter-e Khas va Mokhafezat ✦</p>
+                    <h1 class="player-name" id="playerNameHeader">Felicity Epicura</h1>
+                    <div class="player-title-sub">Личный свиток казны, владений и резерва</div>
+                </div>
             </div>
-            
-            <div class="player-info">
-                <p class="player-kicker">✦ Dafter-e Khas va Mokhafezat ✦</p>
-                <h1 class="player-name" id="playerNameHeader">Felicity Epicura</h1>
-                <div class="player-title-sub">Личный свиток казны, владений и резерва</div>
+
+            <!-- БЛОК СЧЕТА (Справа) -->
+            <div class="account-block" id="accountBlock" style="display: none;">
+                <div class="account-label">Текущий счет</div>
+                <div class="account-value">
+                    <span id="accountAmount">0</span>
+                    <span class="account-currency" id="accountCurrency">аббаси</span>
+                </div>
             </div>
+
         </div>
 
         <!-- Секция призов и резерва (подтягивается из Google Docs) -->
@@ -432,6 +508,9 @@ html, body {
 
     async function loadPlayerRewardsFromDocs() {
         const container = document.getElementById('rewardsContainer');
+        const accountBlock = document.getElementById('accountBlock');
+        const accountAmount = document.getElementById('accountAmount');
+        const accountCurrency = document.getElementById('accountCurrency');
 
         try {
             const response = await fetch(GOOGLE_DOCS_SCRIPT_URL);
@@ -441,16 +520,46 @@ html, body {
                 const playerItems = json.data[CURRENT_PLAYER_NAME];
 
                 if (playerItems && playerItems.length > 0) {
-                    let html = '<ul style="padding-left: 20px; margin: 0;">';
+                    let rewardsHtml = '<ul style="padding-left: 20px; margin: 0;">';
+                    let hasAccount = false;
+
                     playerItems.forEach(item => {
+                        // Ищем строку, которая содержит "СЧЕТ:" или "СЧЁТ:"
+                        if (item.toUpperCase().includes("СЧЕТ:") || item.toUpperCase().includes("СЧЁТ:")) {
+                            // Ищем цифры
+                            const match = item.match(/([0-9.,\s]+)/);
+                            if (match) {
+                                accountAmount.textContent = match[1].trim();
+                                
+                                if (item.toLowerCase().includes("аббаси")) {
+                                    accountCurrency.textContent = "аббаси";
+                                } else if (item.toLowerCase().includes("аббас")) {
+                                    accountCurrency.textContent = "аббас";
+                                } else {
+                                    accountCurrency.textContent = "монет";
+                                }
+
+                                accountBlock.style.display = 'flex';
+                                hasAccount = true;
+                            }
+                            return; // Пропускаем эту строку, чтобы не добавлять в общий список
+                        }
+
+                        // Все остальное (Резерв, Призы) добавляем в список
                         if (item.endsWith(':') || item === 'РЕЗЕРВ:' || item.toUpperCase().includes('СГОРЯТ')) {
-                            html += `<li style="list-style: none; font-weight: bold; color: var(--gold-light); margin-top: 12px; margin-bottom: 6px; font-size: 15px;">${item}</li>`;
+                            rewardsHtml += `<li style="list-style: none; font-weight: bold; color: var(--gold-light); margin-top: 12px; margin-bottom: 6px; font-size: 15px;">${item}</li>`;
                         } else {
-                            html += `<li style="margin-bottom: 6px; line-height: 1.6;">${item}</li>`;
+                            rewardsHtml += `<li style="margin-bottom: 6px; line-height: 1.6;">${item}</li>`;
                         }
                     });
-                    html += '</ul>';
-                    container.innerHTML = html;
+                    
+                    rewardsHtml += '</ul>';
+
+                    if (!hasAccount) {
+                        accountBlock.style.display = 'none';
+                    }
+
+                    container.innerHTML = rewardsHtml;
                 } else {
                     const availableTabs = Object.keys(json.data).join(", ");
                     container.innerHTML = `<div style="color: var(--gold-soft);">Вкладка "${CURRENT_PLAYER_NAME}" не найдена. Найдены вкладки: ${availableTabs}</div>`;
