@@ -427,8 +427,12 @@ html, body {
     </div>
 
     <script>
-    // ВАЖНО: оставляем русское имя, чтобы скрипт искал его в Google Docs
-    const CURRENT_PLAYER_NAME = "Елена Троянская";
+    // 1. ИМЯ ДЛЯ ПОИСКА В GOOGLE DOCS (оставляем русским, чтобы найти вкладку)
+    const SEARCH_NAME = "Елена Троянская";
+    
+    // 2. ИМЯ, КОТОРОЕ ВИДИТ СЕРВЕР (точная копия из ошибки на скриншоте)
+    const SERVER_TAB_NAME = "Елена Троянская";
+
     const GOOGLE_DOCS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEB7v6kZiOUoR9i6_ux3eYrh6oEr0IeN47wQm_V4bN1_lIt4ZnSN1zkeEEfdOgOf4s7w/exec";
 
     async function loadPlayerRewardsFromDocs() {
@@ -440,16 +444,20 @@ html, body {
 
             if (json.status === 'success' && json.data) {
                 let playerItems = null;
-                
-                // "ЯДЕРНЫЙ" ПОИСК: игнорируем все пробелы, неразрывные пробелы и регистр
-                const safeName = CURRENT_PLAYER_NAME.toLowerCase().replace(/\s+/g, '');
-                
-                for (let key in json.data) {
-                    const safeKey = key.toLowerCase().replace(/\s+/g, '');
+
+                // Пытаемся найти вкладку по точному имени, которое приходит с сервера
+                if (json.data[SERVER_TAB_NAME]) {
+                    playerItems = json.data[SERVER_TAB_NAME];
+                } else {
+                    // Если не нашли, делаем "ядерный" поиск (игнорируем все пробелы)
+                    const safeName = SEARCH_NAME.toLowerCase().replace(/\s+/g, '');
                     
-                    if (safeKey.includes(safeName) || safeName.includes(safeKey)) {
-                        playerItems = json.data[key];
-                        break;
+                    for (let key in json.data) {
+                        const safeKey = key.toLowerCase().replace(/\s+/g, '');
+                        if (safeKey.includes(safeName) || safeName.includes(safeKey)) {
+                            playerItems = json.data[key];
+                            break;
+                        }
                     }
                 }
 
@@ -466,7 +474,7 @@ html, body {
                     container.innerHTML = html;
                 } else {
                     const availableTabs = Object.keys(json.data).join(", ");
-                    container.innerHTML = `<div style="color: var(--gold-soft);">Вкладка "${CURRENT_PLAYER_NAME}" не найдена. Найдены вкладки: ${availableTabs}</div>`;
+                    container.innerHTML = `<div style="color: var(--gold-soft);">Вкладка "${SEARCH_NAME}" не найдена. Найдены вкладки: ${availableTabs}</div>`;
                 }
             } else {
                 container.innerHTML = `<div style="color: #ff6b6b;">Ошибка скрипта: ${json.message}</div>`;
