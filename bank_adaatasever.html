@@ -438,7 +438,15 @@ html, body {
             const json = await response.json();
 
             if (json.status === 'success' && json.data) {
-                const playerItems = json.data[CURRENT_PLAYER_NAME];
+                // Мягкий поиск (игнорируем лишние пробелы по краям)
+                let playerItems = null;
+                
+                for (let key in json.data) {
+                    if (key.trim() === CURRENT_PLAYER_NAME.trim()) {
+                        playerItems = json.data[key];
+                        break;
+                    }
+                }
 
                 if (playerItems && playerItems.length > 0) {
                     let html = '<ul style="padding-left: 20px; margin: 0;">';
