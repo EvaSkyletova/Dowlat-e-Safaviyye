@@ -7,7 +7,7 @@
 <!-- Иконка вкладки -->
 <link rel="icon" type="image/png" href="leo.png">
 
-<title>Казна: Елена Троянская</title>
+<title>Казна: Helen of Troy</title>
 <style>
 @font-face {
     font-family: 'Yipes';
@@ -427,6 +427,7 @@ html, body {
     </div>
 
     <script>
+    // ВАЖНО: здесь оставляем русское имя, как в Google Доксе
     const CURRENT_PLAYER_NAME = "Елена Троянская";
     const GOOGLE_DOCS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEB7v6kZiOUoR9i6_ux3eYrh6oEr0IeN47wQm_V4bN1_lIt4ZnSN1zkeEEfdOgOf4s7w/exec";
 
@@ -438,7 +439,15 @@ html, body {
             const json = await response.json();
 
             if (json.status === 'success' && json.data) {
-                const playerItems = json.data[CURRENT_PLAYER_NAME];
+                // Мягкий поиск (игнорируем лишние пробелы по краям)
+                let playerItems = null;
+                
+                for (let key in json.data) {
+                    if (key.trim() === CURRENT_PLAYER_NAME.trim()) {
+                        playerItems = json.data[key];
+                        break;
+                    }
+                }
 
                 if (playerItems && playerItems.length > 0) {
                     let html = '<ul style="padding-left: 20px; margin: 0;">';
