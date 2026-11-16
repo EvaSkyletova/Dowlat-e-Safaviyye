@@ -279,7 +279,6 @@
     box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
   }
 
-  /* СТИЛЬ КНОПКИ КАК В activity.html */
   .refresh-btn {
     background: var(--panel-dark);
     color: var(--muted);
@@ -353,7 +352,6 @@
   }
   .character-group:last-child { margin-bottom: 0; }
 
-  /* ИМЯ ПЕРСОНАЖА */
   .character-group-header {
     background: rgba(212, 175, 55, 0.15);
     color: var(--gold-light);
@@ -372,7 +370,6 @@
     align-items: stretch;
   }
 
-  /* ФОТО ПЕРСОНАЖА СЛЕВА (ЧБ СТИЛЬ) */
   .character-avatar-box {
     width: 90px;
     min-width: 90px;
@@ -415,7 +412,6 @@
     filter: grayscale(100%);
   }
 
-  /* КОНТЕЙНЕР ТАБЛИЦЫ С ПРОКРУТКОЙ */
   .table-box-scroll {
     flex: 1;
     overflow-x: auto;
@@ -427,7 +423,6 @@
     border-collapse: collapse;
     text-align: left;
     font-size: 11px;
-    /* ИСПРАВЛЕНИЕ: убрали white-space: nowrap, разрешаем перенос длинных названий построек */
     white-space: normal; 
   }
 
@@ -439,7 +434,7 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     border-bottom: 1px solid var(--line);
-    white-space: nowrap; /* Шапке оставляем nowrap для красоты */
+    white-space: nowrap;
   }
 
   .builds-table td {
@@ -447,11 +442,9 @@
     border-bottom: 1px solid var(--line-soft);
     color: var(--text);
     vertical-align: middle;
-    /* Разрешаем перенос текста для ячеек */
     word-break: break-word;
   }
 
-  /* Задаем столбцу с названием постройки (первому) нормальный комфортный перенос и ширину */
   .builds-table td:first-child {
     min-width: 250px;
     max-width: 400px;
@@ -473,7 +466,7 @@
     font-size: 14px;
   }
 
-  /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ */
+  /* АДАПТАЦИЯ */
   @media (max-width: 850px) {
     .character-avatar-box {
       width: 75px;
@@ -527,7 +520,6 @@
 <body>
 
     <script>
-        // Эффект «пуньк» при клике
         window.addEventListener('click', (e) => {
             if (e.target.closest('a') || e.target.closest('button')) return;
             const echo = document.createElement('div');
@@ -539,7 +531,7 @@
         });
     </script>
 
-    <!-- ЕДИНАЯ СТРОГАЯ ШАПКА САЙТА С ПРАВИЛЬНЫМ TITLE И ФАВИКОНОМ -->
+    <!-- ШАПКА САЙТА -->
     <header class="site-header">
         <nav class="site-nav">
             <img src="logo.png" alt="Логотип" class="nav-logo">
@@ -572,7 +564,7 @@
           <p class="builds-subtitle">Имперский учет возводимых зданий, помещений и сооружений</p>
         </header>
 
-        <!-- ПАНЕЛЬ УПРАВЛЕНИЯ (ПОИСК + КНОПКА ОБНОВИТЬ) -->
+        <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
         <div class="controls-bar">
           <div class="search-box">
             <input type="text" id="searchInput" class="search-input" placeholder="Поиск по имени персонажа..." oninput="renderTable()" autocomplete="off">
@@ -594,12 +586,11 @@
     </div>
 
 <script>
-  // ССЫЛКА НА ВАШ GOOGLE APPS SCRIPT
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlF49zvDWqEa117mHXB5RT0Z75cj9HUudJTK8gVGjAVfAH89DtHZSMtN7cLfylQ60L9A/exec";
 
-// СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ
-const CHARACTER_AVATARS = {
-    # ——— Сефеви (шахская семья) ———
+  // СЛОВАРЬ ФОТОГРАФИЙ ПЕРСОНАЖЕЙ (ИСПРАВЛЕНЫ КОММЕНТАРИИ НА СТАНДАРТНЫЙ JS ФОРМАТ)
+  const CHARACTER_AVATARS = {
+    // Сефеви (шахская семья)
     "Нариман Сефеви": "images/nariman.jpg",
     "Сефи Сефеви": "images/sefi.jpg",
     "Эльдениз Сефеви": "images/eldeniz.jpg",
@@ -617,7 +608,7 @@ const CHARACTER_AVATARS = {
     "Шади Улья-бегим": "images/shadi.jpg",
     "Марджана Хатун": "images/marjana.jpg",
 
-    # ——— Баяты ———
+    // Баяты
     "Аббас Баят": "images/abbas.jpg",
     "Алекбер Баят": "images/alekber.jpg",
     "Орхан Баят": "images/orhan.jpg",
@@ -626,7 +617,7 @@ const CHARACTER_AVATARS = {
     "Салтанат Баят": "images/saltanat.jpg",
     "Мави-Лале Ханум": "images/mavilale.jpg",
 
-    # ——— Румлу ———
+    // Румлу
     "Дашдемир Румлу": "images/dashdemir.jpg",
     "Джаваншир Румлу": "images/javanshir.jpg",
     "Джахангир Румлу": "images/jahangir.jpg",
@@ -636,7 +627,7 @@ const CHARACTER_AVATARS = {
     "Карахан Румлу": "images/karakhan.jpg",
     "Ханин Хатун": "images/hanin.jpg",
 
-    # ——— Каджары ———
+    // Каджары
     "Рузи Каджар": "images/ruzi.jpg",
     "Сейфулла Каджар": "images/seyfulla.jpg",
     "Фарид Фавадари": "images/farid.jpg",
@@ -645,7 +636,7 @@ const CHARACTER_AVATARS = {
     "Инайат Каджар": "images/inayat.jpg",
     "Товусур Фавадари": "images/tovusur.jpg",
 
-    # ——— Шамлу ———
+    // Шамлу
     "Хусейн Шамлу": "images/husein.jpg",
     "Арслан Шамлу": "images/arslan.jpg",
     "Алаэддин Шамлу": "images/alaeddin.jpg",
@@ -656,14 +647,14 @@ const CHARACTER_AVATARS = {
     "Томирис Шамлу": "images/tomiris.jpg",
     "Ширин Хатун": "images/shirin.jpg",
 
-    # ——— Афшары ———
+    // Афшары
     "Боран Афшар": "images/boran.jpg",
     "Халид Афшар": "images/khalid.jpg",
     "Макпал Афшар": "images/makpal.jpg",
     "Джессамин Афшар": "images/jessamin.jpg",
     "Гаресах Хатун": "images/garesah.jpg",
 
-    # ——— Бахтиары ———
+    // Бахтиары
     "Саади Чехарленг": "images/saadi.jpg",
     "Мансур Чехарленг": "images/bahtiyar_mansur.jpg",
     "Бахтияр Чехарленг": "images/bahtiyar.jpg",
@@ -672,14 +663,14 @@ const CHARACTER_AVATARS = {
     "Асиль-Муна Чехарленг": "images/asil.jpg",
     "Белгюзар Хафтленг": "images/belgi.jpg",
 
-    # ——— Текели ———
+    // Текели
     "Джафар Текели": "images/jafar.jpg",
     "Алиаскар Текели": "images/aliaskar.jpg",
     "Сайна Текели": "images/sayna.jpg",
     "Мах-и-Мелек Текели": "images/melek.jpg",
     "Адила Текели": "images/adila.jpg",
 
-    # ——— Каратурлу ———
+    // Каратурлу
     "Туре Каратурлу": "images/ture.jpg",
     "Усман-ад-Дин Каратурлу": "images/usman.jpg",
     "Башар Каратурлу": "images/bashar.jpg",
@@ -689,10 +680,10 @@ const CHARACTER_AVATARS = {
     "Ибрисам Каратурлу": "images/ibrisam.jpg",
     "Мадиян Хатун": "images/madiyan.jpg",
 
-    # ——— Прочие жители ———
+    // Прочие жители
     "Нушине Ханым": "images/nushine.jpg",
     "Рахиль Хатун": "images/rahile.jpg"
-};
+  };
 
   let sheetsData = {
     process: [],
@@ -743,7 +734,6 @@ const CHARACTER_AVATARS = {
       return;
     }
 
-    // Группировка строк по имени персонажа
     let grouped = {};
     rows.forEach(row => {
       let charName = getRowCharacterName(row, currentTab);
@@ -762,7 +752,6 @@ const CHARACTER_AVATARS = {
     for (let charName in grouped) {
       let avatarHtml = getCharacterAvatar(charName);
       
-      // Считаем общую сумму взносов для активных построек
       let totalVznosHtml = "";
       if (currentTab === 'active') {
         let totalSum = 0;
@@ -803,7 +792,7 @@ const CHARACTER_AVATARS = {
       if (currentTab === 'process') {
         html += `<th>Название</th><th>Дата нач.</th><th>Год откр.</th><th>Место</th>`;
       } else if (currentTab === 'active') {
-        html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Poжертвования</th><th>Взнос</th>`;
+        html += `<th>Название</th><th>Год</th><th>Место</th><th>Состояние</th><th>Платеж</th><th>Пожертвования</th><th>Взнос</th>`;
       } else {
         html += `<th>Название</th><th>Год открытия</th><th>Место</th><th>Пожертвования</th>`;
       }
@@ -854,7 +843,6 @@ const CHARACTER_AVATARS = {
     }
   }
 
-  // Загружаем данные при открытии страницы
   fetchBuildsData();
 </script>
 
