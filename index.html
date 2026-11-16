@@ -90,7 +90,7 @@
         ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
-        /* ЕДИНАЯ ШАПКА САЙТА */
+        /* ЕДИНАЯ ШАПКА САЙТА (В ТОЧНОСТИ КАК НА ДРУГИХ СТРАНИЦАХ) */
         .site-header {
             display: flex;
             justify-content: center;
@@ -160,7 +160,7 @@
         /* ЗОЛОТАЯ КНОПКА-ЛУПА В ШАПКЕ СПРАВА */
         .header-search-wrap {
             position: absolute;
-            right: 25px;
+            right: 20px;
             display: flex;
             align-items: center;
         }
@@ -189,11 +189,11 @@
             transform: scale(1.05);
         }
 
-        /* ВЫПЛЫВАЮЩАЯ СТРОКА ПОИСКА (ABSOLUTE, НЕ СДВИГАЕТ КОНТЕНТ) */
+        /* ВЫПЛЫВАЮЩАЯ СТРОКА ПОИСКА */
         .floating-search-box {
             position: absolute;
             right: 0;
-            top: 50px;
+            top: 48px;
             width: 280px;
             background: var(--panel);
             border: 1px solid var(--gold);
@@ -621,7 +621,7 @@
             transform: translateY(-1px);
         }
 
-        /* АДАПТАЦИЯ */
+        /* АДАПТАЦИЯ (ПОЛНОЕ СХОДСТВО ШАПКИ НА ПК И ТЕЛЕФОНАХ) */
         @media (max-width: 920px) {
             .hall-grid {
                 flex-wrap: wrap; 
@@ -637,16 +637,14 @@
                 width: 100%;
                 height: 240px;
             }
-            .header-search-wrap {
-                right: 12px;
-            }
         }
 
         @media (max-width: 480px) {
-            .site-header { padding: 12px 10px; }
-            .site-nav { gap: 8px 10px; }
-            .nav-logo { height: 35px; margin-right: 5px; }
-            .site-nav a { font-size: 9.5px; letter-spacing: 0.4px; }
+            .site-header { padding: 10px 12px; }
+            .site-nav { gap: 12px 18px; }
+            .nav-logo { height: 42px; margin-right: 12px; }
+            .site-nav a { font-size: 11px; letter-spacing: 1.2px; }
+            .header-search-wrap { right: 10px; }
             .hero { padding: 25px 10px 10px 10px; }
             .hero-image-container { margin-bottom: 15px; }
             .hero h1 { font-size: 26px; }
@@ -659,8 +657,8 @@
             .palace-card { width: calc(50% - 6px); flex: 0 0 calc(50% - 6px); }
             .palace-window { height: 190px; }
             .name-plaque { padding: 10px 5px; min-height: 70px; }
-            .admin-name { font-size: 13px; }
-            .admin-role { font-size: 11px; }
+            .admin-name { font-size: 13.5px; }
+            .admin-role { font-size: 11.5px; }
         }
     </style>
 </head>
@@ -677,7 +675,7 @@
         });
     </script>
 
-    <!-- ШАПКА САЙТА -->
+    <!-- ШАПКА САЙТА (СТРОГО КАК НА ВСЕХ ОСТАЛЬНЫХ СТРАНИЦАХ) -->
     <header class="site-header">
         <nav class="site-nav">
             <img src="logo.png" alt="Логотип" class="nav-logo">
@@ -693,19 +691,19 @@
             <a href="map.html">Карта</a>
             <a href="guide.html">Звездный гид</a>
             <a href="letopis.html">Летопись</a>
-        </nav>
 
-        <!-- ЗОЛОТАЯ КНОПКА-ЛУПА И ВЫПЛЫВАЮЩАЯ СТРОКА -->
-        <div class="header-search-wrap">
-            <button class="search-toggle-btn" onclick="toggleSearchBox(event)" title="Поиск по сайту">
-                🔍
-            </button>
-            <div class="floating-search-box" id="floatingSearchBox">
-                <span class="floating-search-icon">🔍</span>
-                <input type="text" id="siteSearchInput" class="floating-search-input" placeholder="Поиск по сайту..." oninput="handleGlobalSearch(this.value)">
-                <div class="floating-search-results" id="searchResultsBox"></div>
+            <!-- ЗОЛОТАЯ КНОПКА-ЛУПА В ПРАВОЙ ЧАСТИ ШАПКИ -->
+            <div class="header-search-wrap">
+                <button class="search-toggle-btn" onclick="toggleSearchBox(event)" title="Поиск по сайту">
+                    🔍
+                </button>
+                <div class="floating-search-box" id="floatingSearchBox">
+                    <span class="floating-search-icon">🔍</span>
+                    <input type="text" id="siteSearchInput" class="floating-search-input" placeholder="Поиск по сайту..." oninput="handleGlobalSearch(this.value)">
+                    <div class="search-results" id="searchResultsBox"></div>
+                </div>
             </div>
-        </div>
+        </nav>
     </header>
 
     <!-- НАЗВАНИЕ И БОЛЬШАЯ КАРТИНКА -->
@@ -807,7 +805,6 @@
 
     <!-- СКРИПТЫ -->
     <script>
-        // БАЗА ДАННЫХ ДЛЯ ПОИСКА (ВКЛЮЧАЕТ ВСЕ ВАШИ ТЕМЫ И ТЕРМИНЫ)
         const sitePagesContent = [
             { title: "География и Звезды", url: "guide.html", keywords: "география звезды карты небесные сферы карта" },
             { title: "Календарь", url: "guide.html", keywords: "календарь счет дней месяцев время года" },
@@ -841,10 +838,9 @@
             { title: "Интриги и Яды", url: "reputation.html", keywords: "интриги яды отравления заговор тайны" },
             { title: "Правила и Беременность", url: "pravila.html", keywords: "беременность роды дети наследники правила закон" },
             { title: "Банк и Счета", url: "bank.html", keywords: "банк счета казна аббаси налоги золото" },
-            { title: "Анкеты персонажей", url: "ankets.html", keywords: "анкеты персонажи сефевиды кызылбаши" }
+            { title: "Анкеты персонажей", url: "ankets.html", keywords: "ankets персонажи сефевиды кызылбаши" }
         ];
 
-        // Открытие / закрытие выплывающей строки поиска
         function toggleSearchBox(e) {
             e.stopPropagation();
             const box = document.getElementById('floatingSearchBox');
@@ -864,7 +860,7 @@
                 return;
             }
 
-            const matches = sitePagesContent.filter(page => 
+            const matches = sitePagesContent.flexfilter ? [] : sitePagesContent.filter(page => 
                 page.title.toLowerCase().includes(q) || page.keywords.toLowerCase().includes(q)
             );
 
@@ -887,15 +883,15 @@
             resultsBox.style.display = 'block';
         }
 
-        // Закрытие поиска при клике вне его
         window.addEventListener('click', (e) => {
             if (!e.target.closest('.header-search-wrap')) {
-                document.getElementById('floatingSearchBox').classList.remove('active');
-                document.getElementById('searchResultsBox').style.display = 'none';
+                const box = document.getElementById('floatingSearchBox');
+                if (box) box.classList.remove('active');
+                const res = document.getElementById('searchResultsBox');
+                if (res) res.style.display = 'none';
             }
         });
 
-        // Модальное окно админов
         const adminQuotes = [
             "«И что ты хочешь про меня узнать?»",
             "«Не тыкай так грубо, будь ласковее»",
