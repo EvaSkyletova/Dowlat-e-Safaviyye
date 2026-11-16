@@ -56,7 +56,6 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы не было второго колесика */
             overflow-y: auto;
         }
 
@@ -318,7 +317,6 @@
             gap: 8px;
         }
 
-        /* Главная плашка общей репутации выделена золотой рамкой */
         .rep-card.main-banner {
             background: rgba(22, 22, 25, 0.95);
             border: 1px solid var(--gold);
@@ -377,7 +375,6 @@
             transition: width 0.6s ease;
         }
 
-        /* Цвета шкал по уровням */
         .fill-red { background: linear-gradient(90deg, #b33939, #eb4d4b); box-shadow: 0 0 10px rgba(235, 77, 75, 0.4); }
         .fill-yellow { background: linear-gradient(90deg, #d4af37, #fbe8a6); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
         .fill-green { background: linear-gradient(90deg, #27ae60, #2ecc71); box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
@@ -493,7 +490,6 @@
             .sheet-content { padding: 15px 10px; }
             .tab-content { padding: 12px 10px; }
 
-            /* Идеальная компоновка репутации на узких экранах */
             .rep-card-top {
                 flex-direction: column;
                 align-items: flex-start;
@@ -587,7 +583,7 @@
 
                 <div id="personality" class="tab-content">
                     <p>Каждый, живущий во дворце Али-Капу прочувствовал на себе то с какой силой стены дворца, стоящие на костях и манящие к себе самым сладким ядом – властью, давят на сознание, заставляют счастливые дни покрыться пылью и обратиться в прах забытых воспоминаний. Нариман всегда рос слишком уж смышленым ребенком. Было ли дело в том, что его матерью была Акбану-бегим, что многим напоминала ледяную королеву или в чем-то другом никто не знал, но факт оставался фактом – Мирза совсем не походил на детей своего возраста. С момента отлучения матери и обиды на отца за женитьбы на рабыне Хайзуран, он стал пылкий, скорым на гнев и раздражительным. Он был дитем, которому казалось что в момент он лишился не только матери, но и вообще обоих родителей в целом и если бы не чуткое воспитание Рухангиз, то он, вероятно вырос бы человеком невероятной гадости и жестокости. Сейчас же, где бы, с кем бы они не был, его всегда преследует аура мрачности, отдающая оттенками беззвучного, гнева, задушенного еще в зародыше. Эта аура — защитный механизм, который с каждым годом становится все ощутимее и ощутимее. Нариман нетерпим к проявлению слабостей и нерешимости; готов заколоть себя своим же мечом лишь бы, как ему кажется, не опозориться.</p>
-                    <p>В тоже время, Мирза большой задира с колким языком. Он неустанно цепляется к братьям, играя на их недостатках их характеров, а также подшучивает над Хафсанур, то и дело дергая ее за рыжие локоны. Ему доставляет великое удовольствие смотреть на то как они свирепеют, а после перекидывать вину на них же самих, представая перед отцом в белом свете. Мохаммеда Нариман бесконечно уважает, пускай он и понимает что прошлые его решения не дали им возможность стать близкими. Он в первую очередь видит в нем шаха, сын никогда не предаст собственного отца; Он также очень уважает его главную супругу – Рухангиз. Она не стала для него новой Акбану, но он ценит его воспитание и советы так, как юноша его возраста вообще может их ценить. Готов наказать всякого во дворце, кто проявит к ней свое неуважение. Что ни говори, но всем любимым людям Наримана время от времени приходится не сладко. Он всегда живет где-то там, в своем выдуманном мире, его голова всегда преисполнена целями и планами, которые понятны лишь ему.</p>
+                    <p>В тоже время, Мирза большой задира с колким языком. Он неустанно цепляется к братьям, играя на их недостатках их характеров, а также подшучивает над Хафсанур, то и дело дергая ее за рыжие локоны. Ему доставляет великое удовольствие смотреть на то как они свирепеют, а после перекидывать вину на них же самих, представая перед отцом в белом свете. Мохаммеда Нариман бесконечно уважает, пускай он и понимает что прошлые его решения не дали им возможность стать близкими. Он в первую очередь видит в нем шаха, сын никогда не предаст собственного отца; Он также очень уважает его главную супругу – Рухангиз. Она не стала для него новой Акбану, но он ценит его воспитание и советы так, как юноша его возраста вообще может его ценить. Готов наказать всякого во дворце, кто проявит к ней свое неуважение. Что ни говори, но всем любимым людям Наримана время от времени приходится не сладко. Он всегда живет где-то там, в своем выдуманном мире, его голова всегда преисполнена целями и планами, которые понятны лишь ему.</p>
                 </div>
 
                 <div id="additional" class="tab-content">
@@ -663,7 +659,7 @@
 </div>
 
 <script>
-    // Эффект «пуньк» при клике (исправлен, чтобы не блокировать ссылки)
+    // Эффект «пуньк» при клике
     window.addEventListener('click', (e) => {
         if (e.target.closest('a') || e.target.closest('.tab-btn') || e.target.closest('button')) return;
 
@@ -735,7 +731,7 @@
         });
     }
 
-    // --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ (СО ШКАЛАМИ) ---
+    // --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ ---
     const REP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDpw/exec"; 
     const CURRENT_CHARACTER_NAME = "Нариман"; 
 
@@ -758,25 +754,60 @@
 
             let totalPoints = 0;
             let count = 0;
+
+            // Строгий порядок категорий репутации по вашему списку
+            const desiredOrder = [
+                "Светский престиж",
+                "Расположение персидского народа",
+                "Расположение тюркского народа",
+                "Военная репутация",
+                "Религиозность и благотворительность"
+            ];
+
             let categoriesHtml = "";
 
-            for (const [category, pointsRaw] of Object.entries(repData)) {
-                const points = Number(pointsRaw) || 0;
-                totalPoints += points;
-                count++;
+            // Сначала выводим категории строго в нужном порядке
+            desiredOrder.forEach(category => {
+                if (repData.hasOwnProperty(category)) {
+                    const points = Number(repData[category]) || 0;
+                    totalPoints += points;
+                    count++;
 
-                const lvlInfo = getReputationLevel(points);
-                categoriesHtml += `
-                    <div class="rep-card">
-                        <div class="rep-card-top">
-                            <span class="rep-card-title">${category}</span>
-                            <span class="rep-card-value">${points} / 100 <span>(Уровень: ${lvlInfo.name})</span></span>
+                    const lvlInfo = getReputationLevel(points);
+                    categoriesHtml += `
+                        <div class="rep-card">
+                            <div class="rep-card-top">
+                                <span class="rep-card-title">${category}</span>
+                                <span class="rep-card-value">${points} / 100 <span>(Уровень: ${lvlInfo.name})</span></span>
+                            </div>
+                            <div class="rep-bar-wrap">
+                                <div class="rep-bar-fill ${lvlInfo.fillClass}" style="width: ${Math.min(Math.max(points, 0), 100)}%;"></div>
+                            </div>
                         </div>
-                        <div class="rep-bar-wrap">
-                            <div class="rep-bar-fill ${lvlInfo.fillClass}" style="width: ${Math.min(Math.max(points, 0), 100)}%;"></div>
+                    `;
+                }
+            });
+
+            // На случай, если в таблице появятся другие категории, выведем их следом
+            for (const [category, pointsRaw] of Object.entries(repData)) {
+                if (!desiredOrder.includes(category)) {
+                    const points = Number(pointsRaw) || 0;
+                    totalPoints += points;
+                    count++;
+
+                    const lvlInfo = getReputationLevel(points);
+                    categoriesHtml += `
+                        <div class="rep-card">
+                            <div class="rep-card-top">
+                                <span class="rep-card-title">${category}</span>
+                                <span class="rep-card-value">${points} / 100 <span>(Уровень: ${lvlInfo.name})</span></span>
+                            </div>
+                            <div class="rep-bar-wrap">
+                                <div class="rep-bar-fill ${lvlInfo.fillClass}" style="width: ${Math.min(Math.max(points, 0), 100)}%;"></div>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             }
 
             if (count === 0) {
@@ -787,7 +818,6 @@
             const avg = Math.round(totalPoints / count);
             const avgLvlInfo = getReputationLevel(avg);
 
-            // Собираем общую репутацию со шкалой + все остальные категории
             stackContainer.innerHTML = `
                 <div class="rep-card main-banner">
                     <div class="rep-card-top">
@@ -805,6 +835,9 @@
             stackContainer.innerHTML = `<div style="text-align:center; padding: 20px; color: #ff6b6b;">Не удалось загрузить данные репутации.</div>`;
         }
     }
+
+    document.addEventListener('DOMContentLoaded', loadReputation);
+</script>
 
 </body>
 </html>
