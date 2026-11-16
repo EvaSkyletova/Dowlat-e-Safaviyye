@@ -60,7 +60,6 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll и лишние жесткие ограничения */
             overflow-y: auto; 
         }
 
@@ -114,7 +113,6 @@
             flex-wrap: wrap;
         }
 
-        /* ЛОГОТИП В МЕНЮ (БЕЗ СВЕЧЕНИЯ) */
         .nav-logo {
             height: 50px;
             width: auto;
@@ -159,10 +157,128 @@
             text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
         }
 
-        /* HERO SECTION — ЗАГОЛОВОК И БОЛЬШАЯ КАРТИНКА */
+        /* ЗОЛОТАЯ КНОПКА-ЛУПА В ШАПКЕ СПРАВА */
+        .header-search-wrap {
+            position: absolute;
+            right: 25px;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-toggle-btn {
+            background: var(--panel-dark);
+            border: 1px solid var(--line);
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .search-toggle-btn:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold-light);
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* ВЫПЛЫВАЮЩАЯ СТРОКА ПОИСКА (ABSOLUTE, НЕ СДВИГАЕТ КОНТЕНТ) */
+        .floating-search-box {
+            position: absolute;
+            right: 0;
+            top: 50px;
+            width: 280px;
+            background: var(--panel);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.95);
+            display: none;
+            z-index: 1000;
+            animation: searchFadeIn 0.25s ease-out forwards;
+        }
+
+        .floating-search-box.active {
+            display: block;
+        }
+
+        @keyframes searchFadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .floating-search-input {
+            width: 100%;
+            padding: 9px 12px 9px 34px;
+            background: var(--panel-dark);
+            border: 1px solid var(--line);
+            border-radius: 6px;
+            color: var(--text);
+            font-size: 13px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        .floating-search-input:focus {
+            border-color: var(--gold-light);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+
+        .floating-search-icon {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            color: var(--gold);
+            font-size: 13px;
+            pointer-events: none;
+        }
+
+        .floating-search-results {
+            margin-top: 8px;
+            max-height: 220px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .search-result-item {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 10px;
+            color: var(--text);
+            text-decoration: none;
+            border-bottom: 1px solid var(--line-strong);
+            transition: 0.2s;
+            border-radius: 4px;
+        }
+
+        .search-result-item:hover {
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--gold-light);
+        }
+
+        .search-result-title {
+            font-size: 12.5px;
+            font-weight: bold;
+            color: var(--gold-light);
+        }
+
+        .search-result-snippet {
+            font-size: 10.5px;
+            color: var(--muted);
+            font-style: italic;
+        }
+
+        /* HERO SECTION */
         .hero {
             text-align: center;
-            padding: 40px 20px 10px 20px;
+            padding: 30px 20px 10px 20px;
             background: transparent;
             display: flex;
             flex-direction: column;
@@ -225,9 +341,7 @@
             font-weight: bold;
         }
 
-        /* ========================================= */
-        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) И СВАЙП      */
-        /* ========================================= */
+        /* БЛОКИ (КЛИПЫ, ВИДЕО, ASK, СТАТЬИ) */
         .media-buttons-section {
             max-width: 1100px;
             margin: 0 auto 50px auto;
@@ -237,7 +351,7 @@
 
         .media-buttons-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
         }
 
@@ -312,12 +426,9 @@
                 overflow-x: auto;
                 -webkit-overflow-scrolling: touch;
                 scroll-snap-type: x mandatory;
-                -ms-overflow-style: none;
                 scrollbar-width: none;
             }
-            .media-buttons-section::-webkit-scrollbar {
-                display: none;
-            }
+            .media-buttons-section::-webkit-scrollbar { display: none; }
             
             .media-buttons-grid {
                 display: flex;
@@ -328,9 +439,9 @@
             }
             
             .media-card {
-                width: 85vw;
-                max-width: 350px;
-                height: 160px;
+                width: 75vw;
+                max-width: 280px;
+                height: 150px;
                 flex: 0 0 auto;
                 scroll-snap-align: center;
             }
@@ -355,9 +466,7 @@
             }
         }
 
-        /* ========================================= */
-        /* БЛОК АДМИНИСТРАЦИИ                        */
-        /* ========================================= */
+        /* БЛОК АДМИНИСТРАЦИИ */
         .safavid-grand-hall {
             background: transparent;
             color: #cccccc;
@@ -469,9 +578,7 @@
             text-align: center;
         }
 
-        /* ========================================= */
-        /* МОДАЛЬНОЕ ОКНО (ВСПЛЫВАЮЩЕЕ ОКНО)         */
-        /* ========================================= */
+        /* МОДАЛЬНОЕ ОКНО */
         .admin-modal-overlay {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -514,98 +621,52 @@
             transform: translateY(-1px);
         }
 
-        /* ========================================= */
-        /* АДАПТАЦИЯ ДЛЯ ТЕЛЕФОНОВ                   */
-        /* ========================================= */
+        /* АДАПТАЦИЯ */
         @media (max-width: 920px) {
-            /* Включаем перенос строк для карточек */
             .hall-grid {
                 flex-wrap: wrap; 
                 justify-content: center;
-                gap: 15px; /* Уменьшаем отступ между карточками */
+                gap: 15px;
                 padding: 0 10px;
             }
-            /* Настраиваем размер так, чтобы влезало ровно 2 карточки */
             .palace-card {
-                width: calc(50% - 10px); /* 50% минус половина отступа */
+                width: calc(50% - 10px);
                 flex: 0 0 calc(50% - 10px);
             }
             .palace-window {
                 width: 100%;
-                height: 240px; /* Чуть увеличили высоту для красоты */
+                height: 240px;
+            }
+            .header-search-wrap {
+                right: 12px;
             }
         }
 
         @media (max-width: 480px) {
-            .site-header {
-                padding: 12px 10px;
-            }
-            .site-nav {
-                gap: 10px 15px;
-            }
-            .nav-logo {
-                height: 40px;
-                margin-right: 8px;
-            }
-            .site-nav a {
-                font-size: 10px;
-                letter-spacing: 0.6px;
-            }
-            .hero {
-                padding: 30px 10px 10px 10px;
-            }
-            .hero-image-container {
-                margin-bottom: 15px;
-            }
-            .hero h1 {
-                font-size: 26px;
-            }
-            .intro-container {
-                margin: 15px auto;
-                padding: 0 10px;
-            }
-            .intro-text {
-                padding: 20px 16px;
-                font-size: 14px;
-            }
-            .safavid-grand-hall {
-                padding: 0 10px 40px 10px;
-            }
-            .hall-title {
-                font-size: 18px;
-            }
-            .hall-divider {
-                margin-bottom: 25px;
-            }
-            
-            /* Дополнительная настройка для узких экранов */
-            .hall-grid {
-                gap: 12px;
-            }
-            .palace-card {
-                width: calc(50% - 6px);
-                flex: 0 0 calc(50% - 6px);
-            }
-            .palace-window {
-                height: 190px; /* Уменьшаем окно, чтобы карточки не были огромными */
-            }
-            .name-plaque {
-                padding: 10px 5px;
-                min-height: 70px;
-            }
-            .admin-name {
-                font-size: 13px;
-            }
-            .admin-role {
-                font-size: 11px;
-            }
+            .site-header { padding: 12px 10px; }
+            .site-nav { gap: 8px 10px; }
+            .nav-logo { height: 35px; margin-right: 5px; }
+            .site-nav a { font-size: 9.5px; letter-spacing: 0.4px; }
+            .hero { padding: 25px 10px 10px 10px; }
+            .hero-image-container { margin-bottom: 15px; }
+            .hero h1 { font-size: 26px; }
+            .intro-container { margin: 15px auto; padding: 0 10px; }
+            .intro-text { padding: 20px 16px; font-size: 14px; }
+            .safavid-grand-hall { padding: 0 10px 40px 10px; }
+            .hall-title { font-size: 18px; }
+            .hall-divider { margin-bottom: 25px; }
+            .hall-grid { gap: 12px; }
+            .palace-card { width: calc(50% - 6px); flex: 0 0 calc(50% - 6px); }
+            .palace-window { height: 190px; }
+            .name-plaque { padding: 10px 5px; min-height: 70px; }
+            .admin-name { font-size: 13px; }
+            .admin-role { font-size: 11px; }
         }
     </style>
 </head>
 <body>
 
     <script>
-        // Эффект «пуньк» при клике
         window.addEventListener('click', (e) => {
             const echo = document.createElement('div');
             echo.className = 'click-echo';
@@ -633,6 +694,18 @@
             <a href="guide.html">Звездный гид</a>
             <a href="letopis.html">Летопись</a>
         </nav>
+
+        <!-- ЗОЛОТАЯ КНОПКА-ЛУПА И ВЫПЛЫВАЮЩАЯ СТРОКА -->
+        <div class="header-search-wrap">
+            <button class="search-toggle-btn" onclick="toggleSearchBox(event)" title="Поиск по сайту">
+                🔍
+            </button>
+            <div class="floating-search-box" id="floatingSearchBox">
+                <span class="floating-search-icon">🔍</span>
+                <input type="text" id="siteSearchInput" class="floating-search-input" placeholder="Поиск по сайту..." oninput="handleGlobalSearch(this.value)">
+                <div class="floating-search-results" id="searchResultsBox"></div>
+            </div>
+        </div>
     </header>
 
     <!-- НАЗВАНИЕ И БОЛЬШАЯ КАРТИНКА -->
@@ -650,9 +723,13 @@
         </section>
     </div>
 
-    <!-- БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) -->
+    <!-- БЛОКИ (КЛИПЫ, ВИДЕО, ASK, СТАТЬИ) -->
     <section class="media-buttons-section">
         <div class="media-buttons-grid">
+            <a href="ask.html" class="media-card">
+                <img src="https://i.ibb.co/6R228ZtF/image.png" alt="Ask">
+                <span class="media-title">Ask</span>
+            </a>
             <a href="https://vk.ru/@club182656984?isCloseForwardPush=false" target="_blank" rel="noopener noreferrer" class="media-card">
                 <img src="https://sun9-84.vkuserphoto.ru/s/v1/ig2/TzVvfmukS2gOH8H65PyJCvEUW8j6Ht8FcD2SKmuub_JKrRFggu5hx3uL7MpWRVLiAJZ_ohuBj7-XSehZRKRWjjpt.jpg" alt="Статьи">
                 <span class="media-title">Статьи</span>
@@ -728,8 +805,97 @@
         </div>
     </div>
 
-    <!-- СКРИПТ ДЛЯ МОДАЛЬНОГО ОКНА -->
+    <!-- СКРИПТЫ -->
     <script>
+        // БАЗА ДАННЫХ ДЛЯ ПОИСКА (ВКЛЮЧАЕТ ВСЕ ВАШИ ТЕМЫ И ТЕРМИНЫ)
+        const sitePagesContent = [
+            { title: "География и Звезды", url: "guide.html", keywords: "география звезды карты небесные сферы карта" },
+            { title: "Календарь", url: "guide.html", keywords: "календарь счет дней месяцев время года" },
+            { title: "Прогноз погоды", url: "guide.html", keywords: "прогноз погоды климат исфахана ветры буря" },
+            { title: "Фазы луны", url: "guide.html", keywords: "фазы луны ночное светило астрономия" },
+            { title: "Часы муэдзина", url: "guide.html", keywords: "часы муэдзина время молитв тишины намаз" },
+            { title: "Зодиак", url: "guide.html", keywords: "зодиак небесные покровители гороскоп" },
+            { title: "Астролябия судеб", url: "guide.html", keywords: "астролябия судеб инструмент звездочетов предсказание" },
+            { title: "Оракул судьбы", url: "guide.html", keywords: "оракул судьбы шахское гадание знаки предзнаменование" },
+            { title: "Вести и Слухи", url: "guide.html", keywords: "вести слухи шепоты базаров сплетни новости" },
+            { title: "Государственные указы", url: "guide.html", keywords: "государственные указы веления власти законы шаха" },
+            { title: "Религия", url: "guide.html", keywords: "религия оплот веры закона ислам шииты имам" },
+            { title: "Образование", url: "guide.html", keywords: "образование мудрость медресе наука ученые" },
+            { title: "Наука и искусство", url: "guide.html", keywords: "наука искусство ковры трактаты поэзия поэты" },
+            { title: "Доска почета", url: "guide.html", keywords: "доска почета герои месяца награды активность" },
+            { title: "Флэшбеки", url: "guide.html", keywords: "флешбеки воспоминания минувших дней прошлое" },
+            { title: "Строительство", url: "build.html", keywords: "строительство дворцы сады мосты заявки" },
+            { title: "Склеп Империи", url: "crypt.html", keywords: "склеп усопшие герои умершие персонажи" },
+            { title: "Особенности останов", url: "map.html", keywords: "особенности останов провинции регионы земли" },
+            { title: "Али-Капу", url: "structure.html", keywords: "али капу дворец резиденция шахский двор" },
+            { title: "Исфахан", url: "map.html", keywords: "исфахан столица великий город сердце империи" },
+            { title: "Накш-э Джахан", url: "map.html", keywords: "накш э джахан площадь рынок столица" },
+            { title: "Калькулятор пути", url: "army.html", keywords: "калькулятор пути расстояния переходы поход" },
+            { title: "Войска и Корпусы", url: "army.html", keywords: "войска поединки военные корпусы армия гулямы топчи" },
+            { title: "Титулы империи", url: "structure.html", keywords: "титулы ранги беглербег мирза амир эфеднди шахзаде" },
+            { title: "Великий Меджлис", url: "structure.html", keywords: "меджлис совет векил диван министры" },
+            { title: "Шпион и Подслушка", url: "spy.html", keywords: "шпион подслушка разведка тайны агенты" },
+            { title: "Калькулятор товаров", url: "market.html", keywords: "калькулятор товаров рынок купля продажа шелк специи" },
+            { title: "Бизнес", url: "business.html", keywords: "бизнес доход лавки ремесло лавки" },
+            { title: "Счетчик постов", url: "schetchik.html", keywords: "счетчик постов активность символы знаки" },
+            { title: "Интриги и Яды", url: "reputation.html", keywords: "интриги яды отравления заговор тайны" },
+            { title: "Правила и Беременность", url: "pravila.html", keywords: "беременность роды дети наследники правила закон" },
+            { title: "Банк и Счета", url: "bank.html", keywords: "банк счета казна аббаси налоги золото" },
+            { title: "Анкеты персонажей", url: "ankets.html", keywords: "анкеты персонажи сефевиды кызылбаши" }
+        ];
+
+        // Открытие / закрытие выплывающей строки поиска
+        function toggleSearchBox(e) {
+            e.stopPropagation();
+            const box = document.getElementById('floatingSearchBox');
+            box.classList.toggle('active');
+            if (box.classList.contains('active')) {
+                document.getElementById('siteSearchInput').focus();
+            }
+        }
+
+        function handleGlobalSearch(query) {
+            const q = query.trim().toLowerCase();
+            const resultsBox = document.getElementById('searchResultsBox');
+            
+            if (!q || q.length < 2) {
+                resultsBox.style.display = 'none';
+                resultsBox.innerHTML = '';
+                return;
+            }
+
+            const matches = sitePagesContent.filter(page => 
+                page.title.toLowerCase().includes(q) || page.keywords.toLowerCase().includes(q)
+            );
+
+            if (matches.length === 0) {
+                resultsBox.style.display = 'block';
+                resultsBox.innerHTML = `<div class="search-result-item" style="color:var(--muted); cursor:default;"><span class="search-result-title">Ничего не найдено</span></div>`;
+                return;
+            }
+
+            let html = '';
+            matches.forEach(item => {
+                html += `
+                    <a href="${item.url}" class="search-result-item">
+                        <span class="search-result-title">✦ ${item.title}</span>
+                        <span class="search-result-snippet">Найдено в архивах</span>
+                    </a>
+                `;
+            });
+            resultsBox.innerHTML = html;
+            resultsBox.style.display = 'block';
+        }
+
+        // Закрытие поиска при клике вне его
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('.header-search-wrap')) {
+                document.getElementById('floatingSearchBox').classList.remove('active');
+                document.getElementById('searchResultsBox').style.display = 'none';
+            }
+        });
+
+        // Модальное окно админов
         const adminQuotes = [
             "«И что ты хочешь про меня узнать?»",
             "«Не тыкай так грубо, будь ласковее»",
