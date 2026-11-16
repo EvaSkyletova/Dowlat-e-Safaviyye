@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<!-- Иконка вкладки -->
+<link rel="icon" type="image/png" href="leo.png">
+
+<title>Анонимные мнения</title>
+
+<style>
+  /* ========================================= */
+  /* ПОДКЛЮЧЕНИЕ ШРИФТА YIPES                  */
+  /* ========================================= */
+  @font-face {
+    font-family: 'Yipes';
+    src: url('yipes-regular.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  :root {
+    --gold-dark: #8c6a08;
+    --gold: #d4af37;
+    --gold-light: #fbe8a6;
+    --gold-soft: #c5a059;
+    --text: #f0ebd8;
+    --muted: #a69e88;
+    --line: rgba(212, 175, 55, 0.3);
+    --line-strong: rgba(212, 175, 55, 0.65);
+    --bg: #161618;
+    --panel: rgba(22, 22, 25, 0.95);
+    --panel-soft: rgba(26, 26, 30, 0.9);
+    --panel-dark: rgba(14, 14, 16, 0.95);
+    --success: #88cb8b;
+    --danger: #d98888;
+  }
+
+  /* Золотая стрелочка для всего сайта */
+  body, *, a, button, input, select, textarea, option, optgroup {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M3 2l18 10-8 3-4 7z' fill='%23d4af37' stroke='%238c6a08' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E"), auto !important;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+    font-family: Georgia, "Times New Roman", serif !important;
+    font-style: normal !important;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg) !important;
+    color: var(--text);
+    background-image:
+      radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+      linear-gradient(to bottom, #161618, #0b0b0d);
+    overflow: hidden;
+  }
+
+  /* ЭФФЕКТ ПУЛЬСАЦИИ-ЭХА («ПУНЬК») ПРИ КЛИКЕ */
+  .click-echo {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    border: 2px solid var(--gold-light);
+    border-radius: 50%;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    animation: echoPulse 0.55s cubic-bezier(0, 0.2, 0.8, 1) forwards;
+    z-index: 999999;
+  }
+
+  @keyframes echoPulse {
+    0% { width: 12px; height: 12px; opacity: 1; box-shadow: 0 0 12px var(--gold); }
+    100% { width: 80px; height: 80px; opacity: 0; box-shadow: 0 0 30px rgba(212, 175, 55, 0); }
+  }
+
+  /* Фирменный золотой скроллбар */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold-dark) transparent;
+  }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+  /* ЕДИНАЯ ШАПКА САЙТА */
+  .site-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    border-bottom: 2px solid var(--line);
+    background: rgba(18, 18, 20, 0.96);
+    backdrop-filter: blur(12px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.7);
+  }
+
+  .site-nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .nav-logo {
+    height: 50px;
+    width: auto;
+    margin-right: 15px;
+    transition: transform 0.3s ease;
+  }
+  .nav-logo:hover {
+    transform: scale(1.1);
+  }
+
+  .site-nav a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    padding: 4px 0;
+    position: relative;
+    font-weight: 500;
+  }
+
+  .site-nav a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 1px;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--gold);
+    transition: width 0.3s ease;
+  }
+
+  .site-nav a:hover::after, .site-nav a.active::after {
+    width: 100%;
+  }
+
+  .site-nav a:hover, .site-nav a.active {
+    color: var(--gold-light);
+    text-shadow: 0 0 10px rgba(251, 232, 166, 0.4);
+  }
+
+  /* СЕКЦИЯ СТРОГО ПО ФОРМАТУ ЭКРАНА */
+  .page-section {
+    width: 100%;
+    height: calc(100vh - 78px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 10px 20px 30px;
+    box-sizing: border-box;
+    overflow: hidden;
+    border-bottom: 2px solid var(--gold);
+  }
+
+  /* КНОПКА НАЗАД */
+  .back-btn {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: var(--panel-dark);
+    color: var(--gold-light);
+    text-decoration: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+  }
+
+  .back-btn:hover {
+    border-color: var(--gold);
+    background: rgba(212, 175, 55, 0.1);
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    transform: translateX(-3px);
+  }
+
+  /* ЧЕРНО-БЕЛЫЕ КАРТИНКИ ПО БОКАМ */
+  .side-decoration {
+    position: absolute;
+    bottom: 0;
+    height: 100%;
+    max-height: 100%;
+    width: auto;
+    object-fit: contain;
+    object-position: bottom;
+    filter: grayscale(100%) contrast(110%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .side-decoration.left {
+    left: 10px;
+    object-position: bottom left;
+  }
+
+  .side-decoration.right {
+    right: 10px;
+    object-position: bottom right;
+  }
+
+  /* КОНТЕЙНЕР ФОРМЫ */
+  .ask-wrap {
+    width: 100%;
+    max-width: 580px;
+    padding: 28px 32px;
+    background: linear-gradient(145deg, rgba(22, 22, 25, 0.96), rgba(14, 14, 16, 0.99));
+    border: 1px solid var(--line);
+    border-top: 2px solid var(--gold);
+    border-bottom: 2px solid var(--gold);
+    border-radius: 12px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), inset 0 0 25px rgba(212, 175, 55, 0.05);
+    z-index: 3;
+    position: relative;
+  }
+
+  .ask-wrap::before,
+  .ask-wrap::after {
+    content: '✦';
+    position: absolute;
+    color: var(--gold);
+    font-size: 12px;
+  }
+  .ask-wrap::before { top: 8px; left: 12px; }
+  .ask-wrap::after { top: 8px; right: 12px; }
+
+  .ask-header {
+    text-align: center;
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .ask-kicker {
+    margin: 0 0 4px;
+    color: var(--gold-soft);
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-weight: bold;
+  }
+
+  .ask-title {
+    margin: 0 0 6px;
+    color: var(--gold-light);
+    font-size: 24px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: normal;
+    font-family: 'Yipes', Georgia, serif !important;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  }
+
+  .ask-desc {
+    margin: 0;
+    color: var(--muted);
+    font-size: 12.5px;
+    font-style: italic;
+    line-height: 1.4;
+  }
+
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+
+  label {
+    font-size: 11.5px;
+    color: var(--gold-soft);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+  }
+
+  textarea {
+    width: 100%;
+    height: 160px;
+    background: var(--panel-dark);
+    color: var(--text);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 12px 14px;
+    outline: none;
+    font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    transition: all 0.2s;
+  }
+
+  textarea:focus {
+    border-color: var(--gold-light);
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+  }
+
+  textarea::placeholder {
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .submit-btn {
+    width: 100%;
+    margin-top: 6px;
+    padding: 12px;
+    background: linear-gradient(90deg, #b89947, #d4af37, #b89947);
+    color: #121008;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s ease;
+  }
+
+  .submit-btn:hover:not(:disabled) {
+    background: linear-gradient(90deg, #d4af37, #fbe8a6, #d4af37);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  }
+
+  .submit-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(136, 203, 139, 0.95);
+    color: #121008;
+    border: 1px solid var(--success);
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 13.5px;
+    font-weight: bold;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  }
+  .toast.show { opacity: 1; }
+
+  /* Адаптивность для телефонов и планшетов */
+  @media (max-width: 1200px) {
+    .side-decoration {
+      display: none;
+    }
+  }
+
+  @media (max-width: 850px) {
+    .ask-wrap {
+      padding: 22px 20px;
+    }
+    .back-btn {
+        top: 10px;
+        left: 10px;
+        padding: 8px 12px;
+        font-size: 11px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .site-header {
+      padding: 12px 10px;
+    }
+    .site-nav {
+      gap: 10px 15px;
+    }
+    .nav-logo {
+      height: 40px;
+      margin-right: 8px;
+    }
+    .site-nav a {
+      font-size: 10px;
+      letter-spacing: 0.6px;
+    }
+    .ask-title {
+      font-size: 20px;
+    }
+    .page-section {
+      padding: 10px 10px 30px;
+    }
+  }
+</style>
+</head>
+<body>
+
+    <!-- ШАПКА САЙТА -->
+    <header class="site-header">
+        <nav class="site-nav">
+            <img src="logo.png" alt="Логотип" class="nav-logo">
+
+            <a href="index.html">Главная</a>
+            <a href="activity.html">Активность</a>
+            <a href="ankets.html">Анкеты</a>
+            <a href="pravila.html">Правила</a>
+            <a href="bank.html">Банк</a>
+            <a href="reputation.html">Репутация</a>
+            <a href="structure.html">Устройство Персии</a>
+            <a href="army.html">Армия</a>
+            <a href="map.html">Карта</a>
+            <a href="guide.html">Звездный гид</a>
+            <a href="letopis.html">Летопись</a>
+        </nav>
+    </header>
+
+<!-- СЕКЦИЯ: ФОРМА АНОНИМНЫХ МНЕНИЙ -->
+<section class="page-section">
+  
+  <!-- КНОПКА ВОЗВРАТА НА ГЛАВНУЮ -->
+  <a href="index.html" class="back-btn">← Вернуться назад</a>
+
+  <img src="images/ask_left.png" alt="Decoration Left" class="side-decoration left">
+
+  <div class="ask-wrap">
+    <header class="ask-header">
+      <p class="ask-kicker">✦ Dowlat-e Ask ✦</p>
+      <h1 class="ask-title">Анонимные мнения</h1>
+      <p class="ask-desc">Отправка анонимного мнения в архив</p>
+    </header>
+
+    <div class="form-group">
+      <label for="opinionInput">Ваше мнение</label>
+      <textarea id="opinionInput" placeholder="Введите текст вашего анонимного мнения здесь..."></textarea>
+    </div>
+
+    <button id="sendBtn" class="submit-btn" onclick="sendToSheet()">Отправить мнение</button>
+  </div>
+
+  <img src="images/ask_right.png" alt="Decoration Right" class="side-decoration right">
+</section>
+
+<div class="toast" id="toast">Успешно!</div>
+
+<script>
+  // Эффект «пуньк» при клике
+  window.addEventListener('click', (e) => {
+      const echo = document.createElement('div');
+      echo.className = 'click-echo';
+      echo.style.left = `${e.clientX}px`;
+      echo.style.top = `${e.clientY}px`;
+      document.body.appendChild(echo);
+      setTimeout(() => { echo.remove(); }, 550);
+  });
+
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyDiXJaq6IChGQM2wolO9DDB_ynzVhw_RCDI2pm9fWGpQY0bWIyAyT_ip93LY55bVaM/exec";
+
+  function sendToSheet() {
+    const text = document.getElementById("opinionInput").value.trim();
+    if (!text) {
+      showToast("Введите текст мнения!");
+      return;
+    }
+
+    const fullPostText = `#dwltrpg_ask
+
+ᅠ ᅠᅠᅠ ᅠᅠᅠ ᅠᅠᅠ ᅠᅠᅠ 𝐃𝐎𝐖𝐋𝐀𝐓-𝐄\`𝐒ᅠ𝐀𝐒𝐊
+ㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤㅤМнение о...
+
+ᅠ ᅠᅠᅠ ᅠ ᅠ${text}`;
+
+    const btn = document.getElementById("sendBtn");
+    
+    btn.disabled = true;
+    btn.innerText = "Отправка...";
+    showToast("Отправка в таблицу...");
+
+    const currentDate = new Date().toLocaleString("ru-RU", {
+      timeZone: "Europe/Moscow",
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+
+    const formData = new URLSearchParams();
+    formData.append("date", currentDate);
+    formData.append("text", fullPostText);
+
+    fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      body: formData
+    })
+    .then(() => {
+      showToast("Мнение успешно отправлено в таблицу!");
+      document.getElementById("opinionInput").value = "";
+    })
+    .catch(err => {
+      console.error(err);
+      showToast("Ошибка отправки!");
+    })
+    .finally(() => {
+      btn.disabled = false;
+      btn.innerText = "Отправить мнение";
+    });
+  }
+
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
+    40% { transform: translateY(-6px) translateX(-50%); }
+    60% { transform: translateY(-3px) translateX(-50%); }
+  }
+
+  function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2500);
+  }
+</script>
+
+</body>
+</html>
