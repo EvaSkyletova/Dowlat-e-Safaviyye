@@ -293,7 +293,7 @@
         /* HERO SECTION */
         .hero {
             text-align: center;
-            padding: 10px 20px 10px 20px; /* Уменьшили верхний отступ, так как лупа теперь в отдельной строке */
+            padding: 10px 20px 10px 20px;
             background: transparent;
             display: flex;
             flex-direction: column;
@@ -357,7 +357,7 @@
         }
 
         /* ========================================= */
-        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) И СВАЙП      */
+        /* БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ, ASK) И СВАЙП */
         /* ========================================= */
         .media-buttons-section {
             max-width: 1100px;
@@ -368,7 +368,7 @@
 
         .media-buttons-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4, 1fr); /* 4 колонки: Статьи, Видео, Клипы, Ask */
             gap: 20px;
         }
 
@@ -460,7 +460,7 @@
             
             .media-card {
                 width: 75vw;
-                max-width: 280px;
+                max-width: 260px;
                 height: 150px;
                 flex: 0 0 auto;
                 scroll-snap-align: center;
@@ -789,7 +789,7 @@
         </section>
     </div>
 
-    <!-- БЛОКИ (КЛИПЫ, ВИДЕО, СТАТЬИ) -->
+    <!-- БЛОКИ (КЛИПЫ, ВИДЕО, ASK, СТАТЬИ) — С ДОБАВЛЕНИЕМ ASK -->
     <section class="media-buttons-section">
         <div class="media-buttons-grid">
             <a href="https://vk.ru/@club182656984?isCloseForwardPush=false" target="_blank" rel="noopener noreferrer" class="media-card">
@@ -803,6 +803,10 @@
             <a href="https://vk.ru/clips/dwltrpg" target="_blank" rel="noopener noreferrer" class="media-card">
                 <img src="https://i.ibb.co/YFYP4ZWq/ostany-1.png" alt="Клипы">
                 <span class="media-title">Клипы</span>
+            </a>
+            <a href="ask.html" class="media-card">
+                <img src="https://i.ibb.co/6R228ZtF/image.png" alt="Ask">
+                <span class="media-title">Ask</span>
             </a>
         </div>
         <div class="swipe-hint">
@@ -896,7 +900,7 @@
             { title: "Титулы империи", url: "structure.html", keywords: "титулы ранги беглербег мирза амир эфеднди шахзаде" },
             { title: "Великий Меджлис", url: "structure.html", keywords: "меджлис совет векил диван министры" },
             { title: "Шпион и Подслушка", url: "spy.html", keywords: "шпион подслушка разведка тайны агенты" },
-            { title: "Калькулятор товаров", url: "market.html", keywords: "калькулятор товаров рынок купля продажа шелк специи" },
+            { title: "Калькулятор товаров", url: "market.html", keywords: "kaлькулятор товаров рынок купля продажа шелк специи" },
             { title: "Бизнес", url: "business.html", keywords: "бизнес доход лавки ремесло лавки" },
             { title: "Счетчик постов", url: "schetchik.html", keywords: "счетчик постов активность символы знаки" },
             { title: "Интриги и Яды", url: "reputation.html", keywords: "интриги яды отравления заговор тайны" },
@@ -958,6 +962,7 @@
             "«Какая любопытная...»"
         ];
         function showAdminQuote(cardElement) {
+            TheModal = document.getElementById('adminModal');
             const modal = document.getElementById('adminModal');
             const quoteTextElem = document.getElementById('modalQuoteText');
             
