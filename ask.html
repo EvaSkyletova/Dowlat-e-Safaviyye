@@ -491,7 +491,6 @@
 ᅠ ᅠᅠᅠ ᅠ ᅠ${text}`;
 
     const btn = document.getElementById("sendBtn");
-    
     btn.disabled = true;
     btn.innerText = "Отправка...";
     showToast("Отправка в таблицу...");
@@ -515,23 +514,17 @@
       body: formData
     })
     .then(() => {
-      showToast("Мнение успешно отправлено в таблицу!");
+      showToast("Мнение отправлено! Проверьте таблицу.");
       document.getElementById("opinionInput").value = "";
     })
     .catch(err => {
-      console.error(err);
-      showToast("Ошибка отправки!");
+      console.error("Fetch error:", err);
+      showToast("Ошибка сети при отправке!");
     })
     .finally(() => {
       btn.disabled = false;
       btn.innerText = "Отправить мнение";
     });
-  }
-
-  @keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-    40% { transform: translateY(-6px) translateX(-50%); }
-    60% { transform: translateY(-3px) translateX(-50%); }
   }
 
   function showToast(msg) {
