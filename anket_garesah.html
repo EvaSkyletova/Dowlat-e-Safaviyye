@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Анкета: Гаресах-хатун</title>
+    <title>Анкета: Гаресах</title>
     
     <!-- Иконка вкладки -->
     <link rel="icon" type="image/png" href="leo.png">
@@ -56,7 +56,6 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            /* ИСПРАВЛЕНИЕ: убрали жесткий overflow-y: scroll, чтобы не было второго колесика */
             overflow-y: auto;
         }
 
@@ -164,14 +163,17 @@
             box-sizing: border-box; 
         }
         
-        .back-nav-container {
+        .top-nav-bar {
             width: 100%;
             max-width: 1200px;
             margin: 0 auto 15px auto;
             padding: 0 20px;
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
+            align-items: center;
             box-sizing: border-box;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .back-btn {
@@ -200,6 +202,48 @@
             color: #fff;
             transform: translateX(-3px);
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.25);
+        }
+
+        /* ПЕРЕКЛЮЧАТЕЛЬ МУЗЫКАЛЬНОГО ПЛЕЕРА СПРАВА */
+        .music-player-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(14, 14, 16, 0.85);
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 6px 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            font-size: 12px;
+            color: var(--gold-light);
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+
+        .music-toggle-btn {
+            background: none;
+            border: 1px solid var(--gold-soft);
+            color: var(--gold-light);
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .music-toggle-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+            border-color: var(--gold);
+            transform: scale(1.08);
+        }
+
+        .music-label {
+            color: var(--muted);
+            font-style: italic;
+            font-size: 11.5px;
         }
 
         .sheet-container { 
@@ -296,174 +340,35 @@
         p { margin: 0 0 16px 0; text-align: justify; white-space: pre-line; }
         p:last-child { margin-bottom: 0; }
 
-        .family-key { color: var(--gold-soft); text-transform: uppercase; font-size: 11px; letter-spacing: 1px; font-weight: bold; }
-
-        /* ========================================= */
-        /* ШКАЛЫ РЕПУТАЦИИ (КАК У НАРИМАНА)          */
-        /* ========================================= */
-        .reputation-stack {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-            width: 100%;
-        }
-
-        .rep-card {
-            background: rgba(14, 14, 16, 0.7);
-            border: 1px solid var(--line);
-            border-radius: 6px;
-            padding: 14px 16px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        /* Главная плашка общей репутации выделена золотой рамкой */
-        .rep-card.main-banner {
-            background: rgba(22, 22, 25, 0.95);
-            border: 1px solid var(--gold);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 15px rgba(212, 175, 55, 0.05);
-        }
-
-        .rep-card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-
-        .rep-card-title {
-            color: var(--gold-soft);
-            text-transform: uppercase;
-            font-size: 12.5px;
-            letter-spacing: 1px;
-            font-weight: bold;
-        }
-
-        .rep-card.main-banner .rep-card-title {
-            color: var(--gold-light);
-            font-size: 13.5px;
-        }
-
-        .rep-card-value {
-            font-size: 14px;
-            color: var(--text);
-            font-weight: bold;
-            text-align: right;
-        }
-
-        .rep-card-value span {
-            font-size: 11px;
-            font-style: italic;
-            color: var(--muted);
-            margin-left: 6px;
-            font-weight: normal;
-        }
-
-        .rep-bar-wrap {
-            width: 100%;
-            height: 7px;
-            background: #222;
-            border-radius: 4px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .rep-bar-fill {
-            height: 100%;
-            width: 0%;
-            border-radius: 3px;
-            transition: width 0.6s ease;
-        }
-
-        /* Цвета шкал по уровням */
+        /* ШКАЛЫ РЕПУТАЦИИ */
+        .reputation-stack { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+        .rep-card { background: rgba(14, 14, 16, 0.7); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+        .rep-card.main-banner { background: rgba(22, 22, 25, 0.95); border: 1px solid var(--gold); box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 15px rgba(212, 175, 55, 0.05); }
+        .rep-card-top { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 6px; }
+        .rep-card-title { color: var(--gold-soft); text-transform: uppercase; font-size: 12.5px; letter-spacing: 1px; font-weight: bold; }
+        .rep-card.main-banner .rep-card-title { color: var(--gold-light); font-size: 13.5px; }
+        .rep-card-value { font-size: 14px; color: var(--text); font-weight: bold; text-align: right; }
+        .rep-card-value span { font-size: 11px; font-style: italic; color: var(--muted); margin-left: 6px; font-weight: normal; }
+        .rep-bar-wrap { width: 100%; height: 7px; background: #222; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.06); }
+        .rep-bar-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 0.6s ease; }
         .fill-red { background: linear-gradient(90deg, #b33939, #eb4d4b); box-shadow: 0 0 10px rgba(235, 77, 75, 0.4); }
         .fill-yellow { background: linear-gradient(90deg, #d4af37, #fbe8a6); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
         .fill-green { background: linear-gradient(90deg, #27ae60, #2ecc71); box-shadow: 0 0 10px rgba(46, 204, 113, 0.4); }
 
-        /* ========================================= */
-        /* МОДАЛЬНОЕ ОКНО                            */
-        /* ========================================= */
-        .modal-overlay { 
-            position: fixed; 
-            top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0, 0, 0, 0.8); 
-            backdrop-filter: blur(6px); 
-            display: none; 
-            align-items: center; 
-            justify-content: center; 
-            z-index: 9999; 
-            padding: 15px; 
-        }
-        
-        .modal-card { 
-            background: linear-gradient(145deg, rgba(22, 22, 25, 0.98), rgba(14, 14, 16, 0.99)); 
-            border: 1px solid var(--line); 
-            border-top: 2px solid var(--gold); 
-            border-bottom: 2px solid var(--gold); 
-            border-radius: 6px; 
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9); 
-            max-width: 480px; 
-            width: 100%; 
-            padding: 28px 24px; 
-            position: relative; 
-        }
-        
+        /* МОДАЛЬНОЕ ОКНО */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 15px; }
+        .modal-card { background: linear-gradient(145deg, rgba(22, 22, 25, 0.98), rgba(14, 14, 16, 0.99)); border: 1px solid var(--line); border-top: 2px solid var(--gold); border-bottom: 2px solid var(--gold); border-radius: 6px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9); max-width: 480px; width: 100%; padding: 28px 24px; position: relative; }
         .modal-header { margin-bottom: 18px; border-bottom: 1px solid var(--line); padding-bottom: 12px; }
         .modal-title { color: var(--gold-light); font-size: 18px; margin: 0 0 6px 0; text-transform: uppercase; letter-spacing: 1.5px; font-weight: normal; }
         .modal-desc { color: var(--muted); font-size: 12.5px; margin: 0; font-style: italic; }
-        
         .modal-form-group { margin-bottom: 14px; display: flex; flex-direction: column; gap: 6px; }
         .modal-label { color: var(--gold-soft); font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; }
-        
-        .modal-input, .modal-textarea, .modal-select { 
-            width: 100%; 
-            padding: 11px 14px; 
-            background: var(--panel-dark); 
-            border: 1px solid var(--line); 
-            border-radius: 4px; 
-            color: var(--text); 
-            font-size: 13.5px; 
-            outline: none; 
-            transition: all 0.3s; 
-        }
-        
+        .modal-input, .modal-textarea, .modal-select { width: 100%; padding: 11px 14px; background: var(--panel-dark); border: 1px solid var(--line); border-radius: 4px; color: var(--text); font-size: 13.5px; outline: none; transition: all 0.3s; }
         .modal-textarea { resize: vertical; min-height: 90px; }
-        
-        .modal-input:focus, .modal-textarea:focus, .modal-select:focus { 
-            border-color: var(--gold-light); 
-            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3); 
-        }
-        
+        .modal-input:focus, .modal-textarea:focus, .modal-select:focus { border-color: var(--gold-light); box-shadow: 0 0 12px rgba(212, 175, 55, 0.3); }
         .modal-actions { display: flex; gap: 12px; margin-top: 20px; }
-        
-        .modal-submit-btn { 
-            flex: 2; 
-            padding: 12px; 
-            background: linear-gradient(90deg, #b89947, #d4af37, #b89947); 
-            color: #121008; 
-            border: none; 
-            border-radius: 4px; 
-            font-size: 13px; 
-            font-weight: bold; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-            letter-spacing: 1.2px; 
-        }
-        
-        .modal-close-btn { 
-            flex: 1; 
-            padding: 12px; 
-            background: var(--panel-dark); 
-            color: var(--muted); 
-            border: 1px solid var(--line); 
-            border-radius: 4px; 
-            font-size: 13px; 
-            text-transform: uppercase; 
-            cursor: pointer; 
-        }
-        
+        .modal-submit-btn { flex: 2; padding: 12px; background: linear-gradient(90deg, #b89947, #d4af37, #b89947); color: #121008; border: none; border-radius: 4px; font-size: 13px; font-weight: bold; text-transform: uppercase; cursor: pointer; letter-spacing: 1.2px; }
+        .modal-close-btn { flex: 1; padding: 12px; background: var(--panel-dark); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; font-size: 13px; text-transform: uppercase; cursor: pointer; }
         .modal-status { margin-top: 10px; font-size: 12.5px; text-align: center; display: none; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
@@ -492,8 +397,9 @@
             .site-nav a { font-size: 10px; letter-spacing: 0.6px; }
             .sheet-content { padding: 15px 10px; }
             .tab-content { padding: 12px 10px; }
+            .top-nav-bar { flex-direction: column; align-items: stretch; }
+            .music-player-wrap { justify-content: center; }
 
-            /* Идеальная компоновка репутации на узких экранах */
             .rep-card-top {
                 flex-direction: column;
                 align-items: flex-start;
@@ -534,9 +440,19 @@
     </header>
 
 <div class="sheet-wrapper">
-    <div class="back-nav-container">
+    <!-- ВЕРХНЯЯ ПАНЕЛЬ: КНОПКА НАЗАД И ПЛЕЕР ПЕСНИ-АССИОЦИАЦИИ -->
+    <div class="top-nav-bar">
         <a href="ankets.html" class="back-btn">← К списку анкет</a>
+
+        <div class="music-player-wrap">
+            <button type="button" class="music-toggle-btn" id="musicToggleBtn" onclick="toggleMusic()" title="Включить / Выключить песню">▶</button>
+            <span class="music-label">Песня-ассоциация:</span>
+            <span id="musicSongName" style="color: var(--text); font-weight: bold;">MIA - Bad girl</span>
+        </div>
     </div>
+
+    <!-- СКРЫТЫЙ АУДИОПЛЕЕР -->
+    <audio id="charAudio" src="bad_girls.mp3" loop></audio>
 
     <div class="sheet-container">
         <div class="sheet-grid">
@@ -587,7 +503,7 @@
                     <p>Когда Боран Афшар женился на сефевидке Макпал-Талии, та первым делом, как оказалась в доме, подставила Гаресах в отравлении Борана, за что Гаресах была так жестоко избита Шейхом, отчего ей пришлось несколько дней провести в его покоях, чтобы никто из слуг или детей не увидел ее лицо.</p>
                     <p>С тех пор как Боран Афшар повторно женился на гостье дома Джессамин, с которой Гаресах, как ей думалось, была мила и учтива, хатун переменилась. Оказалось, быть женщиной и быть матерью сыновей недостаточно, чтобы получить хоть какое-то признание от господина. Оказалось, что нужно лишь родиться с серебряной или золотой, как повезет, ложкой во рту (и не только).</p>
                     <p>Гаресах обозлилась на каждую из жен Шейха Афшара за их привилегированность, за их статус, за то, что те не страдали так, как страдала она. И если раньше она могла довериться Макпал в отношении своих детей и вопросов, связанных с ними, то с тех пор ни ей, ни Джессамин она не позволяла праздное радушие к Халиду, Фатиху, Карахан и Мехвеш (затем и к Метину). И детям было сказано четко и ясно: Гаресах их мать, и только она – жены их отца к ним не имеют никакого отношения. Таким образом она выстроила стену между детьми и госпожами Афшар во избежание нелепой путаницы, где в доме один отец и три матери.</p>
-                    <p>В 1640 году Гаресах родила третьего сына – Метина. Ни у кого не оставалось сомнений, что один из ее сыновей однажды станет Шейхом племени Афшар, покуда законные жены Борана нарожали дочерей, чем не вызвали у него злости и негодования. Сей факт стал очередным ударом для Гаресах и она вновь почувствовала себя униженной, потому что за рожденных ею дочерей она расплатилась сполна. Выйдя на тропу «холодной войны», Гаресах принялась налаживать связи в Голестане и Северном Хорасане, чему к ее удивлению Боран никак не мешал. Как только Фатих достиг возраста 6 лет, прежде чем начать подготовку к церемонии обрезания, хатун направила приветственные обращения к ханым кланов, коих попросила содействовать в помощи наиболее бедным семьям, что не могут себе позволить проводить может и не подобные церемонии, но хотя бы достойные. Гаресах, откладывавшая с жалования средства, добавила их к средствам благородных ханым. И в назначенный день Церемония обрезания проводилась в некоторых уголках Голестана и Северного Хорасана вместе с Фатихом в столице.</p>
+                    <p>В 1640 году Гаресах родила третьего сына – Метина. Ни у кого не оставалось сомнений, что один из ее сыновей однажды станет Шейхом племени Афшар, покуда законные жены Борана нарожали дочерей, чем не вызвали у него злости и недовольства. Сей факт стал очередным ударом для Гаресах и она вновь почувствовала себя униженной, потому что за рожденных ею дочерей она расплатилась сполна. Выйдя на тропу «холодной войны», Гаресах принялась налаживать связи в Голестане и Северном Хорасане, чему к ее удивлению Боран никак не мешал. Как только Фатих достиг возраста 6 лет, прежде чем начать подготовку к церемонии обрезания, хатун направила приветственные обращения к ханым кланов, коих попросила содействовать в помощи наиболее бедным семьям, что не могут себе позволить проводить может и не подобные церемонии, но хотя бы достойные. Гаресах, откладывавшая с жалования средства, добавила их к средствам благородных ханым. И в назначенный день Церемония обрезания проводилась в некоторых уголках Голестана и Северного Хорасана вместе с Фатихом в столице.</p>
                     <p>С тех пор Гаресах обзавелась единомышленницами (которые, отчасти, тоже преследовали свою выгоду, понимая, что однажды ее сын возглавит племя). Сама Гаресах, не горевшая идеей благотворительности, была вынуждена принять условия игры. Средствами она не располагала, но обладала огромным стремлением заявить о себе. Первым делом серыми схемами через местных прорабов по ее наказу были переманены рабочие из соседнего остана: им предложили социальный лифт – возможность для их детей обучаться грамоте и ремеслам вместе с детьми знатных семей племени. Это вызвало невиданный ажиотаж, ведь подобные перспективы обычно были недоступны выходцам из других регионов. Разумеется, спонсировали все это ханым кланов (и насколько могла она сама), которым сперва показалось не по душе платить за образование детей рабочих, но Гаресах убедила их в том, что это поднимет не только престиж конкретно их семьи, но и прибавит лояльных рабочих, что будут исполнять всю черную работу их семейного бизнеса. Все эти махинации привели к реальному росту лояльности среди рабочего населения.</p>
                     <p>Тем временем Халид подрастал. Пускай за выбор учителей ответственен был Боран, но Гаресах исправно отводила мальчика на занятия в мужское крыло до тех пор, пока тот сам не переехал в отдельные покои. Иной раз она приходила сама и не показывалась на глаза, но всегда участвовала в его обучении, чтобы ненароком другие заинтересованные женщины дома не взяли на себя эту обязанность. Ко всему прочему, узнав, что в столицу возвращается полнородная сестра Наримана-мирзы – первого наследника трона, Гаресах не упустила возможности добиться аудиенции на тот момент еще живой Валиде-кадын Симузар. Не сразу. Гаресах не спешила бежать в тот же день, как Нурхаят прибыла, чтобы шахская чета не решила, что они остро в ней нуждаются. Нет, хатун выжидала и вызнавала. Нурхаят оказалась не первой красавицей и даже не в числе средних по миловидности среди дочерей Шаха Мохаммеда, тем более единственная, прожившая в ссылке вместе с опальной матерью. Каковы ее шансы на успешный брак? Шансы определила сама Гаресах. Халид – наследник племени, однажды он станет Шейхом, а невзрачная Нурхаят Сефеви – госпожой при нем. Применив парочку ловких манипуляций, Гаресах добилась от Симузар согласия на брак, который состоится, как только Нурхаят достигнет брачного возраста.</p>
                     <p>Следом за сим Гаресах сблизилась с Товусур Каджар, что стала главной женщиной племени при своем сыне Шейхе. Обдумывает, как бы ее младшему сыну подсунуть свою старшую дочь и предложить этот план Борану.</p>
@@ -655,7 +571,38 @@
 </div>
 
 <script>
-    // Эффект «пуньк» при клике (исправлен, чтобы не блокировать ссылки)
+    // НАСТРОЙКА ПЕСНИ И АУДИО (меняйте под каждого персонажа в его анкете)
+    const CHARACTER_SONG = {
+        title: "MIA - Bad girl",
+        url: "songs/bad_girls.mp3" // путь к аудиофайлу (например, mp3 в папке сайта)
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const audio = document.getElementById('charAudio');
+        const songNameSpan = document.getElementById('musicSongName');
+        songNameSpan.textContent = CHARACTER_SONG.title;
+        audio.src = CHARACTER_SONG.url;
+    });
+
+    function toggleMusic() {
+        const audio = document.getElementById('charAudio');
+        const btn = document.getElementById('musicToggleBtn');
+
+        if (audio.paused) {
+            audio.play().then(() => {
+                btn.textContent = "❚❚";
+                btn.style.borderColor = "var(--gold)";
+            }).catch(e => {
+                alert("Не удалось воспроизвести аудиофайл. Проверьте ссылку на песню.");
+            });
+        } else {
+            audio.pause();
+            btn.textContent = "▶";
+            btn.style.borderColor = "var(--gold-soft)";
+        }
+    }
+
+    // Эффект «пуньк» при клике
     window.addEventListener('click', (e) => {
         if (e.target.closest('a') || e.target.closest('.tab-btn') || e.target.closest('button')) return;
 
@@ -722,12 +669,12 @@
         .catch(err => {
             statusBox.style.color = "#d98888";
             statusBox.innerText = "Ошибка при отправке. Попробуйте позже.";
-            submitBtn.disabled = false;
+            submitBtn.disabled: false;
             submitBtn.innerText = "Отправить";
         });
     }
 
-    // --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ (СО ШКАЛАМИ) ---
+    // --- ЛОГИКА ЗАГРУЗКИ РЕПУТАЦИИ ИЗ ТАБЛИЦЫ ---
     const REP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEBGZb1BIG5GkAvld2NIWgCPHMKdyHZGgPLkHLBAe4e-liIj3vdXKAT96B0WZBIsVDpw/exec"; 
     const CURRENT_CHARACTER_NAME = "Гаресах"; 
 
@@ -779,7 +726,6 @@
             const avg = Math.round(totalPoints / count);
             const avgLvlInfo = getReputationLevel(avg);
 
-            // Собираем общую репутацию со шкалой + все остальные категории
             stackContainer.innerHTML = `
                 <div class="rep-card main-banner">
                     <div class="rep-card-top">
