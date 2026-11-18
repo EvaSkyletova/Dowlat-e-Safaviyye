@@ -55,7 +55,6 @@
                 radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
                 linear-gradient(to bottom, #161618, #0b0b0d);
             overflow-x: hidden;
-            /* ИСПРАВЛЕНИЕ: убрали жесткий скролл, чтобы было одно колесико */
             overflow-y: auto;
         }
 
@@ -166,11 +165,12 @@
             border-bottom: 2px solid var(--gold);
             border-radius: 6px;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85), inset 0 0 30px rgba(212, 175, 55, 0.03);
+            position: relative;
         }
 
         .page-header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             padding-bottom: 20px;
             border-bottom: 1px solid var(--line);
         }
@@ -201,6 +201,72 @@
             font-style: italic;
             line-height: 1.5;
             letter-spacing: 0.5px;
+        }
+
+        /* КОНТЕЙНЕР ДЛЯ ЛУПЫ В ТОЧНОМ МЕСТЕ (СЛЕВА НАД СЕФЕВИ) */
+        .search-action-container {
+            max-width: 1040px;
+            margin: 0 auto 15px auto;
+            position: relative;
+            padding: 0 10px;
+        }
+
+        .search-toggle-btn {
+            background: none;
+            border: none;
+            padding: 4px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .search-toggle-btn:hover {
+            transform: scale(1.15);
+        }
+
+        .search-toggle-btn img {
+            width: 24px;
+            height: 24px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 4px rgba(212, 175, 55, 0.6));
+        }
+
+        .floating-search-box {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 45px;
+            width: 260px;
+            animation: fadeInSearch 0.3s ease-out forwards;
+            z-index: 60;
+        }
+
+        .floating-search-box.open {
+            display: block;
+        }
+
+        @keyframes fadeInSearch {
+            from { opacity: 0; transform: translateX(-8px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .floating-search-input {
+            width: 100%;
+            background: rgba(14, 14, 16, 0.95);
+            color: var(--text);
+            border: 1px solid var(--gold);
+            border-radius: 6px;
+            padding: 10px 14px;
+            font-size: 13.5px;
+            outline: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        .floating-search-input::placeholder {
+            color: var(--muted);
+            font-style: italic;
         }
 
         .faction-section {
@@ -316,6 +382,11 @@
                 margin: 20px 10px;
                 padding: 25px 15px;
             }
+            .search-action-container {
+                display: flex;
+                justify-content: flex-start;
+                padding-left: 5px;
+            }
             .page-title {
                 font-size: 22px;
             }
@@ -375,14 +446,27 @@
     </header>
 
 <div class="main-wrap">
+    
     <header class="page-header">
         <p class="page-kicker">✦ Тумар-э довлати ✦</p>
         <h1 class="page-title">Анкеты персонажей</h1>
         <p class="page-desc">Правящая династия, великие роды и кызылбашские племена державы Сефевидов.</p>
     </header>
 
+    <!-- ЛУПА В ТОЧНОМ МЕСТЕ ПОД ШАПКОЙ СЛЕВА -->
+    <div class="search-action-container">
+        <div style="position: relative; display: inline-block;">
+            <button class="search-toggle-btn" onclick="toggleSearchBox(event)" title="Поиск персонажа">
+                <img src="search_icon.png" alt="Поиск" onerror="this.src='leo.png'">
+            </button>
+            <div class="floating-search-box" id="floatingSearchBox">
+                <input type="text" id="characterSearch" class="floating-search-input" placeholder="Поиск персонажа..." oninput="filterCharacters()" autocomplete="off">
+            </div>
+        </div>
+    </div>
+
 <!-- СЕФЕВИ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="сефеви">
     <h2 class="faction-title">Сефеви</h2>
     <div class="tree-link-wrap">
         <a href="safavidtree.html" class="tree-link-btn" target="_blank">✦ Древо династии Сефевидов ✦</a>
@@ -408,7 +492,7 @@
 </div>
 
 <!-- УСТАДЖЛЫ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="устаджлы">
     <h2 class="faction-title">Устаджлы</h2>
     <div class="tree-link-wrap">
         <a href="ustajlitree.html" class="tree-link-btn" target="_blank">✦ Древо племени Устаджлы ✦</a>
@@ -424,7 +508,7 @@
 </div>
 
 <!-- БАЯТЫ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="баяты">
     <h2 class="faction-title">Баяты</h2>
     <div class="tree-link-wrap">
         <a href="bayattree.html" class="tree-link-btn" target="_blank">✦ Древо племени Баят ✦</a>
@@ -442,7 +526,7 @@
 </div>
 
 <!-- РУМЛУ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="румлу">
     <h2 class="faction-title">Румлу</h2>
     <div class="tree-link-wrap">
         <a href="rumlutree.html" class="tree-link-btn" target="_blank">✦ Древо племени Румлу ✦</a>
@@ -460,7 +544,7 @@
 </div>
 
 <!-- КАДЖАРЫ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="каджары">
     <h2 class="faction-title">Каджары</h2>
     <div class="tree-link-wrap">
         <a href="kajartree.html" class="tree-link-btn" target="_blank">✦ Древо племени Каджар ✦</a>
@@ -477,7 +561,7 @@
 </div>
 
 <!-- ШАМЛУ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="шамлу">
     <h2 class="faction-title">Шамлу</h2>
     <div class="tree-link-wrap">
         <a href="shamlutree.html" class="tree-link-btn" target="_blank">✦ Древо племени Шамлу ✦</a>
@@ -496,7 +580,7 @@
 </div>
 
 <!-- АФШАРЫ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="афшары">
     <h2 class="faction-title">Афшары</h2>
     <div class="tree-link-wrap">
         <a href="afshartree.html" class="tree-link-btn" target="_blank">✦ Древо племени Афшар ✦</a>
@@ -511,7 +595,7 @@
 </div>
 
 <!-- БАХТИАРЫ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="бахтиары">
     <h2 class="faction-title">Бахтиары</h2>
     <div class="tree-link-wrap">
         <a href="bakhtiyartree.html" class="tree-link-btn" target="_blank">✦ Древо племени Бахтиар ✦</a>
@@ -528,7 +612,7 @@
 </div>
 
 <!-- ТЕКЕЛИ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="текели">
     <h2 class="faction-title">Текели</h2>
     <div class="tree-link-wrap">
         <a href="tekelitree.html" class="tree-link-btn" target="_blank">✦ Древо племени Текели ✦</a>
@@ -543,7 +627,7 @@
 </div>
 
 <!-- КАРАТУРЛУ -->
-<div class="faction-section">
+<div class="faction-section" data-faction="каратурлу">
     <h2 class="faction-title">Каратурлу</h2>
     <div class="tree-link-wrap">
         <a href="karaturlutree.html" class="tree-link-btn" target="_blank">✦ Древо клана Каратурлу ✦</a>
@@ -560,16 +644,76 @@
     </div>
 </div>
     
-    <!-- ЗУЛЬКАДАР -->
-<div class="faction-section">
+<!-- ПРОЧИЕ ЖИТЕЛИ -->
+<div class="faction-section" data-faction="прочие жители">
     <h2 class="faction-title">Прочие жители</h2>
     <div class="characters-grid">
         <a href="anket_nushine.html" class="character-btn">Нушине Ханым</a>
         <a href="anket_rahile.html" class="character-btn">Рахиль Хатун</a>
     </div>
-<div class="tree-link-wrap">
-    <div class="faction-section">
-        <a href="zulkadartree.html" class="tree-link-btn" target="_blank">✦ Древо вымершего клана Зулькадар ✦</a>
 </div>
+
+<!-- ЗУЛЬКАДАР -->
+<div class="faction-section" data-faction="зулькадар">
+    <h2 class="faction-title">Зулькадар</h2>
+    <div class="tree-link-wrap">
+        <a href="zulkadartree.html" class="tree-link-btn" target="_blank">✦ Древо вымершего клана Зулькадар ✦</a>
+    </div>
+</div>
+
+</div>
+
+<script>
+    function toggleSearchBox(e) {
+        e.stopPropagation();
+        const box = document.getElementById('floatingSearchBox');
+        box.classList.toggle('open');
+        if (box.classList.contains('open')) {
+            document.getElementById('characterSearch').focus();
+        }
+    }
+
+    document.addEventListener('click', (e) => {
+        const box = document.getElementById('floatingSearchBox');
+        const btn = document.querySelector('.search-toggle-btn');
+        if (!box.contains(e.target) && !btn.contains(e.target)) {
+            box.classList.remove('open');
+        }
+    });
+
+    function filterCharacters() {
+        const query = document.getElementById('characterSearch').value.toLowerCase().trim();
+        const sections = document.querySelectorAll('.faction-section');
+
+        sections.forEach(section => {
+            const buttons = section.querySelectorAll('.character-btn');
+            let sectionHasMatch = false;
+
+            if (buttons.length > 0) {
+                buttons.forEach(btn => {
+                    const name = btn.textContent.toLowerCase();
+                    if (name.includes(query)) {
+                        btn.style.display = "flex";
+                        sectionHasMatch = true;
+                    } else {
+                        btn.style.display = "none";
+                    }
+                });
+            } else {
+                const factionTitle = section.querySelector('.faction-title').textContent.toLowerCase();
+                if (factionTitle.includes(query)) {
+                    sectionHasMatch = true;
+                }
+            }
+
+            if (query === "" || sectionHasMatch) {
+                section.style.display = "block";
+            } else {
+                section.style.display = "none";
+            }
+        });
+    }
+</script>
+
 </body>
 </html>
