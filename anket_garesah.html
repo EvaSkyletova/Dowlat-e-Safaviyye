@@ -571,10 +571,10 @@
 </div>
 
 <script>
-    // НАСТРОЙКА ПЕСНИ И АУДИО (меняйте под каждого персонажа в его анкете)
+    // НАСТРОЙКА ПЕСНИ И АУДИО
     const CHARACTER_SONG = {
         title: "MIA - Bad girl",
-        url: "/songs/bad_girls.mp3" // путь к аудиофайлу (например, mp3 в папке сайта)
+        url: "songs/bad_girls.mp3"
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -593,7 +593,8 @@
                 btn.textContent = "❚❚";
                 btn.style.borderColor = "var(--gold)";
             }).catch(e => {
-                alert("Не удалось воспроизвести аудиофайл. Проверьте ссылку на песню.");
+                console.error("Ошибка воспроизведения аудио:", e);
+                alert("Не удалось воспроизвести песню. Убедитесь, что файл 'songs/bad_girls.mp3' существует в папке с сайтом и путь указан верно.");
             });
         } else {
             audio.pause();
@@ -669,7 +670,7 @@
         .catch(err => {
             statusBox.style.color = "#d98888";
             statusBox.innerText = "Ошибка при отправке. Попробуйте позже.";
-            submitBtn.disabled: false;
+            submitBtn.disabled = false;
             submitBtn.innerText = "Отправить";
         });
     }
@@ -749,3 +750,4 @@
 
 </body>
 </html>
+,path:/home/user/anket_garesah.html}
