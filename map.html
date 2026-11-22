@@ -1403,7 +1403,7 @@
             initResourceDropdown();
         });
 
-        // Функция нормализации и объединения ресурса по смыслу (с точным разделением мёда и меди)
+        // Функция нормализации и объединения ресурса по смыслу (с точным учетом чая)
         function getCanonicalResourceName(rawName) {
             let name = rawName.toLowerCase();
             
@@ -1423,11 +1423,13 @@
                 return 'Горный мед и пчелиный воск';
             }
 
+            // Точная проверка для чая (чтобы не цеплять обычаи и случаи)
+            if (name.startsWith('чай') || name.includes(' чай') || name.includes('чайные') || name.includes('чайный')) return 'Чай';
+
             if (name.includes('оливк') || name.includes('маслин')) return 'Оливки и маслины';
             if (name.includes('жемчуг') || name.includes('перламутр')) return 'Жемчуг и перламутр';
             if (name.includes('соль') || name.includes('солончак')) return 'Соль (каменная, озерная, морская)';
             if (name.includes('финик')) return 'Финики';
-            if (name.includes('чай')) return 'Чай';
             if (name.includes('пшениц') || name.includes('ячмен') || name.includes('зерно')) return 'Пшеница, ячмень и злаки';
             if (name.includes('рыб') || name.includes('креветк') || name.includes('икр') || name.includes('осетр')) return 'Рыба, икра и морепродукты';
             if (name.includes('воск') || name.includes('пчелин')) return 'Горный мед и пчелиный воск';
